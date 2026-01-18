@@ -4,8 +4,8 @@ import { ThemeProvider } from "next-themes";
 import "styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "Next JS SaaS Starter Template",
-  description: "Next JS SaaS Starter Template",
+  title: "Queso Ventures",
+  description: "The technical business partner you never had.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="bg-white dark:bg-black min-h-screen">
+      <body className="bg-lightAccent dark:bg-darkAccent min-h-screen">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           {children}
         </ThemeProvider>
