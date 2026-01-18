@@ -4,6 +4,16 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+      colors:{
+        "darkAccent": "#e68809",
+        "lightAccent": "#f7c143",
+
+        "darkBG": "#110606",
+        "lightBG": "#fcf3db",
+
+        "darkMain": "#512423",
+        "lightMain": "#f7c143",
+      },
       fontFamily: {
         sans: [
           "Inter Tight",
