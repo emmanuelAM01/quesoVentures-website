@@ -7,11 +7,11 @@ export default function Hero() {
         Have any tech stuff you need done?
       </h1>
       <p className="text-2xl text-gray-600 dark:text-gray-300 mb-12 font-light">
-        Websites and Apps built/fixed fast.
+        Ideas turned to reality, fast.
       </p>
       <div className="flex justify-center space-x-6">
         <Link
-          href="anchor tab to PriceEstimator"
+          href="#pricing-estimator"
           className="bg-black text-white dark:bg-white dark:text-black px-5 py-2 rounded-md text-base font-semibold hover:bg-gray-800 dark:hover:bg-gray-200 transition duration-300"
         >
           Get a Quote
