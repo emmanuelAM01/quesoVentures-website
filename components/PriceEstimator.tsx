@@ -55,7 +55,7 @@ export default function PriceEstimator() {
 
     // BASIC WEBSITE
     if (service === "basic-website") {
-      basePrice = 1500;
+      basePrice = 2000;
       
       // Page pricing: first 3 included, 4-6 are $200 each, 7+ are $350 each
       if (pages > 3 && pages <= 6) {
@@ -158,7 +158,7 @@ export default function PriceEstimator() {
           { name: "WhatsApp customer service bot", price: 8000 },
           { name: "Admin dashboard for orders", price: 12000 },
           { name: "Document upload and parsing system", price: 10000 },
-          { name: "Simple CRM for client tracking", price: 14000 },
+          { name: "CRM for client tracking", price: 14000 },
         ],
         customUseCase,
       };
