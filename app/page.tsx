@@ -3,7 +3,6 @@ import Hero from "components/Hero";
 import Features from "components/Features";
 import Section from "components/Section";
 import Footer from "components/Footer";
-import Customers from "components/Customers";
 import Accordion from "components/Accordion";
 import PriceEstimator from "components/PriceEstimator";
 
