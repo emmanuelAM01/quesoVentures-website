@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
+import AboutModal from "components/AboutModal";
+import ContactModal from "components/ContactModal";
+
 
 import "styles/globals.css";
 
@@ -23,6 +26,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-lightAccent dark:bg-darkAccent min-h-screen">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           {children}
+          <AboutModal />
+          <ContactModal />
         </ThemeProvider>
       </body>
     </html>

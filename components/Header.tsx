@@ -1,40 +1,74 @@
-import Link from "next/link";
-import ThemeSwitch from "./ThemeSwitch";
-//If mobile, render contact page, if not show contact popup
+"use client";
 
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import ThemeSwitch from "./ThemeSwitch";
 
 export default function Header() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 6);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="bg-white dark:bg-[#462E00] shadow-sm dark:border-b dark:border-gray-800">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+    <header
+      className={[
+        "sticky top-0 z-50 w-full",
+        "bg-cheese-header-light dark:bg-cheese-header-dark",
+        "backdrop-blur-md",
+        "transition-all duration-200",
+        scrolled
+          ? "border-b border-lightBorder/90 dark:border-darkBorder/90 shadow-sm"
+          : "border-b border-lightBorder/60 dark:border-darkBorder/60 shadow-none",
+      ].join(" ")}
+    >
+      <div className="container mx-auto px-4 h-16 flex justify-between items-center">
         <div className="flex items-center">
-          <span className="text-xl dark:text-gray-100 hover:text-darkMain dark:hover:text-lightBG">
-            <Link 
-              href="/"
-            >
-              Queso Ventures
-            </Link>
+          <span className="relative text-lg font-medium text-lightText dark:text-darkText px-4 py-2 rounded-full transition-colors
+            after:content-[''] after:absolute after:left-4 after:right-4 after:bottom-1 after:h-[2px]
+            after:origin-left after:scale-x-0 after:transition-transform after:duration-200
+            after:bg-lightAccent dark:after:bg-darkAccent
+            hover:after:scale-x-100">
+            <Link href="/">Queso Ventures</Link>
           </span>
         </div>
+
         <nav className="flex items-center">
           <ul className="flex space-x-2 mr-2">
             <li>
-              <Link
-                href="#about-popup"
-                className="text-sm text-gray-800 dark:text-white px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                About
-              </Link>
+              <button
+  type="button"
+  onClick={() => window.dispatchEvent(new CustomEvent("modal:open", { detail: { id: "about-popup" } }))}
+  className="relative text-sm font-medium text-lightText dark:text-darkText px-4 py-2 rounded-full transition-colors
+              after:content-[''] after:absolute after:left-4 after:right-4 after:bottom-1 after:h-[2px]
+              after:origin-left after:scale-x-0 after:transition-transform after:duration-200
+              after:bg-lightAccent dark:after:bg-darkAccent
+              hover:after:scale-x-100"
+>
+  About
+</button>
+
             </li>
+
             <li>
-              <Link
-                href="#contact-popup"
-                className="text-sm text-gray-800 dark:text-white px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                Contact
-              </Link>
+              <button
+  type="button"
+  onClick={() => window.dispatchEvent(new CustomEvent("modal:open", { detail: { id: "contact-popup" } }))}
+  className="relative text-sm font-medium text-lightText dark:text-darkText px-4 py-2 rounded-full transition-colors
+              after:content-[''] after:absolute after:left-4 after:right-4 after:bottom-1 after:h-[2px]
+              after:origin-left after:scale-x-0 after:transition-transform after:duration-200
+              after:bg-lightAccent dark:after:bg-darkAccent
+              hover:after:scale-x-100"
+>
+  Contact
+</button>
             </li>
           </ul>
+
           <ThemeSwitch />
         </nav>
       </div>

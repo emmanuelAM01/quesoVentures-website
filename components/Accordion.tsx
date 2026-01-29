@@ -12,25 +12,38 @@ interface AccordionItemProps {
 
 const AccordionItem: React.FC<AccordionItemProps> = ({ title, content, isOpen, toggleOpen }) => {
   return (
-    <div className="mb-4">
+    <div className="mb-3">
       <div
-        className={`w-full rounded-lg overflow-hidden ${
-          isOpen ? "bg-black dark:bg-gray-900" : "bg-black dark:bg-gray-900"
-        }`}
+        className={[
+          "w-full rounded-xl overflow-hidden",
+          "border border-lightBorder dark:border-darkBorder",
+          "bg-white/70 dark:bg-white/5 backdrop-blur",
+          "transition-colors",
+        ].join(" ")}
       >
-        <button className="w-full text-left p-4 flex justify-between items-center" onClick={toggleOpen}>
-          <span className="text-xl font-semibold text-white dark:text-white">{title}</span>
-          <span className={`transform transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}>
-            <FaChevronDown className="text-2xl text-white" />
+        <button
+          className="w-full text-left p-4 flex justify-between items-center"
+          onClick={toggleOpen}
+          type="button"
+        >
+          <span className="text-base sm:text-lg font-semibold text-lightText dark:text-darkText">
+            {title}
+          </span>
+
+          <span className={`transform transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}>
+            <FaChevronDown className="text-lg text-lightTextMuted dark:text-darkTextMuted" />
           </span>
         </button>
+
         <div
-          className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${
-            isOpen ? "max-h-[1000px]" : "max-h-0"
+          className={`overflow-hidden transition-[max-height] duration-200 ease-in-out ${
+            isOpen ? "max-h-[600px]" : "max-h-0"
           }`}
         >
-          <div className="p-4">
-            <p className="text-white font-light">{content}</p>
+          <div className="px-4 pb-4 text-start">
+            <p className="text-sm sm:text-base font-light text-lightTextMuted dark:text-darkTextMuted leading-relaxed">
+              {content}
+            </p>
           </div>
         </div>
       </div>
@@ -38,28 +51,11 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ title, content, isOpen, t
   );
 };
 
-const defaultAccordionItems = [
-  {
-    title: "Sign up for free",
-    content: "Start your journey with a 34-day trial. It's easy no credit card or commitment.",
-  },
-  {
-    title: "Easy to use",
-    content:
-      "Our app is designed to be user-friendly and easy to use. We want to provide a seamless experience for your users so that you can focus on what matters.",
-  },
-  {
-    title: "Focus on what matters",
-    content:
-      "With better financial management, you can reduce money-related stress and focus on what matters most. More to come.",
-  },
-];
-
 interface AccordionProps {
-  items?: { title: string; content: string }[];
+  items: { title: string; content: string }[];
 }
 
-const Accordion: React.FC<AccordionProps> = ({ items = defaultAccordionItems }) => {
+const Accordion: React.FC<AccordionProps> = ({ items }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggleItem = (index: number) => {
@@ -67,7 +63,7 @@ const Accordion: React.FC<AccordionProps> = ({ items = defaultAccordionItems }) 
   };
 
   return (
-    <div className="w-[90%]">
+    <div className="w-full max-w-xl">
       {items.map((item, index) => (
         <AccordionItem
           key={index}
