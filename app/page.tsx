@@ -2,8 +2,8 @@ import Header from "components/Header";
 import Hero from "components/Hero";
 import Features from "components/Features";
 import Section from "components/Section";
-import Footer from "components/Footer";
 import Accordion from "components/Accordion";
+import Footer from "components/Footer";
 import PriceEstimator from "components/PriceEstimator";
 
 export default function Page() {
