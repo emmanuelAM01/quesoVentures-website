@@ -69,10 +69,11 @@ export default function Modal({ id, title, children }: ModalProps) {
     };
   }, [open]);
 
-  const close = () => {
-    history.pushState("", document.title, window.location.pathname + window.location.search);
-    setOpen(false);
-  };
+const close = () => {
+  const newUrl = window.location.pathname + window.location.search;
+  window.history.replaceState(null, "", newUrl);
+  setOpen(false);
+};
 
   if (!open) return null;
 
