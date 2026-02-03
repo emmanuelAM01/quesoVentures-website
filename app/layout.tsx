@@ -8,7 +8,7 @@ import "styles/globals.css";
 
 export const metadata: Metadata = {
   title: "Queso Ventures",
-  description: "The technical business partner you never had.",
+  description: "Building tech so you can focus on running your business",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -18,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" href="/favicon.png" type="image/png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preload" href="/about.JPEG" as="image" />
+        <link rel="preload" href="/logo.png" as="image" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap"
