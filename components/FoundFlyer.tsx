@@ -15,14 +15,13 @@ export default function Hero() {
         <Link
           href="/#pricing-estimator"
           className="
-  bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:darkButtonHover
-  text-lightBG dark:text-darkBG
-  px-6 py-3
-  rounded-xl
-  text-base font-semibold
-  transition-colors
-"
-
+              bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:darkButtonHover
+              text-lightBG dark:text-darkBG
+              px-6 py-3
+              rounded-xl
+              text-base font-semibold
+              transition-colors
+            "
         >
           Get a website quote
         </Link>
