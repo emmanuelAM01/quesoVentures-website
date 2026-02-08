@@ -2,30 +2,31 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="text-center flex flex-col items-center justify-center mx-4 sm:mx-8 md:mx-16 lg:mx-24 min-h-screen">
-      <h1 className="font-sans text-2xl tracking-tight sm:text-3xl md:text-4xl lg:text-5xl text-lightText dark:text-darkText mb-6">
-        I build websites and apps, so you dont have to.
-      </h1>
+    <section className="container mx-auto px-4 min-h-screen flex flex-col items-center justify-center">
+      <div className="max-w-4xl mx-auto text-center">
+        <h1 className="font-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight text-lightText dark:text-darkText mb-6">
+          Get More Leads from Google and AI
+        </h1>
 
-      <p className="text-xl text-lightTextMuted dark:text-darkTextMuted mb-12 font-light max-w-2xl">
-        I help small businesses and early teams get online fast.
-      </p>
+        <p className="text-lg sm:text-xl md:text-2xl text-lightTextMuted dark:text-darkTextMuted mb-12 font-light">
+          Houston based SEO and GEO to bring you more inbound leads, not just more traffic.
+        </p>
 
-      <div className="flex justify-center">
-        <Link
-          href="#pricing-estimator"
-          className="
-  bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:darkButtonHover
-  text-lightBG dark:text-darkBG
-  px-6 py-3
-  rounded-xl
-  text-base font-semibold
-  transition-colors
-"
-
-        >
-          Get a website quote
-        </Link>
+        <div className="flex justify-center">
+          <Link
+            href="#free-audit"
+            className="
+              bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover
+              text-lightBG dark:text-darkBG
+              px-6 py-3
+              rounded-xl
+              text-base font-semibold
+              transition-colors
+            "
+          >
+            Book a Free Growth Audit
+          </Link>
+        </div>
       </div>
     </section>
   );

@@ -10,6 +10,7 @@ export async function POST(req: Request) {
 
     const name = typeof body?.name === "string" ? body.name.trim() : "";
     const contact = typeof body?.contact === "string" ? body.contact.trim() : "";
+    const info = typeof body?.contact === "string" ? body.contact.trim() : "";
     const message = typeof body?.message === "string" ? body.message.trim() : "";
     const website = typeof body?.website === "string" ? body.website.trim() : "";
 
@@ -39,6 +40,7 @@ export async function POST(req: Request) {
     const text = [
       `Name: ${name}`,
       `Contact: ${contact}`,
+      `Website: ${info}`,
       "",
       message,
     ].join("\n");
