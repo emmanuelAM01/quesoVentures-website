@@ -78,7 +78,7 @@ const close = () => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100]">
+    <div className="fixed inset-0 z-[100] max-h-[95vh]">
       {/* Backdrop */}
       <button
         type="button"
