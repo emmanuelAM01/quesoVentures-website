@@ -78,8 +78,7 @@ const close = () => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] max-h-[95vh]">
-      {/* Backdrop */}
+    <div className="fixed inset-0 z-[100]">
       <button
         type="button"
         aria-label="Close modal"
@@ -87,9 +86,7 @@ const close = () => {
         className="absolute inset-0 z-0 bg-black/40 backdrop-blur-sm"
       />
 
-      {/* Centering wrapper */}
       <div className="absolute inset-0 z-10 flex items-center justify-center p-4">
-        {/* Dialog */}
         <div
           role="dialog"
           aria-modal="true"
@@ -102,9 +99,9 @@ const close = () => {
             bg-white dark:bg-darkBG
             shadow-xl
             p-6
+            max-h-[85svh] overflow-hidden
           "
         >
-          {/* Header */}
           <div className="flex items-start justify-between gap-4">
             <h2
               id={`${id}-title`}
@@ -128,8 +125,9 @@ const close = () => {
             </button>
           </div>
 
-          {/* Content */}
-          <div className="mt-5">{children}</div>
+          <div className="mt-5 overflow-y-auto max-h-[calc(85svh-96px)] pr-1">
+            {children}
+          </div>
         </div>
       </div>
     </div>

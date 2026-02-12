@@ -83,7 +83,7 @@ export default function ContactModal() {
         </div>
       ) : (
         <>
-          <form onSubmit={onSubmit} className="flex flex-col gap-5">
+          <form onSubmit={onSubmit} className="flex flex-col gap-5 sm:gap-5">
             {/* honeypot */}
             <div className="hidden">
               <label>Website</label>
@@ -91,45 +91,43 @@ export default function ContactModal() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-semibold text-lightText dark:text-darkText">
-                Your Name
-              </label>
+  <label className="text-xs sm:text-sm font-semibold text-lightText dark:text-darkText">
+    Your Name
+  </label>
               <input
                 name="name"
                 type="text"
                 required
                 placeholder="John Smith"
-                className="w-full rounded-lg border border-lightBorder dark:border-darkBorder bg-white dark:bg-transparent px-4 py-3 text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/60 dark:placeholder:text-darkTextMuted/60 focus:outline-none focus:ring-2 focus:ring-lightButton/40 dark:focus:ring-darkButton/40 transition-shadow"
-              />
+    className="w-full rounded-lg border border-lightBorder dark:border-darkBorder bg-white dark:bg-transparent px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/60 dark:placeholder:text-darkTextMuted/60 focus:outline-none focus:ring-2 focus:ring-lightButton/40 dark:focus:ring-darkButton/40 transition-shadow"              />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-semibold text-lightText dark:text-darkText">
-                Email
-              </label>
+  <label className="text-xs sm:text-sm font-semibold text-lightText dark:text-darkText">
+    Email
+  </label>
               <input
                 name="contact"
                 type="email"
                 required
                 placeholder="john@yourbusiness.com"
-                className="w-full rounded-lg border border-lightBorder dark:border-darkBorder bg-white dark:bg-transparent px-4 py-3 text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/60 dark:placeholder:text-darkTextMuted/60 focus:outline-none focus:ring-2 focus:ring-lightButton/40 dark:focus:ring-darkButton/40 transition-shadow"
-              />
+    className="w-full rounded-lg border border-lightBorder dark:border-darkBorder bg-white dark:bg-transparent px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/60 dark:placeholder:text-darkTextMuted/60 focus:outline-none focus:ring-2 focus:ring-lightButton/40 dark:focus:ring-darkButton/40 transition-shadow"              />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-semibold text-lightText dark:text-darkText">
-                Your Website <span className="text-lightTextMuted dark:text-darkTextMuted font-normal">(if you have one)</span>
-              </label>
+  <label className="text-xs sm:text-sm font-semibold text-lightText dark:text-darkText">
+    Your Website <span className="text-lightTextMuted dark:text-darkTextMuted font-normal">(if you have one)</span>
+  </label>
               <input
                 name="info"
                 type="text"
                 placeholder="yourbusiness.com"
-                className="w-full rounded-lg border border-lightBorder dark:border-darkBorder bg-white dark:bg-transparent px-4 py-3 text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/60 dark:placeholder:text-darkTextMuted/60 focus:outline-none focus:ring-2 focus:ring-lightButton/40 dark:focus:ring-darkButton/40 transition-shadow"
+    className="w-full rounded-lg border border-lightBorder dark:border-darkBorder bg-white dark:bg-transparent px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/60 dark:placeholder:text-darkTextMuted/60 focus:outline-none focus:ring-2 focus:ring-lightButton/40 dark:focus:ring-darkButton/40 transition-shadow"
               />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-semibold text-lightText dark:text-darkText">
+  <label className="text-xs sm:text-sm font-semibold text-lightText dark:text-darkText">
                 What do you need help with?
               </label>
               <textarea
@@ -138,8 +136,7 @@ export default function ContactModal() {
                 rows={4}
                 defaultValue={prefillMessage}
                 placeholder="Tell me about your business and what you're trying to achieve..."
-                className="w-full resize-none rounded-lg border border-lightBorder dark:border-darkBorder bg-white dark:bg-transparent px-4 py-3 text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/60 dark:placeholder:text-darkTextMuted/60 focus:outline-none focus:ring-2 focus:ring-lightButton/40 dark:focus:ring-darkButton/40 transition-shadow"
-              />
+                className="w-full resize-none rounded-lg border border-lightBorder dark:border-darkBorder bg-white dark:bg-transparent px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/60 dark:placeholder:text-darkTextMuted/60 focus:outline-none focus:ring-2 focus:ring-lightButton/40 dark:focus:ring-darkButton/40 transition-shadow"              />
             </div>
 
             {status === "error" && (
@@ -151,32 +148,25 @@ export default function ContactModal() {
             <button
               type="submit"
               disabled={status === "sending"}
-              className="mt-2 inline-flex items-center justify-center rounded-xl bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover px-8 py-4 text-lg font-semibold text-lightBG dark:text-darkBG transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow"
-            >
+              className="mt-1 sm:mt-2 w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-lightBG dark:text-darkBG transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow"            >
               {status === "sending" ? "Sending..." : "Send Message"}
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-lightBorder dark:border-darkBorder">
-            <div className="text-center">
-              <p className="text-sm text-lightTextMuted dark:text-darkTextMuted mb-3">
-                Prefer to talk first?
-              </p>
-              <Link
-                href="https://calendar.app.google/DTrFqJ9XjEuTNmfr6"
-                target="_blank"
-                className="
-                  inline-flex items-center justify-center
-                  text-lightButton dark:text-darkButton
-                  hover:text-lightButtonHover dark:hover:text-darkButtonHover
-                  text-base font-semibold
-                  transition-colors
-                "
-              >
-                Schedule a call instead →
-              </Link>
-            </div>
-          </div>
+<div className="mt-6 text-center">
+  <p className="text-sm sm:text-sm text-lightTextMuted dark:text-darkTextMuted mb-3">
+    Prefer to talk first?
+  </p>
+
+  <Link
+    href="https://calendar.app.google/DTrFqJ9XjEuTNmfr6"
+    target="_blank"
+    className="inline-flex items-center justify-center text-lightButton dark:text-darkButton hover:text-lightButtonHover dark:hover:text-darkButtonHover text-sm sm:text-base font-semibold transition-colors"
+  >
+    Schedule a call instead →
+  </Link>
+</div>
+
         </>
       )}
     </Modal>

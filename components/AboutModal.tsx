@@ -26,7 +26,7 @@ export default function AboutModal() {
             Hey, I'm Emmanuel
           </p>
           <p className="text-sm sm:text-base font-light text-lightTextMuted dark:text-darkTextMuted mt-1">
-            Building sites since I was 18. Now I help Houston businesses compete online.
+            7 years in the industry, now I help Houston businesses grow their online presence. 
           </p>
         </div>
       </div>
@@ -35,11 +35,11 @@ export default function AboutModal() {
         <ul className="space-y-3 text-sm sm:text-base font-light text-lightTextMuted dark:text-darkTextMuted">
           <li className="flex gap-2">
             <span className="text-lightButton dark:text-darkButton mt-1">•</span>
-            <span>Not a dev shop or agency - I'm a specialized asset for local businesses that need real results</span>
+            <span>I help local businesses see real results, I'm not just a tech shop or dev agency</span>
           </li>
           <li className="flex gap-2">
             <span className="text-lightButton dark:text-darkButton mt-1">•</span>
-            <span>I audit what's broken, fix what's holding you back, and build systems that bring in leads</span>
+            <span>I find what's broken, fix what's holding you back, and build systems that bring in leads</span>
           </li>
           <li className="flex gap-2">
             <span className="text-lightButton dark:text-darkButton mt-1">•</span>
