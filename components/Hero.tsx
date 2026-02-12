@@ -3,9 +3,9 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <section className="container mx-auto px-4 min-h-screen flex flex-col items-center justify-center">
-      <div className="max-w-4xl mx-auto text-center">
+      <div className="max-w-5xl mx-auto text-center">
         <h1 className="font-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight text-lightText dark:text-darkText mb-6">
-          Get More Leads from Google and AI
+          More Leads from Google and AI Searches
         </h1>
 
         <p className="text-lg sm:text-xl md:text-2xl text-lightTextMuted dark:text-darkTextMuted mb-12 font-light">
