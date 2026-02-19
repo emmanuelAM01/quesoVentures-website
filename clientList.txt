@@ -1,0 +1,16 @@
+Quickfix Automotive - 4550 Farm to Market 1960 Rd E, Humble, TX 77346 (Owner named Dar)
+GP Plumbing, LLC - (832) 797-6324 Residential address, site made with Airo. Google Business Profile needs work. 
+The fade zone - Inside the Tuscany Village Salons, 7506 Farm to Market 1960 Rd E, Humble, TX 77346. Have webapp booking, no site.
+
+
+Website (if they have one)
+You don't need to look at source code manually. Use free tools — Google PageSpeed Insights gives you load speed and mobile score automatically. You're looking for anything below 70 on mobile. Also check if the site has their city and service mentioned clearly in the page title, the headline, and the first paragraph. A lot of small business sites just say "Welcome to Joe's Plumbing" with no mention of Humble or Houston anywhere. That alone tanks their local ranking.
+Google Business Profile
+Search their business name and look at the listing directly. You're checking — do they have photos and how many, are their hours correct, do they have service categories filled out, are they posting updates, do they have a description written, and what's their review count and average rating. This takes five minutes and is often the biggest gap.
+Local Search Visibility
+Search "plumber Humble TX" or "barber near Atascocita" and see if they show up in the map pack at all. If they don't appear in the top three map results they're essentially invisible to anyone who doesn't already know their name.
+Competitor Comparison
+Pull the top two or three businesses that DO show up for that search. Note their review count, their GBP completeness, and a quick look at their website. That becomes your benchmark — "here's who's beating you and why."
+GEO Readiness
+Ask ChatGPT or Perplexity "best plumber in Humble TX" and see if they get mentioned. Almost nobody local shows up yet which is actually your pitch — this is coming and getting ahead of it now is the advantage.
+For the actual scoring, I'd keep it simple. Five categories, each scored 1-5, total out of 25. Something like website quality, mobile speed, GBP completeness, local search visibility, and GEO readiness. Anything below 15 is a clear opportunity. You present the score, show them where competitors are, and the gap sells itself.
