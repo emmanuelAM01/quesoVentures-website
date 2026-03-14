@@ -7,8 +7,9 @@ import ContactModal from "components/ContactModal";
 import "styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "Queso Ventures",
-  description: "Building tech so you can focus on running your business",
+  metadataBase: new URL("https://quesoventures.com"),
+  title: "Queso Ventures | SEO & GEO for Houston Businesses",
+  description: "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
