@@ -57,7 +57,7 @@ export default function FreeAuditSection() {
               type="button"
               onClick={() =>
                 openContactWithPrefill(
-                  "I want a free SEO + GEO audit. My business is in Houston. Here is my website URL and what I want more of (calls, bookings, leads):"
+                  "I want a free online presence audit. My business is in Houston. Here is my website URL and what I want more of (calls, bookings, leads):"
                 )
               }
               className="w-full inline-flex items-center justify-center rounded-xl bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover px-8 py-4 text-lg font-semibold text-lightBG dark:text-darkBG transition-colors"
@@ -76,7 +76,7 @@ export default function FreeAuditSection() {
             type="button"
             onClick={() =>
               openContactWithPrefill(
-                "I have a question about SEO/GEO for my Houston business:"
+                "I want to get more leads for my business:"
               )
             }
             className="inline-flex items-center justify-center rounded-xl border border-lightBorder dark:border-darkBorder px-6 py-3 text-base font-semibold text-lightText dark:text-darkText hover:bg-black/5 dark:hover:bg-white/10 transition-colors"

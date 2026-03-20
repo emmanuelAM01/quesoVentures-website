@@ -6,7 +6,7 @@ export default function AskDirectlyButton() {
       type="button"
       onClick={() => {
         window.dispatchEvent(new CustomEvent("contact:prefill", {
-          detail: { message: "I have a question about SEO/GEO for my Houston business:" }
+          detail: { message: "I want to get more leads for my business:" }
         }));
         window.dispatchEvent(new CustomEvent("modal:open", {
           detail: { id: "contact-popup" }
