@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     const text = [
       `Name: ${name}`,
       `Contact: ${contact}`,
-      `Website: ${info}`,
+      `Website: ${website}`,
       "",
       message,
     ].join("\n");
