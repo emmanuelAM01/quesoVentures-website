@@ -16,11 +16,11 @@ export default function FreeAuditSection() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl md:text-5xl text-lightText dark:text-darkText mb-6">
-            Free Website Growth Audit for Houston Businesses
+            Why aren&apos;t customers finding you?
           </h2>
 
           <p className="text-lg sm:text-xl md:text-2xl text-lightTextMuted dark:text-darkTextMuted font-light">
-            Book a call and I'll audit your website and Google presence, then help you fix what's stopping you from getting more customers.
+            I'll take a free look at your Google presence and website, then show you exactly what's stopping new clients from finding you.
           </p>
         </div>
 
@@ -57,16 +57,16 @@ export default function FreeAuditSection() {
               type="button"
               onClick={() =>
                 openContactWithPrefill(
-                  "I want a free online presence audit. My business is in Houston. Here is my website URL and what I want more of (calls, bookings, leads):"
+                  "I want a free visibility check. My business is in Houston. Here is my website URL and what I want more of (calls, bookings, leads):"
                 )
               }
               className="w-full inline-flex items-center justify-center rounded-xl bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover px-8 py-4 text-lg font-semibold text-lightBG dark:text-darkBG transition-colors"
             >
-              Request Free Audit
+              Get a Free Visibility Check
             </button>
 
             <p className="mt-4 text-center text-sm sm:text-base text-lightTextMuted dark:text-darkTextMuted font-light">
-              No pressure. If we're a fit, I'll tell you the next steps. If not, you still get valuable insights.
+              No pressure. If we're a fit, I'll tell you the next steps.
             </p>
           </div>
         </div>
