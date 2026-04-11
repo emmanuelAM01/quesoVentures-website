@@ -17,7 +17,7 @@ export const metadata: Metadata = {
       "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
     url: "https://quesoventures.com",
     siteName: "Queso Ventures",
-    images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures logo" }],
+    images: [{ url: "/logo.png", width: 512, height: 512, alt:"Queso Ventures logo - Houston web design and local SEO" }],
     locale: "en_US",
     type: "website",
   },
