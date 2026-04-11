@@ -14,7 +14,7 @@ export default function AboutModal() {
         <div className="relative h-20 w-20 sm:h-24 sm:w-24 flex-shrink-0 overflow-hidden rounded-full border-2 border-lightBorder dark:border-darkBorder">
           <Image
             src="/about.JPEG"
-            alt="Emmanuel"
+            alt="Emmanuel Mendieta - Founder of Queso Ventures, Houston local SEO and web design"
             fill
             className="object-cover"
             priority={false}

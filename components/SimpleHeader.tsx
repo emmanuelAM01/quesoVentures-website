@@ -39,7 +39,7 @@ export default function Header() {
         >
           <Image
             src="/logo.png"
-            alt="Queso Ventures logo"
+            alt="Queso Ventures logo - Houston web design and local SEO"
             width={25}
             height={25}
             className="object-contain"
