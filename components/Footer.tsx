@@ -25,7 +25,7 @@ const Footer = () => {
             <AiOutlineYoutube size={22} />
           </a>
         </div>
-        <p>&copy; {currentYear} Queso Ventures</p>
+        <p>&copy; {currentYear} Queso Ventures LLC</p>
       </div>
     </footer>
   );
