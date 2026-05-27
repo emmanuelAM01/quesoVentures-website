@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="bg-lightAccent dark:bg-darkAccent min-h-screen">
+      <body className="bg-lightAccent dark:bg-darkAccent min-h-screen overflow-x-hidden">
         <ThemeProvider attribute="class" defaultTheme="light">
           {children}
           <AboutModal />
