@@ -11,6 +11,9 @@ const navLinkClass =
   "after:origin-left after:scale-x-0 after:transition-transform after:duration-200 " +
   "after:bg-lightAccent dark:after:bg-darkAccent hover:after:scale-x-100";
 
+const mobileLinkClass =
+  "block w-full text-left px-3 py-3 text-base font-medium text-lightText dark:text-darkText rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors";
+
 const industries = [
   { label: "Food Trucks", href: "/website-for-food-trucks-houston" },
   { label: "Smoke & Vape Shops", href: "/website-for-smoke-shops-houston" },
@@ -21,6 +24,8 @@ const industries = [
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [industriesOpen, setIndustriesOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileIndustriesOpen, setMobileIndustriesOpen] = useState(false);
   const industriesRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
@@ -39,6 +44,8 @@ export default function Header() {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+  const closeMobile = () => setMobileOpen(false);
 
   return (
     <header
@@ -74,7 +81,8 @@ export default function Header() {
           </Link>
         </div>
 
-        <nav className="flex items-center">
+        {/* Desktop nav */}
+        <nav className="hidden md:flex items-center">
           <ul className="flex items-center space-x-1 mr-2">
             <li>
               <Link href="/services" className={navLinkClass}>
@@ -152,7 +160,98 @@ export default function Header() {
 
           <ThemeSwitch />
         </nav>
+
+        {/* Mobile: theme switch + hamburger */}
+        <div className="flex items-center gap-1 md:hidden">
+          <ThemeSwitch />
+          <button
+            type="button"
+            onClick={() => setMobileOpen((o) => !o)}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+            className="p-2 rounded-lg text-lightText dark:text-darkText hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+          >
+            {mobileOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <nav className="md:hidden border-t border-lightBorder dark:border-darkBorder bg-lightBG dark:bg-darkBG">
+          <div className="container mx-auto px-4 py-2 flex flex-col gap-0.5">
+            <Link href="/services" onClick={closeMobile} className={mobileLinkClass}>
+              Services
+            </Link>
+
+            <div>
+              <button
+                type="button"
+                onClick={() => setMobileIndustriesOpen((o) => !o)}
+                className={`${mobileLinkClass} flex items-center justify-between`}
+                aria-expanded={mobileIndustriesOpen}
+              >
+                <span>Industries</span>
+                <span
+                  className={`inline-block transition-transform duration-200 text-sm ${
+                    mobileIndustriesOpen ? "rotate-180" : ""
+                  }`}
+                >
+                  ▾
+                </span>
+              </button>
+              {mobileIndustriesOpen && (
+                <div className="pl-3 flex flex-col gap-0.5 mt-0.5 mb-1">
+                  {industries.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={closeMobile}
+                      className="block px-3 py-2.5 text-sm text-lightTextMuted dark:text-darkTextMuted rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <Link href="/blog" onClick={closeMobile} className={mobileLinkClass}>
+              Blog
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => {
+                closeMobile();
+                window.dispatchEvent(new CustomEvent("modal:open", { detail: { id: "about-popup" } }));
+              }}
+              className={mobileLinkClass}
+            >
+              About
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                closeMobile();
+                window.dispatchEvent(new CustomEvent("modal:open", { detail: { id: "contact-popup" } }));
+              }}
+              className={`${mobileLinkClass} text-lightButton dark:text-darkButton font-semibold`}
+            >
+              Contact
+            </button>
+          </div>
+        </nav>
+      )}
     </header>
   );
 }

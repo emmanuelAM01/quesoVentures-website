@@ -98,7 +98,7 @@ const close = () => {
             border border-lightBorder dark:border-darkBorder
             bg-white dark:bg-darkBG
             shadow-xl
-            p-6
+            p-4 sm:p-6
             max-h-[85svh] overflow-hidden
           "
         >
@@ -125,7 +125,7 @@ const close = () => {
             </button>
           </div>
 
-          <div className="mt-5 overflow-y-auto max-h-[calc(85svh-96px)] pr-1">
+          <div className="mt-4 sm:mt-5 overflow-y-auto max-h-[calc(85svh-80px)] sm:max-h-[calc(85svh-96px)] pr-1">
             {children}
           </div>
         </div>
