@@ -6,7 +6,7 @@ export default function AskDirectlyButton() {
       type="button"
       onClick={() => {
         window.dispatchEvent(new CustomEvent("contact:prefill", {
-          detail: { message: "I want to get more leads for my business:" }
+          detail: { message: "I want to see what my website can look like. I need help with getting more..." }
         }));
         window.dispatchEvent(new CustomEvent("modal:open", {
           detail: { id: "contact-popup" }
@@ -14,7 +14,7 @@ export default function AskDirectlyButton() {
       }}
       className="inline-flex items-center justify-center rounded-xl border border-lightBorder dark:border-darkBorder px-6 py-3 text-base font-semibold text-lightText dark:text-darkText hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
     >
-      Ask Me Directly
+      See What Your Website Could Look Like
     </button>
   );
 }

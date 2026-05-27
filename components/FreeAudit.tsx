@@ -16,11 +16,11 @@ export default function FreeAuditSection() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl md:text-5xl text-lightText dark:text-darkText mb-6">
-            Why aren&apos;t customers finding you?
+            Ready to stop being invisible online?
           </h2>
 
           <p className="text-lg sm:text-xl md:text-2xl text-lightTextMuted dark:text-darkTextMuted font-light">
-            I'll take a free look at your Google presence and website, then show you exactly what's stopping new clients from finding you.
+            No pressure. I take a look at where you stand, show you what is possible, and you decide if it makes sense.
           </p>
         </div>
 
@@ -28,14 +28,13 @@ export default function FreeAuditSection() {
           <div className="space-y-6">
             <div>
               <h3 className="text-xl sm:text-2xl font-semibold text-lightText dark:text-darkText mb-3">
-                Here's what I'll analyze:
+                Here&apos;s what I&apos;ll analyze:
               </h3>
               <div className="text-base sm:text-lg text-lightTextMuted dark:text-darkTextMuted font-light space-y-2">
-                <p>• Top SEO issues holding you back from local search rankings</p>
+                <p>• Top issues holding you back from local search rankings</p>
                 <p>• Quick wins for Houston local search visibility</p>
-                <p>• Conversion fixes to turn your traffic into actual calls and bookings</p>
-                <p>• AI search readiness (Google's GEO and the future of search)</p>
-                <p>• A prioritized 30-day plan you can actually execute</p>
+                <p>• What is stopping your visitors from calling or booking</p>
+                <p>• AI search readiness (showing up when people ask AI assistants for recommendations)</p>
               </div>
             </div>
 
@@ -44,46 +43,30 @@ export default function FreeAuditSection() {
                 This is for you if:
               </h3>
               <div className="text-base sm:text-lg text-lightTextMuted dark:text-darkTextMuted font-light space-y-2">
-                <p>• You're a service business in Houston (med spas, clinics, law firms, contractors, local brands, cafes, restaurants, and concierge services)</p>
-                <p>• Your site gets traffic but not enough leads</p>
-                <p>• You're tired of relying on ads to stay visible</p>
-                <p>• You know you need to show up in AI search but don't know where to start</p>
+                <p>• You do not have a website yet and do not know where to start</p>
+                <p>• You have a website but customers are not finding you online</p>
+                <p>• You want new customers to find you without chasing them down</p>
+                <p>• You want to be consistent, not trendy</p>
               </div>
             </div>
           </div>
 
-          <div className="mt-10 pt-8 border-t border-lightBorder dark:border-darkBorder">
+          <div className="flex flex-col mx-auto mt-10 pt-8 border-t border-lightBorder dark:border-darkBorder">
             <button
               type="button"
               onClick={() =>
                 openContactWithPrefill(
-                  "I want a free visibility check. My business is in Houston. Here is my website URL and what I want more of (calls, bookings, leads):"
+                  "I want to see what my website can look like. I need help with getting more..."
                 )
               }
-              className="w-full inline-flex items-center justify-center rounded-xl bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover px-8 py-4 text-lg font-semibold text-lightBG dark:text-darkBG transition-colors"
+              className=" mx-auto  inline-flex items-center justify-center rounded-xl bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover px-8 py-4 text-lg font-semibold text-lightBG dark:text-darkBG transition-colors"
             >
-              Get a Free Visibility Check
+              See What Your Website Could Look Like
             </button>
-
-            <p className="mt-4 text-center text-sm sm:text-base text-lightTextMuted dark:text-darkTextMuted font-light">
-              No pressure. If we're a fit, I'll tell you the next steps.
-            </p>
+            
           </div>
         </div>
 
-        <div className="mt-8 text-center">
-          <button
-            type="button"
-            onClick={() =>
-              openContactWithPrefill(
-                "I want to get more leads for my business:"
-              )
-            }
-            className="inline-flex items-center justify-center rounded-xl border border-lightBorder dark:border-darkBorder px-6 py-3 text-base font-semibold text-lightText dark:text-darkText hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
-          >
-            Ask a Question First
-          </button>
-        </div>
       </div>
     </section>
   );

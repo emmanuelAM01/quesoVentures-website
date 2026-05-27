@@ -7,11 +7,11 @@ const services = [
   {
     icon: FaGlobe,
     title: "Rank Higher on Google",
-    description: "Local SEO that helps Houston customers find you before your competitors.",
+    description: "Local search that helps Houston customers find you before your competitors.",
   },
   {
     icon: FaChartLine,
-    title: "Convert Visitors Into Leads",
+    title: "Turn Website Visitors Into Calls",
     description: "Better messaging and layout so more people call, book, or submit your form.",
   },
   {
@@ -31,7 +31,7 @@ const services = [
   },
   {
     icon: FaHandshake,
-    title: "Simple Monthly Retainers",
+    title: "Simple Monthly Plans",
     description: "No hourly billing. No surprises. Just consistent growth work every month.",
   },
 ];
@@ -44,7 +44,7 @@ const services = [
         </h2>
 
         <p className="text-lg sm:text-xl md:text-2xl text-lightTextMuted dark:text-darkTextMuted font-light">
-          SEO, GEO, and conversion improvements built to generate leads.
+          Rank on Google, get more calls, and keep your calendar full.
         </p>
       </div>
 

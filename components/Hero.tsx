@@ -9,7 +9,7 @@ export default function Hero() {
         </h1>
 
         <p className="text-lg sm:text-xl md:text-2xl text-lightTextMuted dark:text-darkTextMuted mb-12 font-light">
-          Built for Houston Service Businesses.
+          You focus on the work. I handle getting you found.
         </p>
 
         <div className="flex justify-center">
@@ -24,12 +24,10 @@ export default function Hero() {
               transition-colors
             "
           >
-            Get a Free Visibility Check
+            See What Your Website Could Look Like
           </Link>
         </div>
       </div>
     </section>
   );
 }
-
-
