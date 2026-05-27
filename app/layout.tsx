@@ -8,7 +8,7 @@ import "styles/globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://quesoventures.com"),
-  title: "Queso Ventures | SEO & GEO for Houston Businesses",
+  title: "Queso Ventures | Websites and Local Search for Houston Businesses",
   description: "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
 };
 

@@ -7,12 +7,12 @@ import FreeAudit from "components/FreeAudit";
 import AskDirectlyButton from "components/AskDirectlyButton";
 
 export const metadata: Metadata = {
-  title: "Queso Ventures | SEO & GEO for Houston Businesses",
+  title: "Queso Ventures | Websites and Local Search for Houston Businesses",
   description:
     "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
   alternates: { canonical: "https://quesoventures.com" },
   openGraph: {
-    title: "Queso Ventures | SEO & GEO for Houston Businesses",
+    title: "Queso Ventures | Websites and Local Search for Houston Businesses",
     description:
       "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
     url: "https://quesoventures.com",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Queso Ventures | SEO & GEO for Houston Businesses",
+    title: "Queso Ventures | Websites and Local Search for Houston Businesses",
     description:
       "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
     images: ["/logo.png"],
@@ -39,37 +39,37 @@ const faqItems = [
   {
     title: "My competitor shows up on Google and I don't. How do I change that?",
     content:
-      "Your competitor has built more trust with Google — a stronger Business Profile, more reviews, better-structured pages, and content that matches what local customers actually search. I audit what they're doing right and build the same foundation for you, starting with what moves the needle fastest.",
+      "Your competitor has built more trust with Google: a stronger Business Profile, more reviews, better-structured pages, and content that matches what local customers actually search. I audit what they're doing right and build the same foundation for you, starting with what moves the needle fastest.",
   },
   {
     title: "How do I show up when someone asks ChatGPT or Google AI to recommend a business like mine?",
     content:
-      "AI tools like ChatGPT and Google's AI Overviews scan your website to decide if your business is credible enough to recommend. To get cited, your site needs to clearly state who you are, what services you offer, where you're located, and who you serve — in a structure AI can read and trust. That's exactly what I optimize for.",
+      "AI tools like ChatGPT and Google's AI Overviews scan your website to decide if your business is credible enough to recommend. To get cited, your site needs to clearly state who you are, what services you offer, where you're located, and who you serve, in a structure AI can read and trust. That's exactly what I optimize for.",
   },
   {
     title: "How fast will I see more leads?",
     content:
-      "Conversion and messaging fixes can show results within a few weeks — visitors start actually contacting you. Consistent Google rankings take 2–4 months of steady work. I focus on both at the same time so you're not waiting months before anything changes.",
+      "Messaging and layout fixes can show results within a few weeks, and visitors start actually contacting you. Consistent search rankings take two to four months of steady work. I focus on both at the same time so you are not waiting months before anything changes.",
   },
   {
     title: "Can you work with my current website, or do I need to start over?",
     content:
-      "Almost always we can work with what you have. If your site is functional, I'll improve the content, structure, page speed, and lead capture without rebuilding. A full redesign only makes sense when the site is truly impossible to update.",
+      "Almost always we can work with what you have. If your site is functional, I'll improve the content, structure, page speed, and lead capture without rebuilding. A full redesign only makes sense when the site is truly impossible to update or nonexistent.",
   },
   {
     title: "Who do you work with?",
     content:
-      "Service businesses in Houston — med spas, clinics, law firms, contractors, restaurants, cafes, and concierge services. If you have a local customer base and want more of them finding you through Google or AI search, we're likely a strong fit.",
+      "Service businesses in Houston: med spas, clinics, law firms, contractors, restaurants, cafes, and concierge services. If you have a local customer base and want more of them finding you through Google or AI search, we are likely a strong fit.",
   },
   {
-    title: "What's included in the free audit?",
+    title: "How does this actually start?",
     content:
-      "An honest look at why your site isn't generating more leads. I review your Google visibility, site speed, mobile experience, content clarity, and conversion blockers — then give you a prioritized plan of exactly what to fix first to start seeing more calls and bookings.",
+      "I build a preview of what your business could look like online before we ever talk numbers. You see something real, not a pitch deck. If it makes sense for your business, we go from there. If not, no pressure.",
   },
   {
     title: "What does it cost?",
     content:
-      "It depends on what your business needs. Most clients work on a monthly retainer so we can keep improving rankings, content, and conversions over time. Book the free audit first and I'll give you transparent pricing based on your actual situation — no generic packages.",
+      "Simple monthly plans with a minimum 4 month commitment. No hourly billing, no surprise fees. Just consistent work every month. Get the free assessment first and I'll walk you through what makes sense for your specific situation.",
   },
 ];
 
