@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://quesoventures.com"),
   title: "Queso Ventures | Websites and Local Search for Houston Businesses",
   description: "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
+  twitter: {
+    card: "summary_large_image",
+    title: "Queso Ventures | Websites and Local Search for Houston Businesses",
+    description: "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
+    images: ["/logo.png"],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

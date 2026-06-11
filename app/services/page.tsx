@@ -24,6 +24,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Websites and Local Search for Houston Businesses | Queso Ventures",
+    description:
+      "Websites built to rank, Google profiles that get you found, and ongoing work that keeps new customers coming in. Houston service businesses — starting with a free audit.",
+    images: ["/logo.png"],
+  },
 };
 
 const jsonLd = {

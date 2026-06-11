@@ -14,8 +14,19 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Local Business Growth Blog | Queso Ventures",
     description:
-      "Practical guides for Houston business owners on getting more customers.",
+      "Practical guides for Houston business owners on getting more customers. Food trucks, shops, contractors, and more.",
     url: "https://quesoventures.com/blog",
+    siteName: "Queso Ventures",
+    images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Local Business Growth Blog | Queso Ventures",
+    description:
+      "Practical guides for Houston business owners on getting more customers. Food trucks, shops, contractors, and more.",
+    images: ["/logo.png"],
   },
 };
 
@@ -42,8 +53,35 @@ function getPosts(): PostMeta[] {
 export default function BlogPage() {
   const posts = getPosts();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": "https://quesoventures.com/blog",
+    name: "Local Business Growth Blog | Queso Ventures",
+    description:
+      "Practical guides for Houston business owners on getting more customers from Google and AI search.",
+    url: "https://quesoventures.com/blog",
+    publisher: {
+      "@type": "Organization",
+      name: "Queso Ventures",
+      url: "https://quesoventures.com",
+      logo: { "@type": "ImageObject", url: "https://quesoventures.com/logo.png" },
+    },
+    blogPost: posts.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.title,
+      description: post.description,
+      url: `https://quesoventures.com/blog/${post.slug}`,
+      datePublished: post.date,
+    })),
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-lightBG dark:bg-darkBG">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
       <main className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">

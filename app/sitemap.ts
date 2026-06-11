@@ -43,25 +43,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: BASE,
-      lastModified: new Date("2026-05-27"),
+      lastModified: new Date("2026-06-11"),
       changeFrequency: "weekly",
       priority: 1.0,
     },
     {
       url: `${BASE}/services`,
-      lastModified: new Date("2026-05-27"),
+      lastModified: new Date("2026-06-11"),
       changeFrequency: "monthly" as const,
       priority: 0.9,
     },
     ...nichePages.map((page) => ({
       url: `${BASE}${page}`,
-      lastModified: new Date("2026-05-27"),
+      lastModified: new Date("2026-06-11"),
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
     {
       url: `${BASE}/blog`,
-      lastModified: new Date("2026-05-27"),
+      lastModified: new Date("2026-06-11"),
       changeFrequency: "weekly" as const,
       priority: 0.7,
     },

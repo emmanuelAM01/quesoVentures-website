@@ -21,6 +21,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Smoke Shop Website & Google Maps Houston | Queso Ventures",
+    description:
+      "Get your smoke shop found on Google in Houston. I build your website, optimize your Google Maps listing, and help you show up before your competitors.",
+    images: ["/logo.png"],
+  },
 };
 
 const faqItems = [
