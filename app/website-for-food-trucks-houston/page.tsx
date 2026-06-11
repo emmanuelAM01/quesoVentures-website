@@ -21,6 +21,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Food Truck Website & Google Maps Setup Houston | Queso Ventures",
+    description:
+      "Get a website for your food truck in Houston and show up when customers search nearby. I build the site, set up Google Maps, and become your ongoing tech partner.",
+    images: ["/logo.png"],
+  },
 };
 
 const faqItems = [

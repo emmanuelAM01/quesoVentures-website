@@ -45,6 +45,17 @@ export async function generateMetadata({
       title: `${data.title} | Queso Ventures`,
       description: data.description,
       url: `https://quesoventures.com/blog/${params.slug}`,
+      siteName: "Queso Ventures",
+      images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
+      locale: "en_US",
+      type: "article",
+      publishedTime: data.date,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${data.title} | Queso Ventures`,
+      description: data.description,
+      images: ["/logo.png"],
     },
   };
 }
@@ -52,8 +63,38 @@ export async function generateMetadata({
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const { data, content } = getPost(params.slug);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `https://quesoventures.com/blog/${params.slug}`,
+    headline: data.title,
+    description: data.description,
+    datePublished: data.date,
+    url: `https://quesoventures.com/blog/${params.slug}`,
+    image: "https://quesoventures.com/logo.png",
+    author: {
+      "@type": "Organization",
+      name: "Queso Ventures",
+      url: "https://quesoventures.com",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Queso Ventures",
+      url: "https://quesoventures.com",
+      logo: { "@type": "ImageObject", url: "https://quesoventures.com/logo.png" },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://quesoventures.com/blog/${params.slug}`,
+    },
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-lightBG dark:bg-darkBG">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
       <main className="container mx-auto px-4 py-16">
         <article className="max-w-2xl mx-auto">

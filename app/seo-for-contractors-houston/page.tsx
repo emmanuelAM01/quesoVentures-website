@@ -21,6 +21,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contractor Website & More Leads in Houston | Queso Ventures",
+    description:
+      "Get more calls from homeowners searching for contractors in Houston. I fix your website, set up Google search, and build a lead pipeline beyond word of mouth.",
+    images: ["/logo.png"],
+  },
 };
 
 const faqItems = [

@@ -21,6 +21,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Med Spa Website & More Clients in Houston | Queso Ventures",
+    description:
+      "Fill your appointment book with clients who found you on Google. I help Houston med spas and salons get found online, build reviews, and stop relying on paid ads.",
+    images: ["/logo.png"],
+  },
 };
 
 const faqItems = [
