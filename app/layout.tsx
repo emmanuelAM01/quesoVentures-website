@@ -10,6 +10,15 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://quesoventures.com"),
   title: "Queso Ventures | Websites and Local Search for Houston Businesses",
   description: "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
+  icons: {
+    icon: [
+      { url: "/logo-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/logo-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/logo-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    shortcut: "/logo-512.png",
+    apple: { url: "/logo-512.png", sizes: "512x512", type: "image/png" },
+  },
   twitter: {
     card: "summary_large_image",
     title: "Queso Ventures | Websites and Local Search for Houston Businesses",
