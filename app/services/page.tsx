@@ -13,12 +13,12 @@ export const metadata: Metadata = {
   title: "Websites and Local Search for Houston Businesses | Queso Ventures",
   description:
     "Websites built to rank, Google profiles that get you found, and ongoing work that keeps new customers coming in. Houston service businesses — starting with a free audit.",
-  alternates: { canonical: "https://quesoventures.com/services" },
+  alternates: { canonical: "https://www.quesoventures.com/services" },
   openGraph: {
     title: "Websites and Local Search for Houston Businesses | Queso Ventures",
     description:
       "Websites built to rank, Google profiles that get you found, and ongoing work that keeps new customers coming in. Houston service businesses — starting with a free audit.",
-    url: "https://quesoventures.com/services",
+    url: "https://www.quesoventures.com/services",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
     locale: "en_US",
@@ -36,12 +36,12 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Service",
-  "@id": "https://quesoventures.com/services#service",
+  "@id": "https://www.quesoventures.com/services#service",
   name: "Web Design & Local SEO — Houston TX",
   provider: {
     "@type": "LocalBusiness",
     name: "Queso Ventures",
-    url: "https://quesoventures.com",
+    url: "https://www.quesoventures.com",
     address: {
       "@type": "PostalAddress",
       addressLocality: "Houston",

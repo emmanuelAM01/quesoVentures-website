@@ -10,12 +10,12 @@ export const metadata: Metadata = {
   title: "Contractor Website & More Leads in Houston | Queso Ventures",
   description:
     "Get more calls from homeowners searching for contractors in Houston. I fix your website, set up Google search, and build a lead pipeline beyond word of mouth.",
-  alternates: { canonical: "https://quesoventures.com/seo-for-contractors-houston" },
+  alternates: { canonical: "https://www.quesoventures.com/seo-for-contractors-houston" },
   openGraph: {
     title: "Contractor Website & More Leads in Houston | Queso Ventures",
     description:
       "Get more calls from homeowners searching for contractors in Houston. I fix your website, set up Google search, and build a lead pipeline beyond word of mouth.",
-    url: "https://quesoventures.com/seo-for-contractors-houston",
+    url: "https://www.quesoventures.com/seo-for-contractors-houston",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
     locale: "en_US",
@@ -58,12 +58,12 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Service",
-      "@id": "https://quesoventures.com/seo-for-contractors-houston#service",
+      "@id": "https://www.quesoventures.com/seo-for-contractors-houston#service",
       name: "Contractor Website & Lead Generation — Houston TX",
       provider: {
         "@type": "LocalBusiness",
         name: "Queso Ventures",
-        url: "https://quesoventures.com",
+        url: "https://www.quesoventures.com",
         address: {
           "@type": "PostalAddress",
           addressLocality: "Houston",
@@ -85,7 +85,7 @@ const jsonLd = {
     },
     {
       "@type": "FAQPage",
-      "@id": "https://quesoventures.com/seo-for-contractors-houston#faq",
+      "@id": "https://www.quesoventures.com/seo-for-contractors-houston#faq",
       mainEntity: faqItems.map((item) => ({
         "@type": "Question",
         name: item.q,

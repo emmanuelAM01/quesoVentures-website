@@ -10,12 +10,12 @@ export const metadata: Metadata = {
   title: "Smoke Shop Website & Google Maps Houston | Queso Ventures",
   description:
     "Get your smoke shop found on Google in Houston. I build your website, optimize your Google Maps listing, and help you show up before your competitors.",
-  alternates: { canonical: "https://quesoventures.com/website-for-smoke-shops-houston" },
+  alternates: { canonical: "https://www.quesoventures.com/website-for-smoke-shops-houston" },
   openGraph: {
     title: "Smoke Shop Website & Google Maps Houston | Queso Ventures",
     description:
       "Get your smoke shop found on Google in Houston. I build your website, optimize your Google Maps listing, and help you show up before your competitors.",
-    url: "https://quesoventures.com/website-for-smoke-shops-houston",
+    url: "https://www.quesoventures.com/website-for-smoke-shops-houston",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
     locale: "en_US",
@@ -58,12 +58,12 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Service",
-      "@id": "https://quesoventures.com/website-for-smoke-shops-houston#service",
+      "@id": "https://www.quesoventures.com/website-for-smoke-shops-houston#service",
       name: "Smoke Shop Website & Local Search Optimization — Houston TX",
       provider: {
         "@type": "LocalBusiness",
         name: "Queso Ventures",
-        url: "https://quesoventures.com",
+        url: "https://www.quesoventures.com",
         address: {
           "@type": "PostalAddress",
           addressLocality: "Houston",
@@ -85,7 +85,7 @@ const jsonLd = {
     },
     {
       "@type": "FAQPage",
-      "@id": "https://quesoventures.com/website-for-smoke-shops-houston#faq",
+      "@id": "https://www.quesoventures.com/website-for-smoke-shops-houston#faq",
       mainEntity: faqItems.map((item) => ({
         "@type": "Question",
         name: item.q,

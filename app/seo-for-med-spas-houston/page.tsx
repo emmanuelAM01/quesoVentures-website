@@ -10,12 +10,12 @@ export const metadata: Metadata = {
   title: "Med Spa Website & More Clients in Houston | Queso Ventures",
   description:
     "Fill your appointment book with clients who found you on Google. I help Houston med spas and salons get found online, build reviews, and stop relying on paid ads.",
-  alternates: { canonical: "https://quesoventures.com/seo-for-med-spas-houston" },
+  alternates: { canonical: "https://www.quesoventures.com/seo-for-med-spas-houston" },
   openGraph: {
     title: "Med Spa Website & More Clients in Houston | Queso Ventures",
     description:
       "Fill your appointment book with clients who found you on Google. I help Houston med spas and salons get found online, build reviews, and stop relying on paid ads.",
-    url: "https://quesoventures.com/seo-for-med-spas-houston",
+    url: "https://www.quesoventures.com/seo-for-med-spas-houston",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
     locale: "en_US",
@@ -58,12 +58,12 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Service",
-      "@id": "https://quesoventures.com/seo-for-med-spas-houston#service",
+      "@id": "https://www.quesoventures.com/seo-for-med-spas-houston#service",
       name: "Med Spa & Salon Website & Local Search — Houston TX",
       provider: {
         "@type": "LocalBusiness",
         name: "Queso Ventures",
-        url: "https://quesoventures.com",
+        url: "https://www.quesoventures.com",
         address: {
           "@type": "PostalAddress",
           addressLocality: "Houston",
@@ -85,7 +85,7 @@ const jsonLd = {
     },
     {
       "@type": "FAQPage",
-      "@id": "https://quesoventures.com/seo-for-med-spas-houston#faq",
+      "@id": "https://www.quesoventures.com/seo-for-med-spas-houston#faq",
       mainEntity: faqItems.map((item) => ({
         "@type": "Question",
         name: item.q,
