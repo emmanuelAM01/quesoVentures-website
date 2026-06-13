@@ -7,7 +7,7 @@ import ContactModal from "components/ContactModal";
 import "styles/globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://quesoventures.com"),
+  metadataBase: new URL("https://www.quesoventures.com"),
   title: "Queso Ventures | Websites and Local Search for Houston Businesses",
   description: "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
   icons: {

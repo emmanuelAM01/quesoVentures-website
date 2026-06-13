@@ -3,4 +3,4 @@ Allow: /
 Disallow: /api/
 Disallow: /foundCode
 
-Sitemap: https://quesoventures.com/sitemap.xml
+Sitemap: https://www.quesoventures.com/sitemap.xml
