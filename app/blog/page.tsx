@@ -10,12 +10,12 @@ export const metadata: Metadata = {
   title: "Local Business Growth Blog | Queso Ventures",
   description:
     "Practical guides for Houston business owners on getting more customers. Food trucks, shops, contractors, and more.",
-  alternates: { canonical: "https://quesoventures.com/blog" },
+  alternates: { canonical: "https://www.quesoventures.com/blog" },
   openGraph: {
     title: "Local Business Growth Blog | Queso Ventures",
     description:
       "Practical guides for Houston business owners on getting more customers. Food trucks, shops, contractors, and more.",
-    url: "https://quesoventures.com/blog",
+    url: "https://www.quesoventures.com/blog",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
     locale: "en_US",
@@ -56,22 +56,22 @@ export default function BlogPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    "@id": "https://quesoventures.com/blog",
+    "@id": "https://www.quesoventures.com/blog",
     name: "Local Business Growth Blog | Queso Ventures",
     description:
       "Practical guides for Houston business owners on getting more customers from Google and AI search.",
-    url: "https://quesoventures.com/blog",
+    url: "https://www.quesoventures.com/blog",
     publisher: {
       "@type": "Organization",
       name: "Queso Ventures",
-      url: "https://quesoventures.com",
-      logo: { "@type": "ImageObject", url: "https://quesoventures.com/logo.png" },
+      url: "https://www.quesoventures.com",
+      logo: { "@type": "ImageObject", url: "https://www.quesoventures.com/logo.png" },
     },
     blogPost: posts.map((post) => ({
       "@type": "BlogPosting",
       headline: post.title,
       description: post.description,
-      url: `https://quesoventures.com/blog/${post.slug}`,
+      url: `https://www.quesoventures.com/blog/${post.slug}`,
       datePublished: post.date,
     })),
   };
