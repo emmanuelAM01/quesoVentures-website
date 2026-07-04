@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AiOutlineInstagram, AiOutlineYoutube } from "react-icons/ai";
 
 const Footer = () => {
@@ -24,6 +25,14 @@ const Footer = () => {
           >
             <AiOutlineYoutube size={22} />
           </a>
+        </div>
+        <div className="flex items-center gap-4 text-lightTextMuted dark:text-darkTextMuted">
+          <Link href="/privacy" className="hover:opacity-70 transition-opacity">
+            Privacy Policy
+          </Link>
+          <Link href="/terms" className="hover:opacity-70 transition-opacity">
+            Terms &amp; Conditions
+          </Link>
         </div>
         <p>&copy; {currentYear} Queso Ventures LLC</p>
       </div>
