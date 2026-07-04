@@ -3,7 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import type { MetadataRoute } from "next";
 
-const BASE = "https://quesoventures.com";
+const BASE = "https://www.quesoventures.com";
 
 function getBlogSlugs(): string[] {
   const dir = path.join(process.cwd(), "content/blog");

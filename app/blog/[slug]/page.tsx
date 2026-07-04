@@ -40,11 +40,11 @@ export async function generateMetadata({
   return {
     title: `${data.title} | Queso Ventures`,
     description: data.description,
-    alternates: { canonical: `https://quesoventures.com/blog/${params.slug}` },
+    alternates: { canonical: `https://www.quesoventures.com/blog/${params.slug}` },
     openGraph: {
       title: `${data.title} | Queso Ventures`,
       description: data.description,
-      url: `https://quesoventures.com/blog/${params.slug}`,
+      url: `https://www.quesoventures.com/blog/${params.slug}`,
       siteName: "Queso Ventures",
       images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
       locale: "en_US",
@@ -66,26 +66,26 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "@id": `https://quesoventures.com/blog/${params.slug}`,
+    "@id": `https://www.quesoventures.com/blog/${params.slug}`,
     headline: data.title,
     description: data.description,
     datePublished: data.date,
-    url: `https://quesoventures.com/blog/${params.slug}`,
-    image: "https://quesoventures.com/logo.png",
+    url: `https://www.quesoventures.com/blog/${params.slug}`,
+    image: "https://www.quesoventures.com/logo.png",
     author: {
       "@type": "Organization",
       name: "Queso Ventures",
-      url: "https://quesoventures.com",
+      url: "https://www.quesoventures.com",
     },
     publisher: {
       "@type": "Organization",
       name: "Queso Ventures",
-      url: "https://quesoventures.com",
-      logo: { "@type": "ImageObject", url: "https://quesoventures.com/logo.png" },
+      url: "https://www.quesoventures.com",
+      logo: { "@type": "ImageObject", url: "https://www.quesoventures.com/logo.png" },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://quesoventures.com/blog/${params.slug}`,
+      "@id": `https://www.quesoventures.com/blog/${params.slug}`,
     },
   };
 

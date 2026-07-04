@@ -10,12 +10,12 @@ export const metadata: Metadata = {
   title: "Queso Ventures | Websites and Local Search for Houston Businesses",
   description:
     "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
-  alternates: { canonical: "https://quesoventures.com" },
+  alternates: { canonical: "https://www.quesoventures.com" },
   openGraph: {
     title: "Queso Ventures | Websites and Local Search for Houston Businesses",
     description:
       "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
-    url: "https://quesoventures.com",
+    url: "https://www.quesoventures.com",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt:"Queso Ventures logo - Houston web design and local SEO" }],
     locale: "en_US",
@@ -78,12 +78,12 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://quesoventures.com/#organization",
+      "@id": "https://www.quesoventures.com/#organization",
       name: "Queso Ventures",
-      url: "https://quesoventures.com",
+      url: "https://www.quesoventures.com",
       logo: {
         "@type": "ImageObject",
-        url: "https://quesoventures.com/logo.png",
+        url: "https://www.quesoventures.com/logo.png",
       },
       description:
         "Queso Ventures helps Houston service businesses get more leads from Google and AI search through SEO and Generative Engine Optimization (GEO).",
@@ -102,10 +102,10 @@ const jsonLd = {
     },
     {
       "@type": "LocalBusiness",
-      "@id": "https://quesoventures.com/#localbusiness",
+      "@id": "https://www.quesoventures.com/#localbusiness",
       name: "Queso Ventures",
-      url: "https://quesoventures.com",
-      image: "https://quesoventures.com/logo.png",
+      url: "https://www.quesoventures.com",
+      image: "https://www.quesoventures.com/logo.png",
       description:
         "SEO and AI search optimization for Houston service businesses — med spas, clinics, law firms, contractors, restaurants, and more.",
       address: {
@@ -123,9 +123,9 @@ const jsonLd = {
     },
     {
       "@type": "Service",
-      "@id": "https://quesoventures.com/#service-seo",
+      "@id": "https://www.quesoventures.com/#service-seo",
       name: "SEO & GEO Optimization for Houston Businesses",
-      provider: { "@id": "https://quesoventures.com/#organization" },
+      provider: { "@id": "https://www.quesoventures.com/#organization" },
       serviceType: "Search Engine Optimization",
       description:
         "Comprehensive SEO and Generative Engine Optimization (GEO) to help Houston service businesses rank higher on Google and get cited by AI search tools like ChatGPT and Perplexity.",
@@ -141,7 +141,7 @@ const jsonLd = {
     },
     {
       "@type": "FAQPage",
-      "@id": "https://quesoventures.com/#faq",
+      "@id": "https://www.quesoventures.com/#faq",
       mainEntity: faqItems.map((item) => ({
         "@type": "Question",
         name: item.title,
