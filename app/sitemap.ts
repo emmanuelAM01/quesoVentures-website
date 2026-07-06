@@ -35,7 +35,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const nichePages = [
     "/website-for-food-trucks-houston",
-    "/website-for-smoke-shops-houston",
+    // "/website-for-smoke-shops-houston",
     "/seo-for-contractors-houston",
     "/seo-for-med-spas-houston",
   ];

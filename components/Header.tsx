@@ -16,7 +16,7 @@ const mobileLinkClass =
 
 const industries = [
   { label: "Food Trucks", href: "/website-for-food-trucks-houston" },
-  { label: "Smoke & Vape Shops", href: "/website-for-smoke-shops-houston" },
+  // { label: "Smoke & Vape Shops", href: "/website-for-smoke-shops-houston" },
   { label: "Contractors & Trades", href: "/seo-for-contractors-houston" },
   { label: "Med Spas & Salons", href: "/seo-for-med-spas-houston" },
 ];

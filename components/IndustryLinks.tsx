@@ -6,11 +6,11 @@ const industries = [
     href: "/website-for-food-trucks-houston",
     tagline: "Get a website and Google Maps presence for your food truck.",
   },
-  {
-    label: "Smoke & Vape Shops",
-    href: "/website-for-smoke-shops-houston",
-    tagline: "Show up first when customers search nearby.",
-  },
+  // {
+  //   label: "Smoke & Vape Shops",
+  //   href: "/website-for-smoke-shops-houston",
+  //   tagline: "Show up first when customers search nearby.",
+  // },
   {
     label: "Contractors & Trades",
     href: "/seo-for-contractors-houston",
