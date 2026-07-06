@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import ThemeSwitch from "./ThemeSwitch";
+import { SERVICE_AREAS } from "./serviceAreas";
 
 const navLinkClass =
   "relative text-sm font-medium text-lightText dark:text-darkText px-4 py-2 rounded-full transition-colors " +
@@ -20,6 +21,14 @@ const industries = [
   { label: "Contractors & Trades", href: "/seo-for-contractors-houston" },
   { label: "Med Spas & Salons", href: "/seo-for-med-spas-houston" },
 ];
+
+const areas = SERVICE_AREAS.map((a) => ({ label: a.city, href: a.slug }));
+
+const dropdownGroupLabel =
+  "px-4 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-widest text-lightTextMuted dark:text-darkTextMuted";
+
+const dropdownFootnote =
+  "px-4 py-2 text-sm italic font-light text-lightTextMuted dark:text-darkTextMuted";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -97,7 +106,7 @@ export default function Header() {
                 className={navLinkClass}
                 aria-expanded={industriesOpen}
               >
-                Industries
+                Who I Help
                 <span
                   className={`ml-1 inline-block transition-transform duration-200 ${
                     industriesOpen ? "rotate-180" : ""
@@ -109,6 +118,7 @@ export default function Header() {
 
               {industriesOpen && (
                 <div className="absolute right-0 top-full mt-1 w-52 rounded-xl border border-lightBorder dark:border-darkBorder bg-lightBG dark:bg-darkBG shadow-lg py-1.5 z-50">
+                  <p className={dropdownGroupLabel}>By industry</p>
                   {industries.map((item) => (
                     <Link
                       key={item.href}
@@ -119,6 +129,20 @@ export default function Header() {
                       {item.label}
                     </Link>
                   ))}
+                  <p className={dropdownFootnote}>and more…</p>
+                  <div className="my-1.5 border-t border-lightBorder dark:border-darkBorder" />
+                  <p className={dropdownGroupLabel}>By area</p>
+                  {areas.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIndustriesOpen(false)}
+                      className="block px-4 py-2 text-sm text-lightText dark:text-darkText hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                  <p className={dropdownFootnote}>always expanding…</p>
                 </div>
               )}
             </li>
@@ -199,7 +223,7 @@ export default function Header() {
                 className={`${mobileLinkClass} flex items-center justify-between`}
                 aria-expanded={mobileIndustriesOpen}
               >
-                <span>Industries</span>
+                <span>Who I Help</span>
                 <span
                   className={`inline-block transition-transform duration-200 text-sm ${
                     mobileIndustriesOpen ? "rotate-180" : ""
@@ -220,6 +244,22 @@ export default function Header() {
                       {item.label}
                     </Link>
                   ))}
+                  <p className="px-3 py-1.5 text-sm italic font-light text-lightTextMuted dark:text-darkTextMuted">
+                    and more…
+                  </p>
+                  {areas.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={closeMobile}
+                      className="block px-3 py-2.5 text-sm text-lightTextMuted dark:text-darkTextMuted rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                  <p className="px-3 py-1.5 text-sm italic font-light text-lightTextMuted dark:text-darkTextMuted">
+                    always expanding…
+                  </p>
                 </div>
               )}
             </div>

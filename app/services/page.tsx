@@ -10,14 +10,14 @@ import {
 } from "react-icons/fa";
 
 export const metadata: Metadata = {
-  title: "Websites and Local Search for Houston Businesses | Queso Ventures",
+  title: "Website Design, Local SEO & Google Business Profile Services | Queso Ventures",
   description:
-    "Websites built to rank, Google profiles that get you found, and ongoing work that keeps new customers coming in. Houston service businesses — starting with a free audit.",
+    "Website design, local SEO, and Google Business Profile services for Houston businesses. Simple plans at $300/month — not agency prices. Free audit first.",
   alternates: { canonical: "https://www.quesoventures.com/services" },
   openGraph: {
-    title: "Websites and Local Search for Houston Businesses | Queso Ventures",
+    title: "Website Design, Local SEO & Google Business Profile Services | Queso Ventures",
     description:
-      "Websites built to rank, Google profiles that get you found, and ongoing work that keeps new customers coming in. Houston service businesses — starting with a free audit.",
+      "Website design, local SEO, and Google Business Profile services for Houston businesses. Simple plans at $300/month — not agency prices. Free audit first.",
     url: "https://www.quesoventures.com/services",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
@@ -26,9 +26,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Websites and Local Search for Houston Businesses | Queso Ventures",
+    title: "Website Design, Local SEO & Google Business Profile Services | Queso Ventures",
     description:
-      "Websites built to rank, Google profiles that get you found, and ongoing work that keeps new customers coming in. Houston service businesses — starting with a free audit.",
+      "Website design, local SEO, and Google Business Profile services for Houston businesses. Simple plans at $300/month — not agency prices. Free audit first.",
     images: ["/logo.png"],
   },
 };
@@ -101,7 +101,7 @@ export default function ServicesPage() {
       <main>
         {/* Hero */}
         <section className="container mx-auto px-4 pt-24 pb-16 text-center">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-lightText dark:text-darkText mb-6 tracking-tight">
               From No Website to Customers Finding You on Google
             </h1>
@@ -146,10 +146,10 @@ export default function ServicesPage() {
               How pricing works
             </h2>
             <p className="text-base text-lightTextMuted dark:text-darkTextMuted font-light mb-6">
-              Simple monthly plans with a minimum 4 month commitment. No hourly billing, no surprise fees. Just consistent work every month.
+              Simple monthly plans at $300 a month, with a minimum 4 month commitment. Traditional agencies charge $1,500+ and most of them aren&apos;t even touching AI search.
             </p>
             <p className="text-base text-lightTextMuted dark:text-darkTextMuted font-light">
-              Every client is different so pricing is based on what your business actually needs. The best first step is letting me take a look. I will show you exactly where the opportunity is before we talk numbers.
+              No hourly billing, no surprise fees. The best first step is letting me take a look — I will show you exactly where the opportunity is, and you will know your exact price before anything starts.
             </p>
           </div>
         </section>
