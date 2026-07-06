@@ -70,6 +70,15 @@ export default function PrivacyPolicyPage() {
             earned. Message and data rates may apply.
           </li>
           <li>
+            In addition to transactional loyalty notifications (such as visit
+            confirmations and reward alerts), enrolled customers may
+            periodically receive promotional messages and re-engagement
+            reminders — for example, a check-in message after a period of
+            inactivity. Message frequency varies. All messages include
+            opt-out instructions, and customers may reply STOP at any time to
+            unsubscribe.
+          </li>
+          <li>
             You can stop the messages whenever you want by replying{" "}
             <strong>STOP</strong> — you&apos;ll get one confirmation text and
             then nothing further. Reply <strong>HELP</strong> for help at any

@@ -51,12 +51,17 @@ export default function TermsPage() {
             <strong>What you&apos;ll get texted</strong> — an enrollment
             confirmation, then messages tied to your activity: visit/progress
             updates, a message when you&apos;ve earned a reward, and a
-            confirmation when you redeem one.
+            confirmation when you redeem one. Programs may also send
+            occasional promotional or marketing messages and periodic
+            re-engagement reminders (for example, a check-in message if you
+            haven&apos;t visited in a while).
           </li>
           <li>
-            <strong>Message and data rates may apply.</strong> Frequency
-            depends on how often you visit — there&apos;s no fixed schedule
-            of unrelated marketing texts.
+            <strong>Message and data rates may apply.</strong> Message
+            frequency varies based on your activity and the Program — it
+            isn&apos;t a fixed schedule, and can include both activity-based
+            notifications and the promotional/re-engagement messages
+            described above.
           </li>
           <li>
             <strong>Quit anytime</strong> — reply <strong>STOP</strong> to
