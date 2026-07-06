@@ -13,16 +13,16 @@ export const metadata: Metadata = {
     canonical: "https://www.quesoventures.com/",
   },
 
-  title: "Queso Ventures | Websites and Local Search for Houston Businesses",
-  description: "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
+  title: "Web Design & Local SEO for Houston Businesses | Queso Ventures",
+  description: "Web design and local SEO that gets Houston businesses found on Google and AI search. Simple monthly plans at $300/month — not agency prices. Free audit first.",
   icons: {
     icon: "/favicon.ico",
     apple: "/logo-square.png",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Queso Ventures | Websites and Local Search for Houston Businesses",
-    description: "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
+    title: "Web Design & Local SEO for Houston Businesses | Queso Ventures",
+    description: "Web design and local SEO that gets Houston businesses found on Google and AI search. Simple monthly plans at $300/month — not agency prices. Free audit first.",
     images: ["/logo.png"],
   },
 };

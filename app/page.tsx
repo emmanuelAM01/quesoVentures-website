@@ -7,14 +7,14 @@ import FreeAudit from "components/FreeAudit";
 import AskDirectlyButton from "components/AskDirectlyButton";
 
 export const metadata: Metadata = {
-  title: "Queso Ventures | Websites and Local Search for Houston Businesses",
+  title: "Web Design & Local SEO for Houston Businesses | Queso Ventures",
   description:
-    "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
+    "Web design and local SEO that gets Houston businesses found on Google and AI search. Simple monthly plans at $300/month — not agency prices. Free audit first.",
   alternates: { canonical: "https://www.quesoventures.com" },
   openGraph: {
-    title: "Queso Ventures | Websites and Local Search for Houston Businesses",
+    title: "Web Design & Local SEO for Houston Businesses | Queso Ventures",
     description:
-      "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
+      "Web design and local SEO that gets Houston businesses found on Google and AI search. Simple monthly plans at $300/month — not agency prices. Free audit first.",
     url: "https://www.quesoventures.com",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt:"Queso Ventures logo - Houston web design and local SEO" }],
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Queso Ventures | Websites and Local Search for Houston Businesses",
+    title: "Web Design & Local SEO for Houston Businesses | Queso Ventures",
     description:
-      "More calls and bookings from your website. I help Houston service businesses get found on Google and AI search — starting with a free audit.",
+      "Web design and local SEO that gets Houston businesses found on Google and AI search. Simple monthly plans at $300/month — not agency prices. Free audit first.",
     images: ["/logo.png"],
   },
 };
@@ -59,7 +59,7 @@ const faqItems = [
   {
     title: "Who do you work with?",
     content:
-      "Service businesses in Houston: med spas, clinics, law firms, contractors, restaurants, cafes, and concierge services. If you have a local customer base and want more of them finding you through Google or AI search, we are likely a strong fit.",
+      "Local service businesses across Houston, Humble, Atascocita, and Kingwood: auto shops and vehicle wrap shops, contractors and home services, carpet cleaners, food trucks, med spas and salons, event venues, and local retailers. If your customers find you by searching online, we are likely a strong fit.",
   },
   {
     title: "How does this actually start?",
@@ -69,7 +69,7 @@ const faqItems = [
   {
     title: "What does it cost?",
     content:
-      "Simple monthly plans with a minimum 4 month commitment. No hourly billing, no surprise fees. Just consistent work every month. Get the free assessment first and I'll walk you through what makes sense for your specific situation.",
+      "Simple monthly plans at $300 a month with a minimum 4 month commitment. Compare that to the $1,500+ traditional agencies charge — and most of them aren't even touching AI search. No hourly billing, no surprise fees, and you'll know your exact number before we start.",
   },
 ];
 
@@ -107,7 +107,7 @@ const jsonLd = {
       url: "https://www.quesoventures.com",
       image: "https://www.quesoventures.com/logo.png",
       description:
-        "SEO and AI search optimization for Houston service businesses — med spas, clinics, law firms, contractors, restaurants, and more.",
+        "Web design, local SEO, and AI search optimization for Houston-area service businesses — auto shops, contractors, med spas, salons, food trucks, event venues, and more.",
       address: {
         "@type": "PostalAddress",
         addressLocality: "Houston",
@@ -116,9 +116,14 @@ const jsonLd = {
       },
       areaServed: [
         { "@type": "City", name: "Houston", addressRegion: "TX" },
+        { "@type": "City", name: "Humble", addressRegion: "TX" },
+        { "@type": "City", name: "Atascocita", addressRegion: "TX" },
+        { "@type": "City", name: "Kingwood", addressRegion: "TX" },
+        { "@type": "City", name: "Spring", addressRegion: "TX" },
+        { "@type": "City", name: "Porter", addressRegion: "TX" },
         { "@type": "State", name: "Texas" },
       ],
-      priceRange: "$$",
+      priceRange: "$300 per month",
       serviceType: ["SEO", "GEO", "Local SEO", "Lead Generation", "Website Optimization"],
     },
     {
@@ -170,10 +175,10 @@ export default function Page() {
           <div className="flex flex-col items-center text-center w-full">
             <div className="max-w-4xl mx-auto mb-10">
               <h2 className="text-3xl sm:text-4xl md:text-5xl text-lightText dark:text-darkText mb-6">
-                Common Questions About Getting More Leads Online
+                Questions, Answered
               </h2>
               <p className="text-lg sm:text-xl md:text-2xl font-light text-lightTextMuted dark:text-darkTextMuted">
-                Real answers for Houston business owners trying to grow online.
+                Straight answers for Houston business owners.
               </p>
             </div>
 

@@ -38,24 +38,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // "/website-for-smoke-shops-houston",
     "/seo-for-contractors-houston",
     "/seo-for-med-spas-houston",
+    "/web-design-humble-tx",
+    "/web-design-atascocita-tx",
+    "/web-design-kingwood-tx",
   ];
 
   return [
     {
       url: BASE,
-      lastModified: new Date("2026-06-11"),
+      lastModified: new Date("2026-07-06"),
       changeFrequency: "weekly",
       priority: 1.0,
     },
     {
       url: `${BASE}/services`,
-      lastModified: new Date("2026-06-11"),
+      lastModified: new Date("2026-07-06"),
       changeFrequency: "monthly" as const,
       priority: 0.9,
     },
     ...nichePages.map((page) => ({
       url: `${BASE}${page}`,
-      lastModified: new Date("2026-06-11"),
+      lastModified: new Date("2026-07-06"),
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),

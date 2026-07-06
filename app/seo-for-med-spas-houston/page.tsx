@@ -144,7 +144,7 @@ export default function MedSpaPage() {
       <main>
         {/* Hero */}
         <section className="container mx-auto px-4 min-h-screen flex flex-col items-center justify-center text-center">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <p className="text-sm font-semibold uppercase tracking-widest text-lightTextMuted dark:text-darkTextMuted mb-4">
               Houston Med Spas &amp; Salons
             </p>
