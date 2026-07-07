@@ -94,18 +94,19 @@ const close = () => {
           onClick={(e) => e.stopPropagation()}
           className="
             w-full max-w-lg
-            rounded-2xl
-            border border-lightBorder dark:border-darkBorder
-            bg-white dark:bg-darkBG
-            shadow-xl
-            p-4 sm:p-6
+            rounded-3xl
+            border border-lightBorder dark:border-white/10
+            bg-white dark:bg-[#151618]
+            shadow-2xl shadow-black/20
+            p-6 sm:p-8
             max-h-[85svh] overflow-hidden
+            animate-scaleIn
           "
         >
           <div className="flex items-start justify-between gap-4">
             <h2
               id={`${id}-title`}
-              className="text-xl sm:text-2xl font-semibold text-lightText dark:text-darkText"
+              className="text-2xl sm:text-3xl tracking-tight font-semibold text-lightText dark:text-darkText"
             >
               {title}
             </h2>
@@ -114,7 +115,8 @@ const close = () => {
               type="button"
               onClick={close}
               className="
-                rounded-lg px-2 py-1
+                inline-flex h-9 w-9 items-center justify-center
+                rounded-full
                 text-lightTextMuted dark:text-darkTextMuted
                 hover:bg-black/5 dark:hover:bg-white/10
                 transition-colors
@@ -125,7 +127,7 @@ const close = () => {
             </button>
           </div>
 
-          <div className="mt-4 sm:mt-5 overflow-y-auto max-h-[calc(85svh-80px)] sm:max-h-[calc(85svh-96px)] pr-1">
+          <div className="mt-5 sm:mt-6 overflow-y-auto max-h-[calc(85svh-110px)] sm:max-h-[calc(85svh-130px)] pr-1">
             {children}
           </div>
         </div>

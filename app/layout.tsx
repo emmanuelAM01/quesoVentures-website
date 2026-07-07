@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   },
 
   title: "Web Design & Local SEO for Houston Businesses | Queso Ventures",
-  description: "Web design and local SEO that gets Houston businesses found on Google and AI search. Simple monthly plans at $300/month — not agency prices. Free audit first.",
+  description: "Web design and local SEO that gets Houston businesses found on Google and AI search. Simple monthly plans at $300/ month, not agency prices. Free audit first.",
   icons: {
     icon: "/favicon.ico",
     apple: "/logo-square.png",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Web Design & Local SEO for Houston Businesses | Queso Ventures",
-    description: "Web design and local SEO that gets Houston businesses found on Google and AI search. Simple monthly plans at $300/month — not agency prices. Free audit first.",
+    description: "Web design and local SEO that gets Houston businesses found on Google and AI search. Simple monthly plans at $300/ month, not agency prices. Free audit first.",
     images: ["/logo.png"],
   },
 };
