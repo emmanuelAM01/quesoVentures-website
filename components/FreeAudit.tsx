@@ -1,6 +1,14 @@
 "use client";
 
 import React from "react";
+import { FaCheck } from "react-icons/fa";
+
+const checks = [
+  "Why you are not showing up in local searches",
+  "Quick wins for getting found in your area",
+  "What stops your visitors from calling or booking",
+  "Whether AI tools would recommend you today",
+];
 
 export default function FreeAuditSection() {
   const openContactWithPrefill = (message: string) => {
@@ -11,62 +19,48 @@ export default function FreeAuditSection() {
   return (
     <section
       id="free-audit"
-      className="container mx-auto px-4 py-16 bg-lightBG dark:bg-darkBG transition-colors"
+      className="container mx-auto px-4 py-20 scroll-mt-16"
     >
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl text-lightText dark:text-darkText mb-6">
-            Ready to stop being invisible online?
-          </h2>
+      <div className="max-w-6xl mx-auto">
+        <div className="rounded-3xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-8 sm:p-12 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+          <div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl text-lightText dark:text-darkText mb-4">
+              Ready to stop being invisible online?
+            </h2>
+            <p className="text-lg sm:text-xl font-light text-lightTextMuted dark:text-darkTextMuted">
+              We take a free look at where you stand, show you what is
+              possible, and you decide. No pressure.
+            </p>
 
-          <p className="text-lg sm:text-xl md:text-2xl text-lightTextMuted dark:text-darkTextMuted font-light">
-            No pressure. I take a look at where you stand, show you what is possible, and you decide if it makes sense.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-lightBorder dark:border-darkBorder p-8 sm:p-10 bg-white/60 dark:bg-transparent">
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-xl sm:text-2xl font-semibold text-lightText dark:text-darkText mb-3">
-                Here&apos;s what I&apos;ll analyze:
-              </h3>
-              <div className="text-base sm:text-lg text-lightTextMuted dark:text-darkTextMuted font-light space-y-2">
-                <p>• Top issues holding you back from local search rankings</p>
-                <p>• Quick wins for Houston local search visibility</p>
-                <p>• What is stopping your visitors from calling or booking</p>
-                <p>• AI search readiness (showing up when people ask AI assistants for recommendations)</p>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-lightBorder dark:border-darkBorder">
-              <h3 className="text-xl sm:text-2xl font-semibold text-lightText dark:text-darkText mb-3">
-                This is for you if:
-              </h3>
-              <div className="text-base sm:text-lg text-lightTextMuted dark:text-darkTextMuted font-light space-y-2">
-                <p>• You do not have a website yet and do not know where to start</p>
-                <p>• You have a website but customers are not finding you online</p>
-                <p>• You want new customers to find you without chasing them down</p>
-                <p>• You want to be consistent, not trendy</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col mx-auto mt-10 pt-8 border-t border-lightBorder dark:border-darkBorder">
             <button
               type="button"
               onClick={() =>
                 openContactWithPrefill(
-                  "I want to see what my website can look like. I need help with getting more..."
+                  "I want to see what my website could look like. I need help with getting more..."
                 )
               }
-              className=" mx-auto  inline-flex items-center justify-center rounded-xl bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover px-8 py-4 text-lg font-semibold text-lightBG dark:text-darkBG transition-colors"
+              className="mt-8 w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover px-6 py-3.5 text-base sm:px-8 sm:py-4 sm:text-lg font-semibold text-lightBG dark:text-darkBG transition-colors"
             >
               See What Your Website Could Look Like
             </button>
-            
+            <p className="mt-4 text-sm font-light text-lightTextMuted dark:text-darkTextMuted">
+              Free. No commitment. We reply within 24 hours.
+            </p>
           </div>
-        </div>
 
+          <ul className="space-y-4">
+            {checks.map((item, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lightAccent/10 dark:bg-darkAccent/10 text-lightAccent dark:text-darkAccent">
+                  <FaCheck size={11} />
+                </span>
+                <span className="text-base sm:text-lg font-light text-lightText dark:text-darkText">
+                  {item}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );

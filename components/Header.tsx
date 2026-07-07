@@ -32,13 +32,22 @@ const dropdownFootnote =
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [overDark, setOverDark] = useState(false);
   const [industriesOpen, setIndustriesOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileIndustriesOpen, setMobileIndustriesOpen] = useState(false);
   const industriesRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 6);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 6);
+      let over = false;
+      document.querySelectorAll("[data-dark-section]").forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= 64 && rect.bottom >= 32) over = true;
+      });
+      setOverDark(over);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -63,6 +72,7 @@ export default function Header() {
         "bg-cheese-header-light dark:bg-cheese-header-dark",
         "backdrop-blur-md",
         "transition-all duration-200",
+        overDark ? "dark" : "",
         scrolled
           ? "border-b border-lightBorder/90 dark:border-darkBorder/90 shadow-sm"
           : "border-b border-lightBorder/60 dark:border-darkBorder/60 shadow-none",
@@ -154,17 +164,9 @@ export default function Header() {
             </li>
 
             <li>
-              <button
-                type="button"
-                onClick={() =>
-                  window.dispatchEvent(
-                    new CustomEvent("modal:open", { detail: { id: "about-popup" } })
-                  )
-                }
-                className={navLinkClass}
-              >
+              <Link href="/about" className={navLinkClass}>
                 About
-              </button>
+              </Link>
             </li>
 
             <li>
@@ -268,16 +270,9 @@ export default function Header() {
               Blog
             </Link>
 
-            <button
-              type="button"
-              onClick={() => {
-                closeMobile();
-                window.dispatchEvent(new CustomEvent("modal:open", { detail: { id: "about-popup" } }));
-              }}
-              className={mobileLinkClass}
-            >
+            <Link href="/about" onClick={closeMobile} className={mobileLinkClass}>
               About
-            </button>
+            </Link>
 
             <button
               type="button"

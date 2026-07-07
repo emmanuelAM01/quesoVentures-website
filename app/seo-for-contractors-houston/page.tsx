@@ -4,7 +4,8 @@ import Footer from "components/Footer";
 import FreeAudit from "components/FreeAudit";
 import IndustryLinks from "components/IndustryLinks";
 import NicheCtaButton from "components/NicheCtaButton";
-import FaqAccordion from "components/FaqAccordion";
+import FaqDeck from "components/FaqDeck";
+import LightBar from "components/LightBar";
 
 export const metadata: Metadata = {
   title: "Contractor Website & More Leads in Houston | Queso Ventures",
@@ -59,7 +60,7 @@ const jsonLd = {
     {
       "@type": "Service",
       "@id": "https://www.quesoventures.com/seo-for-contractors-houston#service",
-      name: "Contractor Website & Lead Generation — Houston TX",
+      name: "Contractor Website & Lead Generation, Houston TX",
       provider: {
         "@type": "LocalBusiness",
         name: "Queso Ventures",
@@ -75,7 +76,7 @@ const jsonLd = {
         "Contractor Website Houston, HVAC Plumber Electrician Google Search Houston, Local SEO for Contractors",
       areaServed: { "@type": "City", name: "Houston", addressRegion: "TX" },
       description:
-        "Website optimization and local search for Houston contractors — plumbers, HVAC, electricians, roofers. Get found when homeowners search and get the phone ringing.",
+        "Website optimization and local search for Houston contractors, plumbers, HVAC, electricians, roofers. Get found when homeowners search and get the phone ringing.",
       offers: {
         "@type": "Offer",
         name: "Free Local Visibility Audit",
@@ -143,8 +144,8 @@ export default function ContractorPage() {
       <Header />
       <main>
         {/* Hero */}
-        <section className="container mx-auto px-4 min-h-screen flex flex-col items-center justify-center text-center">
-          <div className="max-w-5xl mx-auto">
+        <section className="container mx-auto px-4 pt-32 pb-16">
+          <div className="max-w-6xl mx-auto">
             <p className="text-sm font-semibold uppercase tracking-widest text-lightTextMuted dark:text-darkTextMuted mb-4">
               Houston Contractors &amp; Trades
             </p>
@@ -154,13 +155,20 @@ export default function ContractorPage() {
             <p className="text-lg sm:text-xl md:text-2xl text-lightTextMuted dark:text-darkTextMuted font-light mb-10">
               Referrals are not a plan. I build you a second pipeline that brings in calls from customers searching right now.
             </p>
-            <NicheCtaButton message={PREFILL} label="I'll Show You How It Works" />
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
+              <NicheCtaButton message={PREFILL} label="I'll Show You How It Works" />
+              <p className="text-sm font-light text-lightTextMuted dark:text-darkTextMuted">
+                Simple plans at $300 a month.
+              </p>
+            </div>
           </div>
         </section>
 
+        <LightBar />
+
         {/* Pain points */}
         <section className="container mx-auto px-4 py-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl text-lightText dark:text-darkText mb-10 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl text-lightText dark:text-darkText mb-10 max-w-4xl mx-auto">
             Sound familiar?
           </h2>
           <div className="max-w-4xl mx-auto divide-y divide-lightBorder dark:divide-darkBorder">
@@ -179,10 +187,10 @@ export default function ContractorPage() {
 
         {/* What changes */}
         <section className="container mx-auto px-4 py-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl text-lightText dark:text-darkText mb-4 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl text-lightText dark:text-darkText mb-4 max-w-4xl mx-auto">
             Here&apos;s what changes
           </h2>
-          <p className="text-lg text-lightTextMuted dark:text-darkTextMuted font-light text-center mb-10">
+          <p className="text-lg text-lightTextMuted dark:text-darkTextMuted font-light mb-10 max-w-4xl mx-auto">
             I handle the online side so you can focus on the work.
           </p>
           <div className="max-w-4xl mx-auto">
@@ -190,7 +198,7 @@ export default function ContractorPage() {
               {whatChanges.map((item, i) => (
                 <div
                   key={i}
-                  className="flex gap-4 rounded-2xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-6"
+                  className="flex gap-4 rounded-3xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-6"
                 >
                   <span className="text-lightAccent dark:text-darkAccent font-bold text-xl mt-0.5 shrink-0">
                     {i + 1}
@@ -209,15 +217,10 @@ export default function ContractorPage() {
           </div>
         </section>
 
-        {/* FAQ */}
-        <section className="container mx-auto px-4 py-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl text-lightText dark:text-darkText mb-10 text-center">
-            Questions contractors ask
-          </h2>
-          <div className="max-w-4xl mx-auto">
-            <FaqAccordion items={faqItems} />
-          </div>
-        </section>
+        <FaqDeck
+          heading="Questions contractors ask"
+          items={faqItems.map((f) => ({ title: f.q, content: f.a }))}
+        />
 
         <FreeAudit />
         <IndustryLinks current="/seo-for-contractors-houston" />

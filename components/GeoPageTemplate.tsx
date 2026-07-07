@@ -2,7 +2,8 @@ import Link from "next/link";
 import Header from "components/Header";
 import Footer from "components/Footer";
 import FreeAudit from "components/FreeAudit";
-import FaqAccordion from "components/FaqAccordion";
+import FaqDeck from "components/FaqDeck";
+import LightBar from "components/LightBar";
 import NicheCtaButton from "components/NicheCtaButton";
 import { SERVICE_AREAS } from "components/serviceAreas";
 
@@ -26,7 +27,7 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
       {
         "@type": "Service",
         "@id": `https://www.quesoventures.com${slug}#service`,
-        name: `Web Design & Local SEO — ${city}, TX`,
+        name: `Web Design & Local SEO, ${city}, TX`,
         provider: {
           "@type": "LocalBusiness",
           name: "Queso Ventures",
@@ -77,27 +78,33 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
       <Header />
       <main>
         {/* Hero */}
-        <section className="container mx-auto px-4 min-h-screen flex flex-col items-center justify-center text-center">
-          <div className="max-w-5xl mx-auto">
+        <section className="container mx-auto px-4 pt-32 pb-20">
+          <div className="max-w-6xl mx-auto">
             <p className="text-sm font-semibold uppercase tracking-widest text-lightTextMuted dark:text-darkTextMuted mb-4">
               {city}, Texas
             </p>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-lightText dark:text-darkText mb-6 tracking-tight">
               {headline}
             </h1>
-            <p className="max-w-3xl mx-auto text-lg sm:text-xl md:text-2xl text-lightTextMuted dark:text-darkTextMuted font-light mb-10">
+            <p className="max-w-3xl text-lg sm:text-xl md:text-2xl text-lightTextMuted dark:text-darkTextMuted font-light mb-10">
               {subline}
             </p>
-            <NicheCtaButton message={prefill} label="See What Your Website Could Look Like" />
-            <p className="mt-6 text-sm font-light text-lightTextMuted dark:text-darkTextMuted">
-              Simple monthly plans at $300/month. Never the thousands agencies charge.
-            </p>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
+              <NicheCtaButton message={prefill} label="See What Your Website Could Look Like" />
+              <p className="text-sm font-light text-lightTextMuted dark:text-darkTextMuted">
+                Simple plans at $300 a month.
+                <br className="hidden sm:block" /> Never the thousands agencies
+                charge.
+              </p>
+            </div>
           </div>
         </section>
 
+        <LightBar />
+
         {/* Pain points */}
         <section className="container mx-auto px-4 py-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl text-lightText dark:text-darkText mb-10 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl text-lightText dark:text-darkText mb-10 max-w-4xl mx-auto">
             Sound familiar?
           </h2>
           <div className="max-w-4xl mx-auto divide-y divide-lightBorder dark:divide-darkBorder">
@@ -116,18 +123,18 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
 
         {/* What changes */}
         <section className="container mx-auto px-4 py-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl text-lightText dark:text-darkText mb-4 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl text-lightText dark:text-darkText mb-4 max-w-4xl mx-auto">
             Here&apos;s what changes
           </h2>
-          <p className="text-lg text-lightTextMuted dark:text-darkTextMuted font-light text-center mb-10">
-            I handle the online side so you can focus on the work.
+          <p className="text-lg text-lightTextMuted dark:text-darkTextMuted font-light mb-10 max-w-4xl mx-auto">
+            We handle the online side so you can focus on the work.
           </p>
           <div className="max-w-4xl mx-auto">
             <div className="space-y-4">
               {whatChanges.map((item, i) => (
                 <div
                   key={i}
-                  className="flex gap-4 rounded-2xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-6"
+                  className="flex gap-4 rounded-3xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-6"
                 >
                   <span className="text-lightAccent dark:text-darkAccent font-bold text-xl mt-0.5 shrink-0">
                     {i + 1}
@@ -146,33 +153,28 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
           </div>
         </section>
 
-        {/* FAQ */}
-        <section className="container mx-auto px-4 py-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl text-lightText dark:text-darkText mb-10 text-center">
-            Questions {city} business owners ask
-          </h2>
-          <div className="max-w-4xl mx-auto">
-            <FaqAccordion items={faqItems} />
-          </div>
-        </section>
+        <FaqDeck
+          heading={`Questions ${city} business owners ask`}
+          items={faqItems.map((f) => ({ title: f.q, content: f.a }))}
+        />
 
         <FreeAudit />
 
         {/* Other areas */}
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto">
-            <p className="text-sm font-semibold uppercase tracking-widest text-lightTextMuted dark:text-darkTextMuted mb-3 text-center">
+            <p className="text-sm font-semibold uppercase tracking-widest text-lightTextMuted dark:text-darkTextMuted mb-3">
               Not in {city}?
             </p>
-            <h2 className="text-2xl sm:text-3xl text-lightText dark:text-darkText mb-8 text-center">
-              I work with businesses across Northeast Houston
+            <h2 className="text-2xl sm:text-3xl text-lightText dark:text-darkText mb-8">
+              We work with businesses across Northeast Houston
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {otherAreas.map((area) => (
                 <Link
                   key={area.slug}
                   href={area.slug}
-                  className="group block rounded-2xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-8 transition-colors hover:border-lightButton dark:hover:border-darkButton"
+                  className="group block rounded-3xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-8 transition-colors hover:border-lightButton dark:hover:border-darkButton"
                 >
                   <p className="text-base font-semibold text-lightText dark:text-darkText mb-1 group-hover:text-lightButton dark:group-hover:text-darkButton transition-colors">
                     {area.city}
@@ -187,13 +189,13 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
               ))}
               <Link
                 href="/services"
-                className="group block rounded-2xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-8 transition-colors hover:border-lightButton dark:hover:border-darkButton"
+                className="group block rounded-3xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-8 transition-colors hover:border-lightButton dark:hover:border-darkButton"
               >
                 <p className="text-base font-semibold text-lightText dark:text-darkText mb-1 group-hover:text-lightButton dark:group-hover:text-darkButton transition-colors">
                   Greater Houston
                 </p>
                 <p className="text-sm font-light text-lightTextMuted dark:text-darkTextMuted">
-                  Anywhere in the Houston area — I&apos;ll come to you.
+                  Anywhere in the Houston area, I&apos;ll come to you.
                 </p>
                 <p className="mt-3 text-sm font-semibold text-lightButton dark:text-darkButton">
                   See services →

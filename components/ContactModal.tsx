@@ -4,6 +4,12 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Modal from "./Modal";
 
+const inputClass =
+  "w-full rounded-xl border border-transparent bg-black/[0.04] dark:bg-white/[0.06] px-4 py-3 text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/50 dark:placeholder:text-darkTextMuted/50 focus:outline-none focus:border-lightAccent/40 dark:focus:border-darkAccent/40 focus:bg-white dark:focus:bg-transparent transition-colors";
+
+const labelClass =
+  "text-sm font-medium text-lightText dark:text-darkText";
+
 export default function ContactModal() {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [error, setError] = useState<string>("");
@@ -18,8 +24,7 @@ export default function ContactModal() {
     const onPrefill = (e: Event) => {
       const ce = e as CustomEvent<{ message?: string; title?: string }>;
       if (ce.detail?.message) setPrefillMessage(ce.detail.message);
-      
-      // Set dynamic title based on context
+
       if (ce.detail?.message?.toLowerCase().includes("audit")) {
         setModalTitle("Request Your Free Audit");
       } else if (ce.detail?.title) {
@@ -73,74 +78,79 @@ export default function ContactModal() {
   return (
     <Modal id="contact-popup" title={modalTitle}>
       {status === "success" ? (
-        <div className="text-center py-8">
-          <div className="text-2xl font-semibold text-lightText dark:text-darkText mb-3">
-            Message sent ✓
+        <div className="text-center py-10">
+          <div className="mx-auto mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-lightAccent/10 dark:bg-darkAccent/10 text-lightAccent dark:text-darkAccent text-2xl">
+            ✓
+          </div>
+          <div className="text-2xl font-semibold text-lightText dark:text-darkText mb-2">
+            Message sent
           </div>
           <p className="text-base font-light text-lightTextMuted dark:text-darkTextMuted">
-            I'll get back to you within 24 hours.
+            We&apos;ll get back to you within 24 hours.
           </p>
         </div>
       ) : (
         <>
-          <form onSubmit={onSubmit} className="flex flex-col gap-5 sm:gap-5">
+          <form onSubmit={onSubmit} className="flex flex-col gap-4">
             {/* honeypot */}
             <div className="hidden">
               <label>Website</label>
               <input name="website" type="text" tabIndex={-1} autoComplete="off" />
             </div>
 
-            <div className="flex flex-col gap-2">
-  <label className="text-xs sm:text-sm font-semibold text-lightText dark:text-darkText">
-    Your Name
-  </label>
-              <input
-                name="name"
-                type="text"
-                required
-                placeholder="John Smith"
-    className="w-full rounded-lg border border-lightBorder dark:border-darkBorder bg-white dark:bg-transparent px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/60 dark:placeholder:text-darkTextMuted/60 focus:outline-none focus:ring-2 focus:ring-lightButton/40 dark:focus:ring-darkButton/40 transition-shadow"              />
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className={labelClass}>Your name</label>
+                <input
+                  name="name"
+                  type="text"
+                  required
+                  placeholder="John Smith"
+                  className={inputClass}
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className={labelClass}>Email</label>
+                <input
+                  name="contact"
+                  type="email"
+                  required
+                  placeholder="john@yourbusiness.com"
+                  className={inputClass}
+                />
+              </div>
             </div>
 
-            <div className="flex flex-col gap-2">
-  <label className="text-xs sm:text-sm font-semibold text-lightText dark:text-darkText">
-    Email
-  </label>
-              <input
-                name="contact"
-                type="email"
-                required
-                placeholder="john@yourbusiness.com"
-    className="w-full rounded-lg border border-lightBorder dark:border-darkBorder bg-white dark:bg-transparent px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/60 dark:placeholder:text-darkTextMuted/60 focus:outline-none focus:ring-2 focus:ring-lightButton/40 dark:focus:ring-darkButton/40 transition-shadow"              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-  <label className="text-xs sm:text-sm font-semibold text-lightText dark:text-darkText">
-    Your Website <span className="text-lightTextMuted dark:text-darkTextMuted font-normal">(if you have one)</span>
-  </label>
+            <div className="flex flex-col gap-1.5">
+              <label className={labelClass}>
+                Your website{" "}
+                <span className="text-lightTextMuted dark:text-darkTextMuted font-normal">
+                  (if you have one)
+                </span>
+              </label>
               <input
                 name="info"
                 type="text"
                 placeholder="yourbusiness.com"
-    className="w-full rounded-lg border border-lightBorder dark:border-darkBorder bg-white dark:bg-transparent px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/60 dark:placeholder:text-darkTextMuted/60 focus:outline-none focus:ring-2 focus:ring-lightButton/40 dark:focus:ring-darkButton/40 transition-shadow"
+                className={inputClass}
               />
             </div>
 
-            <div className="flex flex-col gap-2">
-  <label className="text-xs sm:text-sm font-semibold text-lightText dark:text-darkText">
-                What do you need help with?
-              </label>
+            <div className="flex flex-col gap-1.5">
+              <label className={labelClass}>What do you need help with?</label>
               <textarea
                 name="message"
                 required
                 rows={4}
                 defaultValue={prefillMessage}
-                placeholder="Tell me about your business and what you're trying to achieve..."
-                className="w-full resize-none rounded-lg border border-lightBorder dark:border-darkBorder bg-white dark:bg-transparent px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/60 dark:placeholder:text-darkTextMuted/60 focus:outline-none focus:ring-2 focus:ring-lightButton/40 dark:focus:ring-darkButton/40 transition-shadow"              />
+                placeholder="Tell us about your business and what you're trying to achieve..."
+                className={`${inputClass} resize-none`}
+              />
             </div>
 
             {status === "error" && (
-              <div className="rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3">
+              <div className="rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3">
                 <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
               </div>
             )}
@@ -148,25 +158,24 @@ export default function ContactModal() {
             <button
               type="submit"
               disabled={status === "sending"}
-              className="mt-1 sm:mt-2 w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-lightBG dark:text-darkBG transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow"            >
+              className="mt-1 w-full inline-flex items-center justify-center rounded-xl bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover px-8 py-4 text-lg font-semibold text-lightBG dark:text-darkBG transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            >
               {status === "sending" ? "Sending..." : "Send Message"}
             </button>
           </form>
 
-<div className="mt-6 text-center">
-  <p className="text-sm sm:text-sm text-lightTextMuted dark:text-darkTextMuted mb-3">
-    Prefer to talk first?
-  </p>
-
-  <Link
-    href="https://calendar.app.google/DTrFqJ9XjEuTNmfr6"
-    target="_blank"
-    className="inline-flex items-center justify-center text-lightButton dark:text-darkButton hover:text-lightButtonHover dark:hover:text-darkButtonHover text-sm sm:text-base font-semibold transition-colors"
-  >
-    Schedule a call instead →
-  </Link>
-</div>
-
+          <div className="mt-5 flex items-center justify-center gap-2 text-sm">
+            <span className="text-lightTextMuted dark:text-darkTextMuted">
+              Prefer to talk first?
+            </span>
+            <Link
+              href="https://calendar.app.google/DTrFqJ9XjEuTNmfr6"
+              target="_blank"
+              className="font-semibold text-lightButton dark:text-darkButton hover:opacity-70 transition-opacity"
+            >
+              Book a call →
+            </Link>
+          </div>
         </>
       )}
     </Modal>

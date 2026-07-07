@@ -63,6 +63,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     })),
     {
+      url: `${BASE}/about`,
+      lastModified: new Date("2026-07-06"),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    },
+    {
       url: `${BASE}/blog`,
       lastModified: new Date("2026-06-11"),
       changeFrequency: "weekly" as const,

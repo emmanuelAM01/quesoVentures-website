@@ -33,18 +33,18 @@ export default function IndustryLinks({ current }: Props) {
   return (
     <section className="container mx-auto px-4 py-16">
       <div className="max-w-4xl mx-auto">
-        <p className="text-sm font-semibold uppercase tracking-widest text-lightTextMuted dark:text-darkTextMuted mb-3 text-center">
+        <p className="text-sm font-semibold uppercase tracking-widest text-lightTextMuted dark:text-darkTextMuted mb-3">
           Not your industry?
         </p>
-        <h2 className="text-2xl sm:text-3xl text-lightText dark:text-darkText mb-8 text-center">
-          I work with other Houston businesses too
+        <h2 className="text-2xl sm:text-3xl text-lightText dark:text-darkText mb-8">
+          We work with other Houston businesses too
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {others.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="group block rounded-2xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-8 transition-colors hover:border-lightButton dark:hover:border-darkButton"
+              className="group block rounded-3xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-8 transition-colors hover:border-lightButton dark:hover:border-darkButton"
             >
               <p className="text-base font-semibold text-lightText dark:text-darkText mb-1 group-hover:text-lightButton dark:group-hover:text-darkButton transition-colors">
                 {item.label}
