@@ -46,7 +46,7 @@ export default function Hero() {
               </Link>
             </div>
 
-            <p className="mt-6 text-sm font-light text-lightTextMuted dark:text-darkTextMuted">
+            <p className="mt-6 text-sm font-light text-center sm:text-left text-lightTextMuted dark:text-darkTextMuted">
               Web design, SEO &amp; AI SEO · Houston, TX
             </p>
           </div>
