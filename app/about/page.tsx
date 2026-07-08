@@ -9,12 +9,12 @@ import NicheCtaButton from "components/NicheCtaButton";
 export const metadata: Metadata = {
   title: "About Emmanuel | Queso Ventures, Houston, TX",
   description:
-    "Seven years building software for startups, the crypto industry, and venture backed AI products. Now I help Houston businesses get found online. Meet the person behind Queso Ventures.",
+    "Seven years building software for startups, fintech, and venture backed AI products. Now I help Houston businesses get found online. Meet the person behind Queso Ventures.",
   alternates: { canonical: "https://www.quesoventures.com/about" },
   openGraph: {
     title: "About Emmanuel | Queso Ventures, Houston, TX",
     description:
-      "Seven years building software for startups, the crypto industry, and venture backed AI products. Now I help Houston businesses get found online.",
+      "Seven years building software for startups, fintech, and venture backed AI products. Now I help Houston businesses get found online.",
     url: "https://www.quesoventures.com/about",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "About Emmanuel | Queso Ventures, Houston, TX",
     description:
-      "Seven years building software for startups, the crypto industry, and venture backed AI products. Now I help Houston businesses get found online.",
+      "Seven years building software for startups, fintech, and venture backed AI products. Now I help Houston businesses get found online.",
     images: ["/logo.png"],
   },
 };
@@ -63,16 +63,16 @@ const chapters = [
     body: "COVID closed every job in town, so I taught myself web development and started freelancing. First client at $15 an hour. I've been building for people ever since.",
   },
   {
-    label: "Went deep",
-    body: "Engineer to tech lead in the crypto industry. I know it has its flaws, but the engineering is just as hard as anywhere else. I shipped products end to end and led a dev team of my own.",
+    label: "Rose to tech lead",
+    body: "I joined a tech company as the newest engineer on the team. Within a year, I was leading it. When something needed to get built, I was the one who did it, and real people were using what I made.",
   },
   {
-    label: "Became an AI engineer",
-    body: "I co-founded a venture backed company and built the entire product myself. AI agents, voice pipelines, the works. The same kind of AI that now decides which businesses get recommended, I have built with my own hands.",
+    label: "Became a CTO",
+    body: "My brother and I started our own company, and investors put real money behind us. As CTO, I built the entire product myself, and that meant building the AI inside it: teaching it to think correctly, pull the right information, and answer questions plainly, the same way AI search does today. I know how it works because I built it from under the hood.",
   },
   {
     label: "Came home",
-    body: "Queso Ventures is where all of it lands. Enterprise grade engineering for the businesses in my own backyard, serving owners across the Houston area.",
+    body: "Queso Ventures is where all of it lands. Enterprise grade technology for the businesses in my own backyard, serving owners across the Houston area. The big companies already have engineers like me. The businesses that actually matter, the ones down the street, deserve one too.",
   },
 ];
 
@@ -93,7 +93,7 @@ export default function AboutPage() {
                 Hey, I&apos;m Emmanuel.
               </h1>
               <p className="max-w-xl text-lg sm:text-xl font-light text-lightTextMuted dark:text-darkTextMuted">
-                AI engineer, software engineer, fintech engineer, and all the way to the crypto industry. <br /><br />
+                AI engineer, software engineer, and CTO of a venture backed startup. <br /><br />
                 I&apos;ve been around and built a lot of stuff. <br /><br />
                 Now, it&apos;s time to apply everything I have learned to the local businesses back home in Houston.
               </p>
