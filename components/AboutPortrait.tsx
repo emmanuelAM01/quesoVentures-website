@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
-const CLICKS_TO_TRIGGER = 4;
-const HOVER_MS = 4000;
+const CLICKS_TO_TRIGGER = 1;
+const HOVER_MS = 2000;
 
 export default function AboutPortrait() {
   const [swapped, setSwapped] = useState(false);
