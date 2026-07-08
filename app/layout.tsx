@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import AboutModal from "components/AboutModal";
 import ContactModal from "components/ContactModal";
+import ConsoleEasterEgg from "components/ConsoleEasterEgg";
 
 
 import "styles/globals.css";
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <AboutModal />
           <ContactModal />
+          <ConsoleEasterEgg />
         </ThemeProvider>
       </body>
     </html>

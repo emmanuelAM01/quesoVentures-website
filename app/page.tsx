@@ -11,6 +11,7 @@ import FaqDeck from "components/FaqDeck";
 import Reveal from "components/Reveal";
 import ScrollDivider from "components/ScrollDivider";
 import LightBar from "components/LightBar";
+import KonamiEasterEgg from "components/KonamiEasterEgg";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -174,6 +175,7 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Header />
+      <KonamiEasterEgg />
       <main>
         <Hero />
         <LightBar />
