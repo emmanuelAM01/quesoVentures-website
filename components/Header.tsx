@@ -44,7 +44,7 @@ export default function Header() {
       let over = false;
       document.querySelectorAll("[data-dark-section]").forEach((el) => {
         const rect = el.getBoundingClientRect();
-        if (rect.top <= 64 && rect.bottom >= 32) over = true;
+        if (rect.top <= 76 && rect.bottom >= 32) over = true;
       });
       setOverDark(over);
     };
@@ -68,17 +68,31 @@ export default function Header() {
   return (
     <header
       className={[
-        "sticky top-0 z-50 w-full",
-        "bg-cheese-header-light dark:bg-cheese-header-dark",
-        "backdrop-blur-md",
+        "sticky top-0 z-50 w-full pt-3 px-3 sm:px-4",
         "transition-all duration-200",
         overDark ? "dark" : "",
-        scrolled
-          ? "border-b border-lightBorder/90 dark:border-darkBorder/90 shadow-sm"
-          : "border-b border-lightBorder/60 dark:border-darkBorder/60 shadow-none",
       ].join(" ")}
     >
-      <div className="container mx-auto px-4 h-16 flex justify-between items-center">
+      <div className="container mx-auto">
+        {/* Pill bar */}
+        <div className="relative rounded-full">
+          {/* Clipped background: always-on animated glow blurred through the frosted glass, top-of-pill only */}
+          <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+            <div className="navbar-glow absolute inset-x-0 -top-4 h-10 blur-xl opacity-30 dark:opacity-15" />
+            <div className="absolute inset-0 bg-cheese-header-light dark:bg-cheese-header-dark backdrop-blur-md" />
+          </div>
+
+          {/* Pill outline */}
+          <div
+            className={[
+              "absolute inset-0 rounded-full pointer-events-none transition-all duration-200",
+              scrolled
+                ? "ring-1 ring-lightBorder/90 dark:ring-darkBorder/90 shadow-md shadow-black/5 dark:shadow-black/20"
+                : "ring-1 ring-lightBorder/60 dark:ring-darkBorder/60 shadow-sm shadow-black/5 dark:shadow-black/10",
+            ].join(" ")}
+          />
+
+          <div className="relative px-4 sm:px-6 h-16 flex justify-between items-center">
         <div className="flex items-center">
           <Link
             href="/"
@@ -208,12 +222,13 @@ export default function Header() {
             )}
           </button>
         </div>
-      </div>
+          </div>
+        </div>
 
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <nav className="md:hidden border-t border-lightBorder dark:border-darkBorder bg-lightBG dark:bg-darkBG">
-          <div className="container mx-auto px-4 py-2 flex flex-col gap-0.5">
+        {/* Mobile menu */}
+        {mobileOpen && (
+          <nav className="md:hidden mt-2 rounded-3xl ring-1 ring-lightBorder/90 dark:ring-darkBorder/90 bg-lightBG dark:bg-darkBG shadow-lg overflow-hidden">
+            <div className="px-4 py-2 flex flex-col gap-0.5">
             <Link href="/services" onClick={closeMobile} className={mobileLinkClass}>
               Services
             </Link>
@@ -284,9 +299,10 @@ export default function Header() {
             >
               Contact
             </button>
-          </div>
-        </nav>
-      )}
+            </div>
+          </nav>
+        )}
+      </div>
     </header>
   );
 }

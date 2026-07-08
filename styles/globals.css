@@ -55,6 +55,25 @@
   }
 }
 
+/* Navbar ambient glow: same idea as .lightbar, dialed way down */
+.navbar-glow {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #c4161c 40%,
+    #ffd100 50%,
+    #c4161c 60%,
+    transparent 100%
+  );
+  background-size: 260% 100%;
+  animation: beam 30s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .navbar-glow {
+    animation: none;
+  }
+}
+
 /* Search demo caret */
 @keyframes caretBlink {
   0%,
