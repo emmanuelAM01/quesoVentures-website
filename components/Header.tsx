@@ -183,6 +183,17 @@ export default function Header() {
               </Link>
             </li>
 
+            {/* Studios sits apart from the learn/trust links, right before the
+                action item — it's the product arm, marked with the brand dot. */}
+            <li>
+              <Link href="/studios" className={`${navLinkClass} font-semibold`}>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#C4161C] to-[#FFD100]" />
+                  Studios
+                </span>
+              </Link>
+            </li>
+
             <li>
               <button
                 type="button"
@@ -287,6 +298,13 @@ export default function Header() {
 
             <Link href="/about" onClick={closeMobile} className={mobileLinkClass}>
               About
+            </Link>
+
+            <Link href="/studios" onClick={closeMobile} className={`${mobileLinkClass} font-semibold`}>
+              <span className="inline-flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#C4161C] to-[#FFD100]" />
+                Studios
+              </span>
             </Link>
 
             <button

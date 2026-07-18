@@ -89,6 +89,27 @@
   animation: caretBlink 1s steps(1) infinite;
 }
 
+/* Queso Studios dark experience: the reveal, the lasers, the glass. */
+@keyframes studios-rise {
+  from { opacity: 0; transform: translateY(28px); filter: blur(12px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+@keyframes studios-laser-draw {
+  from { transform: scaleX(0); opacity: 0; }
+  60% { opacity: 1; }
+  to { transform: scaleX(1); opacity: 1; }
+}
+@keyframes studios-pulse {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.7; }
+}
+@keyframes studios-sweep {
+  from { transform: translateX(-140%) skewX(-18deg); }
+  to { transform: translateX(240%) skewX(-18deg); }
+}
+.studios-no-scrollbar::-webkit-scrollbar { display: none; }
+.studios-no-scrollbar { scrollbar-width: none; }
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;
@@ -103,5 +124,11 @@
   }
   .lightbar {
     animation: none;
+  }
+  .studios-motion {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
   }
 }
