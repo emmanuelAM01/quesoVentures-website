@@ -48,7 +48,7 @@ const TOOLS: Tool[] = [
   },
   {
     name: "Queso Revenue System",
-    price: "$20 / month",
+    price: "Priced per case",
     tagline:
       "Think IRS, but on your side. Licensed CPAs, Harvard economists, Wharton MBAs, and C-suite operators from nationwide logistics firms comb through your money in and out, find where revenue is leaking, and tighten the operation so your bookkeeping and numbers grow as fast as your business.",
     accent: "#FFD100",
