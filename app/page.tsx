@@ -12,28 +12,44 @@ import Reveal from "components/Reveal";
 import ScrollDivider from "components/ScrollDivider";
 import LightBar from "components/LightBar";
 import KonamiEasterEgg from "components/KonamiEasterEgg";
+import IndustryLinks from "components/IndustryLinks";
 import Link from "next/link";
+import {
+  BUSINESS,
+  LOCAL_BUSINESS_SCHEMA,
+  AREA_SERVED_SCHEMA,
+  POSTAL_ADDRESS,
+  SAME_AS,
+} from "components/businessInfo";
+
+const TITLE = "Web Design & Local SEO That Gets Your Phone Ringing";
+const DESCRIPTION =
+  "Get found by the customers closest to you. Web design and local SEO for local businesses, headquartered in Houston and working nationwide. $300 a month. Call (281) 203-4531.";
 
 export const metadata: Metadata = {
-  title: "Web Design & Local SEO for Houston Businesses | Queso Ventures",
-  description:
-    "Web design and local SEO that gets Houston businesses found on Google and AI search. Simple monthly plans at $300/ month, not agency prices. Free audit first.",
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: "https://www.quesoventures.com" },
   openGraph: {
-    title: "Web Design & Local SEO for Houston Businesses | Queso Ventures",
-    description:
-      "Web design and local SEO that gets Houston businesses found on Google and AI search. Simple monthly plans at $300/ month, not agency prices. Free audit first.",
+    title: TITLE,
+    description: DESCRIPTION,
     url: "https://www.quesoventures.com",
     siteName: "Queso Ventures",
-    images: [{ url: "/logo.png", width: 512, height: 512, alt:"Queso Ventures logo - Houston web design and local SEO" }],
+    images: [
+      {
+        url: "/logo.png",
+        width: 512,
+        height: 512,
+        alt: "Queso Ventures logo - web design and local SEO for local businesses",
+      },
+    ],
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Web Design & Local SEO for Houston Businesses | Queso Ventures",
-    description:
-      "Web design and local SEO that gets Houston businesses found on Google and AI search. Simple monthly plans at $300/ month, not agency prices. Free audit first.",
+    title: TITLE,
+    description: DESCRIPTION,
     images: ["/logo.png"],
   },
 };
@@ -67,7 +83,7 @@ const faqItems = [
   {
     title: "Who do you work with?",
     content:
-      "Local service businesses across Houston, Humble, Atascocita, and Kingwood. Auto shops, wrap shops, contractors, carpet cleaners, food trucks, med spas, salons, event venues, and local retailers. If your customers find you by searching online, we are likely a strong fit.",
+      "Local businesses of almost every kind. Auto shops and mobile mechanics, wrap and detail shops, roofers and flooring crews, landscapers, cleaners, med spas and dental practices, event venues, music schools, bakeries, food trucks, and online shops run out of a spare room. I am headquartered in Houston and work with clients from Conroe and Fort Worth out to Miami. If your customers find you by searching, we are likely a strong fit.",
   },
   {
     title: "How does this actually start?",
@@ -77,7 +93,7 @@ const faqItems = [
   {
     title: "What does it cost?",
     content:
-      "Simple monthly plans at $300 a month with a minimum 4 month commitment. Compare that to the $1,500 or more that traditional agencies charge, and most of them are not even touching AI SEO. No hourly billing, no surprise fees.",
+      "Simple monthly plans at $300 a month with a minimum 4 month commitment. Compare that to the $1,500 or more that traditional agencies charge, and most of them still have no answer for customers who ask an AI assistant for a recommendation. No hourly billing, no surprise fees.",
   },
 ];
 
@@ -86,63 +102,40 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://www.quesoventures.com/#organization",
-      name: "Queso Ventures",
-      url: "https://www.quesoventures.com",
+      "@id": `${BUSINESS.url}/#organization`,
+      name: BUSINESS.name,
+      legalName: BUSINESS.legalName,
+      url: BUSINESS.url,
       logo: {
         "@type": "ImageObject",
-        url: "https://www.quesoventures.com/logo.png",
+        url: `${BUSINESS.url}/logo.png`,
       },
+      telephone: BUSINESS.phoneE164,
+      email: BUSINESS.email,
+      address: POSTAL_ADDRESS,
+      sameAs: SAME_AS,
       description:
-        "Queso Ventures helps Houston service businesses get more leads from Google and AI search through SEO and Generative Engine Optimization (GEO).",
-      areaServed: {
-        "@type": "City",
-        name: "Houston",
-        "@id": "https://www.wikidata.org/wiki/Q16555",
-      },
+        "Queso Ventures helps local businesses get more calls from Google, Google Maps, and AI assistants. Headquartered in Northeast Houston, working with clients nationwide.",
+      areaServed: AREA_SERVED_SCHEMA,
       knowsAbout: [
+        "Web Design",
         "Search Engine Optimization",
-        "Generative Engine Optimization",
         "Local SEO",
-        "AI Search Optimization",
+        "Google Business Profile Optimization",
         "Lead Generation",
       ],
     },
-    {
-      "@type": "LocalBusiness",
-      "@id": "https://www.quesoventures.com/#localbusiness",
-      name: "Queso Ventures",
-      url: "https://www.quesoventures.com",
-      image: "https://www.quesoventures.com/logo.png",
-      description:
-        "Web design, local SEO, and AI search optimization for Houston-area service businesses, auto shops, contractors, med spas, salons, food trucks, event venues, and more.",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Houston",
-        addressRegion: "TX",
-        addressCountry: "US",
-      },
-      areaServed: [
-        { "@type": "City", name: "Houston", addressRegion: "TX" },
-        { "@type": "City", name: "Humble", addressRegion: "TX" },
-        { "@type": "City", name: "Atascocita", addressRegion: "TX" },
-        { "@type": "City", name: "Kingwood", addressRegion: "TX" },
-        { "@type": "City", name: "Spring", addressRegion: "TX" },
-        { "@type": "City", name: "Porter", addressRegion: "TX" },
-        { "@type": "State", name: "Texas" },
-      ],
-      priceRange: "$300 per month",
-      serviceType: ["SEO", "GEO", "Local SEO", "Lead Generation", "Website Optimization"],
-    },
+    // The canonical description of the business. Same node id everywhere.
+    LOCAL_BUSINESS_SCHEMA,
     {
       "@type": "Service",
-      "@id": "https://www.quesoventures.com/#service-seo",
-      name: "SEO & GEO Optimization for Houston Businesses",
-      provider: { "@id": "https://www.quesoventures.com/#organization" },
-      serviceType: "Search Engine Optimization",
+      "@id": `${BUSINESS.url}/#service-seo`,
+      name: "Web Design & Local SEO for Northeast Houston Businesses",
+      provider: { "@id": `${BUSINESS.url}/#localbusiness` },
+      serviceType: "Local Search Engine Optimization",
       description:
-        "Comprehensive SEO and Generative Engine Optimization (GEO) to help Houston service businesses rank higher on Google and get cited by AI search tools like ChatGPT and Perplexity.",
-      areaServed: { "@type": "City", name: "Houston", addressRegion: "TX" },
+        "Website design, local search, and Google Business Profile work that gets local service businesses found by the customers nearest them, and recommended when someone asks an AI assistant who to call.",
+      areaServed: AREA_SERVED_SCHEMA,
       offers: {
         "@type": "Offer",
         name: "Free Website Growth Audit",
@@ -154,7 +147,7 @@ const jsonLd = {
     },
     {
       "@type": "FAQPage",
-      "@id": "https://www.quesoventures.com/#faq",
+      "@id": `${BUSINESS.url}/#faq`,
       mainEntity: faqItems.map((item) => ({
         "@type": "Question",
         name: item.title,
@@ -191,10 +184,10 @@ export default function Page() {
                 that need it most.
               </p>
               <p className="mt-6 max-w-3xl text-base sm:text-lg font-light text-lightTextMuted dark:text-darkTextMuted">
-                From restaurant websites to AI and biomedical software, we
-                have built it all and kept it running. And because we helped
-                build AI tools ourselves, we know exactly what they want to
-                see when they recommend a business.
+                From restaurant websites to AI and biomedical software, I
+                have built it all and kept it running. And because I helped
+                build AI tools myself, I know exactly what they look for when
+                they decide which business to recommend.
               </p>
               <Link
                 href="/about"
@@ -210,6 +203,7 @@ export default function Page() {
 
         <Features />
         <HowItWorks />
+        <IndustryLinks heading="Who I build for" />
         <ScrollDivider />
         <Pricing />
         <FaqDeck items={faqItems} />

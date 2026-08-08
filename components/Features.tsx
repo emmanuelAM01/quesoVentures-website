@@ -1,6 +1,8 @@
 import React from "react";
 import { FaGlobe, FaChartLine, FaHandshake } from "react-icons/fa";
 import Reveal from "./Reveal";
+import { liveryAt } from "./livery";
+import Glow from "./Glow";
 
 const services = [
   {
@@ -41,17 +43,31 @@ const Services = () => {
             const Icon = service.icon;
             return (
               <Reveal key={i} delay={i * 120}>
-                <div className="h-full rounded-3xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-8 transition-colors">
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-lightAccent/10 dark:bg-darkAccent/10 text-lightAccent dark:text-darkAccent mb-5">
-                    <Icon size={22} />
-                  </span>
-                  <h3 className="text-xl font-semibold mb-2 text-lightText dark:text-darkText">
-                    {service.title}
-                  </h3>
-                  <p className="text-lightTextMuted dark:text-darkTextMuted font-light">
-                    {service.description}
-                  </p>
-                </div>
+                <Glow color={liveryAt(i).hex} radius="rounded-3xl" lift={false}>
+                  <div className="relative h-full overflow-hidden rounded-3xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark">
+                    <span
+                      className="absolute inset-x-0 top-0 h-1.5"
+                      style={{ backgroundColor: liveryAt(i).hex }}
+                    />
+                    <div className="p-8 pt-10">
+                    <span
+                      className="inline-flex h-12 w-12 items-center justify-center rounded-xl mb-5"
+                      style={{
+                        backgroundColor: `${liveryAt(i).hex}1A`,
+                        color: liveryAt(i).ink,
+                      }}
+                    >
+                      <Icon size={22} />
+                    </span>
+                    <h3 className="text-xl font-semibold mb-2 text-lightText dark:text-darkText">
+                      {service.title}
+                    </h3>
+                    <p className="text-lg text-lightTextMuted dark:text-darkTextMuted font-light leading-relaxed">
+                      {service.description}
+                    </p>
+                    </div>
+                  </div>
+                </Glow>
               </Reveal>
             );
           })}

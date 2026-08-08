@@ -1,84 +1,84 @@
 import fs from "fs";
 import path from "path";
-import matter from "gray-matter";
 import type { MetadataRoute } from "next";
+import { SERVICE_AREAS, FEATURED_INDUSTRIES } from "components/serviceAreas";
 
 const BASE = "https://www.quesoventures.com";
 
-function getBlogSlugs(): string[] {
-  const dir = path.join(process.cwd(), "content/blog");
+/**
+ * Last time the page's own source file changed. Beats a hardcoded date that
+ * freezes months in the past and tells Google nothing here ever moves.
+ */
+function sourceDate(routePath: string): Date {
+  const file = path.join(
+    process.cwd(),
+    "app",
+    routePath.replace(/^\//, ""),
+    "page.tsx"
+  );
   try {
-    return fs
-      .readdirSync(dir)
-      .filter((f) => f.endsWith(".mdx"))
-      .map((f) => f.replace(/\.mdx$/, ""));
+    return fs.statSync(file).mtime;
   } catch {
-    return [];
-  }
-}
-
-function getBlogDate(slug: string): string {
-  try {
-    const raw = fs.readFileSync(
-      path.join(process.cwd(), "content/blog", `${slug}.mdx`),
-      "utf8"
-    );
-    const { data } = matter(raw);
-    return data.date ?? new Date().toISOString();
-  } catch {
-    return new Date().toISOString();
+    return new Date();
   }
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const blogSlugs = getBlogSlugs();
-
-  const nichePages = [
-    "/website-for-food-trucks-houston",
-    // "/website-for-smoke-shops-houston",
-    "/seo-for-contractors-houston",
-    "/seo-for-med-spas-houston",
-    "/web-design-humble-tx",
-    "/web-design-atascocita-tx",
-    "/web-design-kingwood-tx",
-  ];
-
   return [
     {
       url: BASE,
-      lastModified: new Date("2026-07-06"),
-      changeFrequency: "weekly",
+      lastModified: sourceDate("/"),
+      changeFrequency: "weekly" as const,
       priority: 1.0,
     },
     {
-      url: `${BASE}/services`,
-      lastModified: new Date("2026-07-06"),
+      url: `${BASE}/contact`,
+      lastModified: sourceDate("/contact"),
       changeFrequency: "monthly" as const,
       priority: 0.9,
     },
-    ...nichePages.map((page) => ({
-      url: `${BASE}${page}`,
-      lastModified: new Date("2026-07-06"),
+    {
+      url: `${BASE}/services`,
+      lastModified: sourceDate("/services"),
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    },
+    // Geo pages carry the local intent — highest priority after the homepage.
+    ...SERVICE_AREAS.map((area) => ({
+      url: `${BASE}${area.slug}`,
+      lastModified: sourceDate(area.slug),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
+    ...FEATURED_INDUSTRIES.map((industry) => ({
+      url: `${BASE}${industry.slug}`,
+      lastModified: sourceDate(industry.slug),
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
     {
       url: `${BASE}/about`,
-      lastModified: new Date("2026-07-06"),
+      lastModified: sourceDate("/about"),
       changeFrequency: "monthly" as const,
       priority: 0.7,
     },
     {
-      url: `${BASE}/blog`,
-      lastModified: new Date("2026-06-11"),
-      changeFrequency: "weekly" as const,
-      priority: 0.7,
-    },
-    ...blogSlugs.map((slug) => ({
-      url: `${BASE}/blog/${slug}`,
-      lastModified: new Date(getBlogDate(slug)),
+      url: `${BASE}/studios`,
+      lastModified: sourceDate("/studios"),
       changeFrequency: "monthly" as const,
       priority: 0.6,
-    })),
+    },
+    {
+      url: `${BASE}/privacy`,
+      lastModified: sourceDate("/privacy"),
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    },
+    {
+      url: `${BASE}/terms`,
+      lastModified: sourceDate("/terms"),
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    },
   ];
 }

@@ -1,13 +1,23 @@
 "use client";
 
+import { trackCtaClick, type Placement } from "components/analytics";
+
 interface Props {
   message: string;
   label: string;
   variant?: "primary" | "secondary";
+  /** Where this button sits, so the dashboard can rank CTA sources. */
+  from?: Placement;
 }
 
-export default function NicheCtaButton({ message, label, variant = "primary" }: Props) {
+export default function NicheCtaButton({
+  message,
+  label,
+  variant = "primary",
+  from = "hero",
+}: Props) {
   const open = () => {
+    trackCtaClick(from);
     window.dispatchEvent(new CustomEvent("contact:prefill", { detail: { message } }));
     window.dispatchEvent(new CustomEvent("modal:open", { detail: { id: "contact-popup" } }));
   };

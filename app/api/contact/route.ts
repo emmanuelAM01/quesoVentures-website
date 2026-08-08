@@ -10,8 +10,10 @@ export async function POST(req: Request) {
 
     const name = typeof body?.name === "string" ? body.name.trim() : "";
     const contact = typeof body?.contact === "string" ? body.contact.trim() : "";
-    const info = typeof body?.contact === "string" ? body.contact.trim() : "";
+    // The prospect's own website, sent by ContactModal as `business`.
+    const business = typeof body?.business === "string" ? body.business.trim() : "";
     const message = typeof body?.message === "string" ? body.message.trim() : "";
+    // Honeypot. Never rendered to a human, so any value means a bot.
     const website = typeof body?.website === "string" ? body.website.trim() : "";
 
     // honeypot triggered
@@ -40,7 +42,7 @@ export async function POST(req: Request) {
     const text = [
       `Name: ${name}`,
       `Contact: ${contact}`,
-      `Website: ${website}`,
+      `Their website: ${business || "(none given)"}`,
       "",
       message,
     ].join("\n");

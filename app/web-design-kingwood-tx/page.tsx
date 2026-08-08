@@ -4,12 +4,12 @@ import GeoPageTemplate, { GeoPageData } from "components/GeoPageTemplate";
 export const metadata: Metadata = {
   title: "Web Design & Local SEO in Kingwood, TX | Queso Ventures",
   description:
-    "Websites and local search for Kingwood businesses, Town Center, Kings Harbor, and across the Livable Forest. Simple $300/ month plans. Free audit first.",
+    "Websites and local search for Kingwood businesses, Town Center, Kings Harbor, and across the Livable Forest. $300 a month. Free audit first.",
   alternates: { canonical: "https://www.quesoventures.com/web-design-kingwood-tx" },
   openGraph: {
     title: "Web Design & Local SEO in Kingwood, TX | Queso Ventures",
     description:
-      "Websites and local search for Kingwood businesses, Town Center, Kings Harbor, and across the Livable Forest. Simple $300/ month plans. Free audit first.",
+      "Websites and local search for Kingwood businesses, Town Center, Kings Harbor, and across the Livable Forest. $300 a month. Free audit first.",
     url: "https://www.quesoventures.com/web-design-kingwood-tx",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Web Design & Local SEO in Kingwood, TX | Queso Ventures",
     description:
-      "Websites and local search for Kingwood businesses, Town Center, Kings Harbor, and across the Livable Forest. Simple $300/ month plans. Free audit first.",
+      "Websites and local search for Kingwood businesses, Town Center, Kings Harbor, and across the Livable Forest. $300 a month. Free audit first.",
     images: ["/logo.png"],
   },
 };
@@ -28,9 +28,10 @@ export const metadata: Metadata = {
 const data: GeoPageData = {
   city: "Kingwood",
   slug: "/web-design-kingwood-tx",
-  headline: "Kingwood Trusts Its Own. Make Sure They Can Find You.",
-  subline:
-    "Websites and local search for businesses in the Livable Forest, from Town Center to Kings Harbor. Local service, simple monthly pricing, no agency games.",
+  postalCode: "77339",
+  headline: "Be who Kingwood finds.",
+  intro:
+    "Websites and local search for Kingwood businesses — Town Center, Kings Harbor, and across the Livable Forest. Word of mouth got you here; search is what grows it.",
   prefill:
     "I run a business in Kingwood and want more customers finding me online. Here's my current situation:",
   painPoints: [

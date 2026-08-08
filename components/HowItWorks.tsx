@@ -1,4 +1,6 @@
 import Reveal from "./Reveal";
+import { liveryAt } from "./livery";
+import Glow from "./Glow";
 
 const steps = [
   {
@@ -31,17 +33,28 @@ export default function HowItWorks() {
         <div className="grid sm:grid-cols-3 gap-6 mt-12">
           {steps.map((step, i) => (
             <Reveal key={i} delay={i * 120}>
-              <div className="h-full rounded-3xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-8">
-                <p className="text-5xl font-semibold text-lightAccent dark:text-darkAccent mb-5">
-                  {i + 1}
-                </p>
-                <h3 className="text-xl font-semibold text-lightText dark:text-darkText mb-2">
-                  {step.title}
-                </h3>
-                <p className="text-base font-light text-lightTextMuted dark:text-darkTextMuted">
-                  {step.body}
-                </p>
-              </div>
+              <Glow color={liveryAt(i + 3).hex} radius="rounded-3xl" lift={false}>
+                <div className="relative h-full overflow-hidden rounded-3xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark">
+                  <span
+                    className="absolute inset-x-0 top-0 h-1.5"
+                    style={{ backgroundColor: liveryAt(i + 3).hex }}
+                  />
+                  <div className="p-8 pt-10">
+                  <p
+                    className="text-5xl font-semibold mb-5"
+                    style={{ color: liveryAt(i + 3).ink }}
+                  >
+                    {i + 1}
+                  </p>
+                  <h3 className="text-xl font-semibold text-lightText dark:text-darkText mb-2">
+                    {step.title}
+                  </h3>
+                  <p className="text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
+                    {step.body}
+                  </p>
+                  </div>
+                </div>
+              </Glow>
             </Reveal>
           ))}
         </div>

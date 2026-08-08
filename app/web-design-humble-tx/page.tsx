@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import GeoPageTemplate, { GeoPageData } from "components/GeoPageTemplate";
 
 export const metadata: Metadata = {
-  title: "Web Design & Local SEO in Humble, TX | Queso Ventures",
+  title: "Web Design & Local SEO in Humble, TX | $300/month",
   description:
-    "Websites and local search for Humble businesses, auto shops, contractors, salons, and more along FM 1960. Simple $300/ month plans. Free audit first.",
+    "Websites and local search for Humble businesses along FM 1960 and Deerbrook, auto shops, contractors, salons, and more. $300 a month. Call (281) 203-4531.",
   alternates: { canonical: "https://www.quesoventures.com/web-design-humble-tx" },
   openGraph: {
-    title: "Web Design & Local SEO in Humble, TX | Queso Ventures",
+    title: "Web Design & Local SEO in Humble, TX | $300/month",
     description:
-      "Websites and local search for Humble businesses, auto shops, contractors, salons, and more along FM 1960. Simple $300/ month plans. Free audit first.",
+      "Websites and local search for Humble businesses along FM 1960 and Deerbrook, auto shops, contractors, salons, and more. $300 a month. Call (281) 203-4531.",
     url: "https://www.quesoventures.com/web-design-humble-tx",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
@@ -18,9 +18,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Web Design & Local SEO in Humble, TX | Queso Ventures",
+    title: "Web Design & Local SEO in Humble, TX | $300/month",
     description:
-      "Websites and local search for Humble businesses, auto shops, contractors, salons, and more along FM 1960. Simple $300/ month plans. Free audit first.",
+      "Websites and local search for Humble businesses along FM 1960 and Deerbrook, auto shops, contractors, salons, and more. $300 a month. Call (281) 203-4531.",
     images: ["/logo.png"],
   },
 };
@@ -28,9 +28,10 @@ export const metadata: Metadata = {
 const data: GeoPageData = {
   city: "Humble",
   slug: "/web-design-humble-tx",
-  headline: "Humble Customers Are Searching Right Now. Make Sure They Find You.",
-  subline:
-    "Websites and local search for businesses in Humble, from the FM 1960 corridor to Fall Creek. I'm local, I'll come to your shop, and I answer my own phone.",
+  postalCode: "77338",
+  headline: "Humble is searching right now.",
+  intro:
+    "Websites and local search for businesses in Humble, from the FM 1960 corridor and Deerbrook out to Fall Creek. I'm local, I'll come to your shop, and I answer my own phone.",
   prefill:
     "I run a business in Humble and want more customers finding me online. Here's my current situation:",
   painPoints: [

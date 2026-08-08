@@ -1,11 +1,13 @@
 import { FaCheck } from "react-icons/fa";
 import Reveal from "./Reveal";
 import NicheCtaButton from "./NicheCtaButton";
+import { PAINT } from "./livery";
+import Glow from "./Glow";
 
 const included = [
   "Your website, built, hosted, and maintained",
   "Google and Maps presence that gets you found",
-  "AI SEO, so ChatGPT and Siri recommend you",
+  "Set up so ChatGPT and Siri recommend you by name",
   "Monthly updates and direct support, a text away",
   "No hourly billing, no surprise fees",
 ];
@@ -15,7 +17,8 @@ export default function Pricing() {
     <section id="pricing" className="container mx-auto px-4 py-20 scroll-mt-16">
       <div className="max-w-6xl mx-auto">
         <Reveal>
-          <div className="rounded-3xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-8 sm:p-12 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+          <Glow color={PAINT.gialloOrion.hex} radius="rounded-3xl" lift={false} spread={520}>
+          <div className="relative rounded-3xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark p-8 sm:p-12 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
             <div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl text-lightText dark:text-darkText mb-6">
                 One plan. One price.
@@ -27,9 +30,9 @@ export default function Pricing() {
                   / month
                 </span>
               </p>
-              <p className="mt-4 text-base sm:text-lg font-light text-lightTextMuted dark:text-darkTextMuted">
-                Agencies charge $1,500 or more, and most are not even touching
-                AI SEO.
+              <p className="mt-5 text-xl font-light text-lightTextMuted dark:text-darkTextMuted">
+                Agencies charge $1,500 or more, and most still have no answer for
+                customers who ask an AI assistant who to call.
               </p>
               <div className="mt-8">
                 <NicheCtaButton
@@ -56,6 +59,7 @@ export default function Pricing() {
               ))}
             </ul>
           </div>
+          </Glow>
         </Reveal>
       </div>
     </section>

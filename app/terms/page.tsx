@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Terms & Conditions | Queso Ventures",
   description:
     "Terms of use for Queso Ventures LLC's website and SMS loyalty/notification programs.",
-  alternates: { canonical: "https://quesoventures.com/terms" },
+  alternates: { canonical: "https://www.quesoventures.com/terms" },
   robots: { index: true, follow: true },
 };
 

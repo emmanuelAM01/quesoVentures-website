@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy | Queso Ventures",
   description:
     "How Queso Ventures LLC collects, uses, and protects information from our website and SMS loyalty programs.",
-  alternates: { canonical: "https://quesoventures.com/privacy" },
+  alternates: { canonical: "https://www.quesoventures.com/privacy" },
   robots: { index: true, follow: true },
 };
 

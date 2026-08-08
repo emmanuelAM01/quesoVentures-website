@@ -14,7 +14,7 @@ export default function AskDirectlyButton() {
       }}
       className="inline-flex items-center justify-center rounded-xl border border-lightBorder dark:border-darkBorder px-6 py-3 text-base font-semibold text-lightText dark:text-darkText hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
     >
-      See What Your Website Could Look Like
+      See What I'd Build
     </button>
   );
 }

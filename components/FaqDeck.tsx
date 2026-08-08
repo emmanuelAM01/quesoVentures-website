@@ -17,7 +17,7 @@ interface Props {
 export default function FaqDeck({
   items,
   heading = "Questions, answered",
-  subheading = "Straight answers for Houston business owners.",
+  subheading = "Straight answers, no sales pitch.",
 }: Props) {
   const [active, setActive] = useState(0);
   const n = items.length;
@@ -43,7 +43,7 @@ export default function FaqDeck({
           <h2 className="text-3xl sm:text-4xl md:text-5xl text-[#F5F7FA] mb-3">
             {heading}
           </h2>
-          <p className="text-lg sm:text-xl font-light text-[#B7C0C8] mb-12">
+          <p className="text-xl sm:text-2xl font-light text-[#B7C0C8] mb-12">
             {subheading}
           </p>
 
@@ -55,7 +55,7 @@ export default function FaqDeck({
                   key={i}
                   type="button"
                   onClick={() => setActive(i)}
-                  className={`text-left px-4 py-3 rounded-xl text-sm transition-colors border-l-2 ${
+                  className={`text-left px-4 py-3.5 rounded-xl text-[17px] leading-snug transition-colors border-l-2 ${
                     i === active
                       ? "border-darkButton bg-white/[0.07] text-[#F5F7FA] font-medium"
                       : "border-transparent text-[#B7C0C8] hover:bg-white/[0.04]"
@@ -84,13 +84,10 @@ export default function FaqDeck({
                         pointerEvents: offset === 0 ? "auto" : "none",
                       }}
                     >
-                      <p className="text-xs font-semibold uppercase tracking-widest text-darkButton mb-4">
-                        {String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
-                      </p>
-                      <h3 className="text-lg sm:text-xl font-semibold text-[#F5F7FA] mb-3 leading-snug">
+                      <h3 className="text-xl sm:text-2xl font-semibold text-[#F5F7FA] mb-4 leading-snug">
                         {item.title}
                       </h3>
-                      <p className="text-sm sm:text-base font-light text-[#B7C0C8] leading-relaxed overflow-y-auto max-h-[190px] sm:max-h-[160px]">
+                      <p className="text-lg font-light text-[#B7C0C8] leading-relaxed overflow-y-auto max-h-[200px] sm:max-h-[180px]">
                         {item.content}
                       </p>
                     </div>

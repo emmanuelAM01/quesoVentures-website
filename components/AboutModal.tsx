@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Modal from "./Modal";
-import Link from "next/link";
+import { BUSINESS } from "./businessInfo";
+import CallLink from "./CallLink";
 
 export default function AboutModal() {
 
@@ -53,9 +54,8 @@ export default function AboutModal() {
       </div>
 
       <div className="w-full flex flex-col sm:flex-row gap-3 mt-2">
-        <Link
-          href="https://calendar.app.google/DTrFqJ9XjEuTNmfr6"
-          target="_blank"
+        <CallLink
+          from="about"
           className="
             flex-1 inline-flex items-center justify-center
             rounded-xl px-6 py-3
@@ -66,8 +66,8 @@ export default function AboutModal() {
             transition-colors
           "
         >
-          Book a Call
-        </Link>
+          Call {BUSINESS.phone}
+        </CallLink>
         
         <button
           type="button"

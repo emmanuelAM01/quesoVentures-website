@@ -1,5 +1,7 @@
 import Link from "next/link";
 import SearchDemo from "./SearchDemo";
+import { BUSINESS } from "./businessInfo";
+import CallLink from "./CallLink";
 
 export default function Hero() {
   return (
@@ -12,8 +14,8 @@ export default function Hero() {
               Your next customer is searching right now.
             </h1>
 
-            <p className="max-w-xl text-lg sm:text-xl text-lightTextMuted dark:text-darkTextMuted mb-10 font-light">
-              We make sure they find you on Google, Maps, and AI search.
+            <p className="max-w-xl text-xl sm:text-2xl text-lightTextMuted dark:text-darkTextMuted mb-10 font-light">
+              I make sure they find you on Google, Maps, and AI assistants.
               Everything handled for{" "}
               <span className="font-medium text-lightText dark:text-darkText">
                 $300 a month
@@ -36,19 +38,15 @@ export default function Hero() {
                   transition-colors
                 "
               >
-                See What Your Website Could Look Like
+                See What I'd Build
               </Link>
-              <Link
-                href="#how"
-                className="text-center sm:text-left text-base font-semibold text-lightText dark:text-darkText hover:opacity-70 transition-opacity"
+              <CallLink
+                from="hero"
+                className="text-center sm:text-left text-lg font-semibold text-lightText dark:text-darkText hover:opacity-70 transition-opacity whitespace-nowrap"
               >
-                How it works ↓
-              </Link>
+                or call {BUSINESS.phone}
+              </CallLink>
             </div>
-
-            <p className="mt-6 text-sm font-light text-center sm:text-left text-lightTextMuted dark:text-darkTextMuted">
-              Web design, SEO &amp; AI SEO · Houston, TX
-            </p>
           </div>
 
           {/* Search demo */}

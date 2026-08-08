@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
+import { Analytics } from "@vercel/analytics/next";
 import AboutModal from "components/AboutModal";
 import ContactModal from "components/ContactModal";
 import ConsoleEasterEgg from "components/ConsoleEasterEgg";
@@ -10,20 +11,20 @@ import "styles/globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.quesoventures.com"),
 
-  alternates: {
-    canonical: "https://www.quesoventures.com/",
-  },
+  // No canonical here on purpose. A canonical in the root layout is inherited
+  // by every page that doesn't set its own, which quietly tells Google those
+  // pages are all duplicates of the homepage. Each page declares its own.
 
-  title: "Web Design & Local SEO for Houston Businesses | Queso Ventures",
-  description: "Web design and local SEO that gets Houston businesses found on Google and AI search. Simple monthly plans at $300/ month, not agency prices. Free audit first.",
+  title: "Web Design & Local SEO in Atascocita, Humble & Kingwood TX",
+  description: "Web design and local SEO for businesses in Atascocita, Humble, Kingwood, and Northeast Houston. Simple plans at $300 a month, not agency prices. Free audit first.",
   icons: {
     icon: "/favicon.ico",
     apple: "/logo-square.png",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Web Design & Local SEO for Houston Businesses | Queso Ventures",
-    description: "Web design and local SEO that gets Houston businesses found on Google and AI search. Simple monthly plans at $300/ month, not agency prices. Free audit first.",
+    title: "Web Design & Local SEO in Atascocita, Humble & Kingwood TX",
+    description: "Web design and local SEO for businesses in Atascocita, Humble, Kingwood, and Northeast Houston. Simple plans at $300 a month, not agency prices. Free audit first.",
     images: ["/logo.png"],
   },
 };
@@ -48,6 +49,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ContactModal />
           <ConsoleEasterEgg />
         </ThemeProvider>
+        {/* Page views only. Custom events (e.g. call-button taps) need Pro. */}
+        <Analytics />
       </body>
     </html>
   );

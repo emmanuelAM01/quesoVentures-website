@@ -1,21 +1,16 @@
 import type { Metadata } from "next";
-import Header from "components/Header";
-import Footer from "components/Footer";
-import FreeAudit from "components/FreeAudit";
-import IndustryLinks from "components/IndustryLinks";
-import NicheCtaButton from "components/NicheCtaButton";
-import FaqDeck from "components/FaqDeck";
-import LightBar from "components/LightBar";
+import IndustryPageTemplate, { IndustryPageData } from "components/IndustryPageTemplate";
+
+const TITLE = "Websites & Local SEO for Food Trucks & Restaurants | Houston TX";
+const DESCRIPTION = "Get found by people deciding where to eat right now. Websites and local search for Houston food trucks and restaurants. $300 a month. Call (281) 203-4531.";
 
 export const metadata: Metadata = {
-  title: "Food Truck Website & Google Maps Setup Houston | Queso Ventures",
-  description:
-    "Get a website for your food truck in Houston and show up when customers search nearby. I build the site, set up Google Maps, and become your ongoing tech partner.",
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: "https://www.quesoventures.com/website-for-food-trucks-houston" },
   openGraph: {
-    title: "Food Truck Website & Google Maps Setup Houston | Queso Ventures",
-    description:
-      "Get a website for your food truck in Houston and show up when customers search nearby. I build the site, set up Google Maps, and become your ongoing tech partner.",
+    title: TITLE,
+    description: DESCRIPTION,
     url: "https://www.quesoventures.com/website-for-food-trucks-houston",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
@@ -24,208 +19,75 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Food Truck Website & Google Maps Setup Houston | Queso Ventures",
-    description:
-      "Get a website for your food truck in Houston and show up when customers search nearby. I build the site, set up Google Maps, and become your ongoing tech partner.",
+    title: TITLE,
+    description: DESCRIPTION,
     images: ["/logo.png"],
   },
 };
 
-const faqItems = [
-  {
-    q: "Do I need a website or is a Google profile enough?",
-    a: "Both, though the Google Business Profile is the priority. That's what shows your location, hours, and photos when someone searches on Maps. A simple website backs it up and gives people a place to see your full menu before they drive over.",
-  },
-  {
-    q: "My location changes every day. Can Google keep up?",
-    a: "Yes. I'll set up a simple system so your current location is always accurate on Google, whether you're at a regular spot or a weekend event. Customers see where you actually are, not where you were last week.",
-  },
-  {
-    q: "I have Instagram but it's not bringing new customers. Why?",
-    a: "Instagram keeps you in front of people who already follow you. Google Maps reaches customers who don't know you exist yet. People searching for food nearby right now are ready to eat and are a completely different audience.",
-  },
-  {
-    q: "Will this help me book more events and markets?",
-    a: "Yes. A well-maintained online presence with reviews, photos, and a real website makes you look established, which helps when pitching to event organizers or market coordinators.",
-  },
-  {
-    q: "How long before I see more customers?",
-    a: "Your Google Business Profile can start showing in more local searches within a few weeks of being properly set up. Consistent rankings take a bit longer, usually two to three months of steady work.",
-  },
-];
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
+const data: IndustryPageData = {
+  "industry": "Food Trucks & Restaurants",
+  "slug": "/website-for-food-trucks-houston",
+  "headline": "Hungry people decide fast.",
+  "intro": "Websites and local search for food trucks and restaurants across Houston. Your regulars already know where you park. Everyone else is on their phone right now, deciding where to eat in the next few minutes.",
+  "prefill": "I run a food truck or restaurant and want more customers finding me. Here's my current situation:",
+  "serviceName": "Web Design & Local SEO for Food Trucks and Restaurants",
+  "painPoints": [
     {
-      "@type": "Service",
-      "@id": "https://www.quesoventures.com/website-for-food-trucks-houston#service",
-      name: "Food Truck Website & Local Search Optimization, Houston TX",
-      provider: {
-        "@type": "LocalBusiness",
-        name: "Queso Ventures",
-        url: "https://www.quesoventures.com",
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Houston",
-          addressRegion: "TX",
-          addressCountry: "US",
-        },
-      },
-      serviceType:
-        "Website Design for Food Trucks, Google Business Profile Optimization, Local SEO, Food Truck Google Maps Houston",
-      areaServed: { "@type": "City", name: "Houston", addressRegion: "TX" },
-      description:
-        "Website design and local search optimization for Houston food trucks, Google Business Profile setup, Maps visibility, mobile-ready websites, and review building.",
-      offers: {
-        "@type": "Offer",
-        name: "Free Local Visibility Audit",
-        price: "0",
-        priceCurrency: "USD",
-      },
+      "heading": "Nobody can tell where you are today",
+      "body": "The single most common reason a food truck loses a customer is that the person wanted to come and could not confirm the location. If today's spot is buried in a story that expired, it does not exist."
     },
     {
-      "@type": "FAQPage",
-      "@id": "https://www.quesoventures.com/website-for-food-trucks-houston#faq",
-      mainEntity: faqItems.map((item) => ({
-        "@type": "Question",
-        name: item.q,
-        acceptedAnswer: { "@type": "Answer", text: item.a },
-      })),
+      "heading": "Your menu lives in a photo Google can't read",
+      "body": "A photographed menu is invisible to search. Someone craving birria at eight at night will never find you, because the only place that word appears on your site is inside a JPEG."
     },
+    {
+      "heading": "Catering and event bookings never find you",
+      "body": "Catering is the highest-margin work in this business and it comes from deliberate searches during business hours. If there is no page aimed at it, those inquiries go to whoever built one."
+    }
   ],
+  "whatChanges": [
+    {
+      "title": "Your location and hours are always current and findable",
+      "body": "One place to update, that feeds your site and your Google profile at once, so the answer to 'where are they today' takes one tap instead of three apps."
+    },
+    {
+      "title": "Your menu becomes text a search engine can read",
+      "body": "Every dish, written out, so you show up for the specific cravings people search. This is usually the single biggest unlock for a food business."
+    },
+    {
+      "title": "Catering gets its own front door",
+      "body": "A dedicated page with capacity, pricing signals, service area, and an inquiry form. It turns your highest-margin work into something people can find on purpose."
+    },
+    {
+      "title": "AI assistants send hungry people to you",
+      "body": "When someone asks their phone where to eat nearby, those tools read websites and profiles to decide what to name. I structure yours so you are in that answer."
+    }
+  ],
+  "faqItems": [
+    {
+      "q": "I run everything from Instagram. Isn't that enough?",
+      "a": "It reaches people who already follow you. It does nothing for the person who just searched 'tacos near me' and has never heard of you. Those are the customers you are not currently getting."
+    },
+    {
+      "q": "My location changes constantly. Can a website keep up?",
+      "a": "That is exactly what it should do. You update one place, and the site and your Google profile both reflect it. Changing locations is an advantage once people can reliably find where you are."
+    },
+    {
+      "q": "Does this work for a brick-and-mortar restaurant too?",
+      "a": "Yes, and the mechanics are nearly identical. Readable menu, accurate hours, strong Google profile, fast mobile pages, and a clear path to order or book."
+    },
+    {
+      "q": "What does it cost?",
+      "a": "Simple monthly plans at $300 a month. A fraction of the $1,500 or more agencies charge, and you will know your exact number before anything starts."
+    },
+    {
+      "q": "How does this start?",
+      "a": "I take a free look at your current setup and build a preview of what your business could look like online. Then you decide. Call (281) 203-4531."
+    }
+  ]
 };
 
-const PREFILL =
-  "I run a food truck in Houston and want to show up when people search for food nearby. Here's my current situation:";
-
-const painPoints = [
-  {
-    heading: "Customers can't find your location",
-    body: "Your hours, location, and menu aren't showing up when someone nearby searches for food. They pick whoever shows up first. That usually isn't you.",
-  },
-  {
-    heading: "No way to show your menu online",
-    body: "A customer wants to check your menu before they drive over. If there's no website, they move on to the next truck that has one.",
-  },
-  {
-    heading: "Not showing up for 'food trucks near me'",
-    body: "Someone opens Maps, types 'food truck near me,' and your truck doesn't appear, even if you're half a mile away. That customer goes somewhere else.",
-  },
-];
-
-const whatChanges = [
-  {
-    title: "A website built for your food truck",
-    body: "Menu, location, schedule, and a way to follow or contact you. All on a fast, mobile-first page that works every time. I build it and you own it.",
-  },
-  {
-    title: "Your truck shows up on Google Maps",
-    body: "I set up and optimize your Google Business Profile so customers see your location, hours, and photos when they search nearby, even people who've never heard of you.",
-  },
-  {
-    title: "You show up when someone searches 'food trucks near me'",
-    body: "With the right Google profile and website in place, your truck starts appearing in the local searches that hungry customers actually use.",
-  },
-  {
-    title: "I'm your ongoing tech partner",
-    body: "Menu changed? New schedule? New location? I handle the updates so your online presence is always accurate. You focus on the food.",
-  },
-];
-
-
-export default function FoodTruckPage() {
-  return (
-    <div className="flex flex-col min-h-screen bg-lightBG dark:bg-darkBG">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <Header />
-      <main>
-        {/* Hero */}
-        <section className="container mx-auto px-4 pt-32 pb-16">
-          <div className="max-w-6xl mx-auto">
-            <p className="text-sm font-semibold uppercase tracking-widest text-lightTextMuted dark:text-darkTextMuted mb-4">
-              Houston Food Trucks
-            </p>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-lightText dark:text-darkText mb-6 tracking-tight">
-              Get a Website for Your Food Truck in Houston
-            </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-lightTextMuted dark:text-darkTextMuted font-light mb-10">
-              Your truck is out there every day. I make sure customers can find you before they find someone else.
-            </p>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
-              <NicheCtaButton message={PREFILL} label="I'll Show You How It Works" />
-              <p className="text-sm font-light text-lightTextMuted dark:text-darkTextMuted">
-                Simple plans at $300 a month.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <LightBar />
-
-        {/* Pain points */}
-        <section className="container mx-auto px-4 py-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl text-lightText dark:text-darkText mb-10 max-w-4xl mx-auto">
-            Sound familiar?
-          </h2>
-          <div className="max-w-4xl mx-auto divide-y divide-lightBorder dark:divide-darkBorder">
-            {painPoints.map((item, i) => (
-              <div key={i} className="py-6 first:pt-0">
-                <p className="text-lg font-semibold text-lightText dark:text-darkText mb-2">
-                  {item.heading}
-                </p>
-                <p className="text-base font-light text-lightTextMuted dark:text-darkTextMuted">
-                  {item.body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* What changes */}
-        <section className="container mx-auto px-4 py-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl text-lightText dark:text-darkText mb-4 max-w-4xl mx-auto">
-            Here&apos;s what changes
-          </h2>
-          <p className="text-lg text-lightTextMuted dark:text-darkTextMuted font-light mb-10 max-w-4xl mx-auto">
-            I handle the online side so you can focus on the food.
-          </p>
-          <div className="max-w-4xl mx-auto">
-            <div className="space-y-4">
-              {whatChanges.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex gap-4 rounded-3xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] p-6"
-                >
-                  <span className="text-lightAccent dark:text-darkAccent font-bold text-xl mt-0.5 shrink-0">
-                    {i + 1}
-                  </span>
-                  <div>
-                    <p className="text-lg font-semibold text-lightText dark:text-darkText mb-1">
-                      {item.title}
-                    </p>
-                    <p className="text-base font-light text-lightTextMuted dark:text-darkTextMuted">
-                      {item.body}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <FaqDeck
-          heading="Questions food truck owners ask"
-          items={faqItems.map((f) => ({ title: f.q, content: f.a }))}
-        />
-
-        <FreeAudit />
-        <IndustryLinks current="/website-for-food-trucks-houston" />
-      </main>
-      <Footer />
-    </div>
-  );
+export default function FoodTrucksPage() {
+  return <IndustryPageTemplate data={data} />;
 }

@@ -44,6 +44,27 @@ module.exports = {
         panelLight: "#FFFFFF",
         panelDark: "#0F1218",
 
+        // Alternating section band. panelLight (#FFFFFF) sits too close to
+        // lightBG (#FFF8EC) to read as a separate section — this is a real
+        // step down in warmth so the page bands instead of running flat.
+        bandLight: "#F6EAD5",
+        bandDark: "#141821",
+
+        // Full-contrast section, used once or twice per page as punctuation.
+        inkLight: "#101216",
+        inkDark: "#101216",
+
+        // Factory paint. Full palette and usage rules in components/livery.ts.
+        rossoCorsa: "#D40000",
+        rossoScuderia: "#FF2800",
+        gialloOrion: "#FEA700",
+        gialloModena: "#FCE903",
+        arancioXanto: "#E64A37",
+        verdeMantis: "#7DC23B",
+        bluLeMans: "#0690FF",
+        violaPasifae: "#6B0686",
+        grigioTelesto: "#7692A5",
+
         panelTintLight: "rgba(255,255,255,0.70)",
         panelTintDark: "rgba(255,255,255,0.06)",
 

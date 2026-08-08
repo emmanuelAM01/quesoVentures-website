@@ -1,19 +1,24 @@
 const INDUSTRIES = [
   "Mechanics",
+  "Mobile mechanics",
   "Vehicle wraps",
-  "Contractors",
-  "Restaurants",
-  "Food trucks",
-  "Med spas",
-  "Salons",
-  "Barbershops",
-  "Event venues",
-  "Carpet cleaning",
   "Detailers",
+  "Roofers",
+  "Construction",
+  "Flooring",
   "Landscapers",
   "Cleaning services",
+  "Carpet cleaning",
+  "Med spas",
+  "Med clinics",
+  "Dentists",
+  "Event venues",
+  "Music schools",
+  "Bands",
+  "Food trucks",
+  "Restaurants",
+  "Donut shops",
   "Online shops",
-  "Consultants",
   "and everything in between",
 ];
 
@@ -21,9 +26,6 @@ export default function IndustriesMarquee() {
   const items = [...INDUSTRIES, ...INDUSTRIES];
   return (
     <section className="py-14">
-      <p className="container mx-auto px-4 max-w-6xl text-xs font-semibold uppercase tracking-widest text-lightTextMuted dark:text-darkTextMuted mb-8">
-        Trusted by Houston area business owners
-      </p>
       <div
         className="marquee relative overflow-hidden"
         style={{

@@ -3,42 +3,46 @@ import Footer from "components/Footer";
 import FreeAudit from "components/FreeAudit";
 import FaqDeck from "components/FaqDeck";
 import PageHero from "components/PageHero";
-import WhyLocal from "components/WhyLocal";
-import { SERVICE_AREAS } from "components/serviceAreas";
+import IndustryLinks from "components/IndustryLinks";
 import LiveryCard from "components/LiveryCard";
 import StatementCopy from "components/StatementCopy";
 import Glow from "components/Glow";
-import CallLink from "components/CallLink";
-import { liveryAt, OPEN_ENDED, PAINT } from "components/livery";
+import { liveryAt, PAINT } from "components/livery";
+import WhyLocal from "components/WhyLocal";
 import {
   BUSINESS,
   LOCAL_BUSINESS_SCHEMA,
+  AREA_SERVED_SCHEMA,
   breadcrumbSchema,
 } from "components/businessInfo";
 
-export interface GeoPageData {
-  city: string;
+export interface IndustryPageData {
+  /** Plain name of the trade, used in headings and schema. */
+  industry: string;
   slug: string;
-  postalCode?: string;
-  /** Keep under ~34 characters. It has to hold one line. */
+  /** One line. Long framing goes in `intro`. */
   headline: string;
-  /** Opens section two. Where the local detail lives. */
   intro: string;
   prefill: string;
+  serviceName: string;
   painPoints: { heading: string; body: string }[];
   whatChanges: { title: string; body: string }[];
   faqItems: { q: string; a: string }[];
   heroImage?: { src: string; alt: string };
 }
 
-export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
+export default function IndustryPageTemplate({
+  data,
+}: {
+  data: IndustryPageData;
+}) {
   const {
-    city,
+    industry,
     slug,
-    postalCode,
     headline,
     intro,
     prefill,
+    serviceName,
     painPoints,
     whatChanges,
     faqItems,
@@ -52,20 +56,16 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
       {
         "@type": "Service",
         "@id": `${BUSINESS.url}${slug}#service`,
-        name: `Web Design & Local SEO, ${city}, TX`,
+        name: serviceName,
         provider: { "@id": `${BUSINESS.url}/#localbusiness` },
         serviceType: [
           "Web Design",
           "Local SEO",
           "Google Business Profile Optimization",
         ],
-        areaServed: {
-          "@type": "City",
-          name: city,
-          addressRegion: BUSINESS.region,
-          ...(postalCode ? { postalCode } : {}),
-        },
-        description: `Website design, local search, and Google Business Profile work for businesses in ${city}, Texas.`,
+        areaServed: AREA_SERVED_SCHEMA,
+        audience: { "@type": "Audience", audienceType: industry },
+        description: intro,
         offers: {
           "@type": "Offer",
           name: "Free Local Visibility Audit",
@@ -82,11 +82,9 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
           acceptedAnswer: { "@type": "Answer", text: item.a },
         })),
       },
-      breadcrumbSchema([{ name: city, path: slug }]),
+      breadcrumbSchema([{ name: industry, path: slug }]),
     ],
   };
-
-  const otherAreas = SERVICE_AREAS.filter((a) => a.slug !== slug);
 
   return (
     <div className="flex flex-col min-h-screen bg-lightBG dark:bg-darkBG">
@@ -98,8 +96,8 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
       <main>
         <PageHero headline={headline} prefill={prefill} image={heroImage} />
 
-        {/* Full-contrast statement. Breaks the page up so the local framing
-            reads as a design moment rather than another paragraph. */}
+        {/* Full-contrast statement, so section two reads as a design moment
+            rather than the opening paragraph of an article. */}
         <section data-dark-section className="bg-inkLight">
           <div className="container mx-auto px-4 py-28">
             <StatementCopy
@@ -108,15 +106,9 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
               paint={PAINT.gialloOrion}
               className="max-w-4xl mx-auto"
             />
-            {postalCode && (
-              <p className="max-w-4xl mx-auto mt-8 text-lg text-[#B7C0C8]">
-                {city}, TX {postalCode}
-              </p>
-            )}
           </div>
         </section>
 
-        {/* Pain points as cards, not a stacked wall of paragraphs. */}
         <section className="container mx-auto px-4 py-24">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl sm:text-4xl md:text-5xl text-lightText dark:text-darkText mb-12">
@@ -174,51 +166,13 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
         </section>
 
         <FaqDeck
-          heading={`Questions ${city} business owners ask`}
+          heading={`Questions ${industry.toLowerCase()} ask`}
           items={faqItems.map((f) => ({ title: f.q, content: f.a }))}
         />
 
         <FreeAudit />
         <WhyLocal />
-
-        <section className="bg-bandLight dark:bg-bandDark border-t border-lightBorder dark:border-darkBorder">
-          <div className="container mx-auto px-4 py-24">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl sm:text-4xl text-lightText dark:text-darkText mb-12">
-                Not in {city}?
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {otherAreas.map((area, i) => (
-                  <LiveryCard
-                    key={area.slug}
-                    title={area.city}
-                    body={area.tagline}
-                    paint={liveryAt(i + 4)}
-                    href={area.slug}
-                  />
-                ))}
-
-                {/* Never let the list read as the whole map. */}
-                <LiveryCard
-                  open
-                  paint={OPEN_ENDED}
-                  title="And wherever you are"
-                  body={
-                    <>
-                      New areas all the time, and clients well past Texas.{" "}
-                      <CallLink
-                        from="areas"
-                        className="font-semibold text-lightText dark:text-darkText underline underline-offset-4 decoration-gialloOrion decoration-2 hover:opacity-70 transition-opacity whitespace-nowrap"
-                      >
-                        Just ask.
-                      </CallLink>
-                    </>
-                  }
-                />
-              </div>
-            </div>
-          </div>
-        </section>
+        <IndustryLinks current={slug} />
       </main>
       <Footer />
     </div>
