@@ -68,8 +68,8 @@ const jsonLd = {
 
 const chapters = [
   {
-    year: "2020",
-    label: "Started at 18",
+    year: "2019",
+    label: "Started at 18 (yes, I was born in 2001)",
     body: "COVID closed every job in town, so I taught myself web development and started freelancing. First client at $15 an hour. I've been building for people ever since.",
   },
   {
