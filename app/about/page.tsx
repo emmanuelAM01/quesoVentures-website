@@ -84,7 +84,7 @@ const chapters = [
   },
   {
     year: "Now",
-    label: "Came home",
+    label: "Bringing it all together",
     body: "Queso Ventures is where all of it lands. Enterprise grade technology for the businesses in my own backyard, serving owners across the Houston area. The big companies already have engineers like me. The businesses that actually matter, the ones down the street, deserve one too.",
   },
 ];
@@ -172,7 +172,7 @@ export default function AboutPage() {
                 <StatementCopy
                   tone="dark"
                   paint={PAINT.gialloOrion}
-                  text="Every big brand has a team of engineers making sure you find them first. The shops that keep Houston running do not. AI is changing how customers find businesses, and most agencies are still selling the old playbook. I helped build the new tools, so I know the new rules. Queso Ventures brings that edge to local businesses for $300 a month. I'll come see your shop in person, and when you text, it's me who answers."
+                  text="Every big brand has a team of engineers making sure you find them first. The shops that keep Houston running do not. AI is changing how customers find businesses, and most agencies are still selling the old playbook. I helped build the new tools, so I know the new rules. Queso Ventures brings that edge to local businesses for $300 a month. I'll come see your store in person, and when you reach out, it's me who answers."
                 />
 
                 <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
