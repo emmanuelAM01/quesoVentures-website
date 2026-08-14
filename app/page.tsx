@@ -179,15 +179,11 @@ export default function Page() {
           <div className="max-w-6xl mx-auto">
             <Reveal>
               <p className="max-w-4xl text-2xl sm:text-3xl md:text-4xl font-light text-lightText dark:text-darkText leading-snug text-balance">
-                An enterprise grade team of engineers and problem solvers,
-                straight from the AI space, now working for the businesses
-                that need it most.
+                Industry-trained software engineer and problem solver, working for the businesses that rarely get one.
               </p>
               <p className="mt-6 max-w-3xl text-base sm:text-lg font-light text-lightTextMuted dark:text-darkTextMuted">
-                From restaurant websites to AI and biomedical software, I
-                have built it all and kept it running. And because I helped
-                build AI tools myself, I know exactly what they look for when
-                they decide which business to recommend.
+                From restaurant websites to AI and biomedical software, I've built it all and kept it running. I've been at this long enough to
+                know what AI search and new tools look for when they decide which businesses to recommend.
               </p>
               <Link
                 href="/about"

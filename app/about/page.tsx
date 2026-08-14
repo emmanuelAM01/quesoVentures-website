@@ -105,10 +105,14 @@ export default function AboutPage() {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight text-lightText dark:text-darkText mb-6 text-balance">
                 Hey, I&apos;m Emmanuel.
               </h1>
-              <p className="max-w-xl text-xl sm:text-2xl font-light text-lightTextMuted dark:text-darkTextMuted">
-                AI engineer, software engineer, and CTO of a venture backed startup. <br /><br />
-                I&apos;ve been around and built a lot of stuff. <br /><br />
-                Now, it&apos;s time to apply everything I have learned to the local businesses back home in Houston.
+              <p className="max-w-2xl text-xl sm:text-2xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
+                In my career I&apos;ve worn lots of hats: AI engineer, software
+                engineer (there is a bit of a difference), blockchain engineer,
+                all the way to CTO of a venture-backed startup.
+              </p>
+              <p className="mt-5 max-w-2xl text-xl sm:text-2xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
+                Now I&apos;m bringing it all together and applying it to the
+                businesses back home.
               </p>
             </div>
             <AboutPortrait />
