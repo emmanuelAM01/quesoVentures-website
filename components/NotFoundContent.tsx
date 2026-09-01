@@ -52,8 +52,8 @@ export default function NotFoundContent() {
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-4">
               <NicheCtaButton
-                message="I ended up on your 404 page and figured I'd still reach out. Here's my situation:"
-                label="See What I'd Build"
+                message="I ended up on your 404 page and figured I'd still reach out."
+                label="Get My Free Report"
               />
               <Link
                 href="/"

@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
+import { metaFor } from "components/siteCopy";
 import GeoPageTemplate, { GeoPageData } from "components/GeoPageTemplate";
 
-const TITLE = "Local SEO & Web Design in Channelview, TX | Queso Ventures";
-const DESCRIPTION =
-  "Websites and local search for Channelview businesses along Sheldon Road, Market Street, and the Beltway. Simple plans at $300 a month. Call (281) 203-4531 for a free look.";
+const { title: TITLE, description: DESCRIPTION } = metaFor("Channelview");
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -34,7 +33,7 @@ const data: GeoPageData = {
   intro:
     "Websites and local search for Channelview businesses, from Sheldon Road and Market Street out to Woodforest and the Beltway. I'm up the road, and I answer my own phone.",
   prefill:
-    "I run a business in Channelview and want more customers finding me online. Here's my current situation:",
+    "I run a business in Channelview and want more customers finding me online.",
   painPoints: [
     {
       heading: "Channelview gets treated like an afterthought of Houston",
@@ -64,7 +63,7 @@ const data: GeoPageData = {
     },
     {
       title: "You deal with one person, start to finish",
-      body: "I'm in Atascocita, twenty minutes up the road. I'll come to your shop, learn how the business actually works, and you'll always have my direct number. $300 a month, no agency retainer.",
+      body: "I'm in Atascocita, twenty minutes up the road. I'll come to your shop, learn how the business actually works, and you'll always have my direct number. $500 a month, no agency retainer.",
     },
   ],
   faqItems: [
@@ -78,7 +77,7 @@ const data: GeoPageData = {
     },
     {
       q: "What does it cost?",
-      a: "Simple monthly plans at $300 a month. A fraction of the $1,500 or more agencies charge, and you'll know your exact number before anything starts.",
+      a: "Simple monthly plans at $500 a month. Agencies charge $1,500 or more and still have no answer for customers who ask an AI assistant who to call. You'll know your exact number before anything starts.",
     },
     {
       q: "What kinds of businesses do you work with?",
@@ -89,6 +88,7 @@ const data: GeoPageData = {
       a: "I take a free look at where you stand, your site, your Google profile, and whoever currently outranks you in Channelview, then build a preview of what your business could look like online. Then you decide. Call (281) 203-4531 or send a message.",
     },
   ],
+  heroImage: { src: "/hero/chanelview.avif", alt: "Channelview, Texas" },
 };
 
 export default function ChannelviewPage() {

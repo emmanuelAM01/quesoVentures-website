@@ -1,65 +1,73 @@
 import { FaCheck } from "react-icons/fa";
 import Reveal from "./Reveal";
 import NicheCtaButton from "./NicheCtaButton";
-import { PAINT } from "./livery";
-import Glow from "./Glow";
+import LavaLamp from "./LavaLamp";
+import { SITE_COPY, type SiteCopy } from "./siteCopy";
 
-const included = [
-  "Your website, built, hosted, and maintained",
-  "Google and Maps presence that gets you found",
-  "Set up so ChatGPT and Siri recommend you by name",
-  "Monthly updates and direct support, a text away",
-  "No hourly billing, no surprise fees",
-];
-
-export default function Pricing() {
+/**
+ * The price, on a card floating over the blob field.
+ *
+ * Centred type on flat cream read as a slide someone forgot to design. The
+ * section is the moment the whole page has been walking toward, so it gets the
+ * same treatment as the close: dark ground, live colour behind it, and a single
+ * panel holding everything. The card does the containing that a bare centre
+ * axis could not.
+ */
+export default function Pricing({
+  copy = SITE_COPY.pricing,
+}: {
+  copy?: SiteCopy["pricing"];
+}) {
   return (
-    <section id="pricing" className="container mx-auto px-4 py-20 scroll-mt-16">
-      <div className="max-w-6xl mx-auto">
+    <section
+      id="pricing"
+      data-dark-section
+      className="relative overflow-hidden scroll-mt-16"
+    >
+      <LavaLamp scrim={0.62} />
+
+      <div className="relative container mx-auto px-4 py-28 sm:py-32">
         <Reveal>
-          <Glow color={PAINT.gialloOrion.hex} radius="rounded-3xl" lift={false} spread={520}>
-          <div className="relative rounded-3xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark p-8 sm:p-12 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
-            <div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl text-lightText dark:text-darkText mb-6">
-                One plan. One price.
+          <div className="mx-auto max-w-xl rounded-3xl border border-white/10 bg-[#14171D]/80 p-8 backdrop-blur-xl sm:p-12">
+            <div className="text-center">
+              <h2 className="text-3xl sm:text-4xl tracking-tight text-[#F5F7FA]">
+                {copy.heading}
               </h2>
-              <p className="text-6xl sm:text-7xl tracking-tight font-semibold text-lightText dark:text-darkText">
-                $300
-                <span className="text-xl sm:text-2xl font-light text-lightTextMuted dark:text-darkTextMuted">
+
+              <p className="mt-6 text-6xl sm:text-7xl font-semibold tracking-tight text-white">
+                {copy.amount}
+                <span className="align-middle text-xl font-light text-white/50">
                   {" "}
-                  / month
+                  {copy.period}
                 </span>
               </p>
-              <p className="mt-5 text-xl font-light text-lightTextMuted dark:text-darkTextMuted">
-                Agencies charge $1,500 or more, and most still have no answer for
-                customers who ask an AI assistant who to call.
-              </p>
-              <div className="mt-8">
+
+              <div className="mt-8 flex justify-center">
                 <NicheCtaButton
-                  message="I want to talk about getting my business found online. Here's my situation:"
-                  label="Let's Talk First"
+                  message={copy.ctaPrefill}
+                  label={copy.cta}
+                  variant="onDark"
                 />
               </div>
-              <p className="mt-4 text-sm font-light text-lightTextMuted dark:text-darkTextMuted">
-                No payment until we&apos;ve talked and you&apos;ve seen your
-                preview. 4 month minimum.
-              </p>
             </div>
 
-            <ul className="space-y-4">
-              {included.map((item, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lightAccent/10 dark:bg-darkAccent/10 text-lightAccent dark:text-darkAccent">
-                    <FaCheck size={11} />
+            <ul className="mt-10 space-y-3.5 border-t border-white/10 pt-8">
+              {copy.included.map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-darkButton/15 text-darkButton">
+                    <FaCheck size={10} />
                   </span>
-                  <span className="text-base sm:text-lg font-light text-lightText dark:text-darkText">
+                  <span className="text-base font-light text-white/85">
                     {item}
                   </span>
                 </li>
               ))}
             </ul>
+
+            <p className="mt-8 text-center text-sm font-light leading-relaxed text-white/45">
+              {copy.terms}
+            </p>
           </div>
-          </Glow>
         </Reveal>
       </div>
     </section>

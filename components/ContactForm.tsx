@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BUSINESS } from "./businessInfo";
 import { trackContactSubmit } from "./analytics";
 import CallLink from "./CallLink";
+import BusinessPicker from "./BusinessPicker";
 
 const inputClass =
   "w-full rounded-xl border border-transparent bg-black/[0.04] dark:bg-white/[0.06] px-4 py-3 text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/50 dark:placeholder:text-darkTextMuted/50 focus:outline-none focus:border-lightAccent/40 dark:focus:border-darkAccent/40 focus:bg-white dark:focus:bg-transparent transition-colors";
@@ -13,6 +14,9 @@ const labelClass = "text-sm font-medium text-lightText dark:text-darkText";
 interface Props {
   /** Pre-written opening line, set by whichever CTA opened the form. */
   prefillMessage?: string;
+  /** Set when the hero demo already identified the business. */
+  prefillBusiness?: string;
+  prefillPlaceId?: string;
   /** Fired after a successful send — the modal uses it to auto-close. */
   onSuccess?: () => void;
   submitLabel?: string;
@@ -20,8 +24,10 @@ interface Props {
 
 export default function ContactForm({
   prefillMessage = "",
+  prefillBusiness = "",
+  prefillPlaceId = "",
   onSuccess,
-  submitLabel = "Send Message",
+  submitLabel = "Send My Report",
 }: Props) {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [error, setError] = useState("");
@@ -41,7 +47,7 @@ export default function ContactForm({
         body: JSON.stringify({
           name: formData.get("name"),
           contact: formData.get("contact"),
-          business: formData.get("info"),
+          placeId: formData.get("placeId"),
           message: formData.get("message"),
           website: formData.get("website"), // honeypot
         }),
@@ -73,10 +79,10 @@ export default function ContactForm({
           ✓
         </div>
         <div className="text-2xl font-semibold text-lightText dark:text-darkText mb-2">
-          Message sent
+          Got it
         </div>
         <p className="text-base font-light text-lightTextMuted dark:text-darkTextMuted">
-          We&apos;ll get back to you within 24 hours. In a hurry? Call{" "}
+          Your report is on the way, within 24 hours. In a hurry? Call{" "}
           <CallLink
             from="contact_modal"
             className="font-semibold text-lightButton dark:text-darkButton"
@@ -95,53 +101,43 @@ export default function ContactForm({
         <input name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="grid sm:grid-cols-2 gap-4">
-        <div className="flex flex-col gap-1.5">
-          <label className={labelClass}>Your name</label>
-          <input
-            name="name"
-            type="text"
-            required
-            placeholder="John Smith"
-            className={inputClass}
-          />
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <label className={labelClass}>Email</label>
-          <input
-            name="contact"
-            type="email"
-            required
-            placeholder="john@yourbusiness.com"
-            className={inputClass}
-          />
-        </div>
-      </div>
+      {/* Two required fields, no essay.
+          The old form asked for name, email, and a required paragraph
+          describing the problem — which is the thing they are hiring someone
+          to work out, typed on a phone between jobs. The offer is a free
+          report, and the only thing that actually needs is enough to find the
+          business and a way to reply. */}
+      <BusinessPicker
+        inputClass={inputClass}
+        labelClass={labelClass}
+        initialName={prefillBusiness}
+        initialPlaceId={prefillPlaceId}
+      />
 
       <div className="flex flex-col gap-1.5">
-        <label className={labelClass}>
-          Your website{" "}
-          <span className="text-lightTextMuted dark:text-darkTextMuted font-normal">
-            (if you have one)
-          </span>
-        </label>
+        <label className={labelClass}>Email or phone</label>
         <input
-          name="info"
+          name="contact"
           type="text"
-          placeholder="yourbusiness.com"
+          required
+          inputMode="email"
+          placeholder="you@yourbusiness.com or (281) 555-0100"
           className={inputClass}
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className={labelClass}>What do you need help with?</label>
+        <label className={labelClass}>
+          Anything I should know?{" "}
+          <span className="font-normal text-lightTextMuted dark:text-darkTextMuted">
+            (optional)
+          </span>
+        </label>
         <textarea
           name="message"
-          required
-          rows={4}
+          rows={3}
           defaultValue={prefillMessage}
-          placeholder="Tell us about your business and what you're trying to achieve..."
+          placeholder="Skip this if you'd rather just talk."
           className={`${inputClass} resize-none`}
         />
       </div>

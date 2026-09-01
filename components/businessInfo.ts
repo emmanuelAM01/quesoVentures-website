@@ -33,11 +33,16 @@ export const BUSINESS = {
 
   /**
    * What people read. Deliberately not "Atascocita office" — the company isn't
-   * a single-suburb shop and shouldn't read like one. Schema still uses the
-   * locality above so it matches the Google Business Profile exactly.
+   * a single-suburb shop and shouldn't read like one.
+   *
+   * The ZIP came out on 2026-08-31. It was never doing work here: nobody thinks
+   * in ZIP codes, and the one that matters is the `postalCode` in
+   * `POSTAL_ADDRESS` below, which is on every page and is what Google reads
+   * against the Business Profile. This line only has to tell a human roughly
+   * where I am.
    */
-  addressLine: "HQ in 77346 · Northeast Houston",
-  addressLineShort: "HQ in 77346",
+  addressLine: "Northeast Houston, TX",
+  addressLineShort: "Northeast Houston",
 
   /**
    * The Business Profile, by CID. Resolved from the maps.app.goo.gl share link
@@ -57,7 +62,7 @@ export const BUSINESS = {
   instagram: "https://instagram.com/quesoventures",
   youtube: "https://youtube.com/@quesoventures",
 
-  priceRange: "$300 per month",
+  priceRange: "$500 per month",
 } as const;
 
 /** Everything that identifies this business as the same entity across the web. */
@@ -130,7 +135,7 @@ export const LOCAL_BUSINESS_SCHEMA = {
   },
   priceRange: BUSINESS.priceRange,
   description:
-    "Website design and local search for businesses in Atascocita, Humble, Kingwood, and the rest of Northeast Houston. Simple plans at $300 a month.",
+    "Website design and local search for businesses in Atascocita, Humble, Kingwood, and the rest of Northeast Houston. Simple plans at $500 a month.",
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",

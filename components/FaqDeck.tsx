@@ -120,7 +120,7 @@ export default function FaqDeck({
                   onClick={openContact}
                   className="inline-flex items-center justify-center rounded-xl bg-darkButton hover:bg-darkButtonHover px-6 py-3 text-base font-semibold text-darkBG transition-colors"
                 >
-                  Ask Us Anything
+                  Ask Me Anything
                 </button>
               </div>
             </div>

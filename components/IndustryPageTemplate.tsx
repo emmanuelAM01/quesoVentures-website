@@ -4,11 +4,13 @@ import FreeAudit from "components/FreeAudit";
 import FaqDeck from "components/FaqDeck";
 import PageHero from "components/PageHero";
 import IndustryLinks from "components/IndustryLinks";
+import PlaceLinks from "components/PlaceLinks";
+import { HOUSTON } from "content/houston";
 import LiveryCard from "components/LiveryCard";
 import StatementCopy from "components/StatementCopy";
 import Glow from "components/Glow";
 import { liveryAt, PAINT } from "components/livery";
-import WhyLocal from "components/WhyLocal";
+import { MONTHLY_PLAN_OFFER } from "components/pricingCopy";
 import {
   BUSINESS,
   LOCAL_BUSINESS_SCHEMA,
@@ -66,12 +68,17 @@ export default function IndustryPageTemplate({
         areaServed: AREA_SERVED_SCHEMA,
         audience: { "@type": "Audience", audienceType: industry },
         description: intro,
-        offers: {
-          "@type": "Offer",
-          name: "Free Local Visibility Audit",
-          price: "0",
-          priceCurrency: "USD",
-        },
+        // The plan price as a fact, so an assistant can answer "what do they
+        // charge" without the page having to say it in prose again.
+        offers: [
+          MONTHLY_PLAN_OFFER,
+          {
+            "@type": "Offer",
+            name: "Free Local Visibility Audit",
+            price: "0",
+            priceCurrency: "USD",
+          },
+        ],
       },
       {
         "@type": "FAQPage",
@@ -94,7 +101,12 @@ export default function IndustryPageTemplate({
       />
       <Header />
       <main>
-        <PageHero headline={headline} prefill={prefill} image={heroImage} />
+        <PageHero
+          headline={headline}
+          sub={`Web design and local SEO for Houston area ${industry.toLowerCase()}, built by a software engineer.`}
+          prefill={prefill}
+          image={heroImage}
+        />
 
         {/* Full-contrast statement, so section two reads as a design moment
             rather than the opening paragraph of an article. */}
@@ -171,7 +183,9 @@ export default function IndustryPageTemplate({
         />
 
         <FreeAudit />
-        <WhyLocal />
+        {/* Metro level, and it links down to the towns. A trade page per town
+            would be thirty pages differing by two nouns. */}
+        <PlaceLinks current={slug} scope={HOUSTON} />
         <IndustryLinks current={slug} />
       </main>
       <Footer />

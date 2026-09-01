@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { metaFor } from "components/siteCopy";
 import GeoPageTemplate, { GeoPageData } from "components/GeoPageTemplate";
 
+const { title: TITLE, description: DESCRIPTION } = metaFor("Atascocita");
+
 export const metadata: Metadata = {
-  title: "Web Design & SEO in Atascocita, TX 77346 | Queso Ventures",
-  description:
-    "Websites and local search for Atascocita businesses in 77346, Eagle Springs, The Groves, Walden, Kings River, and Balmoral. $300 a month. Call (281) 203-4531.",
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: "https://www.quesoventures.com/web-design-atascocita-tx" },
   openGraph: {
-    title: "Web Design & SEO in Atascocita, TX 77346 | Queso Ventures",
-    description:
-      "Websites and local search for Atascocita businesses in 77346, Eagle Springs, The Groves, Walden, Kings River, and Balmoral. $300 a month. Call (281) 203-4531.",
+    title: TITLE,
+    description: DESCRIPTION,
     url: "https://www.quesoventures.com/web-design-atascocita-tx",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
@@ -18,9 +19,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Web Design & SEO in Atascocita, TX 77346 | Queso Ventures",
-    description:
-      "Websites and local search for Atascocita businesses in 77346, Eagle Springs, The Groves, Walden, Kings River, and Balmoral. $300 a month. Call (281) 203-4531.",
+    title: TITLE,
+    description: DESCRIPTION,
     images: ["/logo.png"],
   },
 };
@@ -31,9 +31,9 @@ const data: GeoPageData = {
   postalCode: "77346",
   headline: "Atascocita is already searching.",
   intro:
-    "Websites and local search for Atascocita businesses in 77346 — Eagle Springs, The Groves, Walden on Lake Houston, Kings River, and Balmoral. Built by someone who will actually show up at your shop.",
+    "Websites and local search for Atascocita businesses in 77346: Eagle Springs, The Groves, Walden on Lake Houston, Kings River, and Balmoral. Built by someone who will actually show up at your shop.",
   prefill:
-    "I run a business in Atascocita and want more customers finding me online. Here's my current situation:",
+    "I run a business in Atascocita and want more customers finding me online.",
   painPoints: [
     {
       heading: "Neighbors search online before they drive anywhere",
@@ -77,7 +77,7 @@ const data: GeoPageData = {
     },
     {
       q: "What does it cost?",
-      a: "Simple monthly plans at $300 a month. Far below the $1,500+ agencies charge, and unlike most of them I set you up for AI search too. You'll know your exact number before anything starts.",
+      a: "Simple monthly plans at $500 a month. Far below the $1,500+ agencies charge, and unlike most of them I set you up for AI search too. You'll know your exact number before anything starts.",
     },
     {
       q: "What kinds of businesses do you work with?",
@@ -88,6 +88,7 @@ const data: GeoPageData = {
       a: "I take a free look at where you stand, your site, your Google profile, and who currently outranks you in Atascocita, and build a preview of what your business could look like online. Then you decide. No pressure.",
     },
   ],
+  heroImage: { src: "/hero/Atascocita-Texas.jpg", alt: "Atascocita, Texas" },
 };
 
 export default function AtascocitaPage() {

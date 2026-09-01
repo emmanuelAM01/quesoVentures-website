@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Reveal from "components/Reveal";
@@ -7,7 +8,7 @@ import AboutPortrait from "components/AboutPortrait";
 import { liveryAt, PAINT } from "components/livery";
 import Glow from "components/Glow";
 import CallLink from "components/CallLink";
-import StatementCopy from "components/StatementCopy";
+import { PRICING } from "components/pricingCopy";
 import NicheCtaButton from "components/NicheCtaButton";
 import {
   BUSINESS,
@@ -169,27 +170,107 @@ export default function AboutPage() {
           <div className="max-w-6xl mx-auto">
             <Reveal>
               <Glow color={PAINT.gialloOrion.hex} radius="rounded-3xl" lift={false} spread={460}>
-              <div data-dark-section className="relative rounded-3xl bg-[#101216] p-8 sm:p-14">
-                <h2 className="text-2xl sm:text-3xl text-[#B7C0C8] font-light mb-8">
-                  Why Queso Ventures exists
-                </h2>
-                <StatementCopy
-                  tone="dark"
-                  paint={PAINT.gialloOrion}
-                  text="Every big brand has a team of engineers making sure you find them first. The shops that keep Houston running do not. AI is changing how customers find businesses, and most agencies are still selling the old playbook. I helped build the new tools, so I know the new rules. Queso Ventures brings that edge to local businesses for $300 a month. I'll come see your store in person, and when you reach out, it's me who answers."
+              <div
+                data-dark-section
+                className="group relative overflow-hidden rounded-3xl bg-[#101216] p-8 sm:p-14"
+              >
+                {/*
+                  Mugello, and it is not decoration. The paragraph's argument is
+                  that every big brand has a team of engineers making sure you
+                  find them first: this is a picture of exactly that, a pit wall
+                  with a factory operation behind it and privateers on track.
+                  It also happens to be the visual language the whole site is
+                  already speaking, since the palette is factory paint.
+
+                  Visibility here is a product, not a setting: the photo shows
+                  through at roughly `opacity x (1 - scrim)`. An early attempt
+                  ran 0.22 under a 0.85 gradient, which is 3% and invisible.
+
+                  At rest only the heading shows and the scrim stays light, so
+                  the photograph is the section. Pointing at it fades the
+                  argument in and deepens the scrim to carry it. The copy never
+                  leaves the DOM — it is opacity, not display — so it is still
+                  read by crawlers and still occupies its space, which is what
+                  stops the card from resizing under the pointer.
+
+                  Anything without a pointer gets the full card immediately:
+                  `(hover: none)` covers touch, and `focus-within` covers the
+                  keyboard.
+                */}
+                <Image
+                  src="/hero/aboutMotoGP.JPEG"
+                  alt="The pit straight at Mugello during a MotoGP session"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 1100px"
+                  className="object-cover"
+                />
+                {/* Base scrim: enough for the heading, light enough to see. */}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(115deg, rgba(16,18,22,0.55) 0%, rgba(16,18,22,0.42) 55%, rgba(16,18,22,0.28) 100%)",
+                  }}
+                />
+                {/* Second scrim, only while the copy is showing. */}
+                <div
+                  className="absolute inset-0 opacity-0 transition-opacity duration-500 group-focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100"
+                  style={{
+                    background:
+                      "linear-gradient(115deg, rgba(16,18,22,0.6) 0%, rgba(16,18,22,0.52) 55%, rgba(16,18,22,0.38) 100%)",
+                  }}
                 />
 
-                <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
-                  <NicheCtaButton
-                    message="I want to see what my business could look like online. Here's my situation:"
-                    label="See What I'd Build"
-                  />
-                  <CallLink
-                    from="about"
-                    className="text-center sm:text-left text-lg font-semibold text-[#F5F7FA] hover:opacity-70 transition-opacity whitespace-nowrap"
-                  >
-                    or call {BUSINESS.phone}
-                  </CallLink>
+                <div
+                  className="relative mx-auto max-w-3xl text-center"
+                  style={{ textShadow: "0 2px 20px rgba(0,0,0,0.75)" }}
+                >
+                  <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-[#B7C0C8]">
+                    Why Queso Ventures exists
+                  </h2>
+
+                  <div className="opacity-0 transition-opacity duration-500 group-focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
+                    <span
+                      className="mx-auto mt-7 block h-1 w-14 rounded-full"
+                      style={{ backgroundColor: PAINT.gialloOrion.hex }}
+                    />
+
+                    <p className="mt-8 text-3xl sm:text-4xl md:text-5xl font-light leading-tight tracking-tight text-balance text-[#F5F7FA]">
+                      Every big brand has a team of engineers making sure you
+                      find them first.
+                    </p>
+
+                    {/*
+                      One paragraph, one column. StatementCopy split this into
+                      newspaper columns, which is right for a wall of text at the
+                      top of a page and wrong here: two ragged columns under a
+                      centred lead read as a layout accident.
+                    */}
+                    <p className="mx-auto mt-7 max-w-2xl text-lg sm:text-xl font-light leading-relaxed text-[#B7C0C8]">
+                      The shops that keep Houston running do not. AI is changing
+                      how customers find businesses, and most agencies are still
+                      selling the old playbook. I helped build the new tools, so
+                      I know the new rules. Queso Ventures brings that edge to
+                      local businesses for {PRICING.monthlyLabel} a month. I&apos;ll
+                      come see your store in person, and when you reach out,
+                      it&apos;s me who answers.
+                    </p>
+
+                    <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
+                      <NicheCtaButton
+                        from="about"
+                        variant="onDark"
+                        message="I want to see what my business could look like online."
+                        label="Get My Free Report"
+                      />
+                      <CallLink
+                        from="about"
+                        className="whitespace-nowrap text-lg font-semibold text-white/80 transition-opacity hover:opacity-70"
+                      >
+                        or call {BUSINESS.phone}
+                      </CallLink>
+                    </div>
+                  </div>
                 </div>
               </div>
               </Glow>

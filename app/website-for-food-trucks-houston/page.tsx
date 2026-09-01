@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
+import { metaForIndustry } from "components/siteCopy";
 import IndustryPageTemplate, { IndustryPageData } from "components/IndustryPageTemplate";
 
-const TITLE = "Websites & Local SEO for Food Trucks & Restaurants | Houston TX";
-const DESCRIPTION = "Get found by people deciding where to eat right now. Websites and local search for Houston food trucks and restaurants. $300 a month. Call (281) 203-4531.";
+const { title: TITLE, description: DESCRIPTION } = metaForIndustry("food trucks and restaurants", "Restaurant");
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -30,7 +30,7 @@ const data: IndustryPageData = {
   "slug": "/website-for-food-trucks-houston",
   "headline": "Hungry people decide fast.",
   "intro": "Websites and local search for food trucks and restaurants across Houston. Your regulars already know where you park. Everyone else is on their phone right now, deciding where to eat in the next few minutes.",
-  "prefill": "I run a food truck or restaurant and want more customers finding me. Here's my current situation:",
+  "prefill": "I run a food truck or restaurant and want more customers finding me.",
   "serviceName": "Web Design & Local SEO for Food Trucks and Restaurants",
   "painPoints": [
     {
@@ -79,7 +79,7 @@ const data: IndustryPageData = {
     },
     {
       "q": "What does it cost?",
-      "a": "Simple monthly plans at $300 a month. A fraction of the $1,500 or more agencies charge, and you will know your exact number before anything starts."
+      "a": "Simple monthly plans at $500 a month. Agencies charge $1,500 or more and still have no answer for customers who ask an AI assistant who to call. You will know your exact number before anything starts."
     },
     {
       "q": "How does this start?",

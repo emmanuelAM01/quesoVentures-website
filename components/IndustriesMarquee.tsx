@@ -15,8 +15,6 @@ const INDUSTRIES = [
   "Event venues",
   "Music schools",
   "Bands",
-  "Food trucks",
-  "Restaurants",
   "Donut shops",
   "Online shops",
   "and everything in between",

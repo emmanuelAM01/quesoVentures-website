@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
+import { metaForIndustry } from "components/siteCopy";
 import IndustryPageTemplate, { IndustryPageData } from "components/IndustryPageTemplate";
 
-const TITLE = "SEO & Web Design for Auto Shops & Mobile Mechanics | Houston TX";
-const DESCRIPTION = "Get found when a driver searches for a mechanic near them. Websites and local search for Houston-area auto shops and mobile mechanics. $300 a month. Call (281) 203-4531.";
+const { title: TITLE, description: DESCRIPTION } = metaForIndustry("auto shops and mobile mechanics", "Auto Shop");
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -30,7 +30,7 @@ const data: IndustryPageData = {
   "slug": "/seo-for-auto-shops-houston",
   "headline": "Be the shop they call.",
   "intro": "Websites and local search for auto shops and mobile mechanics across Northeast Houston. When somebody's check engine light comes on, they search once and call the first shop that looks trustworthy. That should be you.",
-  "prefill": "I run an auto shop or mobile mechanic business and want more customers finding me online. Here's my current situation:",
+  "prefill": "I run an auto shop or mobile mechanic business and want more customers finding me online.",
   "serviceName": "Web Design & Local SEO for Auto Shops and Mobile Mechanics",
   "painPoints": [
     {
@@ -79,13 +79,14 @@ const data: IndustryPageData = {
     },
     {
       "q": "What does it cost?",
-      "a": "Simple monthly plans at $300 a month. A fraction of the $1,500 or more agencies charge, and you will know your exact number before anything starts."
+      "a": "Simple monthly plans at $500 a month. Agencies charge $1,500 or more and still have no answer for customers who ask an AI assistant who to call. You will know your exact number before anything starts."
     },
     {
       "q": "How does this start?",
       "a": "I take a free look at your site, your Google profile, and whoever currently outranks you, then build a preview of what your shop could look like online. Then you decide. Call (281) 203-4531."
     }
-  ]
+  ],
+  heroImage: { src: "/hero/mechanic.jpg", alt: "A mechanic at work in the shop" },
 };
 
 export default function AutoShopsPage() {

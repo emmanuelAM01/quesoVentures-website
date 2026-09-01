@@ -13,7 +13,7 @@ import {
 
 const TITLE = "Contact Queso Ventures | Call (281) 203-4531";
 const DESCRIPTION =
-  "Call (281) 203-4531 or send a message. Web design and local SEO for local businesses. Simple plans at $300 a month, and I answer my own phone.";
+  "Send a message and I reply within 24 hours. Web design and local SEO for Houston area businesses, built by a software engineer.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -119,7 +119,7 @@ export default function ContactPage() {
                 Tell me what you&apos;re working with and I&apos;ll take a free
                 look at where you stand.
               </p>
-              <ContactForm submitLabel="Send Message" />
+              <ContactForm />
             </div>
             </Glow>
           </div>

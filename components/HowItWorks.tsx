@@ -1,62 +1,58 @@
 import Reveal from "./Reveal";
 import { liveryAt } from "./livery";
-import Glow from "./Glow";
+import { SITE_COPY, type SiteCopy } from "./siteCopy";
 
-const steps = [
-  {
-    title: "Reach out",
-    body: "Send a quick message or book a call. Just tell us about your business.",
-  },
-  {
-    title: "See your preview",
-    body: "We build what your business could look like online. Free, before you decide anything.",
-  },
-  {
-    title: "Get found",
-    body: "Love it? We launch. Then we keep you climbing on Google, Maps, and AI search every month.",
-  },
-];
-
-export default function HowItWorks() {
+/**
+ * Deliberately not cards.
+ *
+ * This used to be three glowing panels sitting directly under three glowing
+ * panels, which is what made the page read as endless — same shape twice, so
+ * the eye counted it as one long block instead of two short ones. Same
+ * information, a third of the height, and it breaks the rhythm.
+ */
+export default function HowItWorks({
+  copy = SITE_COPY.steps,
+}: {
+  copy?: SiteCopy["steps"];
+}) {
   return (
-    <section id="how" className="container mx-auto px-4 py-20 scroll-mt-16">
-      <div className="max-w-6xl mx-auto">
-        <Reveal>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl text-lightText dark:text-darkText mb-3">
-            Getting started is easy
-          </h2>
-          <p className="text-lg sm:text-xl text-lightTextMuted dark:text-darkTextMuted font-light">
-            Three steps. No pressure at any of them.
-          </p>
-        </Reveal>
+    <section
+      id="how"
+      className="border-y border-lightBorder dark:border-darkBorder bg-bandLight dark:bg-bandDark scroll-mt-16"
+    >
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-6xl mx-auto">
+          <Reveal className="text-center">
+            <h2 className="text-2xl sm:text-3xl text-lightText dark:text-darkText mb-10">
+              {copy.heading}
+            </h2>
+          </Reveal>
 
-        <div className="grid sm:grid-cols-3 gap-6 mt-12">
-          {steps.map((step, i) => (
-            <Reveal key={i} delay={i * 120}>
-              <Glow color={liveryAt(i + 3).hex} radius="rounded-3xl" lift={false}>
-                <div className="relative h-full overflow-hidden rounded-3xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark">
+          <ol className="grid gap-8 sm:grid-cols-3 sm:gap-10">
+            {copy.items.map((step, i) => (
+              <Reveal key={step.title} delay={i * 100}>
+                <li className="flex gap-4">
                   <span
-                    className="absolute inset-x-0 top-0 h-1.5"
-                    style={{ backgroundColor: liveryAt(i + 3).hex }}
-                  />
-                  <div className="p-8 pt-10">
-                  <p
-                    className="text-5xl font-semibold mb-5"
-                    style={{ color: liveryAt(i + 3).ink }}
+                    className="mt-1 h-8 w-8 shrink-0 rounded-full border-2 grid place-items-center text-sm font-semibold"
+                    style={{
+                      borderColor: liveryAt(i + 3).hex,
+                      color: liveryAt(i + 3).ink,
+                    }}
                   >
                     {i + 1}
-                  </p>
-                  <h3 className="text-xl font-semibold text-lightText dark:text-darkText mb-2">
-                    {step.title}
-                  </h3>
-                  <p className="text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-                    {step.body}
-                  </p>
+                  </span>
+                  <div>
+                    <h3 className="text-lg font-semibold text-lightText dark:text-darkText">
+                      {step.title}
+                    </h3>
+                    <p className="mt-1 text-base font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
+                      {step.body}
+                    </p>
                   </div>
-                </div>
-              </Glow>
-            </Reveal>
-          ))}
+                </li>
+              </Reveal>
+            ))}
+          </ol>
         </div>
       </div>
     </section>

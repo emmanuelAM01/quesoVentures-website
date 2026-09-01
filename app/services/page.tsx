@@ -5,6 +5,9 @@ import FreeAudit from "components/FreeAudit";
 import Reveal from "components/Reveal";
 import PageHero from "components/PageHero";
 import IndustryLinks from "components/IndustryLinks";
+import FaqDeck from "components/FaqDeck";
+import { SITE_COPY } from "components/siteCopy";
+import { MONTHLY_PLAN_OFFER } from "components/pricingCopy";
 import { liveryAt, PAINT } from "components/livery";
 import Glow from "components/Glow";
 import {
@@ -20,15 +23,19 @@ import {
   FaMobileAlt,
 } from "react-icons/fa";
 
+const SERVICES_TITLE = "Web Design, Local SEO & Google Business Profile Services";
+const SERVICES_DESCRIPTION =
+  "What I actually do: build the website, run your Google and Maps presence, and get you named by AI assistants. More customers, and more of them coming back.";
+
 export const metadata: Metadata = {
-  title: "Website Design, Local SEO & Google Business Profile Services",
+  title: SERVICES_TITLE,
   description:
-    "Website design, local SEO, and Google Business Profile work for local businesses. Simple plans at $300 a month, not agency prices. Free audit first.",
+    SERVICES_DESCRIPTION,
   alternates: { canonical: "https://www.quesoventures.com/services" },
   openGraph: {
-    title: "Website Design, Local SEO & Google Business Profile Services",
+    title: SERVICES_TITLE,
     description:
-      "Website design, local SEO, and Google Business Profile work for local businesses. Simple plans at $300 a month, not agency prices. Free audit first.",
+      SERVICES_DESCRIPTION,
     url: "https://www.quesoventures.com/services",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
@@ -37,12 +44,58 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Website Design, Local SEO & Google Business Profile Services",
+    title: SERVICES_TITLE,
     description:
-      "Website design, local SEO, and Google Business Profile work for local businesses. Simple plans at $300 a month, not agency prices. Free audit first.",
+      SERVICES_DESCRIPTION,
     images: ["/logo.png"],
   },
 };
+
+/**
+ * The FAQ that /services never had.
+ *
+ * This page has been "Discovered - currently not indexed" since launch and has
+ * never been crawled: Google found the URL, judged it not worth the fetch, and
+ * moved on. Thin content is the usual cause. Question and answer pairs are also
+ * the format AI assistants extract cleanest, which is the whole point of a page
+ * that explains the service rather than a place.
+ *
+ * Written around what people actually search: "web development", "website
+ * designer", "local seo", "seo services" all rank here already and take no
+ * clicks.
+ */
+const faqItems = [
+  {
+    title: "What is the difference between web design and local SEO?",
+    content:
+      "Web design is what people see once they arrive. Local SEO is what gets them there. A beautiful site nobody finds and a well ranked site nobody calls fail the same way, which is why both are in one plan rather than sold separately.",
+  },
+  {
+    title: "Do you build the website yourself, or use a template?",
+    content:
+      "I build it. I have spent seven years writing software for startups, fintech, and AI products, and your site is code I wrote rather than a theme with your logo dropped in. That is also why custom tools for your business are part of the plan instead of an upsell.",
+  },
+  {
+    title: "What is AI SEO, and is it different from normal SEO?",
+    content:
+      "It overlaps but it is not the same. Google ranks pages; an AI assistant reads your site and decides whether to name you in an answer. That means stating plainly who you are, what you offer, where you work, and who you serve, in a structure a machine can extract. Most sites are written only for people, so they get skipped.",
+  },
+  {
+    title: "Do you manage my Google Business Profile too?",
+    content:
+      "Yes, and for a local business it often matters more than the website. Most people pick from the first three results on Maps and never scroll. Categories, service areas, hours, photos, and review responses all feed that ranking, and all of it is included.",
+  },
+  {
+    title: "Do I have to be in Houston to work with you?",
+    content:
+      "No. I am headquartered in Northeast Houston and I will come to your business in person if you are nearby, which is genuinely useful. Outside the area the method is identical, there are just more calls and fewer drive-bys. I have clients from Conroe and Fort Worth out to Miami.",
+  },
+  {
+    title: "How do I know if my current website is the problem?",
+    content:
+      "Send me your business name and I will tell you. The free report covers where you show up today, whether an AI assistant names you when asked to recommend someone like you, and what is most likely costing you calls. It is yours whether we work together or not.",
+  },
+];
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -62,12 +115,24 @@ const jsonLd = {
       areaServed: AREA_SERVED_SCHEMA,
       description:
         "Website design, local SEO, and Google Business Profile work for service businesses in Atascocita, Humble, Kingwood, and the rest of Northeast Houston.",
-      offers: {
-        "@type": "Offer",
-        name: "Free Visibility Audit",
-        price: "0",
-        priceCurrency: "USD",
-      },
+      offers: [
+        MONTHLY_PLAN_OFFER,
+        {
+          "@type": "Offer",
+          name: "Free Visibility Audit",
+          price: "0",
+          priceCurrency: "USD",
+        },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${BUSINESS.url}/services#faq`,
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.title,
+        acceptedAnswer: { "@type": "Answer", text: item.content },
+      })),
     },
     breadcrumbSchema([{ name: "Services", path: "/services" }]),
   ],
@@ -107,7 +172,12 @@ export default function ServicesPage() {
       <main>
         <PageHero
           headline="From invisible to obvious."
-          prefill="I want to see what my website could look like. Here's my current situation:"
+          sub="What I actually do, and what it costs."
+          prefill="I want to see what my website could look like."
+          image={{
+            src: "/hero/servicesMain.JPEG",
+            alt: "Binoculars looking out across the ground at Verdun",
+          }}
         />
 
         {/* Services */}
@@ -157,17 +227,8 @@ export default function ServicesPage() {
                 <h2 className="text-3xl sm:text-4xl font-semibold text-lightText dark:text-darkText mb-5">
                   How pricing works
                 </h2>
-                <p className="max-w-3xl text-xl leading-relaxed text-lightTextMuted dark:text-darkTextMuted font-light mb-6">
-                  Simple monthly plans at $300 a month, with a minimum 4 month
-                  commitment. Traditional agencies charge $1,500 or more and
-                  most of them still have no answer for customers who ask an AI
-                  assistant who to call.
-                </p>
                 <p className="max-w-3xl text-xl leading-relaxed text-lightTextMuted dark:text-darkTextMuted font-light">
-                  No hourly billing, no surprise fees. The best first step is
-                  letting us take a look. We will show you exactly where the
-                  opportunity is, and you will know your exact price before
-                  anything starts.
+                  {SITE_COPY.pricing.sub} {SITE_COPY.pricing.terms}
                 </p>
               </div>
               </Glow>
@@ -175,6 +236,7 @@ export default function ServicesPage() {
           </div>
         </section>
 
+        <FaqDeck items={faqItems} heading="Questions about the work" />
         <IndustryLinks />
         <FreeAudit />
       </main>

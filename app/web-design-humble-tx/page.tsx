@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { metaFor } from "components/siteCopy";
 import GeoPageTemplate, { GeoPageData } from "components/GeoPageTemplate";
 
+const { title: TITLE, description: DESCRIPTION } = metaFor("Humble");
+
 export const metadata: Metadata = {
-  title: "Web Design & Local SEO in Humble, TX | $300/month",
-  description:
-    "Websites and local search for Humble businesses along FM 1960 and Deerbrook, auto shops, contractors, salons, and more. $300 a month. Call (281) 203-4531.",
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: "https://www.quesoventures.com/web-design-humble-tx" },
   openGraph: {
-    title: "Web Design & Local SEO in Humble, TX | $300/month",
-    description:
-      "Websites and local search for Humble businesses along FM 1960 and Deerbrook, auto shops, contractors, salons, and more. $300 a month. Call (281) 203-4531.",
+    title: TITLE,
+    description: DESCRIPTION,
     url: "https://www.quesoventures.com/web-design-humble-tx",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
@@ -18,9 +19,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Web Design & Local SEO in Humble, TX | $300/month",
-    description:
-      "Websites and local search for Humble businesses along FM 1960 and Deerbrook, auto shops, contractors, salons, and more. $300 a month. Call (281) 203-4531.",
+    title: TITLE,
+    description: DESCRIPTION,
     images: ["/logo.png"],
   },
 };
@@ -33,7 +33,7 @@ const data: GeoPageData = {
   intro:
     "Websites and local search for businesses in Humble, from the FM 1960 corridor and Deerbrook out to Fall Creek. I'm local, I'll come to your shop, and I answer my own phone.",
   prefill:
-    "I run a business in Humble and want more customers finding me online. Here's my current situation:",
+    "I run a business in Humble and want more customers finding me online.",
   painPoints: [
     {
       heading: "You're on FM 1960 but invisible on Google Maps",
@@ -77,7 +77,7 @@ const data: GeoPageData = {
     },
     {
       q: "What does it cost?",
-      a: "Simple monthly plans at $300 a month. That's a fraction of the $1,500+ traditional agencies charge, and most of them aren't even touching AI search. You'll know your exact number before we start.",
+      a: "Simple monthly plans at $500 a month. That's a fraction of the $1,500+ traditional agencies charge, and most of them aren't even touching AI search. You'll know your exact number before we start.",
     },
     {
       q: "Do you only work with certain types of businesses?",
@@ -88,6 +88,7 @@ const data: GeoPageData = {
       a: "I take a free look at your current website, your Google presence, and who's outranking you in Humble, then I build a preview of what your business could look like online before we ever talk numbers. You see something real, then you decide.",
     },
   ],
+  heroImage: { src: "/hero/humble.JPG", alt: "Humble, Texas" },
 };
 
 export default function HumblePage() {

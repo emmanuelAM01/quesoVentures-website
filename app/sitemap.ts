@@ -1,7 +1,9 @@
 import fs from "fs";
 import path from "path";
 import type { MetadataRoute } from "next";
-import { SERVICE_AREAS, FEATURED_INDUSTRIES } from "components/serviceAreas";
+import { FEATURED_INDUSTRIES } from "components/serviceAreas";
+import { CITIES, ALL_NEIGHBORHOODS } from "components/places";
+import { CITY_PAGES, isIndexable } from "components/cityPageData";
 
 const BASE = "https://www.quesoventures.com";
 
@@ -44,7 +46,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     // Geo pages carry the local intent — highest priority after the homepage.
-    ...SERVICE_AREAS.map((area) => ({
+    // The metro page is the hub of its cluster, so it outranks the towns under
+    // it rather than sitting in the same undifferentiated list.
+    ...CITIES.map((city) => ({
+      url: `${BASE}${city.slug}`,
+      lastModified: sourceDate(city.slug),
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    })),
+    ...ALL_NEIGHBORHOODS.map((area) => ({
       url: `${BASE}${area.slug}`,
       lastModified: sourceDate(area.slug),
       changeFrequency: "monthly" as const,
@@ -53,6 +63,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...FEATURED_INDUSTRIES.map((industry) => ({
       url: `${BASE}${industry.slug}`,
       lastModified: sourceDate(industry.slug),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
+    // City pages that carry real copy. A business card landing has no seo
+    // block, so it stays out of the sitemap the same way it stays out of the
+    // index. Empty until cities are registered.
+    ...CITY_PAGES.filter(isIndexable).map((page) => ({
+      url: `${BASE}${page.slug}`,
+      lastModified: sourceDate(page.slug),
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),

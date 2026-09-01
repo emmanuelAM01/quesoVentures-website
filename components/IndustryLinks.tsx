@@ -1,5 +1,4 @@
-import { INDUSTRIES } from "./serviceAreas";
-import { BUSINESS } from "./businessInfo";
+import { LISTED_INDUSTRIES } from "./serviceAreas";
 import CallLink from "./CallLink";
 import { liveryAt, OPEN_ENDED } from "./livery";
 import LiveryCard from "./LiveryCard";
@@ -10,14 +9,11 @@ interface Props {
   heading?: string;
 }
 
-export default function IndustryLinks({
-  current,
-  heading = "Who I build for",
-}: Props) {
+export default function IndustryLinks({ current, heading }: Props) {
   // Guard on `current` being set. Without it, `undefined !== undefined` is
   // false and every industry that has no page of its own gets filtered out —
   // which silently cut this grid from 12 cards to 5 on the homepage.
-  const shown = INDUSTRIES.filter((i) => !current || i.slug !== current);
+  const shown = LISTED_INDUSTRIES.filter((i) => !current || i.slug !== current);
 
   // The open-ended card is always last, so where it lands depends on the count.
   // Alone on a row it reads like a leftover; centre it instead.
@@ -34,7 +30,7 @@ export default function IndustryLinks({
     <section className="container mx-auto px-4 py-24">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl sm:text-4xl md:text-5xl text-lightText dark:text-darkText mb-4">
-          {heading}
+          {heading ?? "Who I build for"}
         </h2>
         <p className="text-xl sm:text-2xl font-light text-lightTextMuted dark:text-darkTextMuted mb-12 max-w-3xl">
           If your customers find you by searching, you&apos;re on this list.

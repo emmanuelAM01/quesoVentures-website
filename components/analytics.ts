@@ -23,10 +23,18 @@ export type Placement =
   | "contact_modal"
   | "about"
   | "why_local"
+  | "why_remote"
   | "industries"
   | "areas";
 
-/** Someone tapped a phone number. The single most valuable signal on the site. */
+/**
+ * Someone tapped a phone number.
+ *
+ * Was described here as the most valuable signal on the site. It is not: as of
+ * 2026-08-31 every call the published number has produced has been spam, which
+ * is why the header pill now opens the form instead. Keep tracking it, but
+ * read `cta_click` and `contact_submit` as the real conversion path.
+ */
 export function trackCall(from: Placement) {
   track("call_click", { from });
 }

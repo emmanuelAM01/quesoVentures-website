@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { metaFor } from "components/siteCopy";
 import GeoPageTemplate, { GeoPageData } from "components/GeoPageTemplate";
 
+const { title: TITLE, description: DESCRIPTION } = metaFor("Kingwood");
+
 export const metadata: Metadata = {
-  title: "Web Design & Local SEO in Kingwood, TX | Queso Ventures",
-  description:
-    "Websites and local search for Kingwood businesses, Town Center, Kings Harbor, and across the Livable Forest. $300 a month. Free audit first.",
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: "https://www.quesoventures.com/web-design-kingwood-tx" },
   openGraph: {
-    title: "Web Design & Local SEO in Kingwood, TX | Queso Ventures",
-    description:
-      "Websites and local search for Kingwood businesses, Town Center, Kings Harbor, and across the Livable Forest. $300 a month. Free audit first.",
+    title: TITLE,
+    description: DESCRIPTION,
     url: "https://www.quesoventures.com/web-design-kingwood-tx",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
@@ -18,9 +19,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Web Design & Local SEO in Kingwood, TX | Queso Ventures",
-    description:
-      "Websites and local search for Kingwood businesses, Town Center, Kings Harbor, and across the Livable Forest. $300 a month. Free audit first.",
+    title: TITLE,
+    description: DESCRIPTION,
     images: ["/logo.png"],
   },
 };
@@ -31,9 +31,9 @@ const data: GeoPageData = {
   postalCode: "77339",
   headline: "Be who Kingwood finds.",
   intro:
-    "Websites and local search for Kingwood businesses — Town Center, Kings Harbor, and across the Livable Forest. Word of mouth got you here; search is what grows it.",
+    "Websites and local search for Kingwood businesses: Town Center, Kings Harbor, and across the Livable Forest. Word of mouth got you here; search is what grows it.",
   prefill:
-    "I run a business in Kingwood and want more customers finding me online. Here's my current situation:",
+    "I run a business in Kingwood and want more customers finding me online.",
   painPoints: [
     {
       heading: "Kingwood loyalty is real, but you have to get discovered first",
@@ -63,7 +63,7 @@ const data: GeoPageData = {
     },
     {
       title: "You deal directly with me, for a simple monthly price",
-      body: "No account managers, no hourly billing, no thousand-dollar retainers. I'm local, I'll come see your business in person, and plans are a simple $300 a month.",
+      body: "No account managers, no thousand-dollar retainers, no surprise line items. I'm local, I'll come see your business in person, and the plan is a simple $500 a month.",
     },
   ],
   faqItems: [
@@ -77,7 +77,7 @@ const data: GeoPageData = {
     },
     {
       q: "What does it cost?",
-      a: "Simple monthly plans at $300 a month. That's a fraction of what agencies charge, and most of them aren't even touching AI search. You'll know your exact number before we start.",
+      a: "Simple monthly plans at $500 a month. That's a fraction of what agencies charge, and most of them aren't even touching AI search. You'll know your exact number before we start.",
     },
     {
       q: "What kinds of businesses do you work with?",
@@ -88,6 +88,7 @@ const data: GeoPageData = {
       a: "I take a free look at your website, your Google profile, and who's outranking you in Kingwood, then I build a preview of what your business could look like online before we talk numbers. You see it first, then decide.",
     },
   ],
+  heroImage: { src: "/hero/kingwood.jpg", alt: "Kingwood, Texas" },
 };
 
 export default function KingwoodPage() {

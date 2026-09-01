@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
+import { metaForIndustry } from "components/siteCopy";
 import IndustryPageTemplate, { IndustryPageData } from "components/IndustryPageTemplate";
 
-const TITLE = "SEO & Web Design for Med Spas, Clinics & Dentists | Houston TX";
-const DESCRIPTION = "Fill the appointment book from search. Websites and local search for Houston-area med spas, clinics, and dental practices. $300 a month. Call (281) 203-4531.";
+const { title: TITLE, description: DESCRIPTION } = metaForIndustry("med spas and clinics", "Med Spa");
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -30,7 +30,7 @@ const data: IndustryPageData = {
   "slug": "/seo-for-med-spas-houston",
   "headline": "Empty slots are a search problem.",
   "intro": "Websites and local search for med spas, medical clinics, and dental practices across Northeast Houston. Your regulars keep coming back. The problem is the person who has never heard of you and is booking something this week.",
-  "prefill": "I run a med spa, clinic, or dental practice and want more bookings from people searching online. Here's my current situation:",
+  "prefill": "I run a med spa, clinic, or dental practice and want more bookings from people searching online.",
   "serviceName": "Web Design & Local SEO for Med Spas, Clinics and Dental Practices",
   "painPoints": [
     {
@@ -79,13 +79,14 @@ const data: IndustryPageData = {
     },
     {
       "q": "What does it cost?",
-      "a": "Simple monthly plans at $300 a month. A fraction of the $1,500 or more agencies charge, and you will know your exact number before anything starts."
+      "a": "Simple monthly plans at $500 a month. Agencies charge $1,500 or more and still have no answer for customers who ask an AI assistant who to call. You will know your exact number before anything starts."
     },
     {
       "q": "How does this start?",
       "a": "I take a free look at your site, your Google profile, and whoever currently outranks you, then build a preview of what your practice could look like online. Then you decide. Call (281) 203-4531."
     }
-  ]
+  ],
+  heroImage: { src: "/hero/clinics.jpg", alt: "A clinic treatment room" },
 };
 
 export default function MedSpasPage() {

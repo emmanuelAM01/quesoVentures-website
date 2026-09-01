@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
+import { metaFor } from "components/siteCopy";
 import GeoPageTemplate, { GeoPageData } from "components/GeoPageTemplate";
 
-const TITLE = "Web Design & Local SEO in Porter & New Caney, TX";
-const DESCRIPTION =
-  "Websites and local search for Porter and New Caney businesses along the 59 corridor, Valley Ranch, and Northcrest. Simple plans at $300 a month. Call (281) 203-4531.";
+const { title: TITLE, description: DESCRIPTION } = metaFor("Porter & New Caney");
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -32,9 +31,9 @@ const data: GeoPageData = {
   postalCode: "77365",
   headline: "Porter and New Caney are booming.",
   intro:
-    "Websites and local search for businesses along the 59 corridor — Valley Ranch, Tavola, Northcrest, and Roman Forest. Thousands of new neighbors a year, and none of them know you yet.",
+    "Websites and local search for businesses along the 59 corridor: Valley Ranch, Tavola, Northcrest, and Roman Forest. Thousands of new neighbors a year, and none of them know you yet.",
   prefill:
-    "I run a business in Porter or New Caney and want more customers finding me online. Here's my current situation:",
+    "I run a business in Porter or New Caney and want more customers finding me online.",
   painPoints: [
     {
       heading: "Thousands of new rooftops, and none of them know you yet",
@@ -78,7 +77,7 @@ const data: GeoPageData = {
     },
     {
       q: "What does it cost?",
-      a: "Simple monthly plans at $300 a month. Far below the $1,500 or more agencies charge, and you'll know your exact number before anything starts.",
+      a: "Simple monthly plans at $500 a month. Agencies charge $1,500 or more and still have no answer for customers who ask an AI assistant who to call. You'll know your exact number before anything starts.",
     },
     {
       q: "Do you actually come out here?",
@@ -89,6 +88,7 @@ const data: GeoPageData = {
       a: "I take a free look at your site, your Google profile, and whoever currently outranks you in Porter and New Caney, then build a preview of what your business could look like online. Then you decide. Call (281) 203-4531 or send a message.",
     },
   ],
+  heroImage: { src: "/hero/newCaneyPorter.jpg", alt: "Porter and New Caney, Texas" },
 };
 
 export default function PorterPage() {

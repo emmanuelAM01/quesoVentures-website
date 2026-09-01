@@ -4,9 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import ThemeSwitch from "./ThemeSwitch";
-import { SERVICE_AREAS, FEATURED_INDUSTRIES } from "./serviceAreas";
+import { LISTED_FEATURED } from "./serviceAreas";
+import { CITIES, ALL_NEIGHBORHOODS } from "components/places";
 import { BUSINESS } from "./businessInfo";
 import CallLink from "./CallLink";
+import NicheCtaButton from "./NicheCtaButton";
+import { SITE_COPY } from "./siteCopy";
 
 const navLinkClass =
   "relative text-[15px] font-medium text-lightText dark:text-darkText px-4 py-2 rounded-full transition-colors " +
@@ -17,10 +20,12 @@ const navLinkClass =
 const mobileLinkClass =
   "block w-full text-left px-3 py-3.5 text-lg font-medium text-lightText dark:text-darkText rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors";
 
-const callPillClass =
-  "inline-flex items-center gap-2 rounded-full px-4 py-2 text-[15px] font-semibold " +
-  "bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover " +
-  "text-lightBG dark:text-darkBG transition-colors whitespace-nowrap";
+const dropdownHeadingClass =
+  "mb-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-lightTextMuted dark:text-darkTextMuted";
+
+const dropdownLinkClass =
+  "block py-[7px] text-[15px] leading-snug text-lightTextMuted transition-colors " +
+  "hover:text-lightText dark:text-darkTextMuted dark:hover:text-darkText";
 
 function PhoneIcon({ size = 14 }: { size?: number }) {
   return (
@@ -84,7 +89,7 @@ export default function Header() {
         <div className="relative rounded-full">
           <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
             <div className="navbar-glow absolute inset-x-0 -top-4 h-10 blur-xl opacity-30 dark:opacity-15" />
-            <div className="absolute inset-0 bg-cheese-header-light dark:bg-cheese-header-dark backdrop-blur-md" />
+            <div className="absolute inset-0 bg-headerLight dark:bg-headerDark backdrop-blur-md" />
           </div>
 
           <div
@@ -148,34 +153,52 @@ export default function Header() {
 
                   {/* Always in the DOM, toggled with CSS. Mounting this
                       conditionally kept every link out of the server HTML,
-                      which is why Google never crawled those pages. */}
+                      which is why Google never crawled those pages.
+
+                      Two labelled columns rather than two undifferentiated
+                      stacks. Twelve links of identical weight on a dark slab
+                      gave the eye nowhere to land and read as a wall; the
+                      headings say what each column is, and dropping the hover
+                      fills for a colour change takes the noise out. */}
                   <div
                     className={`${
                       workOpen ? "block" : "hidden"
-                    } absolute left-1/2 -translate-x-1/2 top-full mt-3 w-[36rem] rounded-2xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark shadow-xl shadow-black/10 dark:shadow-black/40 p-3 z-50`}
+                    } absolute left-1/2 top-full z-50 mt-3 w-[34rem] -translate-x-1/2 rounded-2xl border border-lightBorder bg-panelLight p-6 shadow-xl shadow-black/10 dark:border-darkBorder dark:bg-panelDark dark:shadow-black/40`}
                   >
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="pr-2 border-r border-lightBorder dark:border-darkBorder">
-                        {FEATURED_INDUSTRIES.map((item) => (
+                    <div className="grid grid-cols-2 gap-x-8">
+                      <div>
+                        <p className={dropdownHeadingClass}>By trade</p>
+                        {LISTED_FEATURED.map((item) => (
                           <Link
                             key={item.slug}
                             href={item.slug}
                             onClick={() => setWorkOpen(false)}
-                            className="block rounded-lg px-3 py-2 text-[15px] leading-tight text-lightText dark:text-darkText hover:bg-lightAccent/10 dark:hover:bg-darkAccent/10 transition-colors"
+                            className={dropdownLinkClass}
                           >
                             {item.label}
                           </Link>
                         ))}
+                        {/* A link rather than dead italic text: /services is
+                            the page that lists every trade, which is exactly
+                            what someone who did not find theirs above wants. */}
+                        <Link
+                          href="/services"
+                          onClick={() => setWorkOpen(false)}
+                          className={`${dropdownLinkClass} italic`}
+                        >
+                          and many more
+                        </Link>
                       </div>
                       <div>
-                        {SERVICE_AREAS.map((item) => (
+                        <p className={dropdownHeadingClass}>By area</p>
+                        {ALL_NEIGHBORHOODS.map((item) => (
                           <Link
                             key={item.slug}
                             href={item.slug}
                             onClick={() => setWorkOpen(false)}
-                            className="block rounded-lg px-3 py-2 text-[15px] leading-tight text-lightText dark:text-darkText hover:bg-lightAccent/10 dark:hover:bg-darkAccent/10 transition-colors"
+                            className={dropdownLinkClass}
                           >
-                            {item.city}
+                            {item.name}
                           </Link>
                         ))}
                       </div>
@@ -200,24 +223,31 @@ export default function Header() {
               </ul>
             </nav>
 
-            {/* Right zone */}
-            <div className="hidden md:flex items-center justify-end gap-2">
-              <CallLink from="header" className={callPillClass}>
-                <PhoneIcon />
-                {BUSINESS.phone}
-              </CallLink>
+            {/* Right zone.
+                The pill used to be the phone number, on every page. Every call
+                it produced was spam, so the most valuable button on the site
+                was working for nobody. The form takes the pill; the number
+                stays beside it as a quiet link, because a visible local number
+                is still a trust signal and still has to match the Google
+                Business Profile. */}
+            <div className="hidden md:flex items-center justify-end gap-3">
+              <NicheCtaButton
+                from="header"
+                variant="pill"
+                message={SITE_COPY.audit.ctaPrefill}
+                label="Free Report"
+              />
               <ThemeSwitch />
             </div>
 
-            {/* Mobile: call is always one tap, outside the drawer */}
+            {/* Mobile: the form is always one tap, outside the drawer. */}
             <div className="flex items-center justify-end gap-1 md:hidden">
-              <CallLink
+              <NicheCtaButton
                 from="header_mobile"
-                aria-label={`Call ${BUSINESS.phone}`}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-lightButton dark:bg-darkButton text-lightBG dark:text-darkBG transition-colors"
-              >
-                <PhoneIcon size={15} />
-              </CallLink>
+                variant="pill"
+                message={SITE_COPY.audit.ctaPrefill}
+                label="Free Report"
+              />
               <ThemeSwitch />
               <button
                 type="button"
@@ -244,14 +274,6 @@ export default function Header() {
         {mobileOpen && (
           <nav className="md:hidden mt-2 rounded-3xl ring-1 ring-lightBorder/90 dark:ring-darkBorder/90 bg-panelLight dark:bg-panelDark shadow-xl overflow-hidden">
             <div className="px-4 py-3 flex flex-col gap-0.5">
-              <CallLink
-                from="header_mobile"
-                className="mb-2 flex w-full items-center justify-center gap-2 rounded-xl bg-lightButton dark:bg-darkButton px-4 py-4 text-lg font-semibold text-lightBG dark:text-darkBG"
-              >
-                <PhoneIcon size={16} />
-                Call {BUSINESS.phone}
-              </CallLink>
-
               <Link href="/services" onClick={closeMobile} className={mobileLinkClass}>
                 Services
               </Link>
@@ -274,7 +296,7 @@ export default function Header() {
                 </button>
                 {mobileWorkOpen && (
                   <div className="pl-3 flex flex-col gap-0.5 mt-0.5 mb-1">
-                    {FEATURED_INDUSTRIES.map((item) => (
+                    {LISTED_FEATURED.map((item) => (
                       <Link
                         key={item.slug}
                         href={item.slug}
@@ -284,14 +306,14 @@ export default function Header() {
                         {item.label}
                       </Link>
                     ))}
-                    {SERVICE_AREAS.map((item) => (
+                    {ALL_NEIGHBORHOODS.map((item) => (
                       <Link
                         key={item.slug}
                         href={item.slug}
                         onClick={closeMobile}
                         className="block px-3 py-2.5 text-base text-lightTextMuted dark:text-darkTextMuted rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
                       >
-                        {item.city}
+                        {item.name}
                       </Link>
                     ))}
                   </div>
@@ -316,6 +338,15 @@ export default function Header() {
               >
                 Contact
               </Link>
+
+              {/* Reachable, not competing. */}
+              <CallLink
+                from="header_mobile"
+                className={`${mobileLinkClass} flex items-center gap-2 text-lightTextMuted dark:text-darkTextMuted`}
+              >
+                <PhoneIcon size={14} />
+                {BUSINESS.phone}
+              </CallLink>
             </div>
           </nav>
         )}

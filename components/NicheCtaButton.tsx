@@ -5,7 +5,9 @@ import { trackCtaClick, type Placement } from "components/analytics";
 interface Props {
   message: string;
   label: string;
-  variant?: "primary" | "secondary";
+  /** "onDark" is the hero and closing CTA: house yellow, which is the only
+   *  button that holds its own against the blob field or a photograph. */
+  variant?: "primary" | "secondary" | "onDark" | "pill";
   /** Where this button sits, so the dashboard can rank CTA sources. */
   from?: Placement;
 }
@@ -18,9 +20,35 @@ export default function NicheCtaButton({
 }: Props) {
   const open = () => {
     trackCtaClick(from);
-    window.dispatchEvent(new CustomEvent("contact:prefill", { detail: { message } }));
+    window.dispatchEvent(
+      new CustomEvent("contact:prefill", { detail: { message, title: label } })
+    );
     window.dispatchEvent(new CustomEvent("modal:open", { detail: { id: "contact-popup" } }));
   };
+
+  if (variant === "pill") {
+    return (
+      <button
+        type="button"
+        onClick={open}
+        className="inline-flex items-center whitespace-nowrap rounded-full bg-lightButton px-4 py-2 text-[15px] font-semibold text-lightBG transition-colors hover:bg-lightButtonHover dark:bg-darkButton dark:text-darkBG dark:hover:bg-darkButtonHover"
+      >
+        {label}
+      </button>
+    );
+  }
+
+  if (variant === "onDark") {
+    return (
+      <button
+        type="button"
+        onClick={open}
+        className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-darkButton hover:bg-darkButtonHover px-8 py-4 text-lg font-semibold text-darkBG transition-colors"
+      >
+        {label}
+      </button>
+    );
+  }
 
   if (variant === "secondary") {
     return (

@@ -1,81 +1,120 @@
-import Image from "next/image";
+import HeroBackdrop from "components/HeroBackdrop";
 import NicheCtaButton from "components/NicheCtaButton";
 import { BUSINESS } from "components/businessInfo";
 import CallLink from "components/CallLink";
+import LavaLamp from "components/LavaLamp";
 
 interface Props {
-  /**
-   * Keep this under ~34 characters. It is sized to sit on a single line on
-   * desktop, and anything longer breaks that.
-   */
   headline: string;
+  /**
+   * Rendered beside the copy instead of under it, which turns the hero from a
+   * centred statement into a split. The homepage passes the search demo here.
+   */
+  aside?: React.ReactNode;
+  /** One line under the headline. This is where the search terms live. */
+  sub?: string;
   prefill: string;
   ctaLabel?: string;
+  /** Small line under the buttons. Price, usually. */
+  note?: string;
   /**
-   * Optional hero image — a photo of the work for an industry page, a map for
-   * a city page. Drop a file in /public and pass the path; the layout switches
-   * from centred type to a split automatically.
+   * Full-bleed background photograph: the interchange for Houston, pines for
+   * Kingwood. Drop a file in /public and pass the path. Without one the hero
+   * falls back to the lava lamp, so a city page is never a blank cream screen
+   * waiting on a photo.
    */
   image?: { src: string; alt: string };
 }
 
+/**
+ * Every hero on the site, centred on one axis over a dark ground.
+ *
+ * Type is white in both cases — over a scrimmed photograph or over the blurred
+ * blob field — so the layout never changes shape when a city finally gets its
+ * picture.
+ */
+/**
+ * Type over a photograph needs its own contrast, independent of the scrim.
+ *
+ * Kingwood is a bright sky over water; the mechanic shot is a dark engine bay.
+ * A scrim heavy enough for the first flattens the second into mud. A shadow on
+ * the glyphs themselves costs nothing on a dark image and saves a light one.
+ */
+const OVER_PHOTO = { textShadow: "0 2px 28px rgba(0,0,0,0.55)" };
+
 export default function PageHero({
   headline,
+  sub,
   prefill,
-  ctaLabel = "See What I'd Build",
+  ctaLabel = "Get My Free Report",
+  note,
   image,
+  aside,
 }: Props) {
-  const actions = (
-    <div
-      className={`mt-10 flex flex-col sm:flex-row items-center gap-5 ${
-        image ? "sm:justify-start" : "sm:justify-center"
-      }`}
-    >
-      <NicheCtaButton message={prefill} label={ctaLabel} />
-      <CallLink
-        from="hero"
-        className="text-lg font-semibold text-lightText dark:text-darkText hover:opacity-70 transition-opacity whitespace-nowrap"
-      >
-        or call {BUSINESS.phone}
-      </CallLink>
-    </div>
-  );
-
-  if (image) {
-    return (
-      <section className="relative min-h-[88vh] flex items-center px-4">
-        <div className="container mx-auto">
-          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center pt-28 pb-16">
-            <div>
-              <h1 className="font-sans text-4xl sm:text-5xl lg:text-6xl tracking-tight text-lightText dark:text-darkText text-balance">
-                {headline}
-              </h1>
-              {actions}
-            </div>
-            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-lightBorder dark:border-darkBorder">
-              <Image
-                src={image.src}
-                alt={image.alt}
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-                priority
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
+  const split = Boolean(aside);
   return (
-    <section className="relative min-h-[88vh] flex items-center justify-center px-4">
-      <div className="max-w-5xl mx-auto text-center pt-28 pb-16">
-        {/* Sized so a ~34 character headline holds one line from lg up. */}
-        <h1 className="font-sans text-4xl sm:text-5xl xl:text-6xl tracking-tight text-lightText dark:text-darkText xl:whitespace-nowrap">
-          {headline}
-        </h1>
-        {actions}
+    <section
+      data-dark-section
+      className="relative -mt-[76px] flex min-h-[92vh] items-center overflow-hidden pt-[76px]"
+    >
+      {image ? (
+        <HeroBackdrop src={image.src} alt={image.alt} />
+      ) : (
+        <LavaLamp scrim={0.5} />
+      )}
+
+      <div className="relative container mx-auto px-4 pb-20 pt-32">
+        <div
+          className={
+            split
+              ? "mx-auto grid w-full max-w-6xl items-center gap-14 lg:grid-cols-2 lg:gap-10"
+              : "mx-auto max-w-3xl text-center"
+          }
+        >
+          <div>
+            <h1
+              style={image ? OVER_PHOTO : undefined}
+              className={`font-sans tracking-tight text-balance text-white ${
+                split
+                  ? "text-4xl sm:text-5xl lg:text-6xl"
+                  : "text-4xl sm:text-6xl lg:text-7xl"
+              }`}
+            >
+              {headline}
+            </h1>
+
+            {sub && (
+              <p
+                style={image ? OVER_PHOTO : undefined}
+                className={`mt-7 text-xl sm:text-2xl font-light leading-relaxed text-white/85 ${
+                  split ? "max-w-xl" : "mx-auto max-w-xl"
+                }`}
+              >
+                {sub}
+              </p>
+            )}
+
+            <div
+              className={`mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6 ${
+                split ? "" : "items-center justify-center"
+              }`}
+            >
+              <NicheCtaButton message={prefill} label={ctaLabel} variant="onDark" />
+              <CallLink
+                from="hero"
+                className="whitespace-nowrap text-center text-lg font-semibold text-white/90 transition-opacity hover:opacity-70"
+              >
+                or call {BUSINESS.phone}
+              </CallLink>
+            </div>
+
+            {note && (
+              <p className="mt-6 text-base font-light text-white/60">{note}</p>
+            )}
+          </div>
+
+          {aside && <div className="lg:pl-6">{aside}</div>}
+        </div>
       </div>
     </section>
   );

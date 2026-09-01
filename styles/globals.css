@@ -68,6 +68,22 @@
   background-size: 260% 100%;
   animation: beam 30s linear infinite;
 }
+
+/* The about-page card, protesting when you click it again. The 180deg is
+   baked into every frame because the card is already flipped when this runs,
+   and an animation replaces the transform rather than adding to it. */
+@keyframes queso-shake {
+  0%, 100% { transform: rotateY(180deg) translateX(0); }
+  15% { transform: rotateY(180deg) translateX(-7px); }
+  32% { transform: rotateY(180deg) translateX(7px); }
+  50% { transform: rotateY(180deg) translateX(-5px); }
+  68% { transform: rotateY(180deg) translateX(5px); }
+  85% { transform: rotateY(180deg) translateX(-2px); }
+}
+.queso-shake {
+  animation: queso-shake 450ms ease-in-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .navbar-glow {
     animation: none;
@@ -110,6 +126,16 @@
 .studios-no-scrollbar::-webkit-scrollbar { display: none; }
 .studios-no-scrollbar { scrollbar-width: none; }
 
+
+/* Queso lava lamp. Slow drift for the blob field behind the closing CTA and
+   the image-less hero — something alive under the frosted glass, never
+   legible through it. Shared with the Queso Rewards landing page. */
+@keyframes queso-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(8%, -6%) scale(1.18); }
+  66% { transform: translate(-7%, 7%) scale(0.88); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;
@@ -130,5 +156,8 @@
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
+  }
+  .queso-blob {
+    animation: none !important;
   }
 }

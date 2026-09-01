@@ -3,13 +3,14 @@ import Footer from "components/Footer";
 import FreeAudit from "components/FreeAudit";
 import FaqDeck from "components/FaqDeck";
 import PageHero from "components/PageHero";
-import WhyLocal from "components/WhyLocal";
-import { SERVICE_AREAS } from "components/serviceAreas";
 import LiveryCard from "components/LiveryCard";
 import StatementCopy from "components/StatementCopy";
 import Glow from "components/Glow";
-import CallLink from "components/CallLink";
-import { liveryAt, OPEN_ENDED, PAINT } from "components/livery";
+import { liveryAt, PAINT } from "components/livery";
+import { siteCopy } from "components/siteCopy";
+import PlaceLinks from "components/PlaceLinks";
+import { placeTrail } from "components/places";
+import { MONTHLY_PLAN_OFFER } from "components/pricingCopy";
 import {
   BUSINESS,
   LOCAL_BUSINESS_SCHEMA,
@@ -66,12 +67,17 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
           ...(postalCode ? { postalCode } : {}),
         },
         description: `Website design, local search, and Google Business Profile work for businesses in ${city}, Texas.`,
-        offers: {
-          "@type": "Offer",
-          name: "Free Local Visibility Audit",
-          price: "0",
-          priceCurrency: "USD",
-        },
+        // The plan price as a fact, so an assistant can answer "what do they
+        // charge" without the page having to say it in prose again.
+        offers: [
+          MONTHLY_PLAN_OFFER,
+          {
+            "@type": "Offer",
+            name: "Free Local Visibility Audit",
+            price: "0",
+            priceCurrency: "USD",
+          },
+        ],
       },
       {
         "@type": "FAQPage",
@@ -82,11 +88,9 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
           acceptedAnswer: { "@type": "Answer", text: item.a },
         })),
       },
-      breadcrumbSchema([{ name: city, path: slug }]),
+      breadcrumbSchema(placeTrail(slug)),
     ],
   };
-
-  const otherAreas = SERVICE_AREAS.filter((a) => a.slug !== slug);
 
   return (
     <div className="flex flex-col min-h-screen bg-lightBG dark:bg-darkBG">
@@ -96,7 +100,12 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
       />
       <Header />
       <main>
-        <PageHero headline={headline} prefill={prefill} image={heroImage} />
+        <PageHero
+          headline={headline}
+          sub={siteCopy({ city }).hero.sub}
+          prefill={prefill}
+          image={heroImage}
+        />
 
         {/* Full-contrast statement. Breaks the page up so the local framing
             reads as a design moment rather than another paragraph. */}
@@ -178,47 +187,12 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
           items={faqItems.map((f) => ({ title: f.q, content: f.a }))}
         />
 
-        <FreeAudit />
-        <WhyLocal />
+        {/* Objection, then close, then navigation. The page used to end on a
+            grid of links to other towns, which is a strange note to finish on
+            right after the call to action. */}
+        <FreeAudit copy={siteCopy({ city }).audit} />
+        <PlaceLinks current={slug} />
 
-        <section className="bg-bandLight dark:bg-bandDark border-t border-lightBorder dark:border-darkBorder">
-          <div className="container mx-auto px-4 py-24">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl sm:text-4xl text-lightText dark:text-darkText mb-12">
-                Not in {city}?
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {otherAreas.map((area, i) => (
-                  <LiveryCard
-                    key={area.slug}
-                    title={area.city}
-                    body={area.tagline}
-                    paint={liveryAt(i + 4)}
-                    href={area.slug}
-                  />
-                ))}
-
-                {/* Never let the list read as the whole map. */}
-                <LiveryCard
-                  open
-                  paint={OPEN_ENDED}
-                  title="And wherever you are"
-                  body={
-                    <>
-                      New areas all the time, and clients well past Texas.{" "}
-                      <CallLink
-                        from="areas"
-                        className="font-semibold text-lightText dark:text-darkText underline underline-offset-4 decoration-gialloOrion decoration-2 hover:opacity-70 transition-opacity whitespace-nowrap"
-                      >
-                        Just ask.
-                      </CallLink>
-                    </>
-                  }
-                />
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
       <Footer />
     </div>

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   // pages are all duplicates of the homepage. Each page declares its own.
 
   title: "Web Design & Local SEO in Atascocita, Humble & Kingwood TX",
-  description: "Web design and local SEO for businesses in Atascocita, Humble, Kingwood, and Northeast Houston. Simple plans at $300 a month, not agency prices. Free audit first.",
+  description: "Web design and local SEO for businesses in Atascocita, Humble, Kingwood, and Northeast Houston. Simple plans at $500 a month, not agency prices. Free audit first.",
   icons: {
     icon: "/favicon.ico",
     apple: "/logo-square.png",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Web Design & Local SEO in Atascocita, Humble & Kingwood TX",
-    description: "Web design and local SEO for businesses in Atascocita, Humble, Kingwood, and Northeast Houston. Simple plans at $300 a month, not agency prices. Free audit first.",
+    description: "Web design and local SEO for businesses in Atascocita, Humble, Kingwood, and Northeast Houston. Simple plans at $500 a month, not agency prices. Free audit first.",
     images: ["/logo.png"],
   },
 };

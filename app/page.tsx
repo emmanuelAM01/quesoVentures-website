@@ -12,8 +12,9 @@ import Reveal from "components/Reveal";
 import ScrollDivider from "components/ScrollDivider";
 import LightBar from "components/LightBar";
 import KonamiEasterEgg from "components/KonamiEasterEgg";
-import IndustryLinks from "components/IndustryLinks";
 import Link from "next/link";
+import { PRICING, MONTHLY_PLAN_OFFER } from "components/pricingCopy";
+import { metaFor } from "components/siteCopy";
 import {
   BUSINESS,
   LOCAL_BUSINESS_SCHEMA,
@@ -22,19 +23,21 @@ import {
   SAME_AS,
 } from "components/businessInfo";
 
-const TITLE = "Web Design & Local SEO That Gets Your Phone Ringing";
-const DESCRIPTION =
-  "Get found by the customers closest to you. Web design and local SEO for local businesses, headquartered in Houston and working nationwide. $300 a month. Call (281) 203-4531.";
+const { title: TITLE, description: DESCRIPTION } = metaFor("Houston", {
+  title: "Web Design & Development in Houston, Built by an Engineer",
+  description:
+    "Websites, local SEO, and AI visibility for Houston area businesses. More first-time customers, more repeat customers. See a free report on where you show up today.",
+});
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: "https://www.quesoventures.com" },
+  alternates: { canonical: BUSINESS.url },
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    url: "https://www.quesoventures.com",
-    siteName: "Queso Ventures",
+    url: BUSINESS.url,
+    siteName: BUSINESS.name,
     images: [
       {
         url: "/logo.png",
@@ -54,31 +57,36 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * The FAQ is the highest-value block on the page for AI assistants: discrete
+ * question and answer pairs extract cleanly where prose does not. It costs
+ * almost no height, because the deck shows one card at a time.
+ */
 const faqItems = [
   {
     title: "People visit my site but nobody calls or books. Why?",
     content:
-      "Traffic without calls usually means one of three things. Your site doesn't make the next step obvious, it loads too slowly on mobile, or the message doesn't match what visitors searched for. We find which one is costing you and fix it first.",
+      "Traffic without calls usually means one of three things: the next step isn't obvious, the site is slow on a phone, or the message doesn't match what the visitor searched for. I find which one is costing you and fix that first.",
   },
   {
     title: "My competitor shows up on Google and I don't. How do I change that?",
     content:
-      "Your competitor has built more trust with Google. A stronger Business Profile, more reviews, better pages, and content that matches what local customers actually search. We audit what they're doing right and build the same foundation for you, starting with what moves the needle fastest.",
+      "They have built more trust with Google. A stronger Business Profile, more reviews, better pages, and content that matches what local customers actually search. I audit what is working for them and build the same foundation for you, starting with whatever moves fastest.",
   },
   {
     title: "How do I show up when someone asks ChatGPT or Google AI to recommend a business like mine?",
     content:
-      "AI tools like ChatGPT and Google's AI Overviews scan your website to decide if your business is credible enough to recommend. To get cited, your site needs to clearly state who you are, what you offer, where you are, and who you serve, in a structure AI can read and trust. That is exactly what we optimize for.",
+      "AI assistants scan your website to decide whether your business is credible enough to recommend. To get cited, your site has to state clearly who you are, what you offer, where you are, and who you serve, in a structure those tools can read. That is exactly what I build for.",
   },
   {
     title: "How fast will I see more leads?",
     content:
-      "Messaging and layout fixes can show results within a few weeks. Consistent search rankings take two to four months of steady work. We work on both at the same time, so you are not waiting months before anything changes.",
+      "Messaging and layout fixes can show results within a few weeks. The majority of search changes show up between eight and twelve weeks, and the work is applied continuously rather than in one launch. I run both at the same time, so you are not waiting three months before anything changes.",
   },
   {
     title: "Can you work with my current website, or do I need to start over?",
     content:
-      "Almost always we can work with what you have. If your site is functional, we improve the content, structure, page speed, and lead capture without rebuilding. A full redesign only makes sense when the site is truly beyond saving.",
+      "Almost always I can work with what you have. If the site functions, I improve the content, structure, page speed, and lead capture instead of rebuilding. A full redesign only makes sense when a site is truly beyond saving.",
   },
   {
     title: "Who do you work with?",
@@ -88,12 +96,11 @@ const faqItems = [
   {
     title: "How does this actually start?",
     content:
-      "We build a preview of what your business could look like online before we ever talk numbers. You see something real, not a pitch deck. If it makes sense for your business, we go from there. If not, no pressure.",
+      "You send me your business name. I send back what someone searching for you right now actually finds, and what an AI assistant says when asked to recommend someone like you. If it looks worth fixing, I build a preview of what your site could be, before we ever talk numbers. You see something real, not a pitch deck.",
   },
   {
     title: "What does it cost?",
-    content:
-      "Simple monthly plans at $300 a month with a minimum 4 month commitment. Compare that to the $1,500 or more that traditional agencies charge, and most of them still have no answer for customers who ask an AI assistant for a recommendation. No hourly billing, no surprise fees.",
+    content: `${PRICING.monthlyLabel} a month for the website, the search and AI visibility, and the tools I build for your business. No setup fee. Agencies charge ${PRICING.agencyAnchor} or more and still have no answer for customers who ask an AI assistant who to call. We go through the details together before anything starts.`,
   },
 ];
 
@@ -136,14 +143,21 @@ const jsonLd = {
       description:
         "Website design, local search, and Google Business Profile work that gets local service businesses found by the customers nearest them, and recommended when someone asks an AI assistant who to call.",
       areaServed: AREA_SERVED_SCHEMA,
-      offers: {
-        "@type": "Offer",
-        name: "Free Website Growth Audit",
-        price: "0",
-        priceCurrency: "USD",
-        description:
-          "A free audit of your site structure, Google visibility, conversion blockers, page speed, and lead capture setup with a prioritized 30-day improvement plan.",
-      },
+      // Two offers. The page states the price once in the hero and once in the
+      // pricing block; the machine-readable version below is what lets an AI
+      // assistant answer "how much do they charge" without the page having to
+      // repeat itself a third and fourth time.
+      offers: [
+        MONTHLY_PLAN_OFFER,
+        {
+          "@type": "Offer",
+          name: "Free Website Growth Audit",
+          price: "0",
+          priceCurrency: "USD",
+          description:
+            "A free audit of your site structure, Google visibility, conversion blockers, page speed, and lead capture setup with a prioritized 30-day improvement plan.",
+        },
+      ],
     },
     {
       "@type": "FAQPage",
@@ -174,20 +188,17 @@ export default function Page() {
         <LightBar />
         <IndustriesMarquee />
 
-        {/* Credibility statement */}
-        <section className="container mx-auto px-4 py-16">
-          <div className="max-w-6xl mx-auto">
+        {/* Credibility. One line: the whole argument is that a software
+            engineer is doing this, not a marketing agency. */}
+        <section className="container mx-auto px-4 py-20">
+          <div className="mx-auto max-w-3xl text-center">
             <Reveal>
-              <p className="max-w-4xl text-2xl sm:text-3xl md:text-4xl font-light text-lightText dark:text-darkText leading-snug text-balance">
-                Industry-trained software engineer and problem solver, working for the businesses that rarely get one.
-              </p>
-              <p className="mt-6 max-w-3xl text-base sm:text-lg font-light text-lightTextMuted dark:text-darkTextMuted">
-                From restaurant websites to AI and biomedical software, I've built it all and kept it running. I've been at this long enough to
-                know what AI search and new tools look for when they decide which businesses to recommend.
+              <p className="text-2xl sm:text-3xl md:text-4xl font-light leading-snug text-balance text-lightText dark:text-darkText">
+                Industry-trained software engineer, working for the businesses that rarely get one.
               </p>
               <Link
                 href="/about"
-                className="mt-6 inline-block text-base font-semibold text-lightAccent dark:text-darkAccent hover:opacity-70 transition-opacity"
+                className="mt-6 inline-block text-base font-semibold text-lightAccent dark:text-darkAccent transition-opacity hover:opacity-70"
               >
                 Meet the founder →
               </Link>
@@ -195,16 +206,17 @@ export default function Page() {
           </div>
         </section>
 
-        <ScrollDivider />
-
         <Features />
         <HowItWorks />
-        <IndustryLinks heading="Who I build for" />
         <ScrollDivider />
         <Pricing />
         <FaqDeck items={faqItems} />
-        <ScrollDivider />
-        <FreeAudit />
+        <FreeAudit
+          image={{
+            src: "/hero/ctaHero.JPEG",
+            alt: "A trench path running into the treeline at Verdun",
+          }}
+        />
       </main>
       <Footer />
     </div>

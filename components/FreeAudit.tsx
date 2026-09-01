@@ -1,80 +1,94 @@
 "use client";
 
 import React from "react";
-import { FaCheck } from "react-icons/fa";
 import { BUSINESS } from "./businessInfo";
 import CallLink from "./CallLink";
 import { trackCtaClick } from "./analytics";
-import { PAINT } from "./livery";
-import Glow from "./Glow";
+import LavaLamp from "./LavaLamp";
+import HeroBackdrop from "./HeroBackdrop";
+import { SITE_COPY, type SiteCopy } from "./siteCopy";
 
-const checks = [
-  "Why you are not showing up in local searches",
-  "Quick wins for getting found in your area",
-  "What stops your visitors from calling or booking",
-  "Whether AI tools would recommend you today",
-];
-
-export default function FreeAuditSection() {
-  const openContactWithPrefill = (message: string) => {
+/**
+ * The close, on every page.
+ *
+ * One column, one axis. It used to be a split card: heading and button on the
+ * left, a checklist on the right, and four different type sizes down the left
+ * edge with the button hanging off none of them. Everything now stacks through
+ * the centre, so the eye lands on the headline and falls straight to the
+ * button.
+ */
+export default function FreeAuditSection({
+  copy = SITE_COPY.audit,
+  image,
+}: {
+  copy?: SiteCopy["audit"];
+  /**
+   * Optional photograph behind the close, with the blob field over it.
+   *
+   * Homepage only, on purpose. Every other page opens on a photograph of its
+   * own place or trade, so its close stays the pure blob field; the homepage
+   * opens on the blob field, so its close is the photograph. One of each per
+   * page, in the opposite order.
+   */
+  image?: { src: string; alt: string };
+}) {
+  const open = () => {
     trackCtaClick("free_audit");
-    window.dispatchEvent(new CustomEvent("contact:prefill", { detail: { message } }));
-    window.dispatchEvent(new CustomEvent("modal:open", { detail: { id: "contact-popup" } }));
+    window.dispatchEvent(
+      new CustomEvent("contact:prefill", {
+        detail: { message: copy.ctaPrefill, title: copy.cta },
+      })
+    );
+    window.dispatchEvent(
+      new CustomEvent("modal:open", { detail: { id: "contact-popup" } })
+    );
   };
 
   return (
     <section
       id="free-audit"
-      className="container mx-auto px-4 py-20 scroll-mt-16"
+      data-dark-section
+      className="relative overflow-hidden scroll-mt-16"
     >
-      <div className="max-w-6xl mx-auto">
-        <Glow color={PAINT.rossoCorsa.hex} radius="rounded-3xl" lift={false} spread={520}>
-        <div className="relative rounded-3xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark p-8 sm:p-12 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
-          <div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl text-lightText dark:text-darkText mb-4">
-              Ready to stop being invisible online?
-            </h2>
-            <p className="text-xl sm:text-2xl font-light text-lightTextMuted dark:text-darkTextMuted">
-              I take a free look at where you stand, show you what is possible,
-              and you decide. No pressure.
-            </p>
+      {image ? (
+        <HeroBackdrop {...image} scrim={0.58} position="center 72%" />
+      ) : (
+        <LavaLamp />
+      )}
 
+      <div className="relative container mx-auto px-4 py-28 sm:py-36">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl tracking-tight text-[#F5F7FA] text-balance">
+            {copy.heading}
+          </h2>
+          <p className="mt-6 text-xl sm:text-2xl font-light leading-relaxed text-white/75">
+            {copy.sub}
+          </p>
+
+          {/* Its own row. Both were inline, so the full-width button sat on
+              the same line as the call link and covered it. */}
+          <div className="mt-10">
             <button
               type="button"
-              onClick={() =>
-                openContactWithPrefill(
-                  "I want to see what my website could look like. I need help with getting more..."
-                )
-              }
-              className="mt-8 w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover px-6 py-3.5 text-base sm:px-8 sm:py-4 sm:text-lg font-semibold text-lightBG dark:text-darkBG transition-colors"
+              onClick={open}
+              className="inline-flex w-full items-center justify-center rounded-xl bg-darkButton px-10 py-4 text-lg font-semibold text-darkBG transition-colors hover:bg-darkButtonHover sm:w-auto"
             >
-              See What I'd Build
+              {copy.cta}
             </button>
-            <p className="mt-5 text-lg font-light text-lightTextMuted dark:text-darkTextMuted">
-              Free. No commitment. I reply within 24 hours.
-            </p>
-            <CallLink
-              from="free_audit"
-              className="mt-2 inline-block text-lg font-semibold text-lightText dark:text-darkText hover:opacity-70 transition-opacity whitespace-nowrap"
-            >
-              Or call {BUSINESS.phone}
-            </CallLink>
           </div>
 
-          <ul className="space-y-4">
-            {checks.map((item, i) => (
-              <li key={i} className="flex items-start gap-3">
-                <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lightAccent/10 dark:bg-darkAccent/10 text-lightAccent dark:text-darkAccent">
-                  <FaCheck size={11} />
-                </span>
-                <span className="text-lg sm:text-xl font-light text-lightText dark:text-darkText">
-                  {item}
-                </span>
-              </li>
-            ))}
-          </ul>
+          {copy.reassurance && (
+            <p className="mt-6 text-base font-light text-white/60">
+              {copy.reassurance}
+            </p>
+          )}
+          <CallLink
+            from="free_audit"
+            className="mt-7 block text-base font-semibold text-white/70 transition-opacity hover:opacity-70"
+          >
+            or call {BUSINESS.phone}
+          </CallLink>
         </div>
-        </Glow>
       </div>
     </section>
   );

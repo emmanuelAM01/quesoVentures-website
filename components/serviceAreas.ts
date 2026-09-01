@@ -1,47 +1,23 @@
-export interface ServiceArea {
-  city: string;
-  slug: string;
-  tagline: string;
-}
-
-export const SERVICE_AREAS: ServiceArea[] = [
-  {
-    city: "Atascocita",
-    slug: "/web-design-atascocita-tx",
-    tagline: "Show up first when Atascocita searches.",
-  },
-  {
-    city: "Humble",
-    slug: "/web-design-humble-tx",
-    tagline: "Own the FM 1960 corridor.",
-  },
-  {
-    city: "Kingwood",
-    slug: "/web-design-kingwood-tx",
-    tagline: "Be who Kingwood finds.",
-  },
-  {
-    city: "Summerwood & Fall Creek",
-    slug: "/web-design-summerwood-tx",
-    tagline: "Reach the families moving in.",
-  },
-  {
-    city: "Porter & New Caney",
-    slug: "/web-design-porter-tx",
-    tagline: "Win the 59 corridor.",
-  },
-  {
-    city: "Channelview",
-    slug: "/web-design-channelview-tx",
-    tagline: "Get there before the chains.",
-  },
-];
+/**
+ * Geography moved to components/places.ts, which holds it as a metro tree
+ * rather than a flat list. SERVICE_AREAS is kept as a derived flat view so the
+ * footer and the older link lists did not all have to change at once.
+ */
+export { ALL_NEIGHBORHOODS } from "components/places";
 
 export interface Industry {
   label: string;
   /** Set when this industry has its own page. Otherwise it's listed only. */
   slug?: string;
   tagline: string;
+  /**
+   * Kept out of the nav, the footer and every on-page list, while the page
+   * itself stays live and in the sitemap.
+   *
+   * For work that is welcome when it arrives but not worth going after. The
+   * page can still rank and still convert; it just stops being an invitation.
+   */
+  unlisted?: boolean;
 }
 
 /**
@@ -78,6 +54,7 @@ export const INDUSTRIES: Industry[] = [
     label: "Food Trucks & Restaurants",
     slug: "/website-for-food-trucks-houston",
     tagline: "Get found by people deciding where to eat right now.",
+    unlisted: true,
   },
   {
     label: "Landscaping & Lawn Care",
@@ -109,7 +86,16 @@ export const INDUSTRIES: Industry[] = [
   },
 ];
 
-/** Only the industries that have their own page. */
+/**
+ * Every industry with its own page, unlisted ones included. This is what the
+ * sitemap reads: an unlisted page still gets crawled and can still rank.
+ */
 export const FEATURED_INDUSTRIES = INDUSTRIES.filter(
   (i): i is Industry & { slug: string } => Boolean(i.slug)
 );
+
+/** What the nav, the footer and the on-page lists show. */
+export const LISTED_INDUSTRIES = INDUSTRIES.filter((i) => !i.unlisted);
+
+/** Listed industries that have a page, for link lists. */
+export const LISTED_FEATURED = FEATURED_INDUSTRIES.filter((i) => !i.unlisted);
