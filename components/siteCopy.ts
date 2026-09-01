@@ -62,12 +62,30 @@ export function siteCopy({ city }: PlaceContext = {}) {
       ],
     },
 
-    steps: {
-      heading: "How it works",
-      items: [
-        { title: "Send your business name", body: "That is the whole form." },
-        { title: "Get your report", body: "Where you show up now, and what is costing you calls." },
-        { title: "See your preview", body: "If it is worth fixing, I build it before you decide anything." },
+    /**
+     * The two-card picture section on the homepage.
+     *
+     * Left card: getting found, shown with a live search of their own business.
+     * Right card: what happens after, shown as a reel of the actual tools.
+     *
+     * Keep each title to one line at desktop width — the card puts it under a
+     * graphic, and a third line pushes the graphic out of frame on a phone. The
+     * right-hand body must stay neutral on billing: the plan is to sell tools
+     * separately later, so "added as your business needs them" and never
+     * "included".
+     */
+    showcase: {
+      heading: "The tools the big chains have.",
+      sub: "Built for a business your size.",
+      cards: [
+        {
+          title: "You come up first.",
+          body: `Google, Maps, and the AI assistants people now ask instead. When someone ${nearYou} looks for what you do, they find you.`,
+        },
+        {
+          title: "Then the tools run the rest.",
+          body: "Rewards, a front desk that answers at 9pm, booking, invoicing, and a read on your own numbers. Added as your business needs them.",
+        },
       ],
     },
 

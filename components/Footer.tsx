@@ -75,13 +75,14 @@ const Footer = () => {
             Identity on the left, navigation on the right, and nothing else in
             either.
 
-            The old shape was four equal nav columns, one of which ("Get in
-            touch") was carrying a phone number, an email, a locality, two legal
-            links and the social icons — five unrelated kinds of thing stacked to
-            fill a column. That is why a line reading "Northeast Houston, TX"
-            landed between an email address and a privacy policy and meant
-            nothing. Contact is not a nav group, legal is not contact, and a
-            column exists because its contents belong together.
+            The old shape had a column called "Get in touch" carrying a phone
+            number, an email, a locality, two legal links and the social icons —
+            five unrelated kinds of thing stacked to fill a column. That is why
+            a line reading "Northeast Houston, TX" landed between an email
+            address and a privacy policy and meant nothing. There are four
+            columns again, but each one now answers a single question: what else
+            is here, who is this for, where do you work, how do I reach you.
+            Legal and social stay out of all four, on their own bar below.
           */}
           <div className="grid gap-12 lg:grid-cols-[minmax(0,20rem),1fr] lg:gap-16">
             <div>
@@ -102,22 +103,9 @@ const Footer = () => {
                 Web design and local SEO for Houston area businesses, built by a
                 software engineer. Based in {BUSINESS.addressLine}.
               </p>
-
-              <div className="mt-6 space-y-1">
-                <CallLink
-                  from="footer"
-                  className="block text-[15px] font-medium text-[#F5F7FA] transition-opacity hover:opacity-70"
-                />
-                <a
-                  href={BUSINESS.emailHref}
-                  className="block break-words text-[15px] text-[#8A949E] transition-colors hover:text-[#F5F7FA]"
-                >
-                  {BUSINESS.email}
-                </a>
-              </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-[repeat(3,minmax(0,1fr))_auto]">
               <div>
                 <p className={columnHeading}>Company</p>
                 <Link href="/services" className={columnLink}>
@@ -157,6 +145,31 @@ const Footer = () => {
                   </Link>
                 ))}
                 <span className={columnTail}>and wherever you are</span>
+              </div>
+
+              {/*
+                The number gets a label now.
+
+                Loose in the identity block it read as one more fact about the
+                business, sitting between an address and an email. Headed
+                "Support" it answers a question instead: someone already working
+                with me, or already sold, knows this is the line to use. That is
+                also the only place a phone number belongs on this site — the
+                hero and the navbar are for people who have not decided yet, and
+                every unqualified call so far has been spam.
+              */}
+              <div>
+                <p className={columnHeading}>Support</p>
+                <CallLink
+                  from="footer"
+                  className="block py-1.5 text-[15px] font-medium text-[#F5F7FA] transition-opacity hover:opacity-70"
+                />
+                <a
+                  href={BUSINESS.emailHref}
+                  className="block whitespace-nowrap py-1.5 text-[13px] text-[#8A949E] transition-colors hover:text-[#F5F7FA] sm:text-[15px]"
+                >
+                  {BUSINESS.email}
+                </a>
               </div>
             </div>
           </div>

@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { FaSearch, FaStar, FaMapMarkerAlt } from "react-icons/fa";
 import { HiSparkles } from "react-icons/hi2";
-import type { PlaceSuggestion } from "app/api/places/route";
-import { trackCtaClick } from "./analytics";
+import { useBusinessSearch } from "./useBusinessSearch";
 
 const QUERIES = [
   "mechanic near me",
@@ -17,7 +16,7 @@ const SOURCES = ["Google", "Maps", "AI"] as const;
 type Source = (typeof SOURCES)[number];
 
 /**
- * The demo you can take over.
+ * The hero demo you can take over.
  *
  * It cycles hardcoded searches until someone clicks into the box, at which
  * point the reel stops and it becomes a real Google Places lookup. Pick your
@@ -25,155 +24,41 @@ type Source = (typeof SOURCES)[number];
  * your street, your rating slot — which is the whole argument the page has been
  * making, rendered about you instead of about a stranger.
  *
- * Choosing carries the place_id into the contact form, so the demo is also the
- * lead capture and nobody retypes anything.
+ * The state machine behind that lives in useBusinessSearch, because the
+ * showcase card further down the page runs the same one. What is local here is
+ * the Google/Maps/AI switch: three renderings of the same result, which is the
+ * point the hero is making and the showcase card is not.
  */
 export default function SearchDemo() {
-  const [typed, setTyped] = useState("");
-  const [showResults, setShowResults] = useState(false);
   const [source, setSource] = useState<Source>("Google");
-  const queryIndex = useRef(0);
-
-  /** The visitor has taken the wheel; the reel never restarts. */
-  const [live, setLive] = useState(false);
-  const [query, setQuery] = useState("");
-  const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
-  const [chosen, setChosen] = useState<PlaceSuggestion | null>(null);
-  /** Committed a typed name without picking one off the list. */
-  const [entered, setEntered] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (live) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setTyped(QUERIES[0]);
-      setShowResults(true);
-      return;
-    }
-
-    let cancelled = false;
-    let timer: ReturnType<typeof setTimeout>;
-
-    const type = (query: string, pos: number) => {
-      if (cancelled) return;
-      setTyped(query.slice(0, pos));
-      if (pos < query.length) {
-        timer = setTimeout(() => type(query, pos + 1), 55);
-      } else {
-        timer = setTimeout(() => {
-          if (cancelled) return;
-          setShowResults(true);
-          timer = setTimeout(() => {
-            if (cancelled) return;
-            setShowResults(false);
-            queryIndex.current = (queryIndex.current + 1) % QUERIES.length;
-            timer = setTimeout(() => type(QUERIES[queryIndex.current], 0), 400);
-          }, 2800);
-        }, 250);
-      }
-    };
-
-    type(QUERIES[0], 0);
-    return () => {
-      cancelled = true;
-      clearTimeout(timer);
-    };
-  }, [live]);
-
-  // Live lookup, same proxied route the contact form uses.
-  useEffect(() => {
-    if (!live || chosen || query.trim().length < 3) {
-      setSuggestions([]);
-      return;
-    }
-    const ctrl = new AbortController();
-    const t = setTimeout(async () => {
-      try {
-        const res = await fetch(`/api/places?q=${encodeURIComponent(query)}`, {
-          signal: ctrl.signal,
-        });
-        const data = await res.json();
-        setSuggestions(data.suggestions ?? []);
-      } catch {
-        /* Aborted or offline. The demo just shows nothing. */
-      }
-    }, 250);
-    return () => {
-      clearTimeout(t);
-      ctrl.abort();
-    };
-  }, [query, live, chosen]);
-
-  const takeOver = () => {
-    if (live) return;
-    setLive(true);
-    setTyped("");
-    setShowResults(false);
-  };
-
-  const pick = (s: PlaceSuggestion) => {
-    setChosen(s);
-    setEntered("");
-    setSuggestions([]);
-    setQuery(s.name);
-    setShowResults(true);
-  };
-
-  /**
-   * Commit whatever is typed, for a business Google does not list.
-   *
-   * Same destination as picking off the list, minus the place_id. Rendered as a
-   * button rather than left to the Enter key: nothing on screen would have told
-   * anyone the key did something.
-   */
-  const commit = () => {
-    const name = query.trim();
-    if (!name || chosen) return;
-    setEntered(name);
-    setSuggestions([]);
-    setShowResults(true);
-  };
-
-  const requestReport = () => {
-    const name = chosen?.name ?? entered;
-    if (!name) return;
-    trackCtaClick("hero");
-    window.dispatchEvent(
-      new CustomEvent("contact:prefill", {
-        detail: {
-          title: "Get My Free Report",
-          business:
-            chosen && chosen.address ? `${chosen.name}, ${chosen.address}` : name,
-          placeId: chosen?.placeId ?? "",
-          message: `I'd like the free report for ${name}.`,
-        },
-      })
-    );
-    window.dispatchEvent(
-      new CustomEvent("modal:open", { detail: { id: "contact-popup" } })
-    );
-  };
-
-  /** Whose name the mock result carries. */
-  const named = chosen?.name ?? entered;
-  const bizName = named || "Your Business";
-  const bizWhere = chosen?.address ?? "Houston, TX";
-  /** A result standing in for a real business needs saying so. */
-  const isTheirs = Boolean(named);
-
-  const resultStyle = (delay = 0) => ({
-    opacity: showResults ? 1 : 0,
-    transform: showResults ? "none" : "translateY(10px)",
-    transitionDelay: delay ? `${delay}ms` : undefined,
-  });
+  const {
+    typed,
+    showResults,
+    live,
+    takeOver,
+    query,
+    edit,
+    suggestions,
+    chosen,
+    entered,
+    pick,
+    commit,
+    requestReport,
+    inputRef,
+    bizName,
+    bizWhere,
+    isTheirs,
+    resultStyle,
+  } = useBusinessSearch({ queries: QUERIES, from: "hero" });
 
   return (
     <div
-      onClick={() => {
-        takeOver();
-        inputRef.current?.focus();
-      }}
-      className="w-full max-w-md mx-auto rounded-3xl border border-lightBorder dark:border-darkBorder bg-white dark:bg-[#151618] shadow-xl shadow-black/5 dark:shadow-black/30 p-6 sm:p-7 cursor-text"
+      onClick={takeOver}
+      className={`w-full max-w-md mx-auto rounded-3xl border bg-white dark:bg-[#151618] shadow-xl shadow-black/5 dark:shadow-black/30 p-6 sm:p-7 cursor-text transition-colors ${
+        live
+          ? "border-lightBorder dark:border-darkBorder"
+          : "border-lightBorder hover:border-lightAccent/50 dark:border-darkBorder dark:hover:border-darkAccent/50"
+      }`}
     >
       {/* Source pills */}
       <div className="flex items-center gap-2 mb-5">
@@ -206,14 +91,7 @@ export default function SearchDemo() {
             ref={inputRef}
             type="text"
             value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              if (chosen || entered) {
-                setChosen(null);
-                setEntered("");
-                setShowResults(false);
-              }
-            }}
+            onChange={(e) => edit(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
@@ -226,11 +104,34 @@ export default function SearchDemo() {
           />
         ) : (
           <>
-            <span className="text-sm sm:text-base text-lightText dark:text-darkText whitespace-nowrap overflow-hidden">
+            <span className="min-w-0 truncate text-sm sm:text-base text-lightText dark:text-darkText">
               {typed}
             </span>
             <span className="caret inline-block w-[2px] h-5 bg-lightText dark:bg-darkText shrink-0" />
           </>
+        )}
+
+        {/*
+          The affordance, in the one place it is unmissable.
+
+          A reel that happens to be clickable is a reel nobody clicks — nothing
+          on screen said the box was live, so it read as a picture and the whole
+          easter egg went unused. Owner.com gets this for free because their box
+          ships with a submit button on it. This is the same trick: the pill
+          says the bar takes input, and it is replaced by the real Enter button
+          the moment someone starts typing.
+        */}
+        {!live && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              takeOver();
+            }}
+            className="ml-auto shrink-0 whitespace-nowrap rounded-full bg-lightButton px-3 py-1 text-xs font-semibold text-lightBG transition-colors hover:bg-lightButtonHover dark:bg-darkButton dark:text-darkBG dark:hover:bg-darkButtonHover"
+          >
+            Try yours
+          </button>
         )}
 
         {live && query.trim().length >= 2 && !chosen && !entered && (

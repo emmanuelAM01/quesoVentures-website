@@ -85,7 +85,7 @@ const data: GeoPageData = {
     },
     {
       q: "How does this start?",
-      a: "I take a free look at your website, your Google profile, and who's outranking you in Kingwood, then I build a preview of what your business could look like online before we talk numbers. You see it first, then decide.",
+      a: "Send your business name through the form. I look at what someone searching in Kingwood right now actually finds, and who is outranking you, then I get in touch with what I found. We go from there. Nothing to pay to have that conversation.",
     },
   ],
   heroImage: { src: "/hero/kingwood.jpg", alt: "Kingwood, Texas" },

@@ -83,7 +83,7 @@ const data: IndustryPageData = {
     },
     {
       "q": "How does this start?",
-      "a": "I take a free look at your current setup and build a preview of what your business could look like online. Then you decide. Call (281) 203-4531."
+      "a": "Send your business name through the form. I look at what someone deciding where to eat near you actually finds right now, and what an AI assistant says when asked to recommend somewhere, then I get in touch with what I found. We go from there. Nothing to pay to have that conversation."
     }
   ]
 };

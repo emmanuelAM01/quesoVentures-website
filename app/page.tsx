@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import Header from "components/Header";
 import Hero from "components/Hero";
-import Features from "components/Features";
+import Showcase from "components/Showcase";
 import Footer from "components/Footer";
 import FreeAudit from "components/FreeAudit";
 import IndustriesMarquee from "components/IndustriesMarquee";
-import HowItWorks from "components/HowItWorks";
 import Pricing from "components/Pricing";
 import FaqDeck from "components/FaqDeck";
 import Reveal from "components/Reveal";
@@ -96,7 +94,7 @@ const faqItems = [
   {
     title: "How does this actually start?",
     content:
-      "You send me your business name. I send back what someone searching for you right now actually finds, and what an AI assistant says when asked to recommend someone like you. If it looks worth fixing, I build a preview of what your site could be, before we ever talk numbers. You see something real, not a pitch deck.",
+      "You send me your business name through the form. I look at what someone searching for you right now actually finds, and what an AI assistant says when asked to recommend someone like you, then I get in touch with what I found. We talk it through from there. No contract, no commitment, and nothing to pay to have that conversation.",
   },
   {
     title: "What does it cost?",
@@ -181,7 +179,6 @@ export default function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Header />
       <KonamiEasterEgg />
       <main>
         <Hero />
@@ -206,8 +203,7 @@ export default function Page() {
           </div>
         </section>
 
-        <Features />
-        <HowItWorks />
+        <Showcase />
         <ScrollDivider />
         <Pricing />
         <FaqDeck items={faqItems} />

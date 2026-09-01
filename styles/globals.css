@@ -105,6 +105,51 @@
   animation: caretBlink 1s steps(1) infinite;
 }
 
+/* The navbar's selected trade or town.
+
+   On a trade or area page the "Who I Help" item stops being a menu label and
+   becomes the name of the page you are on. It arrives rather than appearing,
+   which is the difference between a nav that feels stateful and one that looks
+   like it rendered wrong. */
+@keyframes nav-swap {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.nav-swap {
+  animation: nav-swap 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* The tool reel's progress rail.
+
+   Seven rectangles butted together, the live one filling left to right over
+   exactly as long as the panel is held. It is the navigation and the timer at
+   once: you can see where you are in the set, how long until it moves, and jump
+   anywhere by clicking. */
+@keyframes story-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Each tool panel arrives from the right, under the rail. */
+@keyframes panel-in {
+  from { opacity: 0; transform: translateX(22px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.panel-in {
+  animation: panel-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* The question mark on the last panel. Alive but not fidgeting: this stands in
+   for a conversation that has not happened yet. */
+@keyframes queso-ask {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-6px) rotate(4deg); }
+}
+@keyframes queso-ask-ring {
+  0% { transform: scale(0.85); opacity: 0.55; }
+  70%, 100% { transform: scale(1.35); opacity: 0; }
+}
+
 /* Queso Studios dark experience: the reveal, the lasers, the glass. */
 @keyframes studios-rise {
   from { opacity: 0; transform: translateY(28px); filter: blur(12px); }
@@ -147,6 +192,18 @@
   }
   .caret {
     animation: none;
+  }
+  .nav-swap {
+    animation: none;
+  }
+  .story-fill,
+  .queso-ask,
+  .queso-ask-ring,
+  .panel-in {
+    animation: none;
+  }
+  .story-fill {
+    transform: scaleX(1);
   }
   .lightbar {
     animation: none;

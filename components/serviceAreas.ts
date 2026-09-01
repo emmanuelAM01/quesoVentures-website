@@ -7,6 +7,13 @@ export { ALL_NEIGHBORHOODS } from "components/places";
 
 export interface Industry {
   label: string;
+  /**
+   * Nav-width version of `label`. Only needed on industries with a page: when
+   * someone is on one, the navbar swaps "Who I Help" for where they are, and
+   * "Construction, Roofing & Flooring" is four times the width of the item it
+   * replaces. Falls back to `label`.
+   */
+  short?: string;
   /** Set when this industry has its own page. Otherwise it's listed only. */
   slug?: string;
   tagline: string;
@@ -32,26 +39,31 @@ export interface Industry {
 export const INDUSTRIES: Industry[] = [
   {
     label: "Auto Shops & Mobile Mechanics",
+    short: "Auto Shops",
     slug: "/seo-for-auto-shops-houston",
     tagline: "Be the shop that comes up before the dealership.",
   },
   {
     label: "Wrap & Detail Shops",
+    short: "Wrap & Detail",
     slug: "/seo-for-wrap-shops-houston",
     tagline: "Show the work to the people already looking for it.",
   },
   {
     label: "Construction, Roofing & Flooring",
+    short: "Construction",
     slug: "/seo-for-contractors-houston",
     tagline: "Get called by homeowners, not just referrals.",
   },
   {
     label: "Med Spas, Clinics & Dentists",
+    short: "Med Spas",
     slug: "/seo-for-med-spas-houston",
     tagline: "Fill the appointment book from search.",
   },
   {
     label: "Food Trucks & Restaurants",
+    short: "Food Trucks",
     slug: "/website-for-food-trucks-houston",
     tagline: "Get found by people deciding where to eat right now.",
     unlisted: true,

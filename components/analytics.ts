@@ -17,6 +17,7 @@ export type Placement =
   | "header"
   | "header_mobile"
   | "hero"
+  | "showcase"
   | "footer"
   | "free_audit"
   | "contact_page"

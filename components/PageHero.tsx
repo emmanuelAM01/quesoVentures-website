@@ -1,7 +1,5 @@
 import HeroBackdrop from "components/HeroBackdrop";
 import NicheCtaButton from "components/NicheCtaButton";
-import { BUSINESS } from "components/businessInfo";
-import CallLink from "components/CallLink";
 import LavaLamp from "components/LavaLamp";
 
 interface Props {
@@ -94,18 +92,20 @@ export default function PageHero({
               </p>
             )}
 
+            {/*
+              One button. Nothing beside it.
+
+              "or call" sat here as a second, quieter CTA and it was the same
+              mistake the navbar was making: two destinations at the moment of
+              highest intent, one of which routes to a phone that only rings
+              with spam. The number is not hidden — it is in the footer under
+              Support, which is where someone who already wants to talk goes
+              looking for it.
+            */}
             <div
-              className={`mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6 ${
-                split ? "" : "items-center justify-center"
-              }`}
+              className={`mt-10 flex ${split ? "" : "justify-center"}`}
             >
               <NicheCtaButton message={prefill} label={ctaLabel} variant="onDark" />
-              <CallLink
-                from="hero"
-                className="whitespace-nowrap text-center text-lg font-semibold text-white/90 transition-opacity hover:opacity-70"
-              >
-                or call {BUSINESS.phone}
-              </CallLink>
             </div>
 
             {note && (

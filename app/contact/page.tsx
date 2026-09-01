@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Header from "components/Header";
 import Footer from "components/Footer";
 import ContactForm from "components/ContactForm";
 import Glow from "components/Glow";
@@ -58,7 +57,6 @@ export default function ContactPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Header />
       <main>
         {/* Deliberately not a full-height hero. Everything worth knowing is
             one screen: how to reach me, when, and a box to type in. */}

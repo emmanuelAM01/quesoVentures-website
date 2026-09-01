@@ -1,4 +1,3 @@
-import Header from "components/Header";
 import Footer from "components/Footer";
 
 export function LegalPage({
@@ -12,7 +11,6 @@ export function LegalPage({
 }) {
   return (
     <div className="flex flex-col min-h-screen bg-lightBG dark:bg-darkBG">
-      <Header />
       <main>
         <section className="container mx-auto px-4 pt-20 pb-6 max-w-3xl">
           <h1 className="text-3xl sm:text-4xl text-lightText dark:text-darkText mb-2 tracking-tight">

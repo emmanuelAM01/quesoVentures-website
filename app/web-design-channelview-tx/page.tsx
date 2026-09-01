@@ -85,7 +85,7 @@ const data: GeoPageData = {
     },
     {
       q: "How does this start?",
-      a: "I take a free look at where you stand, your site, your Google profile, and whoever currently outranks you in Channelview, then build a preview of what your business could look like online. Then you decide. Call (281) 203-4531 or send a message.",
+      a: "Send your business name through the form. I look at what someone searching in Channelview right now actually finds, and who is outranking you, then I get in touch with what I found. We go from there. Nothing to pay to have that conversation.",
     },
   ],
   heroImage: { src: "/hero/chanelview.avif", alt: "Channelview, Texas" },

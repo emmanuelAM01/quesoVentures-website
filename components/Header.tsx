@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import ThemeSwitch from "./ThemeSwitch";
-import { LISTED_FEATURED } from "./serviceAreas";
+import { INDUSTRIES, LISTED_FEATURED } from "./serviceAreas";
 import { CITIES, ALL_NEIGHBORHOODS } from "components/places";
 import { BUSINESS } from "./businessInfo";
 import CallLink from "./CallLink";
@@ -12,7 +13,7 @@ import NicheCtaButton from "./NicheCtaButton";
 import { SITE_COPY } from "./siteCopy";
 
 const navLinkClass =
-  "relative text-[15px] font-medium text-lightText dark:text-darkText px-4 py-2 rounded-full transition-colors " +
+  "relative whitespace-nowrap text-[15px] font-medium text-lightText dark:text-darkText px-4 py-2 rounded-full transition-colors " +
   "after:content-[''] after:absolute after:left-4 after:right-4 after:bottom-1 after:h-[2px] " +
   "after:origin-left after:scale-x-0 after:transition-transform after:duration-200 " +
   "after:bg-lightAccent dark:after:bg-darkAccent hover:after:scale-x-100";
@@ -26,6 +27,25 @@ const dropdownHeadingClass =
 const dropdownLinkClass =
   "block py-[7px] text-[15px] leading-snug text-lightTextMuted transition-colors " +
   "hover:text-lightText dark:text-darkTextMuted dark:hover:text-darkText";
+
+/**
+ * What the "Who I Help" item should say on this page.
+ *
+ * Null everywhere except a trade or area page, where the nav stops being a
+ * menu and starts telling you where you are. Unlisted trades count: Food Trucks
+ * is kept out of the dropdown, but someone who landed on that page should still
+ * see it named rather than see the generic label.
+ */
+function selectedPlaceOrTrade(pathname: string | null): string | null {
+  if (!pathname) return null;
+  const trade = INDUSTRIES.find((i) => i.slug && i.slug === pathname);
+  if (trade) return trade.short ?? trade.label;
+  const hood = ALL_NEIGHBORHOODS.find((n) => n.slug === pathname);
+  if (hood) return hood.name;
+  const city = CITIES.find((c) => c.slug === pathname);
+  if (city) return city.name;
+  return null;
+}
 
 function PhoneIcon({ size = 14 }: { size?: number }) {
   return (
@@ -42,6 +62,20 @@ function PhoneIcon({ size = 14 }: { size?: number }) {
   );
 }
 
+/**
+ * Routes that bring their own chrome.
+ *
+ * /studios is a deliberate departure from the rest of the site and has no
+ * header at all; /foundCode uses SimpleHeader. Both used to get this simply by
+ * not rendering it, which stopped being an option once it moved into the root
+ * layout.
+ */
+const NO_HEADER = ["/studios", "/foundCode"];
+
+/** Layout effect on the client, plain effect on the server. */
+const useIsoLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [overDark, setOverDark] = useState(false);
@@ -49,6 +83,82 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileWorkOpen, setMobileWorkOpen] = useState(false);
   const workRef = useRef<HTMLLIElement>(null);
+  const pathname = usePathname();
+  const selected = useMemo(() => selectedPlaceOrTrade(pathname), [pathname]);
+
+  /*
+    The slide.
+
+    With nothing selected the nav sits in the middle of the bar. Land on a
+    trade or an area page and it slides right, out of the way, and the name of
+    where you are takes the middle. Going back slides it home again.
+
+    It is one element that moves rather than two that swap, because a swap
+    cannot be animated: the nav is always laid out on the right, next to the
+    button, and a transform carries it to the centre when there is nothing to
+    put there. Transforms do not touch layout, so nothing else on the bar
+    shifts while it travels.
+
+    Measured with offsetLeft rather than getBoundingClientRect, and that is
+    load-bearing: offsetLeft is a layout value and ignores transforms, so a
+    re-measure returns the same answer no matter what offset is currently
+    applied. Rects do not, and reading one while the nav is already displaced
+    compounds the previous measurement — the nav walks off the left edge the
+    moment the web font swaps in and triggers a second pass.
+  */
+  const navRef = useRef<HTMLElement>(null);
+  const centerRef = useRef<HTMLSpanElement>(null);
+  const [shift, setShift] = useState(0);
+  const [measured, setMeasured] = useState(false);
+  /* Below this the name is not drawn, so the nav has no reason to move. */
+  const [wide, setWide] = useState(false);
+
+  const measure = useCallback(() => {
+    const nav = navRef.current;
+    const mark = centerRef.current;
+    if (!nav || !mark) return;
+    /* Both are positioned against the same offsetParent (the bar row), so the
+       difference is the distance the nav has to travel to sit dead centre. */
+    setShift(mark.offsetLeft - (nav.offsetLeft + nav.offsetWidth / 2));
+    setMeasured(true);
+  }, []);
+
+  useIsoLayoutEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    setWide(mq.matches);
+    const onChange = () => {
+      setWide(mq.matches);
+      measure();
+    };
+    mq.addEventListener("change", onChange);
+    measure();
+    window.addEventListener("resize", measure);
+
+    /*
+      The first measurement happens before Inter Tight has loaded, so it sizes
+      the nav in the fallback face and centres it about 45px off. Watching the
+      nav's own box catches the font swap, and anything else that resizes it,
+      without guessing at a delay.
+    */
+    const ro = new ResizeObserver(measure);
+    if (navRef.current) ro.observe(navRef.current);
+
+    return () => {
+      mq.removeEventListener("change", onChange);
+      window.removeEventListener("resize", measure);
+      ro.disconnect();
+    };
+  }, [measure]);
+
+  /** Centre the nav unless a name has taken the middle. */
+  const centred = !selected || !wide;
+  const offset = centred ? shift : 0;
+  /**
+   * Below lg the centred name is not drawn, so the nav item carries it instead.
+   * Above lg it must go back to saying "Who I Help" — the same word in the
+   * middle of the bar and again in the menu label reads as a rendering bug.
+   */
+  const inlineLabel = selected && !wide ? selected : "Who I Help";
 
   useEffect(() => {
     const onScroll = () => {
@@ -77,6 +187,8 @@ export default function Header() {
 
   const closeMobile = () => setMobileOpen(false);
 
+  if (pathname && NO_HEADER.includes(pathname)) return null;
+
   return (
     <header
       className={[
@@ -101,10 +213,16 @@ export default function Header() {
             ].join(" ")}
           />
 
-          {/* Three equal zones so the nav sits dead centre regardless of how
-              wide the logo or the call button get. */}
-          <div className="relative px-4 sm:px-6 h-16 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
-            <div className="flex items-center justify-start">
+          {/* Logo left, everything else right, and the true centre marked by a
+              zero-width span the transform can measure against. */}
+          <div className="relative px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+            <span
+              ref={centerRef}
+              aria-hidden
+              className="pointer-events-none absolute left-1/2 top-0 h-0 w-0"
+            />
+
+            <div className="flex shrink-0 items-center justify-start">
               <Link
                 href="/"
                 className="relative flex items-center gap-2 px-1 py-2 text-lg font-medium text-lightText dark:text-darkText transition-colors
@@ -121,12 +239,50 @@ export default function Header() {
                   className="object-contain"
                   priority={false}
                 />
-                <span className="hidden sm:inline">Queso Ventures</span>
+                <span className="hidden whitespace-nowrap sm:inline">Queso Ventures</span>
               </Link>
             </div>
 
-            {/* Desktop nav — centre zone */}
-            <nav className="hidden md:flex items-center justify-center">
+            {/* The name of the page you are on, in the middle of the bar,
+                wearing the house gradient.
+
+                Two ramps, not one. Over a dark hero the logo's red-to-yellow
+                reads fine; on the cream header further down the page the yellow
+                end lands at about 1.3:1 and the last syllable of the town
+                simply vanishes. The light ramp stops at bronze instead, which
+                still reads as the house colours and still reads as words.
+
+                Only from lg up. Narrower than that the nav is already using
+                most of the width, so the name would collide with it; there the
+                "Who I Help" item carries the label inline instead. */}
+            <span
+              aria-hidden
+              style={{
+                /* In behind the nav: wait for it to clear, or the two words
+                   overlap mid-travel and read as one broken string. Out ahead
+                   of it: the name goes first, then the nav comes home. */
+                transitionDelay: selected && wide ? "260ms" : "0ms",
+                transitionDuration: selected && wide ? "420ms" : "180ms",
+              }}
+              className={`pointer-events-none absolute left-1/2 top-1/2 hidden -translate-y-1/2 whitespace-nowrap bg-gradient-to-r from-[#C4161C] to-[#B87200] bg-clip-text text-[22px] font-semibold tracking-tight text-transparent transition-all ease-out dark:from-[#FF5A4E] dark:to-[#FFD100] lg:block ${
+                selected && wide
+                  ? "-translate-x-1/2 opacity-100 blur-0"
+                  : "-translate-x-[calc(50%+12px)] opacity-0 blur-[2px]"
+              }`}
+            >
+              {selected}
+            </span>
+
+            <div className="hidden shrink-0 md:flex items-center justify-end gap-3">
+            <nav
+              ref={navRef}
+              style={{ transform: `translateX(${offset}px)` }}
+              className={`flex items-center ${
+                measured
+                  ? "transition-transform duration-[550ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  : ""
+              }`}
+            >
               <ul className="flex items-center space-x-1">
                 <li>
                   <Link href="/services" className={navLinkClass}>
@@ -135,13 +291,32 @@ export default function Header() {
                 </li>
 
                 <li ref={workRef} className="relative">
+                  {/*
+                    On a trade or area page this item names the page instead of
+                    the menu, with the underline left drawn.
+
+                    A nav that reads the same on every page makes eleven pages
+                    feel like one; this is the cheapest possible way to tell
+                    someone which of the eleven they are standing on, and it
+                    costs no extra row, no breadcrumb and no second colour. The
+                    label is keyed so it animates in on arrival rather than
+                    simply being different.
+                  */}
                   <button
                     type="button"
                     onClick={() => setWorkOpen((o) => !o)}
-                    className={navLinkClass}
+                    className={`${navLinkClass} ${
+                      selected ? "after:scale-x-100" : ""
+                    }`}
                     aria-expanded={workOpen}
                   >
-                    Who I Help
+                    {/* No marker dot: Studios already owns a dot in this row,
+                        and two different dots meaning two different things is
+                        exactly the noise the dropdown rewrite removed. The
+                        changed word plus the drawn underline is the state. */}
+                    <span key={inlineLabel} className="nav-swap">
+                      {inlineLabel}
+                    </span>
                     <span
                       className={`ml-1 inline-block text-xs transition-transform duration-200 ${
                         workOpen ? "rotate-180" : ""
@@ -173,7 +348,12 @@ export default function Header() {
                             key={item.slug}
                             href={item.slug}
                             onClick={() => setWorkOpen(false)}
-                            className={dropdownLinkClass}
+                            aria-current={item.slug === pathname ? "page" : undefined}
+                            className={`${dropdownLinkClass} ${
+                              item.slug === pathname
+                                ? "font-medium text-lightText dark:text-darkText"
+                                : ""
+                            }`}
                           >
                             {item.label}
                           </Link>
@@ -196,7 +376,12 @@ export default function Header() {
                             key={item.slug}
                             href={item.slug}
                             onClick={() => setWorkOpen(false)}
-                            className={dropdownLinkClass}
+                            aria-current={item.slug === pathname ? "page" : undefined}
+                            className={`${dropdownLinkClass} ${
+                              item.slug === pathname
+                                ? "font-medium text-lightText dark:text-darkText"
+                                : ""
+                            }`}
                           >
                             {item.name}
                           </Link>
@@ -230,7 +415,6 @@ export default function Header() {
                 stays beside it as a quiet link, because a visible local number
                 is still a trust signal and still has to match the Google
                 Business Profile. */}
-            <div className="hidden md:flex items-center justify-end gap-3">
               <NicheCtaButton
                 from="header"
                 variant="pill"
@@ -285,7 +469,9 @@ export default function Header() {
                   className={`${mobileLinkClass} flex items-center justify-between`}
                   aria-expanded={mobileWorkOpen}
                 >
-                  <span>Who I Help</span>
+                  <span key={selected ?? "menu"} className="nav-swap">
+                    {selected ?? "Who I Help"}
+                  </span>
                   <span
                     className={`inline-block transition-transform duration-200 text-sm ${
                       mobileWorkOpen ? "rotate-180" : ""

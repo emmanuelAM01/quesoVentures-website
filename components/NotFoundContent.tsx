@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Header from "components/Header";
 import Footer from "components/Footer";
 import NicheCtaButton from "components/NicheCtaButton";
 
@@ -19,7 +18,6 @@ export default function NotFoundContent() {
 
   return (
     <div className="flex flex-col min-h-screen bg-lightBG dark:bg-darkBG">
-      <Header />
       <main className="flex-1 flex items-center">
         <section className="container mx-auto px-4 py-24">
           <div

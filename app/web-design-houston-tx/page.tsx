@@ -105,7 +105,7 @@ const data: GeoPageData = {
     },
     {
       q: "How does this start?",
-      a: "Send me your business name. I send back what someone searching for you right now actually finds, and what an AI assistant says when asked to recommend someone like you. If it looks worth fixing, I build a preview before we ever talk numbers.",
+      a: "Send your business name through the form. I look at what someone searching for you in Houston right now actually finds, and what an AI assistant says when asked to recommend a business like yours, then I get in touch with what I found. We go from there. Nothing to pay to have that conversation.",
     },
   ],
   heroImage: { src: "/hero/houston.jpg", alt: "Downtown Houston skyline" },

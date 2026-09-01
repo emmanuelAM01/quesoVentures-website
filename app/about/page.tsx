@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import Header from "components/Header";
 import Footer from "components/Footer";
 import Reveal from "components/Reveal";
 import AboutPortrait from "components/AboutPortrait";
@@ -97,7 +96,6 @@ export default function AboutPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Header />
       <main>
         {/* Intro */}
         <section className="container mx-auto px-4 pt-24 pb-16">

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Header from "components/Header";
 import Footer from "components/Footer";
 import FreeAudit from "components/FreeAudit";
 import Reveal from "components/Reveal";
@@ -168,7 +167,6 @@ export default function ServicesPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Header />
       <main>
         <PageHero
           headline="From invisible to obvious."

@@ -85,7 +85,7 @@ const data: GeoPageData = {
     },
     {
       q: "How does this start?",
-      a: "I take a free look at where you stand, your site, your Google profile, and who currently outranks you in Atascocita, and build a preview of what your business could look like online. Then you decide. No pressure.",
+      a: "Send your business name through the form. I look at what someone searching in Atascocita right now actually finds, and who is outranking you, then I get in touch with what I found. We go from there. Nothing to pay to have that conversation.",
     },
   ],
   heroImage: { src: "/hero/Atascocita-Texas.jpg", alt: "Atascocita, Texas" },

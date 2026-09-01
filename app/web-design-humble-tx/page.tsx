@@ -85,7 +85,7 @@ const data: GeoPageData = {
     },
     {
       q: "How does this start?",
-      a: "I take a free look at your current website, your Google presence, and who's outranking you in Humble, then I build a preview of what your business could look like online before we ever talk numbers. You see something real, then you decide.",
+      a: "Send your business name through the form. I look at what someone searching in Humble right now actually finds, and who is outranking you, then I get in touch with what I found. We go from there. Nothing to pay to have that conversation.",
     },
   ],
   heroImage: { src: "/hero/humble.JPG", alt: "Humble, Texas" },

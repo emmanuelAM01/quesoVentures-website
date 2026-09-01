@@ -83,7 +83,7 @@ const data: IndustryPageData = {
     },
     {
       "q": "How does this start?",
-      "a": "I take a free look at your site, your Google profile, and whoever currently outranks you, then build a preview of what your practice could look like online. Then you decide. Call (281) 203-4531."
+      "a": "Send your practice name through the form. I look at what someone searching for a provider near you actually finds right now, and what an AI assistant says when asked to recommend one, then I get in touch with what I found. We go from there. Nothing to pay to have that conversation."
     }
   ],
   heroImage: { src: "/hero/clinics.jpg", alt: "A clinic treatment room" },

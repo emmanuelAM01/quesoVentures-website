@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Analytics } from "@vercel/analytics/next";
+import Header from "components/Header";
 import AboutModal from "components/AboutModal";
 import ContactModal from "components/ContactModal";
 import ConsoleEasterEgg from "components/ConsoleEasterEgg";
@@ -44,7 +45,32 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-lightAccent dark:bg-darkAccent min-h-screen overflow-x-hidden">
         <ThemeProvider attribute="class" defaultTheme="light">
-          {children}
+          {/*
+            The header lives here, not in each page.
+
+            It used to be rendered by every page and every template, which meant
+            every navigation unmounted it and built a new one. Nothing in it
+            could ever carry across a route change — so the nav could not slide
+            from centred to right when you picked a trade, it could only appear
+            already moved. One instance above the router makes the bar a fixed
+            piece of furniture the pages move underneath.
+
+            Two routes opt out inside the component: /studios brings its own
+            chrome and /foundCode uses SimpleHeader.
+          */}
+          {/*
+            The site ground, behind the bar as well as the page.
+
+            body is painted house red so an overscroll bounce shows paint rather
+            than white. That was invisible while every page wrapped its own
+            header in its own background; with the bar hoisted up here, the strip
+            around it went red on any page whose first section does not tuck
+            under it. Heroes that do tuck under still cover this.
+          */}
+          <div className="bg-lightBG dark:bg-darkBG">
+            <Header />
+            {children}
+          </div>
           <AboutModal />
           <ContactModal />
           <ConsoleEasterEgg />

@@ -1,4 +1,3 @@
-import Header from "components/Header";
 import Footer from "components/Footer";
 import FreeAudit from "components/FreeAudit";
 import FaqDeck from "components/FaqDeck";
@@ -105,7 +104,6 @@ export default function CityPageTemplate({ data }: { data: CityPageData }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Header />
       <main>
         <PageHero
           headline={headline}
