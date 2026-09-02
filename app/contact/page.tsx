@@ -10,9 +10,9 @@ import {
   breadcrumbSchema,
 } from "components/businessInfo";
 
-const TITLE = "Contact Queso Ventures | Call (281) 203-4531";
+const TITLE = "Contact Queso Ventures | Houston TX";
 const DESCRIPTION =
-  "Send a message and I reply within 24 hours. Websites, SEO, and AI-SEO for Houston area businesses, built by a software engineer.";
+  "Send your business name and I reply within 24 hours. Websites, SEO, and AI-SEO for Houston area businesses, built by a software engineer.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -58,68 +58,81 @@ export default function ContactPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main>
-        {/* Deliberately not a full-height hero. Everything worth knowing is
-            one screen: how to reach me, when, and a box to type in. */}
+        {/*
+          The form is the page now, and the phone is a detail on it.
+
+          It used to open with "You call, I answer." over a 48px phone number,
+          with the form off to one side under the heading "Rather write it
+          out?" — which made the form the fallback. That is backwards on every
+          count: every unqualified call this number has produced has been spam,
+          the form is what the entire site drives to, and a page that leads with
+          a number is asking to be phoned by the wrong people.
+
+          One column, centred, because that is how every other call to action on
+          this site is built. The details sit underneath in one quiet row for
+          the person who already decided and is just looking for the address.
+        */}
         <section className="container mx-auto px-4 pt-36 pb-24">
-          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-14 lg:gap-20 items-start">
-            <div>
-              <h1 className="font-sans text-4xl sm:text-5xl lg:text-6xl tracking-tight text-lightText dark:text-darkText">
-                You call, I answer.
+          <div className="mx-auto max-w-xl">
+            <div className="text-center">
+              <h1 className="font-sans text-4xl sm:text-5xl tracking-tight text-balance text-lightText dark:text-darkText">
+                Tell me about your business.
               </h1>
-              <p className="mt-6 text-xl sm:text-2xl font-light text-lightTextMuted dark:text-darkTextMuted">
-                No account managers, no ticket queue, no phone tree.
+              <p className="mx-auto mt-6 max-w-lg text-xl font-light text-lightTextMuted dark:text-darkTextMuted">
+                I&apos;ll look at where you show up today and get back to you.
+                Free either way.
               </p>
-
-              <CallLink
-                from="contact_page"
-                className="mt-10 block text-4xl sm:text-5xl font-semibold tracking-tight text-lightText dark:text-darkText hover:text-lightButton dark:hover:text-darkButton transition-colors whitespace-nowrap"
-              />
-
-              <dl className="mt-10 space-y-5 text-lg">
-                <div className="flex flex-wrap gap-x-3">
-                  <dt className="font-semibold text-lightText dark:text-darkText">
-                    Email
-                  </dt>
-                  <dd>
-                    <a
-                      href={BUSINESS.emailHref}
-                      className="inline-block py-1.5 font-light text-lightTextMuted dark:text-darkTextMuted hover:text-lightText dark:hover:text-darkText transition-colors"
-                    >
-                      {BUSINESS.email}
-                    </a>
-                  </dd>
-                </div>
-                <div className="flex flex-wrap gap-x-3">
-                  <dt className="font-semibold text-lightText dark:text-darkText">
-                    Hours
-                  </dt>
-                  <dd className="font-light text-lightTextMuted dark:text-darkTextMuted">
-                    Monday to Saturday, 8am to 7pm
-                  </dd>
-                </div>
-                <div className="flex flex-wrap gap-x-3">
-                  <dt className="font-semibold text-lightText dark:text-darkText">
-                    Based
-                  </dt>
-                  <dd className="font-light text-lightTextMuted dark:text-darkTextMuted">
-                    {BUSINESS.addressLine}, working nationwide
-                  </dd>
-                </div>
-              </dl>
             </div>
 
             <Glow color={PAINT.rossoCorsa.hex} radius="rounded-3xl" lift={false} spread={480}>
-            <div className="relative rounded-3xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark p-8 sm:p-10">
-              <h2 className="text-2xl sm:text-3xl text-lightText dark:text-darkText mb-3">
-                Rather write it out?
-              </h2>
-              <p className="text-lg font-light text-lightTextMuted dark:text-darkTextMuted mb-8">
-                Tell me what you&apos;re working with and I&apos;ll take a free
-                look at where you stand.
-              </p>
+            <div className="relative mt-12 rounded-3xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark p-8 sm:p-10">
               <ContactForm />
             </div>
             </Glow>
+
+
+            <dl className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-base">
+              <div className="flex gap-2">
+                <dt className="font-semibold text-lightText dark:text-darkText">
+                  Email
+                </dt>
+                <dd>
+                  <a
+                    href={BUSINESS.emailHref}
+                    className="inline-block py-1.5 font-light text-lightTextMuted transition-colors hover:text-lightText dark:text-darkTextMuted dark:hover:text-darkText"
+                  >
+                    {BUSINESS.email}
+                  </a>
+                </dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="font-semibold text-lightText dark:text-darkText">
+                  Phone
+                </dt>
+                <dd>
+                  <CallLink
+                    from="contact_page"
+                    className="inline-block py-1.5 font-light text-lightTextMuted transition-colors hover:text-lightText dark:text-darkTextMuted dark:hover:text-darkText"
+                  />
+                </dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="font-semibold text-lightText dark:text-darkText">
+                  Hours
+                </dt>
+                <dd className="py-1.5 font-light text-lightTextMuted dark:text-darkTextMuted">
+                  Monday to Saturday, 8am to 7pm
+                </dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="font-semibold text-lightText dark:text-darkText">
+                  Based
+                </dt>
+                <dd className="py-1.5 font-light text-lightTextMuted dark:text-darkTextMuted">
+                  {BUSINESS.addressLine}
+                </dd>
+              </div>
+            </dl>
           </div>
         </section>
       </main>
