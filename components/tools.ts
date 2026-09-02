@@ -38,22 +38,22 @@ export const TOOLS: Tool[] = [
   {
     id: "rewards",
     name: "Rewards",
-    line: "A punch card that lives on their phone, and a text when they are close to earning something.",
+    line: "A virtual punch card that lives on their phone, and a text when they are close to earning something.",
   },
   {
     id: "checkin",
-    name: "Check-in",
-    line: "They tap in at the counter. The visit counts itself and they know exactly why to come back.",
+    name: "Memberships",
+    line: "They tap to check in at the counter. They get their reward, and you know how to keep them coming back.",
   },
   {
     id: "frontdesk",
     name: "AI front desk",
-    line: "Answers the questions that come in while your hands are busy, in your voice, at 9pm.",
+    line: "Answers the questions or books slots while your hands are busy running your business.",
   },
   {
     id: "booking",
     name: "Booking",
-    line: "They pick a time and get a confirmation. No phone tag, no missed job.",
+    line: "They pick a time and get a confirmation. You are updated every step of the way.",
   },
   {
     id: "invoicing",
@@ -64,7 +64,7 @@ export const TOOLS: Tool[] = [
     id: "qrs",
     name: "QRS",
     full: "Queso Revenue System",
-    line: "Upload your numbers. It finds what is leaking, what is underpriced, and what to do about both.",
+    line: "Upload your numbers. It finds what is working, what is leaking, and what to do about it.",
   },
   /*
     Last on purpose. The six above are things that exist; this one is the

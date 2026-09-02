@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FaCheck, FaRegFileExcel, FaArrowUp, FaArrowDown } from "react-icons/fa6";
+import {
+  FaCheck,
+  FaRegFileExcel,
+  FaArrowUp,
+  FaArrowDown,
+  FaTriangleExclamation,
+} from "react-icons/fa6";
 import { HiSparkles } from "react-icons/hi2";
 import { PAINT } from "./livery";
 import { ASKS, TOOLS, type Tool } from "./tools";
@@ -304,11 +310,35 @@ function Invoicing({ on }: { on: boolean }) {
   );
 }
 
-const FINDINGS = [
-  { dir: "down" as const, label: "Two tools doing the same job", value: "$240 / mo" },
-  { dir: "up" as const, label: "Detail package priced under the market", value: "$1,100 / mo" },
-  { dir: "down" as const, label: "Invoices going out four days late", value: "3 accounts" },
+/**
+ * What an audit actually hands back, in the order it hands it back.
+ *
+ * Three tones, and the order is the point: what is working, what is quietly
+ * leaking, then what is costing real money. An all-red list reads as an
+ * accusation and nobody books a call to be told they are bad at running their
+ * own shop. Leading with the healthy line is also honest about what this tool
+ * does — most of what it finds is fine, and the value is knowing which part
+ * is not.
+ *
+ * Every line here is a thing that genuinely turns up in small-business books:
+ * two overlapping subscriptions nobody cancelled, invoices going out late
+ * enough to hurt cash flow, a utility that crept up and never got questioned.
+ * Swap freely, but keep one of each tone and keep the numbers plausible for a
+ * shop, not for a chain.
+ */
+type Tone = "good" | "watch" | "bad";
+
+const FINDINGS: { tone: Tone; label: string; value: string }[] = [
+  { tone: "good", label: "Revenue steady, no big swings", value: "12 months" },
+  { tone: "watch", label: "Two subscriptions doing the same job", value: "$240 / mo" },
+  { tone: "bad", label: "Invoices going out four days late", value: "3 accounts" },
 ];
+
+const TONE: Record<Tone, { hex: string; Icon: typeof FaArrowUp }> = {
+  good: { hex: PAINT.verdeMantis.hex, Icon: FaArrowUp },
+  watch: { hex: PAINT.gialloOrion.hex, Icon: FaTriangleExclamation },
+  bad: { hex: PAINT.rossoCorsa.hex, Icon: FaArrowDown },
+};
 
 function Qrs({ on }: { on: boolean }) {
   const [shown, setShown] = useState(0);
@@ -345,12 +375,12 @@ function Qrs({ on }: { on: boolean }) {
           >
             <span
               className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-white"
-              style={{
-                backgroundColor:
-                  f.dir === "up" ? PAINT.verdeMantis.hex : PAINT.rossoCorsa.hex,
-              }}
+              style={{ backgroundColor: TONE[f.tone].hex }}
             >
-              {f.dir === "up" ? <FaArrowUp size={10} /> : <FaArrowDown size={10} />}
+              {(() => {
+                const Icon = TONE[f.tone].Icon;
+                return <Icon size={10} />;
+              })()}
             </span>
             <p className="min-w-0 flex-1 truncate text-[13px] text-lightText dark:text-darkText">
               {f.label}
@@ -365,6 +395,11 @@ function Qrs({ on }: { on: boolean }) {
       {/*
         The bench, not the price.
 
+        "Prepared by" rather than "second opinion": the bench is who reads the
+        numbers in the first place, not an upsell bolted on after. A second
+        opinion is something you go looking for when you doubt the first one,
+        which is the opposite of the impression this panel should leave.
+
         There is a subscription behind this line and it is deliberately not on
         the page. The $500 plan is the number this site is teaching people; a
         second figure in a carousel panel turns the section into a price list
@@ -376,8 +411,7 @@ function Qrs({ on }: { on: boolean }) {
         className={`mt-1 border-t border-lightBorder pt-2.5 text-center text-[11px] leading-snug transition-opacity duration-500 dark:border-darkBorder ${muted}`}
         style={{ opacity: shown > FINDINGS.length ? 1 : 0 }}
       >
-        Second opinion from Harvard economists, Wharton MBAs, licensed CPAs, and
-        former logistics CFOs.
+        Prepared by Harvard economists, Wharton MBAs, CPAs, and CFOs. (a bunch of number nerds)
       </p>
     </div>
   );
