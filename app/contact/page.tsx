@@ -72,8 +72,17 @@ export default function ContactPage() {
           this site is built. The details sit underneath in one quiet row for
           the person who already decided and is just looking for the address.
         */}
-        <section className="container mx-auto px-4 pt-36 pb-24">
-          <div className="mx-auto max-w-xl">
+        {/*
+          Centred in what is left of the screen after the bar.
+
+          The block is shorter than a viewport, so pinning it to the top left a
+          field of cream under it and pushed the headline up under the sticky
+          header. min-h is the viewport minus the bar's 76px, so the whole thing
+          sits in the middle of the space it actually has, and py-24 keeps it
+          clear of the bar on a short screen where the content wins.
+        */}
+        <section className="container mx-auto flex min-h-[calc(100svh-76px)] items-center px-4 py-24">
+          <div className="mx-auto w-full max-w-xl">
             <div className="text-center">
               <h1 className="font-sans text-4xl sm:text-5xl tracking-tight text-balance text-lightText dark:text-darkText">
                 Tell me about your business.
@@ -114,22 +123,6 @@ export default function ContactPage() {
                     from="contact_page"
                     className="inline-block py-1.5 font-light text-lightTextMuted transition-colors hover:text-lightText dark:text-darkTextMuted dark:hover:text-darkText"
                   />
-                </dd>
-              </div>
-              <div className="flex gap-2">
-                <dt className="font-semibold text-lightText dark:text-darkText">
-                  Hours
-                </dt>
-                <dd className="py-1.5 font-light text-lightTextMuted dark:text-darkTextMuted">
-                  Monday to Saturday, 8am to 7pm
-                </dd>
-              </div>
-              <div className="flex gap-2">
-                <dt className="font-semibold text-lightText dark:text-darkText">
-                  Based
-                </dt>
-                <dd className="py-1.5 font-light text-lightTextMuted dark:text-darkTextMuted">
-                  {BUSINESS.addressLine}
                 </dd>
               </div>
             </dl>
