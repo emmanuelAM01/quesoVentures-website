@@ -29,61 +29,61 @@ const data: IndustryPageData = {
   "industry": "Construction, Roofing & Flooring Companies",
   "slug": "/seo-for-contractors-houston",
   "headline": "Referrals are not a plan.",
-  "intro": "Websites and local search for construction, roofing, and flooring companies across Northeast Houston, residential and commercial. A second pipeline that keeps producing when the referrals go quiet.",
+  "intro": "Websites, SEO, and AI-SEO for construction, roofing, and flooring companies across Northeast Houston, residential and commercial. A second pipeline that keeps producing when the referrals go quiet.",
   "prefill": "I run a construction, roofing, or flooring company and want my website to actually get me calls.",
-  "serviceName": "Web Design & Local SEO for Construction, Roofing and Flooring Companies",
+  "serviceName": "Websites, SEO & AI-SEO for Construction, Roofing and Flooring Companies",
   "painPoints": [
     {
-      "heading": "Some months are packed, some are dead, and you can't predict which",
-      "body": "Referrals arrive when they arrive. There is no dial to turn when the schedule opens up in three weeks and nothing is booked. Search is that dial, and it keeps working in the slow months."
+      "heading": "Some months are packed, some are dead",
+      "body": "And you cannot predict which, because referrals arrive on their own schedule."
     },
     {
-      "heading": "Homeowners call the first credible result and stop",
-      "body": "After a storm or a burst pipe, nobody collects five bids. They search, they call whoever looks real, and they hire. If you are not on that first screen you never got the chance to quote."
+      "heading": "Homeowners call the first credible result",
+      "body": "Then they stop calling. Third place gets a voicemail nobody returns."
     },
     {
-      "heading": "Commercial buyers vet you online before they ever call",
-      "body": "A property manager awarding a flooring or re-roof contract will look you up first. If there is nothing to find, or what they find looks like a 2009 template, you are out before the conversation starts."
+      "heading": "Commercial buyers check you out first",
+      "body": "They read your site before they ever pick up the phone."
     }
   ],
   "whatChanges": [
     {
-      "title": "You show up for the work you actually want",
-      "body": "Roof replacement, storm damage, commercial re-roof, hardwood, tile, LVP, epoxy, remodels, additions. Each is a separate search with separate intent. Covering them individually is what multiplies the calls."
+      "title": "You show up for the work you want",
+      "body": "Roofing, flooring, remodels, and the jobs worth driving for."
     },
     {
-      "title": "Your website makes people call instead of comparing",
-      "body": "Clear proof of work, service areas, licensing, and a tappable number at the top. Most contractor sites are hard to use on a phone, which is where nearly every one of these searches happens."
+      "title": "Your site asks for the call",
+      "body": "Clear message, real photos, obvious next step, fast on a phone."
     },
     {
-      "title": "Commercial and residential get separate paths",
-      "body": "A homeowner and a property manager want completely different things. I build both so neither one has to dig through the other's content to find what they came for."
+      "title": "Commercial and residential split",
+      "body": "Two very different buyers, two different pages. Most contractors build one."
     },
     {
-      "title": "You get a pipeline that isn't hostage to word of mouth",
-      "body": "Referrals stay your best leads. Search becomes the floor underneath them, so a slow month for referrals is not a slow month for revenue."
+      "title": "A pipeline that is not hostage to referrals",
+      "body": "Something that keeps producing when the phone goes quiet."
     }
   ],
   "faqItems": [
     {
       "q": "I get plenty of work from referrals. Why bother with this?",
-      "a": "Referrals are the best leads you will ever get, and they are completely outside your control. Search is the part you can control. Most contractors add it precisely so a quiet quarter stops being a crisis."
+      "a": "Referrals dry up between seasons. Search is what fills the calendar when the phone goes quiet."
     },
     {
       "q": "I already have a Google listing. Why am I still not showing up?",
-      "a": "A listing alone does very little. Categories, service descriptions, photos, reviews, and a website that reinforces all of it are what decide whether Google puts you in the top three. Those pieces have to work together."
+      "a": "Having a listing and having a good one are different things. Categories, photos, reviews, and the site behind it decide the top three."
     },
     {
       "q": "Do you handle commercial as well as residential?",
-      "a": "Yes, and they need different pages. The searches, the proof, and the decision process are not the same. Building both is usually where the biggest untapped work is."
+      "a": "Yes. They are different searches and different pages, and most contractors only ever build one."
     },
     {
       "q": "What does it cost?",
-      "a": "Simple monthly plans at $500 a month. Agencies charge $1,500 or more and still have no answer for customers who ask an AI assistant who to call. You will know your exact number before anything starts."
+      "a": "$500 a month for the website, getting you found on Google and in AI answers, and the tools I build for your business. No setup fee."
     },
     {
       "q": "How does this start?",
-      "a": "Send your company name through the form. I look at what a homeowner searching for your trade actually finds right now, and what an AI assistant says when asked to recommend someone, then I get in touch with what I found. We go from there. Nothing to pay to have that conversation."
+      "a": "Send your company name through the form. I look at where you show up today and get in touch with what I found. Free either way."
     }
   ],
   heroImage: { src: "/hero/contractorsHero.jpg", alt: "A contractor on site" },

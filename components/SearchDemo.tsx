@@ -68,7 +68,7 @@ export default function SearchDemo() {
             type="button"
             onClick={() => setSource(label)}
             aria-pressed={source === label}
-            className={`text-xs font-medium px-3 py-1 rounded-full border transition-colors ${
+            className={`inline-flex min-h-[36px] items-center text-xs font-medium px-3.5 rounded-full border transition-colors ${
               source === label
                 ? "border-lightAccent/40 bg-lightAccent/5 text-lightAccent dark:border-darkAccent/50 dark:bg-darkAccent/10 dark:text-darkAccent"
                 : "border-lightBorder dark:border-darkBorder text-lightTextMuted dark:text-darkTextMuted hover:text-lightText dark:hover:text-darkText"
@@ -128,7 +128,7 @@ export default function SearchDemo() {
               e.stopPropagation();
               takeOver();
             }}
-            className="ml-auto shrink-0 whitespace-nowrap rounded-full bg-lightButton px-3 py-1 text-xs font-semibold text-lightBG transition-colors hover:bg-lightButtonHover dark:bg-darkButton dark:text-darkBG dark:hover:bg-darkButtonHover"
+            className="ml-auto inline-flex min-h-[36px] shrink-0 items-center whitespace-nowrap rounded-full bg-lightButton px-3.5 text-xs font-semibold text-lightBG transition-colors hover:bg-lightButtonHover dark:bg-darkButton dark:text-darkBG dark:hover:bg-darkButtonHover"
           >
             Try yours
           </button>
@@ -141,7 +141,7 @@ export default function SearchDemo() {
               e.stopPropagation();
               commit();
             }}
-            className="shrink-0 rounded-full bg-lightButton px-3 py-1 text-xs font-semibold text-lightBG transition-colors hover:bg-lightButtonHover dark:bg-darkButton dark:text-darkBG dark:hover:bg-darkButtonHover"
+            className="inline-flex min-h-[36px] shrink-0 items-center rounded-full bg-lightButton px-3.5 text-xs font-semibold text-lightBG transition-colors hover:bg-lightButtonHover dark:bg-darkButton dark:text-darkBG dark:hover:bg-darkButtonHover"
           >
             Enter
           </button>

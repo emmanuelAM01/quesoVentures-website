@@ -550,7 +550,7 @@ export default function ToolCarousel({ running }: { running: boolean }) {
         one strip three pixels tall. The name of what you are looking at moves
         under the panel, where it can be read at a size that matters.
       */}
-      <div className="flex gap-[3px]">
+      <div className="-my-2 flex gap-[3px]">
         {TOOLS.map((t, n) => (
           <button
             key={t.id}
@@ -562,7 +562,10 @@ export default function ToolCarousel({ running }: { running: boolean }) {
             aria-label={t.full ? `${t.name}, ${t.full}` : t.name}
             title={t.full ?? t.name}
             aria-pressed={n === i}
-            className="group flex-1 py-2"
+            /* 44px tall, not the 19px the 3px bar and its padding came to.
+               The bar is the only thing you can see; the button is the thing
+               you have to hit with a thumb. */
+            className="group flex min-h-[44px] flex-1 items-center"
           >
             <span className="block h-[3px] w-full overflow-hidden rounded-full bg-black/10 transition-colors group-hover:bg-black/20 dark:bg-white/15 dark:group-hover:bg-white/25">
               <span

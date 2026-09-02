@@ -112,7 +112,7 @@ function SearchCard({ on }: { on: boolean }) {
               e.stopPropagation();
               takeOver();
             }}
-            className="ml-auto shrink-0 whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold text-white"
+            className="ml-auto inline-flex min-h-[36px] shrink-0 items-center whitespace-nowrap rounded-full px-3.5 text-xs font-semibold text-white"
             style={{ backgroundColor: PAINT.rossoCorsa.hex }}
           >
             Try yours
@@ -126,7 +126,7 @@ function SearchCard({ on }: { on: boolean }) {
               e.stopPropagation();
               commit();
             }}
-            className="ml-auto shrink-0 rounded-full px-3 py-1 text-xs font-semibold text-white"
+            className="ml-auto inline-flex min-h-[36px] shrink-0 items-center rounded-full px-3.5 text-xs font-semibold text-white"
             style={{ backgroundColor: PAINT.rossoCorsa.hex }}
           >
             Enter
@@ -148,7 +148,7 @@ function SearchCard({ on }: { on: boolean }) {
               <button
                 type="button"
                 onClick={() => pick(s)}
-                className="block w-full px-4 py-2.5 text-left transition-colors hover:bg-black/[0.04]"
+                className="block w-full px-4 py-3 text-left transition-colors hover:bg-black/[0.04]"
               >
                 <span className="block text-sm font-medium text-black/85">
                   {s.name}

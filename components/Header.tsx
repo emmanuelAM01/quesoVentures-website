@@ -225,7 +225,7 @@ export default function Header() {
             <div className="flex shrink-0 items-center justify-start">
               <Link
                 href="/"
-                className="relative flex items-center gap-2 px-1 py-2 text-lg font-medium text-lightText dark:text-darkText transition-colors
+                className="relative flex items-center gap-2 px-1 py-3 text-lg font-medium text-lightText dark:text-darkText transition-colors
                   after:content-[''] after:absolute after:left-1 after:right-1 after:bottom-1 after:h-[2px]
                   after:origin-left after:scale-x-0 after:transition-transform after:duration-200
                   after:bg-lightAccent dark:after:bg-darkAccent
@@ -371,20 +371,51 @@ export default function Header() {
                       </div>
                       <div>
                         <p className={dropdownHeadingClass}>By area</p>
-                        {ALL_NEIGHBORHOODS.map((item) => (
-                          <Link
-                            key={item.slug}
-                            href={item.slug}
-                            onClick={() => setWorkOpen(false)}
-                            aria-current={item.slug === pathname ? "page" : undefined}
-                            className={`${dropdownLinkClass} ${
-                              item.slug === pathname
-                                ? "font-medium text-lightText dark:text-darkText"
-                                : ""
-                            }`}
-                          >
-                            {item.name}
-                          </Link>
+                        {/*
+                          Metro first, towns underneath it.
+
+                          The column used to be a flat list of six towns with no
+                          Houston in it at all, so the one page that covers the
+                          whole metro was reachable only from the footer — which
+                          is backwards, because it is the parent of every other
+                          page in the group and the one carrying the broadest
+                          search. The nesting here is the same tree that
+                          places.ts already describes and that the breadcrumbs
+                          and the sitemap already follow; the nav was the last
+                          place still pretending it was flat.
+
+                          It also scales: the day a second metro is added, it
+                          arrives as another block rather than eleven more towns
+                          in one undifferentiated stack.
+                        */}
+                        {CITIES.map((city) => (
+                          <div key={city.slug} className="mb-1 last:mb-0">
+                            <Link
+                              href={city.slug}
+                              onClick={() => setWorkOpen(false)}
+                              aria-current={city.slug === pathname ? "page" : undefined}
+                              className={`${dropdownLinkClass} font-medium text-lightText dark:text-darkText`}
+                            >
+                              All of {city.name}
+                            </Link>
+                            <div className="ml-1 border-l border-lightBorder pl-3 dark:border-darkBorder">
+                              {city.neighborhoods.map((item) => (
+                                <Link
+                                  key={item.slug}
+                                  href={item.slug}
+                                  onClick={() => setWorkOpen(false)}
+                                  aria-current={item.slug === pathname ? "page" : undefined}
+                                  className={`${dropdownLinkClass} ${
+                                    item.slug === pathname
+                                      ? "font-medium text-lightText dark:text-darkText"
+                                      : ""
+                                  }`}
+                                >
+                                  {item.name}
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
                         ))}
                       </div>
                     </div>
@@ -492,15 +523,28 @@ export default function Header() {
                         {item.label}
                       </Link>
                     ))}
-                    {ALL_NEIGHBORHOODS.map((item) => (
-                      <Link
-                        key={item.slug}
-                        href={item.slug}
-                        onClick={closeMobile}
-                        className="block px-3 py-2.5 text-base text-lightTextMuted dark:text-darkTextMuted rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                      >
-                        {item.name}
-                      </Link>
+                    {CITIES.map((city) => (
+                      <div key={city.slug}>
+                        <Link
+                          href={city.slug}
+                          onClick={closeMobile}
+                          className="block px-3 py-2.5 text-base font-medium text-lightText dark:text-darkText rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                        >
+                          All of {city.name}
+                        </Link>
+                        <div className="ml-3 border-l border-lightBorder pl-2 dark:border-darkBorder">
+                          {city.neighborhoods.map((item) => (
+                            <Link
+                              key={item.slug}
+                              href={item.slug}
+                              onClick={closeMobile}
+                              className="block px-3 py-2.5 text-base text-lightTextMuted dark:text-darkTextMuted rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                            >
+                              {item.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
                     ))}
                   </div>
                 )}

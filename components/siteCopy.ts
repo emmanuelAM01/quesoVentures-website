@@ -36,7 +36,7 @@ export function siteCopy({ city }: PlaceContext = {}) {
       headline: "More first-time customers. More repeat customers.",
       // Where the search terms live, since the headline carries none. Someone
       // who searched "website designer" needs to see the word on landing.
-      sub: `${where} web design and local SEO, built by a software engineer.`,
+      sub: `Websites, SEO, and AI-SEO for ${where}, built by a software engineer.`,
       cta: "Get My Free Report",
       ctaPrefill:
         "I'd like the free report on where my business shows up.",
@@ -75,16 +75,16 @@ export function siteCopy({ city }: PlaceContext = {}) {
      * "included".
      */
     showcase: {
-      heading: "The tools the big chains have.",
-      sub: "Built for a business your size.",
+      heading: "Queso Ventures Recipe",
+      sub: "Measured for you",
       cards: [
         {
-          title: "You come up first.",
-          body: `Google, Maps, and the AI assistants people now ask instead. When someone ${nearYou} looks for what you do, they find you.`,
+          title: "Apply a strong foundation layer.",
+          body: `Google, Maps, and the AI chatbots people now ask instead. When someone ${nearYou} looks for what you do, they find you.`,
         },
         {
-          title: "Then the tools run the rest.",
-          body: "Rewards, a front desk that answers at 9pm, booking, invoicing, and a read on your own numbers. Added as your business needs them.",
+          title: "Then mix in some tools to taste.",
+          body: "Loyalty rewards, AI employees, appointment booking, invoicing, a deep dive on your finances, and more as your business needs them.",
         },
       ],
     },
@@ -116,16 +116,21 @@ export function siteCopy({ city }: PlaceContext = {}) {
        * Has to stand on its own: the pricing card does not render it any more,
        * and /services uses it as a whole paragraph with nothing above it.
        */
-      sub: `${PRICING.monthlyLabel} a month covers the website, your Google and AI visibility, and the tools I build for your business. No setup fee, no surprise invoices.`,
+      sub: `${PRICING.monthlyLabel} a month covers the foundation and the work that never stops: your website, your search rankings, and how AI tools find you. Then we sprinkle in the tools I build for your business.`,
+      /*
+        One line each, and that is a constraint rather than a preference: the
+        card is 672px wide and anything past about sixty characters wraps, which
+        turns a checklist into a paragraph with ticks down the side.
+
+        Note the backticks. The city line was written with ${city} inside a
+        plain double-quoted string, so it rendered the dollar sign and the
+        braces literally on every page.
+      */
       included: [
-        "Your website, built, hosted, and maintained",
-        "Google and Maps presence that gets you found",
-        "Set up so ChatGPT and Siri recommend you by name",
-        // Straight out of the terms, and the single best reason to pick a
-        // software engineer over an agency. It was in the contract and
-        // nowhere on the site.
-        "Custom tools built for your business over time",
-        "A monthly note on what's ranking and what's next",
+        "A website built, hosted, and sharpened every single day.",
+        "SEO and AI-SEO: found on Google, Maps, ChatGPT, and Siri.",
+        `Custom tools built for ${where} owners to keep earning dough.`,
+        "Analysis with clear next steps, not weightless statements.",
       ],
       cta: "Let's Talk First",
       ctaPrefill:
@@ -136,7 +141,7 @@ export function siteCopy({ city }: PlaceContext = {}) {
       // options are all real and all live in the portal's onboarding terms,
       // which is where a client actually meets them. A landing page that opens
       // with the rules loses the reader before the rules matter.
-      terms: `Nothing to pay until you've seen your report and what I'd build. ${PRICING.minimumMonths} month minimum, then month to month. Agencies charge ${PRICING.agencyAnchor} for less.`,
+      terms: `${PRICING.minimumMonths} month minimum, then we are month to month.`,
     },
 
     /**
@@ -155,8 +160,17 @@ export function siteCopy({ city }: PlaceContext = {}) {
      * public promise to everyone, it was not.
      */
     audit: {
-      heading: "See what your customers see.",
-      sub: "A free report on where you show up today.",
+      /*
+        A question, and the one the owner is already asking.
+
+        "See what your customers see" asked the reader to picture themselves as
+        somebody else looking for themselves, which is two hops of imagination
+        standing between them and a button. This is one hop: you do not know
+        where you come up, and the button tells you. It also names all three
+        surfaces the report actually covers, which the old pair never did.
+      */
+      heading: "Where do you show up?",
+      sub: "A free report on Google, Maps, and what AI tells people about you.",
       cta: "Get My Free Report",
       ctaPrefill:
         "I'd like the free report on where my business shows up.",
@@ -215,29 +229,29 @@ export function metaFor(
    */
   override: { title?: string; description?: string } = {}
 ) {
-  const withHook = `${place} Web Design & SEO, Built by an Engineer`;
-  const withPhone = `Web design and local SEO for ${place}. ${META_PROMISE} See a free preview of your site before you decide anything.`;
+  const withHook = `${place} Websites, SEO, & AI-SEO Built by an Engineer`;
+  const withPhone = `Websites, SEO, and AI-SEO for ${place}. ${META_PROMISE} A free report on where you show up today.`;
   return {
     title:
       override.title ??
-      (withHook.length <= TITLE_MAX ? withHook : `${place} Web Design & Local SEO`),
+      (withHook.length <= TITLE_MAX ? withHook : `${place} Websites, SEO, & AI-SEO`),
     description:
       override.description ??
       (withPhone.length <= DESC_MAX
         ? withPhone
-        : `Web design and local SEO for ${place}. ${META_PROMISE} Free preview, no commitment.`),
+        : `Websites, SEO, & AI-SEO for ${place}. ${META_PROMISE}`),
   };
 }
 
 /** For the industry pages, where the trade is the search term, not the town. */
 export function metaForIndustry(trade: string, titleTrade: string) {
-  const title = `${titleTrade} Web Design & SEO | Houston TX`;
-  const withPhone = `Web design and local SEO for Houston area ${trade}. ${META_PROMISE} See a free preview before you decide anything.`;
+  const title = `${titleTrade} Websites, SEO, & AI-SEO | Houston TX`;
+  const withPhone = `Websites, SEO, and AI-SEO for Houston area ${trade}. ${META_PROMISE}`;
   return {
     title,
     description:
       withPhone.length <= DESC_MAX
         ? withPhone
-        : `Web design and local SEO for Houston area ${trade}. ${META_PROMISE} Free preview, no commitment.`,
+        : `Websites, SEO, & AI-SEO for Houston area ${trade}. ${META_PROMISE}`,
   };
 }

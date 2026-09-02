@@ -52,7 +52,7 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
       {
         "@type": "Service",
         "@id": `${BUSINESS.url}${slug}#service`,
-        name: `Web Design & Local SEO, ${city}, TX`,
+        name: `Websites, SEO & AI-SEO, ${city}, TX`,
         provider: { "@id": `${BUSINESS.url}/#localbusiness` },
         serviceType: [
           "Web Design",
@@ -115,11 +115,15 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
               paint={PAINT.gialloOrion}
               className="max-w-4xl mx-auto"
             />
-            {postalCode && (
-              <p className="max-w-4xl mx-auto mt-8 text-lg text-[#B7C0C8]">
-                {city}, TX {postalCode}
-              </p>
-            )}
+            {/*
+              The visible "Atascocita, TX 77346" line is gone.
+
+              It was doing nothing a reader wanted and everything a reader
+              notices: a postcode printed under a sentence is the single most
+              recognisable tell of a page written for a search engine. The code
+              itself is still load-bearing — it is in this page's PostalAddress
+              schema below, which is where it was ever read.
+            */}
           </div>
         </section>
 

@@ -16,8 +16,8 @@ interface Props {
 
 export default function FaqDeck({
   items,
-  heading = "Questions, answered",
-  subheading = "Straight answers, no sales pitch.",
+  heading = "Common Questions",
+  subheading = "Things I've seen on the job",
 }: Props) {
   const [active, setActive] = useState(0);
   const n = items.length;

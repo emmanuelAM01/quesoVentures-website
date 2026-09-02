@@ -15,7 +15,7 @@ const CLICKS_TO_TRIGGER = 3;
 // The footer is dark in both themes now, so these stop being theme-aware.
 const columnHeading = "text-sm font-semibold text-[#F5F7FA] mb-4";
 const columnLink =
-  "block py-1.5 text-[15px] text-[#8A949E] transition-colors hover:text-[#F5F7FA]";
+  "block py-2.5 text-[15px] text-[#8A949E] transition-colors hover:text-[#F5F7FA]";
 /**
  * Neither of these lists is the whole story, and the footer is now the only
  * place they appear. Nobody should scan six towns, miss theirs, and conclude
@@ -86,7 +86,7 @@ const Footer = () => {
           */}
           <div className="grid gap-12 lg:grid-cols-[minmax(0,20rem),1fr] lg:gap-16">
             <div>
-              <Link href="/" className="inline-flex items-center gap-2.5">
+              <Link href="/" className="-my-1.5 inline-flex items-center gap-2.5 py-1.5">
                 <Image
                   src="/logo.png"
                   alt=""
@@ -100,8 +100,8 @@ const Footer = () => {
               </Link>
 
               <p className="mt-5 max-w-xs text-[15px] font-light leading-relaxed text-[#8A949E]">
-                Web design and local SEO for Houston area businesses, built by a
-                software engineer. Based in {BUSINESS.addressLine}.
+                Websites, SEO, and AI-SEO for Houston area businesses, built by
+                a software engineer. Based in {BUSINESS.addressLine}.
               </p>
             </div>
 
@@ -162,11 +162,11 @@ const Footer = () => {
                 <p className={columnHeading}>Support</p>
                 <CallLink
                   from="footer"
-                  className="block py-1.5 text-[15px] font-medium text-[#F5F7FA] transition-opacity hover:opacity-70"
+                  className="block py-2.5 text-[15px] font-medium text-[#F5F7FA] transition-opacity hover:opacity-70"
                 />
                 <a
                   href={BUSINESS.emailHref}
-                  className="block whitespace-nowrap py-1.5 text-[13px] text-[#8A949E] transition-colors hover:text-[#F5F7FA] sm:text-[15px]"
+                  className="block whitespace-nowrap py-2.5 text-[13px] text-[#8A949E] transition-colors hover:text-[#F5F7FA] sm:text-[15px]"
                 >
                   {BUSINESS.email}
                 </a>
@@ -182,10 +182,10 @@ const Footer = () => {
               >
                 &copy; {currentYear} Queso Ventures LLC
               </p>
-              <Link href="/privacy" className="transition-colors hover:text-[#F5F7FA]">
+              <Link href="/privacy" className="py-2 transition-colors hover:text-[#F5F7FA]">
                 Privacy
               </Link>
-              <Link href="/terms" className="transition-colors hover:text-[#F5F7FA]">
+              <Link href="/terms" className="py-2 transition-colors hover:text-[#F5F7FA]">
                 Terms
               </Link>
             </div>
@@ -196,7 +196,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="text-[#8A949E] transition-colors hover:text-[#F5F7FA]"
+                className="-m-2.5 flex h-10 w-10 items-center justify-center text-[#8A949E] transition-colors hover:text-[#F5F7FA]"
               >
                 <AiOutlineInstagram size={20} />
               </a>
@@ -205,14 +205,14 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="YouTube"
-                className="text-[#8A949E] transition-colors hover:text-[#F5F7FA]"
+                className="-m-2.5 flex h-10 w-10 items-center justify-center text-[#8A949E] transition-colors hover:text-[#F5F7FA]"
               >
                 <AiOutlineYoutube size={20} />
               </a>
               {/* Every client site carries this line. So does this one. */}
               <Link
                 href="/"
-                className="text-[14px] font-semibold text-[#F5F7FA] transition-colors hover:text-darkButton"
+                className="py-2 text-[14px] font-semibold text-[#F5F7FA] transition-colors hover:text-darkButton"
               >
                 Built By Queso Ventures
               </Link>

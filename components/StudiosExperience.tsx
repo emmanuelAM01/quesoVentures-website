@@ -375,11 +375,19 @@ export default function StudiosExperience() {
                 type="button"
                 onClick={() => goTo(i)}
                 aria-label={`Go to tool ${i + 1}`}
-                className={[
-                  "h-1 rounded-full transition-all duration-500",
-                  i === active ? "w-10 bg-gradient-to-r from-[#C4161C] to-[#FFD100]" : "w-4 bg-white/20 hover:bg-white/40",
-                ].join(" ")}
-              />
+                /* The visible pip is 4px tall; the button around it is 36, or
+                   nobody on a phone ever hits it. */
+                className="group -my-4 flex h-9 items-center"
+              >
+                <span
+                  className={[
+                    "block h-1 rounded-full transition-all duration-500",
+                    i === active
+                      ? "w-10 bg-gradient-to-r from-[#C4161C] to-[#FFD100]"
+                      : "w-4 bg-white/20 group-hover:bg-white/40",
+                  ].join(" ")}
+                />
+              </button>
             ))}
           </div>
           <button

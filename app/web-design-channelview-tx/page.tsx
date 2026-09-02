@@ -30,63 +30,62 @@ const data: GeoPageData = {
   slug: "/web-design-channelview-tx",
   postalCode: "77530",
   headline: "Channelview searches first.",
-  intro:
-    "Websites and local search for Channelview businesses, from Sheldon Road and Market Street out to Woodforest and the Beltway. I'm up the road, and I answer my own phone.",
+  intro: "Channelview finds you on a phone, or not at all.",
   prefill:
     "I run a business in Channelview and want more customers finding me online.",
   painPoints: [
     {
-      heading: "Channelview gets treated like an afterthought of Houston",
-      body: "Most web designers sell you a 'Houston' website and call it done. But nobody here searches 'Houston auto shop.' They search Channelview, or Sheldon, or just 'near me' while sitting on I-10. A page built for a metro of seven million does not win those searches.",
+      heading: "Everybody knows you, and everybody is not enough",
+      body: "The people who moved in this year have never heard your name."
     },
     {
-      heading: "The plants keep the area busy, but busy is not the same as found",
-      body: "Steady industrial work and steady traffic along the ship channel means real demand. It also means workers and families who are new to the area, do not know anybody yet, and pick whoever comes up first on their phone.",
+      heading: "Houston results bury you",
+      body: "Search Houston anything and you are on page four. Search Channelview and it is wide open."
     },
     {
-      heading: "You're losing searches to businesses in Baytown and East Houston",
-      body: "Customers here will drive fifteen minutes without thinking about it. If a shop in Baytown ranks for the search and you don't, that's your customer in their parking lot.",
-    },
+      heading: "Your competition has a real website",
+      body: "Not a better shop. A better first impression."
+    }
   ],
   whatChanges: [
     {
-      title: "You show up when Channelview searches for what you do",
-      body: "I build your website and Google Business Profile around what people here actually type, your service plus 'Channelview,' plus 'near me,' so you land in the top results instead of page three.",
+      title: "Channelview finds you first",
+      body: "Built for people who add their own town, because out here they do."
     },
     {
-      title: "Your website turns a visit into a phone call",
-      body: "Clear message, phone number that works with one tap, fast on mobile. Most local sites look fine and convert nobody. I fix the part that costs you money.",
+      title: "Your site asks for the call",
+      body: "Clear message, obvious next step, fast on a phone."
     },
     {
-      title: "AI assistants name your business",
-      body: "When somebody asks ChatGPT or their phone for a recommendation in Channelview, those tools read websites to decide who to name. I structure yours so it's you.",
+      title: "AI assistants name you",
+      body: "Structured so a phone asked for a recommendation here says your name."
     },
     {
-      title: "You deal with one person, start to finish",
-      body: "I'm in Atascocita, twenty minutes up the road. I'll come to your shop, learn how the business actually works, and you'll always have my direct number. $500 a month, no agency retainer.",
-    },
+      title: "You get a person, not a queue",
+      body: "One monthly price, and I answer my own messages."
+    }
   ],
   faqItems: [
     {
-      q: "Do people really search 'Channelview' instead of 'Houston'?",
-      a: "Constantly, and that's the whole opportunity. Almost nobody builds pages targeting Channelview specifically, so the competition is a fraction of what it is for Houston. Same effort, far better odds of landing on the first screen.",
+      q: "Do people really search Channelview instead of Houston?",
+      a: "Yes. When someone wants a shop close to home they add their own town, and out here that matters."
     },
     {
       q: "I've been here for years and everybody knows me. Why bother?",
-      a: "Your regulars are not the problem. The problem is the family that moved in last month, the worker on a new contract, the person whose usual shop just closed. They have nobody to ask, so they search. Whoever shows up gets the call.",
+      a: "Everyone who has been here knows you. The people who just moved in do not, and they are searching."
     },
     {
       q: "What does it cost?",
-      a: "Simple monthly plans at $500 a month. Agencies charge $1,500 or more and still have no answer for customers who ask an AI assistant who to call. You'll know your exact number before anything starts.",
+      a: "$500 a month for the website, getting you found on Google and in AI answers, and the tools I build for your business. No setup fee."
     },
     {
       q: "What kinds of businesses do you work with?",
-      a: "Local service businesses across Channelview and Northeast Houston, auto and wrap shops, contractors and trades, salons and med spas, food trucks, cleaning services, event venues, and local retailers. If customers find you by searching, we're a fit.",
+      a: "Local businesses whose customers find them by searching. Auto shops, contractors, salons, cleaners, food trucks, and plenty more."
     },
     {
       q: "How does this start?",
-      a: "Send your business name through the form. I look at what someone searching in Channelview right now actually finds, and who is outranking you, then I get in touch with what I found. We go from there. Nothing to pay to have that conversation.",
-    },
+      a: "Send your business name through the form. I look at where you show up today and get in touch with what I found. Free either way."
+    }
   ],
   heroImage: { src: "/hero/chanelview.avif", alt: "Channelview, Texas" },
 };

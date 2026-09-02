@@ -90,7 +90,7 @@ export const PRICING_META = `${PRICING.monthlyLabel} a month. Call ${BUSINESS.ph
  */
 export const MONTHLY_PLAN_OFFER = {
   "@type": "Offer" as const,
-  name: "Monthly Web Design & Local SEO Plan",
+  name: "Monthly Websites, SEO & AI-SEO Plan",
   availability: "https://schema.org/InStock",
   priceCurrency: "USD",
   price: String(PRICING.monthly),

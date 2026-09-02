@@ -5,9 +5,8 @@ import Reveal from "components/Reveal";
 import PageHero from "components/PageHero";
 import IndustryLinks from "components/IndustryLinks";
 import FaqDeck from "components/FaqDeck";
-import { SITE_COPY } from "components/siteCopy";
-import { MONTHLY_PLAN_OFFER } from "components/pricingCopy";
-import { liveryAt, PAINT } from "components/livery";
+import { MONTHLY_PLAN_OFFER, PRICING } from "components/pricingCopy";
+import { liveryAt } from "components/livery";
 import Glow from "components/Glow";
 import {
   BUSINESS,
@@ -18,11 +17,11 @@ import {
 import {
   FaGlobe,
   FaMapMarkerAlt,
-  FaChartLine,
+  FaWrench,
   FaMobileAlt,
 } from "react-icons/fa";
 
-const SERVICES_TITLE = "Web Design, Local SEO & Google Business Profile Services";
+const SERVICES_TITLE = "Websites, SEO, AI-SEO & Google Business Profile";
 const SERVICES_DESCRIPTION =
   "What I actually do: build the website, run your Google and Maps presence, and get you named by AI assistants. More customers, and more of them coming back.";
 
@@ -65,34 +64,34 @@ export const metadata: Metadata = {
  */
 const faqItems = [
   {
-    title: "What is the difference between web design and local SEO?",
+    title: "What is the difference between a website, SEO, and AI-SEO?",
     content:
-      "Web design is what people see once they arrive. Local SEO is what gets them there. A beautiful site nobody finds and a well ranked site nobody calls fail the same way, which is why both are in one plan rather than sold separately.",
+      "The website is what people see when they arrive. SEO is what gets them there from Google. AI-SEO is what gets you named when someone asks ChatGPT or Siri instead. You need all three, so all three are in one plan.",
   },
   {
     title: "Do you build the website yourself, or use a template?",
     content:
-      "I build it. I have spent seven years writing software for startups, fintech, and AI products, and your site is code I wrote rather than a theme with your logo dropped in. That is also why custom tools for your business are part of the plan instead of an upsell.",
+      "I build it. Seven years writing software, not a theme with your logo dropped on it. That is also why custom tools come with the plan instead of as an upsell.",
   },
   {
     title: "What is AI SEO, and is it different from normal SEO?",
     content:
-      "It overlaps but it is not the same. Google ranks pages; an AI assistant reads your site and decides whether to name you in an answer. That means stating plainly who you are, what you offer, where you work, and who you serve, in a structure a machine can extract. Most sites are written only for people, so they get skipped.",
+      "Google ranks pages. ChatGPT and Siri read your site and decide whether to name you in an answer. Getting named takes a structure a machine can read, and most sites do not have one.",
   },
   {
-    title: "Do you manage my Google Business Profile too?",
+    title: "Do you handle my Google Maps listing too?",
     content:
-      "Yes, and for a local business it often matters more than the website. Most people pick from the first three results on Maps and never scroll. Categories, service areas, hours, photos, and review responses all feed that ranking, and all of it is included.",
+      "Yes, and it often matters more than the website. Most people pick from the first three on Maps and never scroll.",
   },
   {
-    title: "Do I have to be in Houston to work with you?",
+    title: "What tools do I get?",
     content:
-      "No. I am headquartered in Northeast Houston and I will come to your business in person if you are nearby, which is genuinely useful. Outside the area the method is identical, there are just more calls and fewer drive-bys. I have clients from Conroe and Fort Worth out to Miami.",
+      "Loyalty rewards, an AI front desk that answers after hours, booking, invoicing, and a read on your own numbers. Added as your business needs them.",
   },
   {
-    title: "How do I know if my current website is the problem?",
+    title: "How do I know if my website is the problem?",
     content:
-      "Send me your business name and I will tell you. The free report covers where you show up today, whether an AI assistant names you when asked to recommend someone like you, and what is most likely costing you calls. It is yours whether we work together or not.",
+      "Send me your business name. The free report shows where you turn up today and what is most likely costing you calls.",
   },
 ];
 
@@ -103,7 +102,7 @@ const jsonLd = {
     {
       "@type": "Service",
       "@id": `${BUSINESS.url}/services#service`,
-      name: "Web Design & Local SEO, Northeast Houston TX",
+      name: "Websites, SEO & AI-SEO, Northeast Houston TX",
       provider: { "@id": `${BUSINESS.url}/#localbusiness` },
       serviceType: [
         "Web Design",
@@ -137,26 +136,41 @@ const jsonLd = {
   ],
 };
 
+/*
+  Four cards, four different needs.
+
+  It was website, Google, Maps, AI — which is one need said four ways. A reader
+  three cards in has learned nothing new since the first, and the page reads
+  like padding. Google and Maps are the same behaviour and the same visit, so
+  they are one card now, and the slot they freed goes to the thing this page
+  was missing entirely: the tools.
+
+  Kept as "you need", dropped the "we". Every other word on this site is written
+  by one person, and "we build it" turns that into a nameless agency of the
+  exact kind these headings are meant to beat. The search terms stay where they
+  were — web design, local SEO, Google Business Profile, Google Maps, AI-SEO.
+  What changed is who is speaking, and how many times.
+*/
 const services = [
   {
     icon: FaMobileAlt,
     heading: "You need a website",
-    body: "We build it around what your customers are already searching for. Fast on mobile, easy to find, and clear enough that visitors actually call.",
-  },
-  {
-    icon: FaChartLine,
-    heading: "You need to show up on Google",
-    body: "When someone searches for your service in Houston, your name should be there. We build the pages and content that earn those rankings.",
+    body: "I build it around what your customers are already searching for. Fast on a phone, and clear enough that visitors actually call.",
   },
   {
     icon: FaMapMarkerAlt,
-    heading: "You need to own your Google Maps listing",
-    body: "Most customers pick from the first three businesses that show up on Maps. We get you into that group and keep you there.",
+    heading: "You need to come up on Google",
+    body: "SEO for the search results, and your Google listing for the map. Most people pick from the first three on Maps and never scroll.",
   },
   {
     icon: FaGlobe,
-    heading: "You need customers to find you on AI search too",
-    body: "When someone asks Siri or ChatGPT who to call, we make sure your business is the answer they get.",
+    heading: "You need to be found on AI search too",
+    body: "When someone asks ChatGPT or Siri who to call, AI-SEO is what makes your business the answer they get.",
+  },
+  {
+    icon: FaWrench,
+    heading: "Grab some tools to help you grow",
+    body: "Rewards, an AI front desk, booking, invoicing, a read on your own numbers. Software built for your business, not rented from somebody else.",
   },
 ];
 
@@ -170,7 +184,6 @@ export default function ServicesPage() {
       <main>
         <PageHero
           headline="From invisible to obvious."
-          sub="What I actually do, and what it costs."
           prefill="I want to see what my website could look like."
           image={{
             src: "/hero/servicesMain.JPEG",
@@ -213,28 +226,28 @@ export default function ServicesPage() {
               );
             })}
           </div>
+
+          {/*
+            The price, once, quietly, under the four things it buys.
+
+            This page lost its only visible figure when the tools block came
+            out, which left the schema saying $500 and the page itself saying
+            nothing — fine for a machine, useless for the person reading it.
+
+            "Yours for" and not "all of this for": the plan is to sell tools
+            separately later, the way AWS sells services, so nothing here
+            promises the four cards are the whole of what exists.
+          */}
+          <p className="mx-auto mt-10 max-w-6xl text-center text-lg font-light text-lightTextMuted dark:text-darkTextMuted">
+            Yours for{" "}
+            <span className="font-semibold text-lightText dark:text-darkText">
+              {PRICING.monthlyLabel} a month
+            </span>
+          </p>
           </div>
         </section>
 
-        {/* Pricing callout */}
-        <section className="container mx-auto px-4 py-24">
-          <div className="max-w-6xl mx-auto">
-            <Reveal>
-              <Glow color={PAINT.rossoCorsa.hex} radius="rounded-3xl" lift={false} spread={420}>
-              <div className="relative rounded-3xl border border-lightBorder dark:border-darkBorder bg-lightBG dark:bg-darkBG p-8 sm:p-12">
-                <h2 className="text-3xl sm:text-4xl font-semibold text-lightText dark:text-darkText mb-5">
-                  How pricing works
-                </h2>
-                <p className="max-w-3xl text-xl leading-relaxed text-lightTextMuted dark:text-darkTextMuted font-light">
-                  {SITE_COPY.pricing.sub} {SITE_COPY.pricing.terms}
-                </p>
-              </div>
-              </Glow>
-            </Reveal>
-          </div>
-        </section>
-
-        <FaqDeck items={faqItems} heading="Questions about the work" />
+        <FaqDeck items={faqItems} heading="Common Questions" />
         <IndustryLinks />
         <FreeAudit />
       </main>

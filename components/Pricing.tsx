@@ -12,6 +12,11 @@ import { SITE_COPY, type SiteCopy } from "./siteCopy";
  * same treatment as the close: dark ground, live colour behind it, and a single
  * panel holding everything. The card does the containing that a bare centre
  * axis could not.
+ *
+ * Widened from max-w-xl once the checklist was rewritten: every line now clears
+ * the card in one pass. If a line is ever added that wraps, shorten the line
+ * rather than widening the card again — past this width the price stops
+ * reading as a single object and starts reading as a table.
  */
 export default function Pricing({
   copy = SITE_COPY.pricing,
@@ -28,7 +33,7 @@ export default function Pricing({
 
       <div className="relative container mx-auto px-4 py-28 sm:py-32">
         <Reveal>
-          <div className="mx-auto max-w-xl rounded-3xl border border-white/10 bg-[#14171D]/80 p-8 backdrop-blur-xl sm:p-12">
+          <div className="mx-auto max-w-2xl rounded-3xl border border-white/10 bg-[#14171D]/80 p-8 backdrop-blur-xl sm:p-12">
             <div className="text-center">
               <h2 className="text-3xl sm:text-4xl tracking-tight text-[#F5F7FA]">
                 {copy.heading}

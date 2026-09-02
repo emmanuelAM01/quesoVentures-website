@@ -30,63 +30,62 @@ const data: GeoPageData = {
   slug: "/web-design-kingwood-tx",
   postalCode: "77339",
   headline: "Be who Kingwood finds.",
-  intro:
-    "Websites and local search for Kingwood businesses: Town Center, Kings Harbor, and across the Livable Forest. Word of mouth got you here; search is what grows it.",
+  intro: "Word of mouth got you here. Kingwood searches for the rest.",
   prefill:
     "I run a business in Kingwood and want more customers finding me online.",
   painPoints: [
     {
-      heading: "Kingwood loyalty is real, but you have to get discovered first",
-      body: "Once a Kingwood family finds a business they like, they stick with it for years and tell their neighbors. The hard part is that first discovery. Today, that moment happens on Google, and if you're not there, the loyalty goes to someone else.",
+      heading: "Loyalty is real. Getting discovered is the hard part",
+      body: "Once a Kingwood family picks you they stay for years. That first pick happens on Google."
     },
     {
-      heading: "New families arrive every month with zero connections",
-      body: "People move to Kingwood for the schools and the trees, and they arrive knowing nobody. Their first mechanic, salon, contractor, or med spa is whoever shows up first when they search. That's a customer for a decade, decided in one search.",
+      heading: "New families arrive every month knowing nobody",
+      body: "Their first mechanic, salon, or contractor is whoever comes up first."
     },
     {
-      heading: "Your website looks fine but does nothing",
-      body: "A lot of Kingwood businesses have a website that's essentially a business card. It doesn't rank, doesn't load fast on a phone, and doesn't push anyone to call. It exists, it just doesn't work.",
-    },
+      heading: "Your website looks fine and does nothing",
+      body: "It does not rank, it is slow on a phone, and nothing on it asks for the call."
+    }
   ],
   whatChanges: [
     {
-      title: "You show up when Kingwood searches for what you do",
-      body: "I tune your website and Google Business Profile to the searches people here actually type, your service plus 'Kingwood,' plus 'near me', so you appear in the map results people pick from.",
+      title: "Kingwood finds you first",
+      body: "Your site and Google profile get built around what neighbors actually type."
     },
     {
-      title: "Your website earns the call",
-      body: "Kingwood customers do their homework. I make sure that when they land on your site, they see a credible, fast, clear presence that answers their questions and makes contacting you effortless.",
+      title: "Your site asks for the call",
+      body: "Clear message, obvious next step, fast on a phone."
     },
     {
-      title: "AI tools recommend you when neighbors ask",
-      body: "More people every month ask ChatGPT or Siri who to hire instead of scrolling results. Those tools read your website to decide. I structure yours so your business is the recommendation.",
+      title: "AI assistants name you",
+      body: "When someone asks their phone for a recommendation in Kingwood, you are the answer."
     },
     {
-      title: "You deal directly with me, for a simple monthly price",
-      body: "No account managers, no thousand-dollar retainers, no surprise line items. I'm local, I'll come see your business in person, and the plan is a simple $500 a month.",
-    },
+      title: "You get a person, not a queue",
+      body: "One monthly price, and I answer my own messages."
+    }
   ],
   faqItems: [
     {
       q: "My business runs on referrals from Kingwood neighbors. Why change?",
-      a: "Don't change it, add to it. Referrals reach people who already know your customers. Search reaches the new families arriving every month and everyone whose usual provider just retired, moved, or dropped the ball. It's a second pipeline, not a replacement.",
+      a: "Referrals are the best customers you get. They are also the ones you cannot schedule."
     },
     {
-      q: "I'm in a shopping center off Kingwood Drive. Doesn't visibility handle itself?",
-      a: "Drive-by visibility helps people who already pass you. But when someone at home searches for your service, Google decides who they see, and that's a completely separate contest. Plenty of tucked-away businesses outrank storefronts because their online presence is stronger.",
+      q: "I'm in a shopping center off Kingwood Drive. Won't people just see me?",
+      a: "Driving past you is not the same as looking for you. Most people decide before they leave the house."
     },
     {
       q: "What does it cost?",
-      a: "Simple monthly plans at $500 a month. That's a fraction of what agencies charge, and most of them aren't even touching AI search. You'll know your exact number before we start.",
+      a: "$500 a month for the website, getting you found on Google and in AI answers, and the tools I build for your business. No setup fee."
     },
     {
       q: "What kinds of businesses do you work with?",
-      a: "Local service businesses across Kingwood and Northeast Houston, contractors, auto shops, salons and med spas, event venues, food trucks, cleaning services, and more. If your customers search online for what you do, we're likely a fit.",
+      a: "Local businesses whose customers find them by searching. Auto shops, contractors, salons, cleaners, food trucks, and plenty more."
     },
     {
       q: "How does this start?",
-      a: "Send your business name through the form. I look at what someone searching in Kingwood right now actually finds, and who is outranking you, then I get in touch with what I found. We go from there. Nothing to pay to have that conversation.",
-    },
+      a: "Send your business name through the form. I look at where you show up today and get in touch with what I found. Free either way."
+    }
   ],
   heroImage: { src: "/hero/kingwood.jpg", alt: "Kingwood, Texas" },
 };

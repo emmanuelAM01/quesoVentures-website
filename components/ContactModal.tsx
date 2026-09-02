@@ -3,8 +3,6 @@
 import { useState, useEffect } from "react";
 import Modal from "./Modal";
 import ContactForm from "./ContactForm";
-import { BUSINESS } from "./businessInfo";
-import CallLink from "./CallLink";
 
 export default function ContactModal() {
   const [prefillMessage, setPrefillMessage] = useState("");
@@ -46,18 +44,6 @@ export default function ContactModal() {
         prefillPlaceId={placeId}
         onSuccess={() => setTimeout(close, 5000)}
       />
-
-      <div className="mt-5 flex items-center justify-center gap-2 text-sm">
-        <span className="text-lightTextMuted dark:text-darkTextMuted">
-          Prefer to talk first?
-        </span>
-        <CallLink
-          from="contact_modal"
-          className="font-semibold text-lightButton dark:text-darkButton hover:opacity-70 transition-opacity"
-        >
-          Call {BUSINESS.phone} →
-        </CallLink>
-      </div>
     </Modal>
   );
 }

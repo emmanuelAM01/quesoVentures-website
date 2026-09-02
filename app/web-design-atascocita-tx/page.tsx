@@ -30,63 +30,62 @@ const data: GeoPageData = {
   slug: "/web-design-atascocita-tx",
   postalCode: "77346",
   headline: "Atascocita is already searching.",
-  intro:
-    "Websites and local search for Atascocita businesses in 77346: Eagle Springs, The Groves, Walden on Lake Houston, Kings River, and Balmoral. Built by someone who will actually show up at your shop.",
+  intro: "Atascocita looks you up before it drives anywhere.",
   prefill:
     "I run a business in Atascocita and want more customers finding me online.",
   painPoints: [
     {
-      heading: "Neighbors search online before they drive anywhere",
-      body: "Atascocita is a community of commuters and busy families. Before anyone drives down FM 1960 or West Lake Houston Parkway, they've already searched, compared the top results, and picked. If you're not in that first screen, you were never in the running.",
+      heading: "Neighbors search before they drive",
+      body: "Nobody drives FM 1960 hoping to spot you. They searched, compared the top few, and picked."
     },
     {
-      heading: "The Facebook groups only reach people already paying attention",
-      body: "Neighborhood groups and NextDoor are useful, but they're word of mouth with extra steps. The families moving into Eagle Springs and The Groves every month aren't in those groups yet, they're on Google.",
+      heading: "Facebook groups only reach people who already know you",
+      body: "The families who moved in last month are not in those groups. They are on Google."
     },
     {
-      heading: "You're competing with Humble and Kingwood businesses too",
-      body: "Atascocita customers will happily drive 10 minutes for the right business. That cuts both ways: businesses one town over are winning searches that should be yours. A locally-tuned website flips that back in your favor.",
-    },
+      heading: "Humble and Kingwood shops win searches that should be yours",
+      body: "Ten minutes is nothing to an Atascocita customer, and that cuts both ways."
+    }
   ],
   whatChanges: [
     {
-      title: "You show up when Atascocita searches for what you do",
-      body: "I build your website and Google Business Profile around the searches your neighbors actually type, your service plus 'Atascocita,' plus 'near me', so you're in the top results they see.",
+      title: "Atascocita finds you first",
+      body: "Your service plus Atascocita, plus every near me variation people actually use."
     },
     {
-      title: "Your website makes people act, not just look",
-      body: "Clear message, obvious next step, fast on a phone. I rework your site so the person who finds you actually calls, books, or messages instead of hitting the back button.",
+      title: "Your site asks for the call",
+      body: "Clear message, obvious next step, fast on a phone."
     },
     {
-      title: "AI assistants recommend you by name",
-      body: "When someone asks ChatGPT or their phone for a recommendation in Atascocita, those tools scan websites to pick an answer. I structure yours so you're the business they cite.",
+      title: "AI assistants name you",
+      body: "Structured so a phone asked for a recommendation here says your name."
     },
     {
-      title: "You work with a local, not a ticket queue",
-      body: "I'm in the area. I'll meet you at your business, understand what makes it different, and be a text away, for a simple monthly price, not agency retainers.",
-    },
+      title: "You get a person, not a queue",
+      body: "One monthly price, and I answer my own messages."
+    }
   ],
   faqItems: [
     {
-      q: "Atascocita isn't technically a city. Does local search still work here?",
-      a: "Yes, Google treats Atascocita as its own local area, and people here search 'Atascocita' by name constantly. Most businesses never optimize for it specifically, which is exactly why the opportunity is wide open.",
+      q: "Atascocita isn't technically a city. Do people still search it by name?",
+      a: "Yes. People search Atascocita by name every day, and almost nobody here is set up for it."
     },
     {
-      q: "I get some business from neighborhood Facebook groups. Isn't that enough?",
-      a: "Groups reach people who already know the area. Google reaches everyone, including the new families moving into Eagle Springs, The Groves, and Balmoral every month. The businesses that show up in search get the newcomers by default.",
+      q: "I get business from neighborhood Facebook groups. Isn't that enough?",
+      a: "Those reach people who already know you. Google reaches the families in Eagle Springs and The Groves who moved in last month."
     },
     {
       q: "What does it cost?",
-      a: "Simple monthly plans at $500 a month. Far below the $1,500+ agencies charge, and unlike most of them I set you up for AI search too. You'll know your exact number before anything starts.",
+      a: "$500 a month for the website, getting you found on Google and in AI answers, and the tools I build for your business. No setup fee."
     },
     {
       q: "What kinds of businesses do you work with?",
-      a: "Local service businesses across Atascocita and Northeast Houston, auto and wrap shops, contractors, salons and med spas, food trucks, event venues, cleaning services, and more. If customers search for what you do, we're a fit.",
+      a: "Local businesses whose customers find them by searching. Auto shops, contractors, salons, cleaners, food trucks, and plenty more."
     },
     {
       q: "How does this start?",
-      a: "Send your business name through the form. I look at what someone searching in Atascocita right now actually finds, and who is outranking you, then I get in touch with what I found. We go from there. Nothing to pay to have that conversation.",
-    },
+      a: "Send your business name through the form. I look at where you show up today and get in touch with what I found. Free either way."
+    }
   ],
   heroImage: { src: "/hero/Atascocita-Texas.jpg", alt: "Atascocita, Texas" },
 };

@@ -1,8 +1,6 @@
 "use client";
 
 import React from "react";
-import { BUSINESS } from "./businessInfo";
-import CallLink from "./CallLink";
 import { trackCtaClick } from "./analytics";
 import LavaLamp from "./LavaLamp";
 import HeroBackdrop from "./HeroBackdrop";
@@ -82,12 +80,6 @@ export default function FreeAuditSection({
               {copy.reassurance}
             </p>
           )}
-          <CallLink
-            from="free_audit"
-            className="mt-7 block text-base font-semibold text-white/70 transition-opacity hover:opacity-70"
-          >
-            or call {BUSINESS.phone}
-          </CallLink>
         </div>
       </div>
     </section>

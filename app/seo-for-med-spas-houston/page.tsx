@@ -29,61 +29,61 @@ const data: IndustryPageData = {
   "industry": "Med Spas, Clinics & Dentists",
   "slug": "/seo-for-med-spas-houston",
   "headline": "Empty slots are a search problem.",
-  "intro": "Websites and local search for med spas, medical clinics, and dental practices across Northeast Houston. Your regulars keep coming back. The problem is the person who has never heard of you and is booking something this week.",
+  "intro": "Websites, SEO, and AI-SEO for med spas, medical clinics, and dental practices across Northeast Houston. Your regulars keep coming back. The problem is the person who has never heard of you and is booking something this week.",
   "prefill": "I run a med spa, clinic, or dental practice and want more bookings from people searching online.",
-  "serviceName": "Web Design & Local SEO for Med Spas, Clinics and Dental Practices",
+  "serviceName": "Websites, SEO & AI-SEO for Med Spas, Clinics and Dental Practices",
   "painPoints": [
     {
-      "heading": "New patients search, they don't ask around",
-      "body": "Somebody deciding to finally get Botox, a cleaning, or a consult does not poll their friends. They search, they read a few reviews, and they book whoever looks credible and is close. That decision takes minutes."
+      "heading": "New patients search. They do not ask around",
+      "body": "Discretion is part of it. They look it up privately, then book."
     },
     {
-      "heading": "Every treatment is its own search, and you rank for none of them",
-      "body": "Botox, fillers, laser, microneedling, implants, whitening, Invisalign, weight management. Each one is a different search with different intent. A single page listing everything competes for nothing in particular."
+      "heading": "Every treatment is its own search",
+      "body": "Botox, fillers, laser, implants. You are competing for each one separately."
     },
     {
-      "heading": "Trust has to be visible before anyone books",
-      "body": "This is a category where people are handing you their face or their teeth. Credentials, before-and-afters, real staff photos, and current reviews are not decoration, they are the entire decision."
+      "heading": "Trust has to show before anyone books",
+      "body": "Nobody puts a needle near their face on a hunch."
     }
   ],
   "whatChanges": [
     {
-      "title": "Each treatment gets its own way to be found",
-      "body": "One page per service, written around how patients actually search rather than how the industry names things. More searches covered means more of the book filled."
+      "title": "Each treatment gets found",
+      "body": "Its own page, its own search, instead of one page trying to be everything."
     },
     {
-      "title": "Booking becomes the obvious next step",
-      "body": "Tappable phone number, clear pricing signals, and an online booking path that works on a phone. Most practice sites make people work to hand over money."
+      "title": "Booking is the obvious next step",
+      "body": "Straight into whatever system you already use."
     },
     {
-      "title": "Your credibility shows up before the visit",
-      "body": "Credentials, results, and reviews arranged where a nervous first-time patient actually looks. That is what turns a page view into a booked appointment in this category."
+      "title": "Credibility shows up before the visit",
+      "body": "Credentials, results, and reviews where a nervous first-timer will actually see them."
     },
     {
-      "title": "AI assistants recommend your practice",
-      "body": "When somebody asks for a good med spa or dentist nearby, those tools read websites to decide who to name. I structure yours so you are the recommendation."
+      "title": "AI assistants name your practice",
+      "body": "When someone asks their phone for a good med spa nearby, it is you."
     }
   ],
   "faqItems": [
     {
       "q": "We're booked out already. Why would we need this?",
-      "a": "Being booked is exactly when to build it, because you can be selective about which services fill up. Practices that wait until a slow quarter are starting from zero at the worst possible moment."
+      "a": "Booked out today is not booked out in March. Search is what keeps next quarter full without discounting."
     },
     {
       "q": "Is medical or dental content different to handle?",
-      "a": "Yes. Search engines hold health content to a higher standard, which means credentials, accurate service descriptions, and a clean technical setup matter more here than in most industries. It also means most competitors get it wrong."
+      "a": "Yes. Claims have to stay careful and Google is stricter about health pages. I write to that line, not over it."
     },
     {
       "q": "Can you work with our existing booking system?",
-      "a": "Almost always. The goal is to remove steps between finding you and booking, not to replace software your front desk already knows."
+      "a": "Yes. The site sends people into whatever you already use rather than replacing it."
     },
     {
       "q": "What does it cost?",
-      "a": "Simple monthly plans at $500 a month. Agencies charge $1,500 or more and still have no answer for customers who ask an AI assistant who to call. You will know your exact number before anything starts."
+      "a": "$500 a month for the website, getting you found on Google and in AI answers, and the tools I build for your business. No setup fee."
     },
     {
       "q": "How does this start?",
-      "a": "Send your practice name through the form. I look at what someone searching for a provider near you actually finds right now, and what an AI assistant says when asked to recommend one, then I get in touch with what I found. We go from there. Nothing to pay to have that conversation."
+      "a": "Send your practice name through the form. I look at where you show up today and get in touch with what I found. Free either way."
     }
   ],
   heroImage: { src: "/hero/clinics.jpg", alt: "A clinic treatment room" },

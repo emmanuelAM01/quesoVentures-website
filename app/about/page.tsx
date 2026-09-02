@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Footer from "components/Footer";
@@ -7,7 +8,6 @@ import AboutPortrait from "components/AboutPortrait";
 import { liveryAt, PAINT } from "components/livery";
 import Glow from "components/Glow";
 import CallLink from "components/CallLink";
-import { PRICING } from "components/pricingCopy";
 import NicheCtaButton from "components/NicheCtaButton";
 import {
   BUSINESS,
@@ -19,7 +19,7 @@ import {
 export const metadata: Metadata = {
   title: "About Emmanuel | Queso Ventures",
   description:
-    "Seven years building software for startups, fintech, and venture backed AI products. Now I help local businesses get found online. Meet the person behind Queso Ventures.",
+    "Seven years building software for startups, fintech, and venture backed AI products. Now I help local businesses get found online.",
   alternates: { canonical: "https://www.quesoventures.com/about" },
   openGraph: {
     title: "About Emmanuel | Queso Ventures",
@@ -69,7 +69,7 @@ const jsonLd = {
 const chapters = [
   {
     year: "2019",
-    label: "Started at 18 (yes, I was born in 2001)",
+    label: "Started at 18",
     body: "COVID closed every job in town, so I taught myself web development and started freelancing. First client at $15 an hour. I've been building for people ever since.",
   },
   {
@@ -125,7 +125,8 @@ export default function AboutPage() {
             {chapters.map((chapter, i) => {
               const paint = liveryAt(i);
               return (
-                <Reveal key={i} delay={i * 120}>
+                <Fragment key={i}>
+                <Reveal delay={i * 120}>
                   <Glow color={paint.hex} radius="rounded-3xl" lift={false}>
                   <div className="relative h-full overflow-hidden rounded-3xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark">
                     {/* Livery stripe across the top, full bleed. */}
@@ -158,6 +159,70 @@ export default function AboutPage() {
                   </div>
                   </Glow>
                 </Reveal>
+
+                {/*
+                  The degree, between the rows rather than in a card of its own.
+
+                  It belongs on the timeline and it is the one beat that is not
+                  a chapter: nothing changed about the work in 2023, the paper
+                  just caught up with it. A card would give it the same weight
+                  as becoming a CTO. A line across the gap gives it the weight
+                  it has, and the joke lands better in an aside than in a
+                  headline.
+                */}
+                {i === 1 && (
+                  <Reveal className="sm:col-span-2">
+                    {/*
+                      Arancio Xanto, and not by coincidence.
+
+                      Red and yellow are already spoken for by the two cards it
+                      sits between, so the divider needed a paint that reads as
+                      house livery without echoing either neighbour. The rules
+                      run out of it and fade to nothing at both ends, which is
+                      the only ornament here: everything else is the sentence.
+
+                      Two values from the same paint. The ink is the darkened
+                      variant, the only one legible setting type on cream; the
+                      factory hex is far too bright there and exactly right on
+                      the dark panel. Passed as custom properties so the palette
+                      module stays the single source for both.
+                    */}
+                    <div
+                      className="flex items-center gap-5 py-2"
+                      style={
+                        {
+                          "--paint": PAINT.arancioXanto.hex,
+                          "--paint-ink": PAINT.arancioXanto.ink,
+                        } as React.CSSProperties
+                      }
+                    >
+                      <span
+                        aria-hidden
+                        className="hidden h-px flex-1 sm:block"
+                        style={{
+                          backgroundImage:
+                            "linear-gradient(to right, transparent, var(--paint))",
+                        }}
+                      />
+                      <p className="text-center text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
+                        <span className="font-semibold text-[color:var(--paint-ink)] dark:text-[color:var(--paint)]">
+                          2023
+                        </span>{" "}
+                        &middot; Graduated from the University of Houston,
+                        majoring in Computer Science (what a surprise).
+                      </p>
+                      <span
+                        aria-hidden
+                        className="hidden h-px flex-1 sm:block"
+                        style={{
+                          backgroundImage:
+                            "linear-gradient(to left, transparent, var(--paint))",
+                        }}
+                      />
+                    </div>
+                  </Reveal>
+                )}
+                </Fragment>
               );
             })}
           </div>
@@ -219,13 +284,49 @@ export default function AboutPage() {
                   }}
                 />
 
+                {/*
+                  The resting title, centred in the card rather than sitting on
+                  top of it.
+
+                  The copy underneath keeps its space while hidden, so an
+                  in-flow heading is pinned to the top of a very tall card with
+                  a photograph running past it — which is why it read as a
+                  caption. This layer is centred in the box and fades out as the
+                  argument fades in, so the two never occupy the middle at once.
+                  It duplicates the words in the h2 below it and is therefore
+                  aria-hidden: the real heading is the one that stays in the
+                  document.
+
+                  White, not the house ramp. Red-to-yellow letters over this
+                  photograph lose their second half against the sand and the
+                  Brembo boards, which is the one place on the site where the
+                  gradient actively costs legibility. The warm tint at the tail
+                  of the type is as far as it goes, and the full ramp appears
+                  underneath as a rule, where nothing has to be read through it.
+                */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-6 text-center opacity-100 transition-opacity duration-500 group-focus-within:opacity-0 group-hover:opacity-0 [@media(hover:none)]:opacity-0"
+                >
+                  <span
+                    className="absolute h-[48%] w-[92%] max-w-4xl rounded-full blur-3xl"
+                    style={{ background: "rgba(16,18,22,0.66)" }}
+                  />
+                  <p className="relative bg-gradient-to-b from-white from-[55%] to-[#FFE0A0] bg-clip-text text-4xl font-light leading-tight tracking-tight text-transparent sm:text-5xl md:text-6xl">
+                    Why Queso Ventures exists
+                  </p>
+                  <span
+                    className="relative mt-7 block h-1 w-24 rounded-full"
+                    style={{
+                      backgroundImage: `linear-gradient(to right, ${PAINT.rossoCorsa.hex}, ${PAINT.gialloOrion.hex}, ${PAINT.gialloModena.hex})`,
+                    }}
+                  />
+                </div>
+
                 <div
                   className="relative mx-auto max-w-3xl text-center"
                   style={{ textShadow: "0 2px 20px rgba(0,0,0,0.75)" }}
                 >
-                  <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-[#B7C0C8]">
-                    Why Queso Ventures exists
-                  </h2>
 
                   <div className="opacity-0 transition-opacity duration-500 group-focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
                     <span
@@ -234,8 +335,7 @@ export default function AboutPage() {
                     />
 
                     <p className="mt-8 text-3xl sm:text-4xl md:text-5xl font-light leading-tight tracking-tight text-balance text-[#F5F7FA]">
-                      Every big brand has a team of engineers making sure you
-                      find them first.
+                      Big brands have dedicated engineers 
                     </p>
 
                     {/*
@@ -244,29 +344,44 @@ export default function AboutPage() {
                       top of a page and wrong here: two ragged columns under a
                       centred lead read as a layout accident.
                     */}
-                    <p className="mx-auto mt-7 max-w-2xl text-lg sm:text-xl font-light leading-relaxed text-[#B7C0C8]">
-                      The shops that keep Houston running do not. AI is changing
-                      how customers find businesses, and most agencies are still
-                      selling the old playbook. I helped build the new tools, so
-                      I know the new rules. Queso Ventures brings that edge to
-                      local businesses for {PRICING.monthlyLabel} a month. I&apos;ll
-                      come see your store in person, and when you reach out,
-                      it&apos;s me who answers.
+                    {/*
+                      Three sentences, down from five.
+
+                      The cut ones were the agency swipe and the sentence
+                      explaining that AI is changing search — both true, both
+                      already made by the headline above and the whole page
+                      below. What is left is the only part nobody else on this
+                      market can say: I built the thing, and you get me.
+
+                      The price went with them. It is on the pricing card, the
+                      services page and this page's own schema; a fourth
+                      appearance inside the emotional beat was the one place it
+                      was doing no work.
+                    */}
+                    {/*
+                      Houston is written out, not interpolated.
+
+                      ${city} inside JSX text prints the dollar sign and the
+                      braces exactly as typed — JSX needs {city}, and there is
+                      no `city` here to reach for anyway. This page is the
+                      flagship About page rather than one of the city-templated
+                      geo pages, so the name is simply the name. If Queso
+                      Ventures ever gets a second About page per metro, this is
+                      the line that becomes a prop.
+                    */}
+                    <p className="mx-auto mt-7 max-w-2xl text-xl font-light leading-relaxed text-[#B7C0C8]">
+                      The local places that Houston is built on do not. I built
+                      Queso Ventures to help level the playing field with
+                      technology.
                     </p>
 
-                    <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
+                    <div className="mt-10 flex justify-center">
                       <NicheCtaButton
                         from="about"
                         variant="onDark"
                         message="I want to see what my business could look like online."
                         label="Get My Free Report"
                       />
-                      <CallLink
-                        from="about"
-                        className="whitespace-nowrap text-lg font-semibold text-white/80 transition-opacity hover:opacity-70"
-                      >
-                        or call {BUSINESS.phone}
-                      </CallLink>
                     </div>
                   </div>
                 </div>

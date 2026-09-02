@@ -42,12 +42,12 @@ export default function PlaceLinks({
           </h2>
 
           <div>
-            <ul className="flex flex-wrap gap-x-7 gap-y-3">
+            <ul className="-my-1.5 flex flex-wrap gap-x-7 gap-y-1">
               {!isMetro && (
                 <li>
                   <Link
                     href={city.slug}
-                    className="text-lg font-semibold text-lightText underline decoration-gialloOrion decoration-2 underline-offset-[6px] transition-opacity hover:opacity-70 dark:text-darkText"
+                    className="inline-block py-1.5 text-lg font-semibold text-lightText underline decoration-gialloOrion decoration-2 underline-offset-[6px] transition-opacity hover:opacity-70 dark:text-darkText"
                   >
                     All of {city.name}
                   </Link>
@@ -57,7 +57,7 @@ export default function PlaceLinks({
                 <li key={n.slug}>
                   <Link
                     href={n.slug}
-                    className="text-lg font-light text-lightText underline decoration-transparent decoration-2 underline-offset-[6px] transition-colors hover:decoration-gialloOrion dark:text-darkText"
+                    className="inline-block py-1.5 text-lg font-light text-lightText underline decoration-transparent decoration-2 underline-offset-[6px] transition-colors hover:decoration-gialloOrion dark:text-darkText"
                   >
                     {n.name}
                   </Link>

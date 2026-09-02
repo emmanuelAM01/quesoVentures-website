@@ -12,7 +12,7 @@ import {
 
 const TITLE = "Contact Queso Ventures | Call (281) 203-4531";
 const DESCRIPTION =
-  "Send a message and I reply within 24 hours. Web design and local SEO for Houston area businesses, built by a software engineer.";
+  "Send a message and I reply within 24 hours. Websites, SEO, and AI-SEO for Houston area businesses, built by a software engineer.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -83,7 +83,7 @@ export default function ContactPage() {
                   <dd>
                     <a
                       href={BUSINESS.emailHref}
-                      className="font-light text-lightTextMuted dark:text-darkTextMuted hover:text-lightText dark:hover:text-darkText transition-colors"
+                      className="inline-block py-1.5 font-light text-lightTextMuted dark:text-darkTextMuted hover:text-lightText dark:hover:text-darkText transition-colors"
                     >
                       {BUSINESS.email}
                     </a>

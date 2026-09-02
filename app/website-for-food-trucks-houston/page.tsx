@@ -29,61 +29,61 @@ const data: IndustryPageData = {
   "industry": "Food Trucks & Restaurants",
   "slug": "/website-for-food-trucks-houston",
   "headline": "Hungry people decide fast.",
-  "intro": "Websites and local search for food trucks and restaurants across Houston. Your regulars already know where you park. Everyone else is on their phone right now, deciding where to eat in the next few minutes.",
+  "intro": "Websites, SEO, and AI-SEO for food trucks and restaurants across Houston. Your regulars already know where you park. Everyone else is on their phone right now, deciding where to eat in the next few minutes.",
   "prefill": "I run a food truck or restaurant and want more customers finding me.",
-  "serviceName": "Web Design & Local SEO for Food Trucks and Restaurants",
+  "serviceName": "Websites, SEO & AI-SEO for Food Trucks and Restaurants",
   "painPoints": [
     {
       "heading": "Nobody can tell where you are today",
-      "body": "The single most common reason a food truck loses a customer is that the person wanted to come and could not confirm the location. If today's spot is buried in a story that expired, it does not exist."
+      "body": "Your schedule is in a story that expired at midnight."
     },
     {
-      "heading": "Your menu lives in a photo Google can't read",
-      "body": "A photographed menu is invisible to search. Someone craving birria at eight at night will never find you, because the only place that word appears on your site is inside a JPEG."
+      "heading": "Your menu is a photo Google cannot read",
+      "body": "So it never comes up when someone searches for what you sell."
     },
     {
-      "heading": "Catering and event bookings never find you",
-      "body": "Catering is the highest-margin work in this business and it comes from deliberate searches during business hours. If there is no page aimed at it, those inquiries go to whoever built one."
+      "heading": "Catering never finds you",
+      "body": "The biggest tickets you get, and there is no page for them."
     }
   ],
   "whatChanges": [
     {
-      "title": "Your location and hours are always current and findable",
-      "body": "One place to update, that feeds your site and your Google profile at once, so the answer to 'where are they today' takes one tap instead of three apps."
+      "title": "Where you are today, findable",
+      "body": "Your location and hours stay current on the site and on Google."
     },
     {
-      "title": "Your menu becomes text a search engine can read",
-      "body": "Every dish, written out, so you show up for the specific cravings people search. This is usually the single biggest unlock for a food business."
+      "title": "Your menu becomes searchable text",
+      "body": "Birria, boudin, whatever you are known for, in words a search engine reads."
     },
     {
       "title": "Catering gets its own front door",
-      "body": "A dedicated page with capacity, pricing signals, service area, and an inquiry form. It turns your highest-margin work into something people can find on purpose."
+      "body": "A page for the office manager feeding forty people on Thursday."
     },
     {
-      "title": "AI assistants send hungry people to you",
-      "body": "When someone asks their phone where to eat nearby, those tools read websites and profiles to decide what to name. I structure yours so you are in that answer."
+      "title": "AI assistants send hungry people",
+      "body": "When someone asks their phone where to eat nearby, it is you."
     }
   ],
   "faqItems": [
     {
       "q": "I run everything from Instagram. Isn't that enough?",
-      "a": "It reaches people who already follow you. It does nothing for the person who just searched 'tacos near me' and has never heard of you. Those are the customers you are not currently getting."
+      "a": "Instagram keeps your regulars, and that matters. It just does not come up when somebody nearby searches for what you sell."
     },
     {
       "q": "My location changes constantly. Can a website keep up?",
-      "a": "That is exactly what it should do. You update one place, and the site and your Google profile both reflect it. Changing locations is an advantage once people can reliably find where you are."
+      "a": "Yes. The site shows where you are today and the Google profile moves with it."
     },
     {
       "q": "Does this work for a brick-and-mortar restaurant too?",
-      "a": "Yes, and the mechanics are nearly identical. Readable menu, accurate hours, strong Google profile, fast mobile pages, and a clear path to order or book."
+      "a": "Yes, same work. The searches change, the setup does not."
     },
     {
       "q": "What does it cost?",
-      "a": "Simple monthly plans at $500 a month. Agencies charge $1,500 or more and still have no answer for customers who ask an AI assistant who to call. You will know your exact number before anything starts."
+      "a": "$500 a month for the website, getting you found on Google and in AI answers, and the tools I build for your business. No setup fee."
     },
     {
       "q": "How does this start?",
-      "a": "Send your business name through the form. I look at what someone deciding where to eat near you actually finds right now, and what an AI assistant says when asked to recommend somewhere, then I get in touch with what I found. We go from there. Nothing to pay to have that conversation."
+      "a": "Send your business name through the form. I look at where you show up today and get in touch with what I found. Free either way."
     }
   ]
 };

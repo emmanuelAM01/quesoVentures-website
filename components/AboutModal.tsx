@@ -2,8 +2,6 @@
 
 import Image from "next/image";
 import Modal from "./Modal";
-import { BUSINESS } from "./businessInfo";
-import CallLink from "./CallLink";
 
 export default function AboutModal() {
 
@@ -15,7 +13,7 @@ export default function AboutModal() {
         <div className="relative h-20 w-20 sm:h-24 sm:w-24 flex-shrink-0 overflow-hidden rounded-full border-2 border-lightBorder dark:border-darkBorder">
           <Image
             src="/about.JPEG"
-            alt="Emmanuel Mendieta - Founder of Queso Ventures, Houston local SEO and web design"
+            alt="Emmanuel Mendieta, founder of Queso Ventures"
             fill
             className="object-cover"
             priority={false}
@@ -44,7 +42,7 @@ export default function AboutModal() {
           </li>
           <li className="flex gap-2">
             <span className="text-lightButton dark:text-darkButton mt-1">•</span>
-            <span>Based in Houston - I'll visit your location in person to understand your business</span>
+            <span>Based in Houston, building for the businesses in my own backyard</span>
           </li>
           <li className="flex gap-2">
             <span className="text-lightButton dark:text-darkButton mt-1">•</span>
@@ -53,40 +51,33 @@ export default function AboutModal() {
         </ul>
       </div>
 
-      <div className="w-full flex flex-col sm:flex-row gap-3 mt-2">
-        <CallLink
-          from="about"
+      {/*
+        One button, not two.
+
+        This was a call button and a message button side by side at equal
+        weight, which is the same split the navbar and the hero already had
+        removed. The number is not gone from the site; it is in the footer under
+        Support, where someone who has decided to talk goes looking for it.
+      */}
+      <div className="w-full mt-2">
+        <button
+          type="button"
+          onClick={() => {
+            window.dispatchEvent(new CustomEvent("modal:close", { detail: { id: "about-popup" } }));
+            window.dispatchEvent(new CustomEvent("contact:prefill", {
+              detail: { message: "I want to learn more about how you can help my Houston business:" }
+            }));
+            window.dispatchEvent(new CustomEvent("modal:open", {
+              detail: { id: "contact-popup" }
+            }));
+          }}
           className="
-            flex-1 inline-flex items-center justify-center
+            w-full inline-flex items-center justify-center
             rounded-xl px-6 py-3
             text-base font-semibold
             bg-lightButton hover:bg-lightButtonHover
             dark:bg-darkButton dark:hover:bg-darkButtonHover
             text-lightBG dark:text-darkBG
-            transition-colors
-          "
-        >
-          Call {BUSINESS.phone}
-        </CallLink>
-        
-        <button
-          type="button"
-          onClick={() => {
-            window.dispatchEvent(new CustomEvent("modal:close", { detail: { id: "about-popup" } }));
-            window.dispatchEvent(new CustomEvent("contact:prefill", { 
-              detail: { message: "I want to learn more about how you can help my Houston business:" } 
-            }));
-            window.dispatchEvent(new CustomEvent("modal:open", { 
-              detail: { id: "contact-popup" } 
-            }));
-          }}
-          className="
-            flex-1 inline-flex items-center justify-center
-            rounded-xl px-6 py-3
-            text-base font-semibold
-            border border-lightBorder dark:border-darkBorder
-            text-lightText dark:text-darkText
-            hover:bg-black/5 dark:hover:bg-white/10
             transition-colors
           "
         >

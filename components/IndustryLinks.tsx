@@ -1,5 +1,5 @@
 import { LISTED_INDUSTRIES } from "./serviceAreas";
-import CallLink from "./CallLink";
+import Link from "next/link";
 import { liveryAt, OPEN_ENDED } from "./livery";
 import LiveryCard from "./LiveryCard";
 
@@ -57,12 +57,12 @@ export default function IndustryLinks({ current, heading }: Props) {
             body={
               <>
                 This list grows every month. Don&apos;t see your trade?{" "}
-                <CallLink
-                  from="industries"
+                <Link
+                  href="/contact"
                   className="font-semibold text-lightText dark:text-darkText underline underline-offset-4 decoration-gialloOrion decoration-2 hover:opacity-70 transition-opacity whitespace-nowrap"
                 >
-                  Call and ask.
-                </CallLink>
+                  Ask me.
+                </Link>
               </>
             }
           />

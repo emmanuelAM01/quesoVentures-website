@@ -101,7 +101,7 @@ export default function IndustryPageTemplate({
       <main>
         <PageHero
           headline={headline}
-          sub={`Web design and local SEO for Houston area ${industry.toLowerCase()}, built by a software engineer.`}
+          sub={`Websites, SEO, and AI-SEO for Houston area ${industry.toLowerCase()}, built by a software engineer.`}
           prefill={prefill}
           image={heroImage}
         />

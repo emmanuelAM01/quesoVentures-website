@@ -22,9 +22,9 @@ import {
 } from "components/businessInfo";
 
 const { title: TITLE, description: DESCRIPTION } = metaFor("Houston", {
-  title: "Web Design & Development in Houston, Built by an Engineer",
+  title: "Houston Websites, SEO & AI-SEO, Built by an Engineer",
   description:
-    "Websites, local SEO, and AI visibility for Houston area businesses. More first-time customers, more repeat customers. See a free report on where you show up today.",
+    "Websites, SEO, and AI-SEO for Houston area businesses. More first-time customers, more repeat customers. A free report on where you show up today.",
 });
 
 export const metadata: Metadata = {
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
         url: "/logo.png",
         width: 512,
         height: 512,
-        alt: "Queso Ventures logo - web design and local SEO for local businesses",
+        alt: "Queso Ventures logo - websites, SEO, and AI-SEO for local businesses",
       },
     ],
     locale: "en_US",
@@ -60,45 +60,58 @@ export const metadata: Metadata = {
  * question and answer pairs extract cleanly where prose does not. It costs
  * almost no height, because the deck shows one card at a time.
  */
+/**
+ * Eight questions, two sentences each, and both limits are load-bearing.
+ *
+ * These are the highest-value block on the page for AI assistants, because a
+ * question and its answer extract cleanly where prose does not. They are also
+ * read by a shop owner on a phone between jobs, and the deck shows one card at
+ * a time — an answer long enough to scroll inside its own card is an answer
+ * nobody finishes.
+ *
+ * No trade vocabulary. "I improve the content, structure, page speed, and lead
+ * capture instead of rebuilding" was four things a customer cannot picture and
+ * has no way to want. Say what changes for them, not what I touch.
+ */
 const faqItems = [
   {
-    title: "People visit my site but nobody calls or books. Why?",
+    title: "People visit my site but nobody calls. Why?",
     content:
-      "Traffic without calls usually means one of three things: the next step isn't obvious, the site is slow on a phone, or the message doesn't match what the visitor searched for. I find which one is costing you and fix that first.",
+      "Usually the site is slow on a phone, or what to do next isn't obvious. I find which one it is and fix that first.",
   },
   {
-    title: "My competitor shows up on Google and I don't. How do I change that?",
+    title: "My competitor shows up on Google and I don't. Why?",
     content:
-      "They have built more trust with Google. A stronger Business Profile, more reviews, better pages, and content that matches what local customers actually search. I audit what is working for them and build the same foundation for you, starting with whatever moves fastest.",
+      "Google trusts them more: a stronger profile, more reviews, better pages. I build you the same foundation, starting with whatever moves fastest.",
   },
   {
-    title: "How do I show up when someone asks ChatGPT or Google AI to recommend a business like mine?",
+    title: "How do I show up when someone asks ChatGPT or Siri who to call?",
     content:
-      "AI assistants scan your website to decide whether your business is credible enough to recommend. To get cited, your site has to state clearly who you are, what you offer, where you are, and who you serve, in a structure those tools can read. That is exactly what I build for.",
+      "Those tools read your website before they recommend anyone. Yours has to say plainly who you are, what you do, and where you do it. That is what I set up.",
   },
   {
-    title: "How fast will I see more leads?",
+    title: "How fast will I see more calls?",
     content:
-      "Messaging and layout fixes can show results within a few weeks. The majority of search changes show up between eight and twelve weeks, and the work is applied continuously rather than in one launch. I run both at the same time, so you are not waiting three months before anything changes.",
+      "Some changes show up within a few weeks. Search results take eight to twelve. I run both at the same time so you are not waiting on one.",
   },
   {
-    title: "Can you work with my current website, or do I need to start over?",
+    title: "Do I need a whole new website?",
     content:
-      "Almost always I can work with what you have. If the site functions, I improve the content, structure, page speed, and lead capture instead of rebuilding. A full redesign only makes sense when a site is truly beyond saving.",
+      "Usually not. If what you have works, I fix what is losing you calls instead of starting over.",
   },
   {
     title: "Who do you work with?",
     content:
-      "Local businesses of almost every kind. Auto shops and mobile mechanics, wrap and detail shops, roofers and flooring crews, landscapers, cleaners, med spas and dental practices, event venues, music schools, bakeries, food trucks, and online shops run out of a spare room. I am headquartered in Houston and work with clients from Conroe and Fort Worth out to Miami. If your customers find you by searching, we are likely a strong fit.",
-  },
-  {
-    title: "How does this actually start?",
-    content:
-      "You send me your business name through the form. I look at what someone searching for you right now actually finds, and what an AI assistant says when asked to recommend someone like you, then I get in touch with what I found. We talk it through from there. No contract, no commitment, and nothing to pay to have that conversation.",
+      "Local businesses whose customers find them by searching. Auto shops, contractors, roofers, cleaners, med spas, bakeries, and plenty more.",
   },
   {
     title: "What does it cost?",
-    content: `${PRICING.monthlyLabel} a month for the website, the search and AI visibility, and the tools I build for your business. No setup fee. Agencies charge ${PRICING.agencyAnchor} or more and still have no answer for customers who ask an AI assistant who to call. We go through the details together before anything starts.`,
+    content: `${PRICING.monthlyLabel} a month for the website, getting you found on Google and in AI answers, and the tools I build for your business. No setup fee.`,
+  },
+  {
+    title: "How does this start?",
+    content:
+      "Send me your business name. I look at where you show up today and get in touch with what I found. Free either way.",
   },
 ];
 
@@ -135,7 +148,7 @@ const jsonLd = {
     {
       "@type": "Service",
       "@id": `${BUSINESS.url}/#service-seo`,
-      name: "Web Design & Local SEO for Northeast Houston Businesses",
+      name: "Websites, SEO & AI-SEO for Northeast Houston Businesses",
       provider: { "@id": `${BUSINESS.url}/#localbusiness` },
       serviceType: "Local Search Engine Optimization",
       description:
@@ -153,7 +166,7 @@ const jsonLd = {
           price: "0",
           priceCurrency: "USD",
           description:
-            "A free audit of your site structure, Google visibility, conversion blockers, page speed, and lead capture setup with a prioritized 30-day improvement plan.",
+            "A free report on where your business shows up today on Google, on Maps, and in AI answers, plus what is most likely costing you calls.",
         },
       ],
     },
@@ -195,7 +208,7 @@ export default function Page() {
               </p>
               <Link
                 href="/about"
-                className="mt-6 inline-block text-base font-semibold text-lightAccent dark:text-darkAccent transition-opacity hover:opacity-70"
+                className="mt-4 inline-block py-2 text-base font-semibold text-lightAccent dark:text-darkAccent transition-opacity hover:opacity-70"
               >
                 Meet the founder →
               </Link>

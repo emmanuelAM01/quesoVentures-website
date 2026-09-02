@@ -41,36 +41,36 @@ export const INDUSTRIES: Industry[] = [
     label: "Auto Shops & Mobile Mechanics",
     short: "Auto Shops",
     slug: "/seo-for-auto-shops-houston",
-    tagline: "Be the shop that comes up before the dealership.",
+    tagline: "Beat the dealership to the search.",
   },
   {
     label: "Wrap & Detail Shops",
     short: "Wrap & Detail",
     slug: "/seo-for-wrap-shops-houston",
-    tagline: "Show the work to the people already looking for it.",
+    tagline: "Your best work is driving around town. Let them find you.",
   },
   {
     label: "Construction, Roofing & Flooring",
     short: "Construction",
     slug: "/seo-for-contractors-houston",
-    tagline: "Get called by homeowners, not just referrals.",
+    tagline: "Calls that didn't come from a referral.",
   },
   {
     label: "Med Spas, Clinics & Dentists",
     short: "Med Spas",
     slug: "/seo-for-med-spas-houston",
-    tagline: "Fill the appointment book from search.",
+    tagline: "Fill the booking slots.",
   },
   {
     label: "Food Trucks & Restaurants",
     short: "Food Trucks",
     slug: "/website-for-food-trucks-houston",
-    tagline: "Get found by people deciding where to eat right now.",
+    tagline: "Be the answer to where should we eat.",
     unlisted: true,
   },
   {
     label: "Landscaping & Lawn Care",
-    tagline: "Win the season before it starts.",
+    tagline: "Booked before the season starts.",
   },
   {
     label: "Cleaning & Carpet Care",
@@ -78,11 +78,11 @@ export const INDUSTRIES: Industry[] = [
   },
   {
     label: "Event Venues",
-    tagline: "Get booked further out.",
+    tagline: "Got book?",
   },
   {
     label: "Music Schools & Bands",
-    tagline: "Be findable when someone is ready to book.",
+    tagline: "Found the week someone decides to start.",
   },
   {
     label: "Bakeries & Donut Shops",
@@ -90,7 +90,7 @@ export const INDUSTRIES: Industry[] = [
   },
   {
     label: "Licensed & Specialty Retail",
-    tagline: "Show up for the people already searching for you.",
+    tagline: "Found by the people already looking.",
   },
   {
     label: "Online & Home-Based Shops",
