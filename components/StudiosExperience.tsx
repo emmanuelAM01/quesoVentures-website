@@ -2,56 +2,138 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Reveal from "components/Reveal";
+import { STUDIO_DEMOS, type DemoId } from "components/StudiosDemos";
 
 // The Queso Studios reveal. This page deliberately abandons the site's
 // chrome: no header, no footer, dark only. Act one is the wordmark alone in
 // a black void with laser light. Act two is the lineup, a center-snapped
 // glass carousel where side cards fall away in perspective. The only way
 // out is the "Leave" pill, which appears once the reveal has done its job.
+//
+// Every card in the lineup carries a working demo of the tool it is selling,
+// running only while that card is centred. A tagline can tell a shop owner
+// there is a booking tool; watching a slot get picked and confirmed is the
+// only version of that sentence they can actually picture.
 
 type Tool = {
+  /** Keys the live demo in StudiosDemos. */
+  demo: DemoId;
   name: string;
   price: string;
   tagline: string;
+  /**
+   * A quieter line under the tagline. Used where the strongest thing about a
+   * tool would swallow the sentence that explains it, so it gets set small and
+   * separated instead, and reads like fine print that happens to be a flex.
+   */
+  note?: string;
   href?: string;
   linkLabel?: string;
-  accent: string; // hex used for the card's laser edge and price glow
+  /**
+   * The card's laser edge, glow, and price pill.
+   *
+   * Factory paint, with one house rule bent: a few of the palette's inks are
+   * mixed for legibility on cream and go nearly black against this page, so
+   * where that happens the brighter sibling is used instead. One colour per
+   * tool, so flipping the lineup feels like flipping a lineup rather than
+   * scrolling a spec sheet.
+   */
+  accent: string;
 };
 
 const PRICE_NOTE = "Queso Ventures clients receive discounts";
 
+/**
+ * The lineup.
+ *
+ * Ordered the way it should be met: the one with a website of its own first,
+ * because it is proof rather than a promise, then the tools in rough order of
+ * how easily an owner can picture them, and the open slot last. That slot only
+ * means anything once someone has seen eight finished things.
+ */
 const TOOLS: Tool[] = [
   {
+    demo: "rewards",
     name: "Queso Rewards",
-    price: "$20 / month",
+    price: "$0 / month",
     tagline:
-      "Loyalty programs for local businesses. Digital punch cards, automatic texts, email campaigns, and a deals page customers actually check.",
+      "A punch card that lives on your customer's phone. It fills as they come back, and it texts them when they are one are getting closer to their reward.",
     href: "https://www.quesorewards.com",
     linkLabel: "Visit quesorewards.com",
+    accent: "#FEA700",
+  },
+  {
+    demo: "memberships",
+    name: "Memberships",
+    price: "$30 / month",
+    tagline:
+      "A QR code by the register that opens your own page of deals and store news. Post whatever you want that week, and every scan tells you who came back for it.",
+    note: "Not a punch card. You write the offer, change it whenever, and see which customers keep showing up.",
+    accent: "#7DC23B",
+  },
+  {
+    demo: "chat",
+    name: "AI Chat",
+    price: "$30 / month",
+    tagline:
+      "A chat box on your website that knows your policies, rules, business both inside and out. Only answers how you would answer.",
+    accent: "#A855F7",
+  },
+  {
+    demo: "frontdesk",
+    name: "AI Frontdesk",
+    price: "$30 / month",
+    tagline:
+      "A phone agent that answers when you cannot. It takes the call, books the appointment, and keeps you the updated.",
     accent: "#C4161C",
   },
   {
-    name: "Delivery Fee Calculator",
+    demo: "booking",
+    name: "Booking",
     price: "$20 / month",
     tagline:
-      "Instant delivery and catering quotes on your own website. Customers type an address and get a real price, with no back-and-forth calls.",
-    linkLabel: "Built into Queso Ventures client websites",
+      "They pick a time and get a confirmation, then a reminder. No confusion, no double bookings, just simple cohesion.",
+    accent: "#0690FF",
+  },
+  {
+    demo: "delivery",
+    name: "Delivery Fee Calculator",
+    price: "$25 / month",
+    tagline:
+      "Instant delivery and catering quotes based on your business needs. Type an address, get a factual price, so there is no more guessing or spitballing.",
+    accent: "#E64A37",
+  },
+  {
+    demo: "invoicing",
+    name: "Invoicing",
+    price: "$30 / month",
+    tagline:
+      "Ask for it the way you would ask a person. It builds the invoice, sends it by email and text, and chases it if it goes unpaid. (Because this part is never fun)",
     accent: "#FFD100",
   },
   {
-    name: "AI Frontdesk",
-    price: "$20 / month",
-    tagline:
-      "A phone agent that answers when you can't. It takes the call, books the appointment, and sends you the message.",
-    accent: "#C4161C",
-  },
-  {
+    demo: "qrs",
     name: "Queso Revenue System",
     price: "Priced per case",
     tagline:
-      "Think IRS, but on your side. Licensed CPAs, Harvard economists, Wharton MBAs, and C-suite operators from nationwide logistics firms comb through your money in and out, find where revenue is leaking, and tighten the operation so your bookkeeping and numbers grow as fast as your business.",
-    accent: "#FFD100",
+      "Think IRS, but on your side. Upload your numbers and it shows you what is working, what needs attention, and what to do about it.",
+    note: "Prepared by licensed CPAs, Harvard economists, Wharton MBAs, and CFOs out of nationwide logistics firms. (a bunch of number nerds)",
+    accent: "#7692A5",
+  },
+  /*
+    The empty slot, and the only card here that is not software. Eight finished
+    tools make the case that things get built; this one says the list is not
+    closed, which is the part no platform can copy.
+  */
+  {
+    demo: "next",
+    name: "Whatever you need next",
+    price: "Let's talk",
+    tagline:
+      "Every tool on this page started as somebody telling me what was slowing them down. Tell me yours and it is the next thing I build.",
+    accent: "#FEA700",
   },
 ];
 
@@ -61,6 +143,7 @@ export default function StudiosExperience() {
   const [wantTool, setWantTool] = useState<string | null>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const frame = useRef(0);
   const glowRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useRef(false);
 
@@ -98,19 +181,38 @@ export default function StudiosExperience() {
         best = i;
       }
       if (reducedMotion.current) return;
+      /*
+        Deliberately gentle. The first pass swung 12 degrees and dropped 30% of
+        scale across the width of the track, so a flick of a trackpad threw the
+        whole row around and the carousel read as twitchy. The same gesture now
+        moves the cards about half as far, which is the difference between a
+        lineup turning and a lineup being shoved.
+      */
       const norm = d / track.clientWidth;
-      const scale = Math.max(0.84, 1 - Math.abs(norm) * 0.3);
-      const tilt = Math.max(-12, Math.min(12, norm * -16));
-      el.style.transform = `perspective(1200px) rotateY(${tilt}deg) scale(${scale})`;
-      el.style.opacity = String(Math.max(0.3, 1 - Math.abs(norm) * 1.15));
+      const scale = Math.max(0.9, 1 - Math.abs(norm) * 0.16);
+      const tilt = Math.max(-7, Math.min(7, norm * -8.5));
+      el.style.transform = `perspective(1600px) rotateY(${tilt}deg) scale(${scale})`;
+      el.style.opacity = String(Math.max(0.42, 1 - Math.abs(norm) * 0.72));
     });
     setActive(best);
   }, []);
 
+  /* One measurement per frame, however many scroll events arrive in it. */
+  const onTrackScroll = useCallback(() => {
+    if (frame.current) return;
+    frame.current = requestAnimationFrame(() => {
+      frame.current = 0;
+      updateCards();
+    });
+  }, [updateCards]);
+
   useEffect(() => {
     updateCards();
     window.addEventListener("resize", updateCards);
-    return () => window.removeEventListener("resize", updateCards);
+    return () => {
+      window.removeEventListener("resize", updateCards);
+      if (frame.current) cancelAnimationFrame(frame.current);
+    };
   }, [updateCards]);
 
   // Modal: lock scroll and close on Escape while open.
@@ -126,6 +228,14 @@ export default function StudiosExperience() {
       window.removeEventListener("keydown", onKey);
     };
   }, [wantTool]);
+
+  const setCardRef = useMemo(
+    () =>
+      TOOLS.map((_, i) => (el: HTMLDivElement | null) => {
+        cardRefs.current[i] = el;
+      }),
+    []
+  );
 
   const goTo = useCallback((index: number) => {
     const track = trackRef.current;
@@ -150,7 +260,7 @@ export default function StudiosExperience() {
         href="/"
         className={[
           "fixed top-5 left-5 z-50 flex items-center gap-2 rounded-full",
-          "border border-white/15 bg-white/5 backdrop-blur-md px-5 py-2.5",
+          "border border-white/15 bg-[#04050A]/85 backdrop-blur-md px-5 py-2.5",
           "text-sm font-semibold text-white/80 hover:text-white hover:border-white/35",
           "transition-all duration-500",
           showLeave ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-3 pointer-events-none",
@@ -190,7 +300,7 @@ export default function StudiosExperience() {
         <div className="relative text-center px-6">
           <div className="relative overflow-hidden">
             <h1
-              className="studios-motion text-[clamp(2.75rem,9vw,7rem)] leading-[1.04] font-bold tracking-tight text-balance bg-gradient-to-b from-white via-white to-white/30 bg-clip-text text-transparent"
+              className="studios-motion text-[clamp(2.5rem,7.5vw,5.5rem)] leading-[1.04] font-bold tracking-tight text-balance bg-gradient-to-b from-white via-white to-white/30 bg-clip-text text-transparent"
               style={{ animation: "studios-rise 1.3s 0.3s cubic-bezier(0.16,1,0.3,1) both" }}
             >
               Queso Studios
@@ -208,31 +318,61 @@ export default function StudiosExperience() {
             style={{ animation: "studios-laser-draw 1.2s 1.1s cubic-bezier(0.16,1,0.3,1) both" }}
           />
 
+          {/* One line at desktop. The old sentence broke across two under a
+              wordmark five times its size, which is the exact hierarchy this
+              page should not have: cut to a single clause and set larger, so
+              the gap between the title and the line under it is a step rather
+              than a cliff. */}
           <p
-            className="studios-motion mt-10 text-base sm:text-xl font-light text-white/60 max-w-xl mx-auto leading-relaxed"
+            className="studios-motion mt-9 text-[clamp(1.2rem,2.4vw,1.75rem)] font-normal text-white/80 max-w-3xl mx-auto leading-relaxed text-balance"
             style={{ animation: "studios-rise 1.1s 1.5s cubic-bezier(0.16,1,0.3,1) both" }}
           >
-            What Queso Ventures is truly about, building software for those
-            who need it most.
+            Building software for the companies that need it most.
           </p>
         </div>
       </section>
 
-      {/* The why, in first person */}
-      <section className="relative px-6 pt-14 sm:pt-20 pb-6">
-        <div className="max-w-3xl mx-auto text-center space-y-6">
-          <p className="text-base sm:text-lg text-white/65 leading-relaxed">
-            Queso Ventures is a software engineering company at heart. As my
-            relationships with clients grow, I hear the tech problems they
-            actually need solved, so I build the tool, show it to them, and
-            let them use it.
-          </p>
-          <p className="text-base sm:text-lg text-white/65 leading-relaxed">
-            This list keeps growing as I talk to more people like you and
-            build what you really need built. I am not guessing at products
-            and hoping for market fit. I am listening to the market and
-            building directly to it.
-          </p>
+      {/*
+        The why.
+
+        One type scale, deliberately tight. No eyebrow label: a 10px kicker over
+        a 48px headline is the inverted hierarchy this page kept falling into,
+        and the sentence it carried belongs in the body copy anyway. The two
+        statements are set at the same size so neither outranks the other, and
+        the line between them is half their size rather than a third — a step
+        down, not a cliff.
+
+        Both statements have to hold one line at desktop width, which is what
+        caps the headline at 3rem. Lengthen either one and the scale has to come
+        down with it.
+      */}
+      <section className="relative px-6 pt-16 sm:pt-24 pb-2">
+        <div className="mx-auto max-w-5xl text-center">
+          <Reveal>
+            <h2 className="text-[clamp(1.75rem,3.7vw,3rem)] font-bold leading-[1.12] tracking-tight text-balance bg-gradient-to-b from-white via-white to-white/70 bg-clip-text text-transparent">
+              Queso Ventures is a software company at heart
+            </h2>
+          </Reveal>
+
+          <Reveal delay={160}>
+            <p className="mx-auto mt-7 max-w-4xl text-[clamp(1.05rem,1.55vw,1.5rem)] font-light leading-relaxed text-white/55 text-balance">
+              Every tool on this page started with a conversation from a real business owner who needed help.
+            </p>
+          </Reveal>
+
+          <Reveal delay={300}>
+            <div
+              aria-hidden
+              className="mx-auto mt-10 h-px w-48 max-w-[55vw] bg-gradient-to-r from-transparent via-[#C4161C] to-transparent"
+            />
+          </Reveal>
+
+          <Reveal delay={420}>
+            <p className="mt-10 text-[clamp(1.75rem,3.7vw,3rem)] font-bold leading-[1.12] tracking-tight bg-gradient-to-r from-[#C4161C] via-[#FF7A1A] to-[#FFD100] bg-clip-text text-transparent">
+              Go shopping
+            </p>
+          </Reveal>
+
         </div>
       </section>
 
@@ -240,18 +380,17 @@ export default function StudiosExperience() {
       <section className="relative pb-16 sm:pb-24">
         <div
           ref={trackRef}
-          onScroll={() => requestAnimationFrame(updateCards)}
-          className="studios-no-scrollbar flex gap-6 sm:gap-10 overflow-x-auto snap-x snap-mandatory py-10"
+          onScroll={onTrackScroll}
+          className="studios-no-scrollbar flex items-center gap-6 sm:gap-10 overflow-x-auto overscroll-x-contain snap-x snap-mandatory py-10"
           style={{ paddingLeft: "max(1.5rem, calc(50vw - 300px))", paddingRight: "max(1.5rem, calc(50vw - 300px))" }}
         >
           {TOOLS.map((tool, i) => {
             const isActive = i === active;
+            const Demo = STUDIO_DEMOS[tool.demo];
             return (
               <div
                 key={i}
-                ref={(el) => {
-                  cardRefs.current[i] = el;
-                }}
+                ref={setCardRef[i]}
                 className={`snap-center shrink-0 w-[84vw] max-w-[600px] will-change-transform ${
                   isActive ? "" : "cursor-pointer"
                 }`}
@@ -273,8 +412,8 @@ export default function StudiosExperience() {
               >
                 <article
                   className={[
-                    "group relative overflow-hidden rounded-3xl border bg-white/[0.04] backdrop-blur-xl",
-                    "p-7 sm:p-9 h-full flex flex-col gap-6",
+                    "group relative overflow-hidden rounded-3xl border bg-white/[0.045]",
+                    "p-7 sm:p-9 flex flex-col gap-6",
                     "transition-[border-color,box-shadow] duration-500",
                     isActive ? "border-white/25" : "border-white/10",
                   ].join(" ")}
@@ -314,26 +453,53 @@ export default function StudiosExperience() {
                         style={{ color: tool.accent, borderColor: `${tool.accent}55`, textShadow: `0 0 14px ${tool.accent}66` }}
                       >
                         {tool.price}
-                        <span aria-hidden>*</span>
+                        {tool.price.includes("$") && <span aria-hidden>*</span>}
                       </span>
+                      {tool.price.includes("$") && (
                       <span
                         role="tooltip"
                         className="absolute right-0 top-full mt-2.5 w-max max-w-[230px] rounded-xl border border-white/15 bg-[#0A0C15]/95 backdrop-blur-md px-3.5 py-2 text-xs text-white/75 leading-snug opacity-0 translate-y-1 pointer-events-none transition-all duration-300 group-hover/price:opacity-100 group-hover/price:translate-y-0 group-focus/price:opacity-100 group-focus/price:translate-y-0 z-10"
                       >
                         {PRICE_NOTE}
                       </span>
+                      )}
                     </span>
                   </div>
 
                   <div className="relative flex-1 flex flex-col gap-4">
-                    <h3 className="text-3xl sm:text-4xl font-bold tracking-tight">{tool.name}</h3>
-                    <p className="text-sm sm:text-base text-white/55 leading-relaxed max-w-md">
+                    <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">{tool.name}</h3>
+
+                    {/*
+                      The demo. Mounted only while this card is the centred one,
+                      so exactly one of these is animating at a time — eight
+                      idle loops repainting behind the perspective transforms
+                      would cost frames on the swipe and buy nothing, since
+                      nobody can read a card that is turned 12 degrees away.
+                    */}
+                    <div className="rounded-2xl border border-white/[0.07] bg-black/25 p-3.5">
+                      {/*
+                        Always mounted. Swapping the demo for a spacer when the
+                        card left the centre meant every card you scrolled past
+                        visibly emptied and refilled, which read as the page
+                        glitching. Off does not mean gone: the demo holds its
+                        finished state and only the centred one replays, so the
+                        timers still run in exactly one place.
+                      */}
+                      <Demo on={isActive} />
+                    </div>
+
+                    <p className="text-sm sm:text-base text-white/55 leading-relaxed">
                       {tool.tagline}
                     </p>
+                    {tool.note && (
+                      <p className="border-t border-white/10 pt-3 text-xs leading-relaxed text-white/35">
+                        {tool.note}
+                      </p>
+                    )}
                     {tool.href == null && tool.linkLabel && (
                       <p className="text-sm font-semibold text-white/40">{tool.linkLabel}</p>
                     )}
-                    <div className="flex flex-wrap items-center gap-3 mt-auto pt-3">
+                    <div className="flex flex-wrap items-center gap-3 pt-1">
                       {tool.href && (
                         <a
                           href={tool.href}

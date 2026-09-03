@@ -16,8 +16,8 @@ import { ASKS, TOOLS, type Tool } from "./tools";
  * The tool reel.
  *
  * The site could only ever say "custom tools built for your business", which
- * is a sentence a shop owner cannot picture. This shows six of them, one at a
- * time, and lets someone stop on the one that is their problem.
+ * is a sentence a shop owner cannot picture. This shows them one at a time and
+ * lets someone stop on the one that is their problem.
  *
  * Every panel is drawn rather than screenshotted, on purpose: a real screenshot
  * dates the moment a UI changes, carries a fake business name that has to be
@@ -30,7 +30,7 @@ const HOLD_MS = 5000;
 /**
  * A paint per tool, used as the ground the panel sits on.
  *
- * Six white panels in a row on a white card is a spec sheet. Flipping through
+ * A row of white panels on a white card is a spec sheet. Flipping through
  * a suite should feel like flipping through a suite, and this site already
  * rotates factory paint across every card grid — so the reel does the same,
  * one colour per tool, laid down as a soft wash rather than a fill. Livery
@@ -39,6 +39,7 @@ const HOLD_MS = 5000;
 const GROUND: Record<Tool["id"], string> = {
   rewards: PAINT.gialloOrion.hex,
   checkin: PAINT.verdeMantis.hex,
+  chat: PAINT.violaPasifae.hex,
   frontdesk: PAINT.rossoCorsa.hex,
   booking: PAINT.bluLeMans.hex,
   invoicing: PAINT.arancioXanto.hex,
@@ -120,9 +121,88 @@ function CheckIn({ on }: { on: boolean }) {
         <p className="mt-3 text-base font-semibold text-lightText dark:text-darkText">
           Checked in
         </p>
+        {/* Not a punch-card count. Scanning opens the shop's own page of deals
+            and news, and the scan is how the owner knows they came back. */}
         <p className={`mt-1.5 text-[14px] leading-snug ${muted}`}>
-          That is visit 3. Keep coming back to earn more deals.
+          Here is what is on at the shop this week.
         </p>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The website chat box.
+ *
+ * Sits next to the phone agent in the reel and had to not look like it: both
+ * are two bubbles and a reply. So this one is drawn inside a browser window,
+ * because that is the whole difference — this one lives on the site the same
+ * visitor is already reading, and it is answering out of the shop's own
+ * written policy rather than improvising. The little source tag under the
+ * answer is the part that matters: it is what separates this from a chatbot
+ * that makes up a warranty.
+ */
+function Chatbot({ on }: { on: boolean }) {
+  const [step, setStep] = useState(0);
+  useEffect(() => {
+    if (!on) return setStep(0);
+    const timers = [
+      setTimeout(() => setStep(1), 700),
+      setTimeout(() => setStep(2), 1800),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [on]);
+
+  const bubble = (shown: boolean) => ({
+    opacity: shown ? 1 : 0,
+    transform: shown ? "none" : "translateY(8px)",
+  });
+
+  return (
+    <div className={PANEL}>
+      <div className={`${cardBase} overflow-hidden p-0`}>
+        {/* Browser chrome. Three dots and a URL is all it takes to say "your
+            website" without drawing a website. */}
+        <div className="flex items-center gap-1.5 border-b border-lightBorder px-3 py-2 dark:border-darkBorder">
+          {["#FF5F57", "#FEBC2E", "#28C840"].map((c) => (
+            <span
+              key={c}
+              className="h-2 w-2 rounded-full"
+              style={{ backgroundColor: c, opacity: 0.55 }}
+            />
+          ))}
+          <span
+            className={`ml-2 rounded-full bg-black/[0.06] px-2.5 py-0.5 text-[10px] dark:bg-white/10 ${muted}`}
+          >
+            yourshop.com
+          </span>
+        </div>
+
+        <div className="space-y-2 p-3">
+          <div
+            className="max-w-[88%] rounded-2xl rounded-bl-md bg-black/[0.05] px-3.5 py-2 text-[13px] leading-snug text-lightText transition-all duration-500 dark:bg-white/10 dark:text-darkText"
+            style={bubble(step >= 1)}
+          >
+            Do you warranty the work?
+          </div>
+
+          <div
+            className="ml-auto max-w-[88%] rounded-2xl rounded-br-md px-3.5 py-2 text-[13px] leading-snug text-white transition-all duration-500"
+            style={{
+              ...bubble(step >= 2),
+              backgroundColor: PAINT.violaPasifae.hex,
+            }}
+          >
+            Yes. 24 months or 24,000 miles on parts and labor.
+          </div>
+
+          <p
+            className={`ml-auto flex items-center justify-end gap-1.5 text-[11px] font-medium transition-opacity duration-500 ${muted}`}
+            style={{ opacity: step >= 2 ? 1 : 0 }}
+          >
+            <HiSparkles size={11} /> Straight off your warranty page
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -549,6 +629,7 @@ function WhatsNext({ on }: { on: boolean }) {
 const PANELS: Record<string, (p: { on: boolean }) => JSX.Element> = {
   rewards: Rewards,
   checkin: CheckIn,
+  chat: Chatbot,
   frontdesk: FrontDesk,
   booking: Booking,
   invoicing: Invoicing,
@@ -576,7 +657,7 @@ export default function ToolCarousel({ running }: { running: boolean }) {
       {/*
         The rail.
 
-        Seven pills of text was the obvious build and the wrong one: at this
+        A pill of text per tool was the obvious build and the wrong one: at this
         width they wrapped, no two were the same size, and nothing about them
         said the panel was going to change on its own. These are equal
         rectangles butted up against each other, and the live one fills over

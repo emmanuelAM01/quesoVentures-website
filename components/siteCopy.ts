@@ -84,7 +84,7 @@ export function siteCopy({ city }: PlaceContext = {}) {
         },
         {
           title: "Then mix in some tools to taste.",
-          body: "Loyalty rewards, AI employees, appointment booking, invoicing, a deep dive on your finances, and more as your business needs them.",
+          body: "Loyalty rewards, AI that answers your phone and your website, appointment booking, invoicing, a deep dive on your finances, and more as your business needs them.",
         },
       ],
     },

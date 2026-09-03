@@ -7,7 +7,7 @@
  *
  * Deliberately says nothing about what any of it costs. The plan is to sell
  * tools the way AWS sells services — separately, added as a business needs them
- * — so a page that implies the $500 covers all six would have to be corrected
+ * — so a page that implies the $500 covers all of them would have to be corrected
  * later. Describe what they do; price them in conversation.
  *
  * Order is the order they appear. Lead with the two a local business pictures
@@ -18,6 +18,7 @@ export interface Tool {
   id:
     | "rewards"
     | "checkin"
+    | "chat"
     | "frontdesk"
     | "booking"
     | "invoicing"
@@ -43,7 +44,17 @@ export const TOOLS: Tool[] = [
   {
     id: "checkin",
     name: "Memberships",
-    line: "They tap to check in at the counter. They get their reward, and you know how to keep them coming back.",
+    line: "A code by the register opens your own page of deals and store news. Every scan tells you who came back.",
+  },
+  /*
+    Placed before the phone agent on purpose. Everyone has used a chat box on
+    a website, so this is the cheapest one to picture, and picturing it makes
+    the phone agent on the next panel obvious instead of far-fetched.
+  */
+  {
+    id: "chat",
+    name: "AI chat",
+    line: "It reads your own policies and answers the same five questions all day, right on your site.",
   },
   {
     id: "frontdesk",
@@ -67,7 +78,7 @@ export const TOOLS: Tool[] = [
     line: "Upload your numbers. It finds what is working, what is leaking, and what to do about it.",
   },
   /*
-    Last on purpose. The six above are things that exist; this one is the
+    Last on purpose. Everything above is a thing that exists; this one is the
     promise that the list is not finished, and it only means anything once
     someone has seen what the finished ones look like.
   */
