@@ -57,7 +57,7 @@ const TOOLS: Tool[] = [
   {
     demo: "rewards",
     name: "Queso Rewards",
-    price: "$0 / month",
+    price: "$40 / month",
     tagline:
       "A punch card that lives on your customer's phone. It fills as they come back, and it texts them when they are one are getting closer to their reward.",
     href: "https://www.quesorewards.com",
