@@ -151,8 +151,12 @@ export function siteCopy({ city }: PlaceContext = {}) {
      * committed to building a website for every stranger who asked. The offer
      * is now a report: what someone searching right now actually finds, whether
      * an AI assistant names the business, and the first thing worth fixing.
-     * It costs an hour instead of a week, it can be automated later without the
-     * button ever changing, and it demonstrates the service by performing it.
+     * It costs an hour instead of a week, and it demonstrates the service by
+     * performing it.
+     *
+     * It is now automated end to end — the form hands the lead to the portal,
+     * which reads their listing and mails them the report before they have put
+     * their phone down — and the button never changed, exactly as planned.
      *
      * The hand-built preview still happens — it is the strongest thing in the
      * pitch and no competitor at scale can match it — but it moves to the reply,
@@ -174,7 +178,10 @@ export function siteCopy({ city }: PlaceContext = {}) {
       cta: "Get My Free Report",
       ctaPrefill:
         "I'd like the free report on where my business shows up.",
-      reassurance: "",
+      // Worth saying now that it is true. "Free" invites the assumption that
+      // it arrives whenever somebody gets round to it; a minute is the whole
+      // difference between asking now and meaning to ask later.
+      reassurance: "It lands in your inbox in about a minute.",
     },
   };
 }

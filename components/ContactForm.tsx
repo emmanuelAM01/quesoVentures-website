@@ -31,6 +31,10 @@ export default function ContactForm({
 }: Props) {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [error, setError] = useState("");
+  // Whether their report actually went out, which decides which promise the
+  // success panel is allowed to make. A phone-only lead, or a portal that
+  // could not be reached, gets the honest "I'll be in touch" instead.
+  const [reportSent, setReportSent] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -49,6 +53,9 @@ export default function ContactForm({
           contact: formData.get("contact"),
           placeId: formData.get("placeId"),
           message: formData.get("message"),
+          // Which page the form was opened from, so a lead arrives saying
+          // where it came from rather than just when.
+          sourcePage: window.location.pathname,
           website: formData.get("website"), // honeypot
         }),
       });
@@ -61,6 +68,7 @@ export default function ContactForm({
         return;
       }
 
+      setReportSent(!!data?.reportSent);
       setStatus("success");
       trackContactSubmit("success");
       form.reset();
@@ -79,10 +87,17 @@ export default function ContactForm({
           ✓
         </div>
         <div className="text-2xl font-semibold text-lightText dark:text-darkText mb-2">
-          Got it
+          {reportSent ? "Check your email" : "Got it"}
         </div>
         <p className="text-base font-light text-lightTextMuted dark:text-darkTextMuted">
-          Your report is on the way, within 24 hours. In a hurry? Call{" "}
+          {reportSent ? (
+            <>
+              Your report is already in your inbox. If it is not there in a
+              minute, look in spam, or call{" "}
+            </>
+          ) : (
+            <>I&apos;ll get back to you shortly. In a hurry? Call{" "}</>
+          )}
           <CallLink
             from="contact_modal"
             className="font-semibold text-lightButton dark:text-darkButton"
