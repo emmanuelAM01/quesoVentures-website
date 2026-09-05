@@ -37,6 +37,13 @@ function isNonEmpty(v: unknown) {
  * the lead is saved and the confirmation is away, and does the slow half after
  * it has replied. The ceiling is here for the pathological case, not the
  * normal one.
+ *
+ * It returns the portal's own `acknowledged` rather than a boolean, because
+ * only the portal knows whether the confirmation really went. This route used
+ * to answer the question itself with "did the POST succeed, and does the
+ * contact look like an email" — which is true right up until the send fails,
+ * and then the visitor is told to go and check an inbox nothing was delivered
+ * to. The portal already returns the real answer; this passes it through.
  */
 async function sendToPortal(payload: {
   business_name: string;
@@ -44,9 +51,10 @@ async function sendToPortal(payload: {
   place_id: string | null;
   message: string | null;
   source_page: string | null;
-}): Promise<boolean> {
+}): Promise<{ handled: boolean; acknowledged: boolean }> {
+  const nope = { handled: false, acknowledged: false };
   const portal = process.env.PORTAL_URL;
-  if (!portal) return false;
+  if (!portal) return nope;
 
   try {
     const res = await fetch(`${portal.replace(/\/$/, "")}/api/website-lead`, {
@@ -63,12 +71,17 @@ async function sendToPortal(payload: {
 
     if (!res.ok) {
       console.error("Portal lead intake failed", res.status, await res.text().catch(() => ""));
-      return false;
+      return nope;
     }
-    return true;
+
+    const body = (await res.json().catch(() => null)) as { acknowledged?: boolean } | null;
+    // The lead is saved either way — that is what `handled` means, and it is
+    // what decides whether the Gmail fallback fires. Whether they were emailed
+    // is a separate fact and only the portal has it.
+    return { handled: true, acknowledged: !!body?.acknowledged };
   } catch (err) {
     console.error("Portal lead intake error", err);
-    return false;
+    return nope;
   }
 }
 
@@ -161,7 +174,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const handled = await sendToPortal({
+    const portal = await sendToPortal({
       business_name: name,
       contact,
       place_id: placeId || null,
@@ -169,7 +182,7 @@ export async function POST(req: Request) {
       source_page: sourcePage || null,
     });
 
-    if (!handled && !(await mailEmmanuel({ name, contact, message, placeId }))) {
+    if (!portal.handled && !(await mailEmmanuel({ name, contact, message, placeId }))) {
       // Both paths gone. This is the only case the visitor is told about,
       // because it is the only one where their lead really is nowhere.
       return Response.json(
@@ -179,9 +192,9 @@ export async function POST(req: Request) {
     }
 
     // Whether anything actually reached them decides which sentence the form
-    // shows next. "Check your email" is a promise, and it is only made when a
-    // confirmation really has gone to a real address.
-    return Response.json({ ok: true, acknowledged: handled && looksEmail }, { status: 200 });
+    // shows next. "Check your email" is a promise, and it is only made when the
+    // portal says a confirmation really did go to a real address.
+    return Response.json({ ok: true, acknowledged: portal.acknowledged }, { status: 200 });
   } catch {
     return Response.json({ error: "Invalid request." }, { status: 400 });
   }
