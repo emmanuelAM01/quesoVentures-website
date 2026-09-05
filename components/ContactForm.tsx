@@ -31,10 +31,10 @@ export default function ContactForm({
 }: Props) {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [error, setError] = useState("");
-  // Whether their report actually went out, which decides which promise the
-  // success panel is allowed to make. A phone-only lead, or a portal that
+  // Whether a confirmation actually reached them, which decides which promise
+  // the success panel is allowed to make. A phone-only lead, or a portal that
   // could not be reached, gets the honest "I'll be in touch" instead.
-  const [reportSent, setReportSent] = useState(false);
+  const [acknowledged, setAcknowledged] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -68,7 +68,7 @@ export default function ContactForm({
         return;
       }
 
-      setReportSent(!!data?.reportSent);
+      setAcknowledged(!!data?.acknowledged);
       setStatus("success");
       trackContactSubmit("success");
       form.reset();
@@ -87,13 +87,13 @@ export default function ContactForm({
           ✓
         </div>
         <div className="text-2xl font-semibold text-lightText dark:text-darkText mb-2">
-          {reportSent ? "Check your email" : "Got it"}
+          {acknowledged ? "Check your email" : "Got it"}
         </div>
         <p className="text-base font-light text-lightTextMuted dark:text-darkTextMuted">
-          {reportSent ? (
+          {acknowledged ? (
             <>
-              Your report is already in your inbox. If it is not there in a
-              minute, look in spam, or call{" "}
+              I&apos;ve sent you a note, and your report is right behind it —
+              usually within a minute. If nothing shows up, check spam, or call{" "}
             </>
           ) : (
             <>I&apos;ll get back to you shortly. In a hurry? Call{" "}</>

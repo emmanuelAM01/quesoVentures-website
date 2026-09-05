@@ -6,9 +6,13 @@ import nodemailer from "nodemailer";
  * This used to be the whole pipeline: compose a Gmail message to Emmanuel and
  * stop. The person who asked got a page saying their report was coming "within
  * 24 hours", and whether one ever arrived depended on him seeing that mail and
- * finding an evening. Now the portal does it — it records the lead, reads their
- * Google listing, writes the report, sends it, and tells Emmanuel it happened —
- * all before this handler returns.
+ * finding an evening.
+ *
+ * Now the portal takes it. Before this handler returns it has recorded the
+ * lead, emailed the visitor a confirmation, and told Emmanuel. The report
+ * itself is built behind that — reading their listing, fetching their site and
+ * running Google's mobile speed test takes half a minute, and nobody watches a
+ * form spinner for half a minute — and lands a minute later.
  *
  * Gmail stays as the fallback and is not going anywhere. A marketing site must
  * never lose a lead because another service was slow, redeploying, or missing
@@ -29,10 +33,10 @@ function isNonEmpty(v: unknown) {
  * same header the client form routes already use, so there is one secret to
  * rotate rather than two.
  *
- * The timeout is generous because the portal is doing real work inside this
- * request: a Places lookup, a fetch of the visitor's own website, and two
- * emails. It is still a timeout, because a visitor watching a spinner is not
- * waiting on us to be thorough.
+ * The timeout is generous but the wait is not: the portal answers as soon as
+ * the lead is saved and the confirmation is away, and does the slow half after
+ * it has replied. The ceiling is here for the pathological case, not the
+ * normal one.
  */
 async function sendToPortal(payload: {
   business_name: string;
@@ -174,9 +178,10 @@ export async function POST(req: Request) {
       );
     }
 
-    // Whether the report went out decides which sentence the form shows next:
-    // "check your email" is a promise, and it is only made when it is true.
-    return Response.json({ ok: true, reportSent: handled && looksEmail }, { status: 200 });
+    // Whether anything actually reached them decides which sentence the form
+    // shows next. "Check your email" is a promise, and it is only made when a
+    // confirmation really has gone to a real address.
+    return Response.json({ ok: true, acknowledged: handled && looksEmail }, { status: 200 });
   } catch {
     return Response.json({ error: "Invalid request." }, { status: 400 });
   }
