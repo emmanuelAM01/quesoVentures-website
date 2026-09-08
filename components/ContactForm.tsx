@@ -5,6 +5,7 @@ import { BUSINESS } from "./businessInfo";
 import { trackContactSubmit } from "./analytics";
 import CallLink from "./CallLink";
 import BusinessPicker from "./BusinessPicker";
+import { formatContactInput } from "./phone";
 
 const inputClass =
   "w-full rounded-xl border border-transparent bg-black/[0.04] dark:bg-white/[0.06] px-4 py-3 text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/50 dark:placeholder:text-darkTextMuted/50 focus:outline-none focus:border-lightAccent/40 dark:focus:border-darkAccent/40 focus:bg-white dark:focus:bg-transparent transition-colors";
@@ -138,6 +139,14 @@ export default function ContactForm({
           inputMode="email"
           placeholder="you@yourbusiness.com or (281) 555-0100"
           className={inputClass}
+          // Formatted in place rather than through state: the field is
+          // uncontrolled and read with FormData on submit, and adding state
+          // for a cosmetic shape would be the tail wagging the dog. The
+          // formatter refuses to touch anything holding a letter or an '@',
+          // so an address typed here is never mangled on its way in.
+          onChange={(e) => {
+            e.target.value = formatContactInput(e.target.value);
+          }}
         />
       </div>
 

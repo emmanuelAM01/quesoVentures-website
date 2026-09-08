@@ -25,3 +25,5 @@ Thumbs.db
 # Build artifacts
 /build
 /dist
+.vercel
+.env*
