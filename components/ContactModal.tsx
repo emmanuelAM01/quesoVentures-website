@@ -42,7 +42,10 @@ export default function ContactModal() {
         prefillMessage={prefillMessage}
         prefillBusiness={business}
         prefillPlaceId={placeId}
-        onSuccess={() => setTimeout(close, 5000)}
+        // No timer. The confirmation stays until it is dismissed — by this
+        // button, the ✕, Escape, or the backdrop — because it is the only
+        // place the visitor is told whether a report is already coming.
+        onClose={close}
       />
     </Modal>
   );

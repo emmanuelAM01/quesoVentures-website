@@ -18,8 +18,19 @@ interface Props {
   /** Set when the hero demo already identified the business. */
   prefillBusiness?: string;
   prefillPlaceId?: string;
-  /** Fired after a successful send — the modal uses it to auto-close. */
-  onSuccess?: () => void;
+  /**
+   * Closes the surface this form is sitting in, when there is one.
+   *
+   * Replaces an onSuccess that existed only to start a five second timer. The
+   * success panel is the one place the form tells somebody what happens next —
+   * whether a report is already on its way or whether I am replying by hand —
+   * and it was deleting itself while they were still reading it. Nothing on a
+   * confirmation should be on a countdown.
+   *
+   * Absent on /contact, which is a page rather than a modal and has nothing to
+   * close, so the button simply is not rendered there.
+   */
+  onClose?: () => void;
   submitLabel?: string;
 }
 
@@ -27,7 +38,7 @@ export default function ContactForm({
   prefillMessage = "",
   prefillBusiness = "",
   prefillPlaceId = "",
-  onSuccess,
+  onClose,
   submitLabel = "Send My Report",
 }: Props) {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
@@ -73,7 +84,6 @@ export default function ContactForm({
       setStatus("success");
       trackContactSubmit("success");
       form.reset();
-      onSuccess?.();
     } catch {
       setStatus("error");
       trackContactSubmit("error");
@@ -88,7 +98,7 @@ export default function ContactForm({
           ✓
         </div>
         <div className="text-2xl font-semibold text-lightText dark:text-darkText mb-2">
-          {acknowledged ? "Check your email" : "Got it"}
+          {acknowledged ? "Check your email" : "Messaged recieved"}
         </div>
         <p className="text-base font-light text-lightTextMuted dark:text-darkTextMuted">
           {acknowledged ? (
@@ -105,6 +115,15 @@ export default function ContactForm({
           />
           .
         </p>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="mt-7 rounded-xl bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover px-6 py-3 text-base font-semibold text-white dark:text-darkBG transition-colors"
+          >
+            Close
+          </button>
+        )}
       </div>
     );
   }
