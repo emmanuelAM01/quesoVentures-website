@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { BUSINESS } from "./businessInfo";
 import { trackContactSubmit } from "./analytics";
-import CallLink from "./CallLink";
+import CopyEmail from "./CopyEmail";
 import BusinessPicker from "./BusinessPicker";
 import { formatContactInput } from "./phone";
 
@@ -98,23 +98,31 @@ export default function ContactForm({
           ✓
         </div>
         <div className="text-2xl font-semibold text-lightText dark:text-darkText mb-2">
-          {acknowledged ? "Check your email" : "Messaged recieved"}
+          {acknowledged ? "Check your email" : "Message received"}
         </div>
-        <p className="text-base font-light text-lightTextMuted dark:text-darkTextMuted">
-          {acknowledged ? (
-            <>
-              I&apos;ve sent you a note, and your report is right behind it —
-              usually within a minute. If nothing shows up, check spam, or call{" "}
-            </>
-          ) : (
-            <>I&apos;ll get back to you shortly. In a hurry? Call{" "}</>
-          )}
-          <CallLink
-            from="contact_modal"
-            className="font-semibold text-lightButton dark:text-darkButton"
-          />
-          .
-        </p>
+        {/* Two paragraphs, not one.
+            These were adjacent lines in a single <p>, and JSX collapses the
+            newline between them into a space — so they rendered as one run-on
+            sentence that went from "it is already in your inbox" straight into
+            "if it never arrives", which are opposite messages. They are also
+            doing different jobs: the first is reassurance, the second is the
+            escape hatch, and the second only matters to someone the first one
+            failed. */}
+        {acknowledged ? (
+          <div className="space-y-3 text-base font-light text-lightTextMuted dark:text-darkTextMuted">
+            <p>
+              Check your email, you should have gotten something. High chance your report is already in your inbox too. (Be sure to check spam/junk)
+            </p>
+            <p>
+              If nothing shows up for over 24 hours, send an email here:{" "}
+              <CopyEmail />
+            </p>
+          </div>
+        ) : (
+          <p className="text-base font-light text-lightTextMuted dark:text-darkTextMuted">
+            Thank you for reaching out and wanting to be part of the Queso Network.
+          </p>
+        )}
         {onClose && (
           <button
             type="button"
