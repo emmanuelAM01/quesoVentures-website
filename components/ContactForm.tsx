@@ -119,9 +119,17 @@ export default function ContactForm({
             </p>
           </div>
         ) : (
-          <p className="text-base font-light text-lightTextMuted dark:text-darkTextMuted">
-            Thank you for reaching out and wanting to be part of the Queso Network.
-          </p>
+          /* The portal did not take this one, so nothing has been sent to them
+             and nothing is coming automatically. That makes this the branch
+             where a way to reach me matters most, and it was the one branch
+             that had none. */
+          <div className="space-y-3 text-base font-light text-lightTextMuted dark:text-darkTextMuted">
+            <p>Thank you for reaching out and wanting to be part of the Queso Network.</p>
+            <p>
+              I will get back to you shortly. If you would rather not wait:{" "}
+              <CopyEmail />
+            </p>
+          </div>
         )}
         {onClose && (
           <button
