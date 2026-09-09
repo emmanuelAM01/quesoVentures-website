@@ -17,6 +17,9 @@ interface Props {
   prefillMessage?: string;
   /** Set when the hero demo already identified the business. */
   prefillBusiness?: string;
+  /** The same pick in pieces, so a prefill submits what a fresh pick would. */
+  prefillBusinessName?: string;
+  prefillBusinessAddress?: string;
   prefillPlaceId?: string;
   /**
    * Closes the surface this form is sitting in, when there is one.
@@ -37,6 +40,8 @@ interface Props {
 export default function ContactForm({
   prefillMessage = "",
   prefillBusiness = "",
+  prefillBusinessName = "",
+  prefillBusinessAddress = "",
   prefillPlaceId = "",
   onClose,
   submitLabel = "Send My Report",
@@ -64,6 +69,9 @@ export default function ContactForm({
           name: formData.get("name"),
           contact: formData.get("contact"),
           placeId: formData.get("placeId"),
+          // Split at the source rather than unpicked later. `name` is now the
+          // business name on its own; this is the rest of what was chosen.
+          businessAddress: formData.get("businessAddress"),
           message: formData.get("message"),
           // Which page the form was opened from, so a lead arrives saying
           // where it came from rather than just when.
@@ -163,6 +171,8 @@ export default function ContactForm({
         labelClass={labelClass}
         initialName={prefillBusiness}
         initialPlaceId={prefillPlaceId}
+        initialBusinessName={prefillBusinessName}
+        initialBusinessAddress={prefillBusinessAddress}
       />
 
       <div className="flex flex-col gap-1.5">

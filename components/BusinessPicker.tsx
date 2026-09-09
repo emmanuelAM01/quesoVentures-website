@@ -9,6 +9,15 @@ interface Props {
   /** Handed over by the hero demo when the visitor already picked themselves. */
   initialName?: string;
   initialPlaceId?: string;
+  /**
+   * The same pick, still in pieces.
+   *
+   * initialName is the display string ("Mann Floors, 3460 Blue Bonnet Cir"),
+   * which is what belongs in the box. These two are what actually gets
+   * submitted, so a prefilled pick carries the same structure a fresh one does.
+   */
+  initialBusinessName?: string;
+  initialBusinessAddress?: string;
 }
 
 /**
@@ -30,12 +39,31 @@ export default function BusinessPicker({
   labelClass,
   initialName = "",
   initialPlaceId = "",
+  initialBusinessName = "",
+  initialBusinessAddress = "",
 }: Props) {
   const [query, setQuery] = useState(initialName);
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const [placeId, setPlaceId] = useState(initialPlaceId);
+  /**
+   * The chosen business, kept apart from what is shown in the box.
+   *
+   * The box shows "Mann Floors, 3460 Blue Bonnet Cir Ste 100, Fort Worth, TX"
+   * on purpose — that is how somebody confirms they picked their own shop
+   * rather than one two streets over. But that string is a label, not data,
+   * and submitting it meant everything downstream received a name with an
+   * address welded onto it and had to guess where one ended and the other
+   * began. Google already hands these over separately; this stops throwing
+   * that apart and gluing it back together.
+   *
+   * Null the moment the field is edited by hand, because a pick that has been
+   * typed over no longer describes what is in the box.
+   */
+  const [picked, setPicked] = useState<{ name: string; address: string } | null>(
+    initialBusinessName ? { name: initialBusinessName, address: initialBusinessAddress } : null
+  );
   const [manual, setManual] = useState(false);
   /** Null until the first lookup answers, so nothing flashes on load. */
   const [configured, setConfigured] = useState<boolean | null>(null);
@@ -71,7 +99,10 @@ export default function BusinessPicker({
   useEffect(() => {
     if (initialName) setQuery(initialName);
     if (initialPlaceId) setPlaceId(initialPlaceId);
-  }, [initialName, initialPlaceId]);
+    if (initialBusinessName) {
+      setPicked({ name: initialBusinessName, address: initialBusinessAddress });
+    }
+  }, [initialName, initialPlaceId, initialBusinessName, initialBusinessAddress]);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -83,6 +114,7 @@ export default function BusinessPicker({
 
   const choose = (s: PlaceSuggestion) => {
     setQuery(s.address ? `${s.name}, ${s.address}` : s.name);
+    setPicked({ name: s.name, address: s.address ?? "" });
     setPlaceId(s.placeId);
     setOpen(false);
     setSuggestions([]);
@@ -119,7 +151,6 @@ export default function BusinessPicker({
       <div ref={boxRef} className="relative">
         <input
           id="business-name"
-          name="name"
           type="text"
           required
           autoComplete="off"
@@ -135,13 +166,21 @@ export default function BusinessPicker({
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
-            // Editing after a pick means the place_id no longer describes it.
+            // Editing after a pick means neither the place_id nor the split
+            // name still describes what is in the box.
             if (placeId) setPlaceId("");
+            if (picked) setPicked(null);
           }}
           onKeyDown={onKeyDown}
           onFocus={() => suggestions.length > 0 && setOpen(true)}
           className={inputClass}
         />
+        {/* What actually submits. The visible field above is a label the
+            visitor reads to confirm the pick; these three are the data.
+            Typed straight in with no pick, `picked` is null and the name is
+            simply what they typed, which is already exactly the name. */}
+        <input type="hidden" name="name" value={picked ? picked.name : query} />
+        <input type="hidden" name="businessAddress" value={picked?.address ?? ""} />
         <input type="hidden" name="placeId" value={placeId} />
 
         {open && suggestions.length > 0 && (

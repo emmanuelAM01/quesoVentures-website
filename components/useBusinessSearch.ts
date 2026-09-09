@@ -162,8 +162,13 @@ export function useBusinessSearch({
       new CustomEvent("contact:prefill", {
         detail: {
           title: "Get My Free Report",
+          // The label the field shows, and underneath it the same pick still
+          // in pieces. Sending only the joined string made the form re-derive
+          // a name out of it, which is a guess we never had to make.
           business:
             chosen && chosen.address ? `${chosen.name}, ${chosen.address}` : name,
+          businessName: chosen?.name ?? name,
+          businessAddress: chosen?.address ?? "",
           placeId: chosen?.placeId ?? "",
           message: `I'd like the free report for ${name}.`,
         },

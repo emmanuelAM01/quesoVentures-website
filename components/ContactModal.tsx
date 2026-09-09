@@ -8,6 +8,8 @@ export default function ContactModal() {
   const [prefillMessage, setPrefillMessage] = useState("");
   const [modalTitle, setModalTitle] = useState("Get in Touch");
   const [business, setBusiness] = useState("");
+  const [businessName, setBusinessName] = useState("");
+  const [businessAddress, setBusinessAddress] = useState("");
   const [placeId, setPlaceId] = useState("");
 
   const close = () => {
@@ -20,11 +22,15 @@ export default function ContactModal() {
         message?: string;
         title?: string;
         business?: string;
+        businessName?: string;
+        businessAddress?: string;
         placeId?: string;
       }>;
       if (ce.detail?.message) setPrefillMessage(ce.detail.message);
       // Sent by the hero demo, so nobody types their business name twice.
       setBusiness(ce.detail?.business ?? "");
+      setBusinessName(ce.detail?.businessName ?? "");
+      setBusinessAddress(ce.detail?.businessAddress ?? "");
       setPlaceId(ce.detail?.placeId ?? "");
 
       // The heading echoes the button that opened it, so the modal never
@@ -41,6 +47,8 @@ export default function ContactModal() {
       <ContactForm
         prefillMessage={prefillMessage}
         prefillBusiness={business}
+        prefillBusinessName={businessName}
+        prefillBusinessAddress={businessAddress}
         prefillPlaceId={placeId}
         // No timer. The confirmation stays until it is dismissed — by this
         // button, the ✕, Escape, or the backdrop — because it is the only

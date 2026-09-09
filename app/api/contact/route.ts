@@ -47,6 +47,7 @@ function isNonEmpty(v: unknown) {
  */
 async function sendToPortal(payload: {
   business_name: string;
+  business_address: string | null;
   contact: string;
   place_id: string | null;
   message: string | null;
@@ -137,8 +138,12 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // `name` is the business name or its website — enough to look them up.
+    // `name` is the business name on its own now. The picker keeps the joined
+    // "name, address" label in the visible field and submits the two apart, so
+    // nothing downstream has to work out where one ends and the other starts.
     const name = typeof body?.name === "string" ? body.name.trim() : "";
+    const businessAddress =
+      typeof body?.businessAddress === "string" ? body.businessAddress.trim() : "";
     const contact = typeof body?.contact === "string" ? body.contact.trim() : "";
     const message = typeof body?.message === "string" ? body.message.trim() : "";
     // Set when they picked their business off the Google dropdown rather than
@@ -176,6 +181,7 @@ export async function POST(req: Request) {
 
     const portal = await sendToPortal({
       business_name: name,
+      business_address: businessAddress || null,
       contact,
       place_id: placeId || null,
       message: message || null,
