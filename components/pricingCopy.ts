@@ -1,4 +1,3 @@
-import { BUSINESS } from "components/businessInfo";
 
 /**
  * Every number and sentence about price, in one place.
@@ -73,9 +72,6 @@ export const PRICING_FAQ = {
   q: "What does it cost?",
   a: `${PRICING_LINE} ${AGENCY_LINE} You'll know your exact number before anything starts.`,
 } as const;
-
-/** Tail fragment for meta descriptions. Reads the phone from BUSINESS. */
-export const PRICING_META = `${PRICING.monthlyLabel} a month. Call ${BUSINESS.phone}.`;
 
 /**
  * The monthly plan as schema.org, so the price is a machine-readable fact.

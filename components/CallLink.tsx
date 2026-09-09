@@ -15,9 +15,23 @@ interface Props {
  * Every phone link on the site goes through here.
  *
  * One component means the number can never drift between pages, and every tap
- * is recorded with the placement that produced it — so after a month you can
- * see whether the header pill, the hero, or the footer is actually earning the
- * calls, and cut the ones that aren't.
+ * is recorded with the placement that produced it.
+ *
+ * IT CURRENTLY HAS NO CALL SITES, AND THAT IS DELIBERATE.
+ *
+ * The site now asks people to fill in the form first and email second; the
+ * phone is a last resort rather than something brandished on every page. The
+ * number was removed from the header drawer, the footer, the contact page and
+ * the success panel for that reason, not because it stopped working.
+ *
+ * It is kept rather than deleted because "last" is not "never" — a campaign or
+ * a single page may want it back — and because if it does come back it must
+ * come back through here, so the number and the tracking stay in one place.
+ *
+ * The number is still published where it belongs: the Google Business Profile,
+ * and the telephone field in this site's LocalBusiness schema, which is what
+ * lets Google line the two up as the same business. Neither of those is a
+ * phone link a visitor sees.
  */
 export default function CallLink({
   from,

@@ -7,7 +7,6 @@ import { AiOutlineInstagram, AiOutlineYoutube } from "react-icons/ai";
 import { LISTED_FEATURED } from "components/serviceAreas";
 import { CITIES, ALL_NEIGHBORHOODS } from "components/places";
 import { BUSINESS } from "components/businessInfo";
-import CallLink from "components/CallLink";
 import { PAINT } from "components/livery";
 
 const CLICKS_TO_TRIGGER = 3;
@@ -160,10 +159,6 @@ const Footer = () => {
               */}
               <div>
                 <p className={columnHeading}>Support</p>
-                <CallLink
-                  from="footer"
-                  className="block py-2.5 text-[15px] font-medium text-[#F5F7FA] transition-opacity hover:opacity-70"
-                />
                 <a
                   href={BUSINESS.emailHref}
                   className="block whitespace-nowrap py-2.5 text-[13px] text-[#8A949E] transition-colors hover:text-[#F5F7FA] sm:text-[15px]"

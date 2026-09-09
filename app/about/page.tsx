@@ -7,7 +7,6 @@ import Reveal from "components/Reveal";
 import AboutPortrait from "components/AboutPortrait";
 import { liveryAt, PAINT } from "components/livery";
 import Glow from "components/Glow";
-import CallLink from "components/CallLink";
 import NicheCtaButton from "components/NicheCtaButton";
 import {
   BUSINESS,

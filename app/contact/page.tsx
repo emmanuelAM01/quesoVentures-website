@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Footer from "components/Footer";
 import ContactForm from "components/ContactForm";
 import Glow from "components/Glow";
-import CallLink from "components/CallLink";
 import { PAINT } from "components/livery";
 import {
   BUSINESS,
@@ -112,17 +111,6 @@ export default function ContactPage() {
                   >
                     {BUSINESS.email}
                   </a>
-                </dd>
-              </div>
-              <div className="flex gap-2">
-                <dt className="font-semibold text-lightText dark:text-darkText">
-                  Phone
-                </dt>
-                <dd>
-                  <CallLink
-                    from="contact_page"
-                    className="inline-block py-1.5 font-light text-lightTextMuted transition-colors hover:text-lightText dark:text-darkTextMuted dark:hover:text-darkText"
-                  />
                 </dd>
               </div>
             </dl>

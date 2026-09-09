@@ -7,8 +7,6 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import ThemeSwitch from "./ThemeSwitch";
 import { INDUSTRIES, LISTED_FEATURED } from "./serviceAreas";
 import { CITIES, ALL_NEIGHBORHOODS } from "components/places";
-import { BUSINESS } from "./businessInfo";
-import CallLink from "./CallLink";
 import NicheCtaButton from "./NicheCtaButton";
 import { SITE_COPY } from "./siteCopy";
 
@@ -45,21 +43,6 @@ function selectedPlaceOrTrade(pathname: string | null): string | null {
   const city = CITIES.find((c) => c.slug === pathname);
   if (city) return city.name;
   return null;
-}
-
-function PhoneIcon({ size = 14 }: { size?: number }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2Z" />
-    </svg>
-  );
 }
 
 /**
@@ -568,15 +551,6 @@ export default function Header() {
               >
                 Contact
               </Link>
-
-              {/* Reachable, not competing. */}
-              <CallLink
-                from="header_mobile"
-                className={`${mobileLinkClass} flex items-center gap-2 text-lightTextMuted dark:text-darkTextMuted`}
-              >
-                <PhoneIcon size={14} />
-                {BUSINESS.phone}
-              </CallLink>
             </div>
           </nav>
         )}
