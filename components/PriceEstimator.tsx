@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { trackCtaClick } from "./analytics";
 
 type WebsiteSizeId = "landing" | "standard" | "large";
 
@@ -222,6 +223,7 @@ Extras: ${selectedFeatures.length ? selectedFeatures.map(f => f.title).join(", "
 Range: ${money(totals.low)} to ${money(totals.high)}
 `;
 
+    trackCtaClick("price_estimator");
     window.dispatchEvent(new CustomEvent("contact:prefill", { detail: { message: summary } }));
     window.dispatchEvent(new CustomEvent("modal:open", { detail: { id: "contact-popup" } }));
   }}

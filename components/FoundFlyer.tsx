@@ -1,7 +1,9 @@
 "use client";
+import { trackCtaClick } from "./analytics";
 
 export default function FoundFlyer() {
   const openContact = () => {
+    trackCtaClick("found_flyer");
     window.dispatchEvent(
       new CustomEvent("modal:open", { detail: { id: "contact-popup" } })
     );

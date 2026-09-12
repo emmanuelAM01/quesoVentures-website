@@ -12,7 +12,14 @@ import { track } from "@vercel/analytics";
  * these down by page in the dashboard.
  */
 
-/** Where on the page the action happened. Keep this list short and stable. */
+/**
+ * Where on the page the action happened. Keep this list short and stable.
+ *
+ * Every button that opens the contact form must pass one of these. Five of them
+ * were opening the form without firing anything at all, which made the funnel
+ * read as if the estimator, the FAQ deck and the stamp page never converted —
+ * they were converting, nothing was counting it.
+ */
 export type Placement =
   | "header"
   | "header_mobile"
@@ -23,10 +30,14 @@ export type Placement =
   | "contact_page"
   | "contact_modal"
   | "about"
+  | "about_modal"
   | "why_local"
   | "why_remote"
   | "industries"
-  | "areas";
+  | "areas"
+  | "faq"
+  | "price_estimator"
+  | "found_flyer";
 
 /**
  * Someone tapped a phone number.

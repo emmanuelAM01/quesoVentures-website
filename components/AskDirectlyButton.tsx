@@ -1,10 +1,18 @@
 "use client";
 
-export default function AskDirectlyButton() {
+import { trackCtaClick, type Placement } from "./analytics";
+
+/**
+ * No call sites at the moment — the free-report ask is carried by FreeAudit.
+ * Kept wired to the funnel so that if it is dropped back onto a page it counts
+ * from the first click rather than going quietly missing the way it did before.
+ */
+export default function AskDirectlyButton({ from = "hero" }: { from?: Placement }) {
   return (
     <button
       type="button"
       onClick={() => {
+        trackCtaClick(from);
         window.dispatchEvent(new CustomEvent("contact:prefill", {
           detail: { message: "I want to see what my website can look like. I need help with getting more..." }
         }));

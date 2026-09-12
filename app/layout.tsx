@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "components/Header";
 import AboutModal from "components/AboutModal";
 import ContactModal from "components/ContactModal";
@@ -75,8 +76,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ContactModal />
           <ConsoleEasterEgg />
         </ThemeProvider>
-        {/* Page views only. Custom events (e.g. call-button taps) need Pro. */}
+        {/*
+          Page views and the custom conversion events in components/analytics.ts.
+          Both need Web Analytics enabled on the project, which it is.
+        */}
         <Analytics />
+        {/*
+          Core Web Vitals from real visitors, per route.
+
+          This is field data, not a Lighthouse score: it is what Google actually
+          measures this site on, and it is the only way to see that one city page
+          is slow because of its hero photograph while the rest are fine.
+
+          Speed Insights was switched on for the project months ago and was
+          collecting nothing, because nothing on the site was sending it.
+        */}
+        <SpeedInsights />
       </body>
     </html>
   );
