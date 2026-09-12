@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Modal from "./Modal";
+import { trackCtaClick } from "./analytics";
 
 export default function AboutModal() {
 
@@ -63,6 +64,7 @@ export default function AboutModal() {
         <button
           type="button"
           onClick={() => {
+            trackCtaClick("about_modal");
             window.dispatchEvent(new CustomEvent("modal:close", { detail: { id: "about-popup" } }));
             window.dispatchEvent(new CustomEvent("contact:prefill", {
               detail: { message: "I want to learn more about how you can help my Houston business:" }

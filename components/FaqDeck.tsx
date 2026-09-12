@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackCtaClick } from "./analytics";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 interface FaqItem {
@@ -26,6 +27,7 @@ export default function FaqDeck({
   const next = () => setActive((a) => (a + 1) % n);
 
   const openContact = () => {
+    trackCtaClick("faq");
     window.dispatchEvent(
       new CustomEvent("contact:prefill", {
         detail: { message: "I have a question about getting my business found online:" },
