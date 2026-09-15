@@ -43,6 +43,27 @@ type Tool = {
   accent: string;
 };
 
+/**
+ * Everything, for less than the sum of it.
+ *
+ * Eight cards is eight decisions, and a shop owner who would happily take one
+ * says no to the fourth simply because it is the fourth thing they have been
+ * asked. One price is one decision. It is deliberately well under the running
+ * total -- the saving is the offer, and without it there is no reason to take
+ * this over the two tools you came for.
+ *
+ * The total is added up from the lineup rather than typed out, so changing a
+ * price on a card can never leave this line quietly wrong.
+ */
+const BUNDLE_PRICE = 349;
+
+function oneAtATime(): number {
+  return TOOLS.reduce((sum, t) => {
+    const n = Number(t.price.replace(/[^0-9]/g, ""));
+    return sum + (Number.isFinite(n) ? n : 0);
+  }, 0);
+}
+
 const PRICE_NOTE = "Queso Ventures clients receive discounts";
 
 /**
@@ -57,7 +78,7 @@ const TOOLS: Tool[] = [
   {
     demo: "rewards",
     name: "Queso Rewards",
-    price: "$40 / month",
+    price: "$99 / month",
     tagline:
       "A punch card that lives on your customer's phone. It fills as they come back, and it texts them when they are one are getting closer to their reward.",
     href: "https://www.quesorewards.com",
@@ -67,7 +88,7 @@ const TOOLS: Tool[] = [
   {
     demo: "memberships",
     name: "Memberships",
-    price: "$30 / month",
+    price: "$79 / month",
     tagline:
       "A QR code by the register that opens your own page of deals and store news. Post whatever you want that week, and every scan tells you who came back for it.",
     note: "Not a punch card. You write the offer, change it whenever, and see which customers keep showing up.",
@@ -76,7 +97,7 @@ const TOOLS: Tool[] = [
   {
     demo: "chat",
     name: "AI Chat",
-    price: "$30 / month",
+    price: "$79 / month",
     tagline:
       "A chat box on your website that knows your policies, rules, business both inside and out. Only answers how you would answer.",
     accent: "#A855F7",
@@ -84,7 +105,7 @@ const TOOLS: Tool[] = [
   {
     demo: "frontdesk",
     name: "AI Frontdesk",
-    price: "$30 / month",
+    price: "$199 / month",
     tagline:
       "A phone agent that answers when you cannot. It takes the call, books the appointment, and keeps you the updated.",
     accent: "#C4161C",
@@ -92,7 +113,7 @@ const TOOLS: Tool[] = [
   {
     demo: "booking",
     name: "Booking",
-    price: "$20 / month",
+    price: "$69 / month",
     tagline:
       "They pick a time and get a confirmation, then a reminder. No confusion, no double bookings, just simple cohesion.",
     accent: "#0690FF",
@@ -100,7 +121,7 @@ const TOOLS: Tool[] = [
   {
     demo: "delivery",
     name: "Delivery Fee Calculator",
-    price: "$25 / month",
+    price: "$79 / month",
     tagline:
       "Instant delivery and catering quotes based on your business needs. Type an address, get a factual price, so there is no more guessing or spitballing.",
     accent: "#E64A37",
@@ -108,7 +129,7 @@ const TOOLS: Tool[] = [
   {
     demo: "invoicing",
     name: "Invoicing",
-    price: "$30 / month",
+    price: "$99 / month",
     tagline:
       "Ask for it the way you would ask a person. It builds the invoice, sends it by email and text, and chases it if it goes unpaid. (Because this part is never fun)",
     accent: "#FFD100",
@@ -566,6 +587,72 @@ export default function StudiosExperience() {
             →
           </button>
         </div>
+      </section>
+
+      {/*
+        Everything, on one row, under the things it replaces.
+
+        Full width and below the lineup on purpose. Above it, it would be the
+        first offer read and every card after it a smaller version of one
+        already made. Inside the carousel it would be a ninth thing to choose
+        between, which is the problem it exists to solve. Here it is the answer
+        to the question eight cards have just raised.
+      */}
+      <section className="relative px-6 pb-20 sm:pb-28">
+        <Reveal>
+          <div
+            className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-white/15 bg-white/[0.045] p-8 sm:p-11"
+            style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)" }}
+          >
+            {/* Every paint at once, which is the offer said in one stroke. */}
+            <div
+              aria-hidden
+              className="absolute top-0 left-10 right-10 h-px"
+              style={{
+                background: `linear-gradient(to right, transparent, ${TOOLS.map((t) => t.accent).join(", ")}, transparent)`,
+              }}
+            />
+
+            <div className="relative flex flex-wrap items-end justify-between gap-x-10 gap-y-7">
+              <div className="min-w-0">
+                <h3 className="text-[clamp(1.75rem,3.2vw,2.75rem)] font-bold leading-[1.1] tracking-tight">
+                  Take the whole lineup
+                </h3>
+                <p className="mt-3.5 max-w-xl text-sm sm:text-base leading-relaxed text-white/55">
+                  Every tool on this page, running for you, on one bill.
+                </p>
+              </div>
+
+              <div className="flex-shrink-0">
+                <p className="text-[clamp(2.25rem,4.6vw,3.5rem)] font-bold leading-none tracking-tight tabular-nums bg-gradient-to-r from-[#C4161C] via-[#FF7A1A] to-[#FFD100] bg-clip-text text-transparent">
+                  ${BUNDLE_PRICE}
+                  <span className="ml-2 align-middle text-base font-medium text-white/45">
+                    / month
+                  </span>
+                </p>
+                <p className="mt-2.5 text-sm text-white/40 tabular-nums">
+                  ${oneAtATime()} one at a time
+                </p>
+                {/* Said out loud rather than hidden behind the asterisk the
+                    cards use. A hover note is fine on a price you are reading
+                    one of; on the row asking for the whole lineup, the thing
+                    that changes the number is worth a line of its own, and a
+                    tooltip is nothing at all on a phone. */}
+                <p className="mt-1 text-sm text-white/40">{PRICE_NOTE}</p>
+              </div>
+            </div>
+
+            <div className="relative pt-9">
+              <button
+                type="button"
+                onClick={() => setWantTool("The whole lineup")}
+                className="inline-block rounded-xl bg-white px-7 py-4 text-sm font-bold text-black transition-all hover:bg-white/85 active:scale-[0.98]"
+              >
+                Want this?
+              </button>
+            </div>
+          </div>
+        </Reveal>
       </section>
 
       {/* Outro: just the mark */}
