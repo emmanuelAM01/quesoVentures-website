@@ -55,7 +55,7 @@ type Tool = {
  * The total is added up from the lineup rather than typed out, so changing a
  * price on a card can never leave this line quietly wrong.
  */
-const BUNDLE_PRICE = 349;
+const BUNDLE_PRICE = 350;
 
 function oneAtATime(): number {
   return TOOLS.reduce((sum, t) => {
@@ -78,7 +78,7 @@ const TOOLS: Tool[] = [
   {
     demo: "rewards",
     name: "Queso Rewards",
-    price: "$99 / month",
+    price: "$100 / month",
     tagline:
       "A punch card that lives on your customer's phone. It fills as they come back, and it texts them when they are one are getting closer to their reward.",
     href: "https://www.quesorewards.com",
@@ -88,7 +88,7 @@ const TOOLS: Tool[] = [
   {
     demo: "memberships",
     name: "Memberships",
-    price: "$79 / month",
+    price: "$80 / month",
     tagline:
       "A QR code by the register that opens your own page of deals and store news. Post whatever you want that week, and every scan tells you who came back for it.",
     note: "Not a punch card. You write the offer, change it whenever, and see which customers keep showing up.",
@@ -97,7 +97,7 @@ const TOOLS: Tool[] = [
   {
     demo: "chat",
     name: "AI Chat",
-    price: "$79 / month",
+    price: "$80 / month",
     tagline:
       "A chat box on your website that knows your policies, rules, business both inside and out. Only answers how you would answer.",
     accent: "#A855F7",
@@ -105,7 +105,7 @@ const TOOLS: Tool[] = [
   {
     demo: "frontdesk",
     name: "AI Frontdesk",
-    price: "$199 / month",
+    price: "$200 / month",
     tagline:
       "A phone agent that answers when you cannot. It takes the call, books the appointment, and keeps you the updated.",
     accent: "#C4161C",
@@ -113,7 +113,7 @@ const TOOLS: Tool[] = [
   {
     demo: "booking",
     name: "Booking",
-    price: "$69 / month",
+    price: "$70 / month",
     tagline:
       "They pick a time and get a confirmation, then a reminder. No confusion, no double bookings, just simple cohesion.",
     accent: "#0690FF",
@@ -121,15 +121,15 @@ const TOOLS: Tool[] = [
   {
     demo: "delivery",
     name: "Delivery Fee Calculator",
-    price: "$79 / month",
+    price: "$80 / month",
     tagline:
-      "Instant delivery and catering quotes based on your business needs. Type an address, get a factual price, so there is no more guessing or spitballing.",
+      "Type an address and get a real price, with traffic, weather and the time of day already in it. Then it hands your driver the route to drive.",
     accent: "#E64A37",
   },
   {
     demo: "invoicing",
     name: "Invoicing",
-    price: "$99 / month",
+    price: "$100 / month",
     tagline:
       "Ask for it the way you would ask a person. It builds the invoice, sends it by email and text, and chases it if it goes unpaid. (Because this part is never fun)",
     accent: "#FFD100",

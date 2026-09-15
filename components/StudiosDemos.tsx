@@ -531,8 +531,11 @@ function Delivery({ on }: { on: boolean }) {
             $18
           </p>
         </div>
+        {/* The second half of the product, which the card was leaving out. It
+            is not a distance calculator: the conditions are in the quote, and
+            the same run comes back out as a route for whoever is driving it. */}
         <p className={`mt-2.5 border-t border-white/10 pt-2.5 text-[11px] ${MUTED}`}>
-          Quoted on the spot. Nobody had to call the shop.
+          Driver gets the route. Rain and 3pm traffic priced in.
         </p>
       </div>
     </div>
