@@ -10,6 +10,7 @@ import {
   FaArrowDown,
   FaTriangleExclamation,
   FaTruckFast,
+  FaMagnifyingGlass,
 } from "react-icons/fa6";
 import { HiSparkles } from "react-icons/hi2";
 import { ASKS } from "./tools";
@@ -705,6 +706,71 @@ function WhatsNext({ on }: { on: boolean }) {
 
 /* ------------------------------------------------------------------ */
 
+// ─── organization ────────────────────────────────────────────────────────────
+//
+// The thing being sold is not a database, it is the end of hunting. So the
+// demo is the hunt, finished: type a name, the file is there, and everything
+// anybody has ever written down about them is on it.
+
+const ORG_FILES = ["Marcus Bell", "Dana Ruiz", "Priya Shah"] as const;
+const ORG_FACTS = [
+  ["Next check-in", "Friday, 10:00"],
+  ["Balance", "$1,250"],
+  ["Last note", "2 days ago"],
+] as const;
+const ORG_MARKS = [800, 1500] as const;
+const SLATE = "#5B8BD0";
+
+function Organization({ on }: { on: boolean }) {
+  const step = useScript(on, ORG_MARKS);
+  return (
+    <div className={BOX}>
+      <div className={`${PANE} p-3`}>
+        <div className="flex items-center gap-2 rounded-lg bg-white/[0.06] px-2.5 py-1.5">
+          <FaMagnifyingGlass size={9} className="shrink-0 text-white/40" />
+          <span className="text-[11px] font-medium text-white/70">
+            marcus
+            <span className="ml-px inline-block h-3 w-px translate-y-0.5 bg-white/50" />
+          </span>
+        </div>
+        <div className="mt-2 space-y-1">
+          {ORG_FILES.map((name, i) => {
+            const hit = i === 0 && step >= 1;
+            return (
+              <span
+                key={name}
+                className="flex items-center justify-between rounded-lg border px-2.5 py-1.5 text-[11px] font-medium transition-all duration-300"
+                style={
+                  hit
+                    ? { borderColor: SLATE, color: SLATE, backgroundColor: `${SLATE}1F` }
+                    : { borderColor: "rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.45)" }
+                }
+              >
+                {name}
+                {hit && <FaCheck size={9} />}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
+      <div
+        className={`${PANE} px-3.5 py-2.5 transition-all duration-500`}
+        style={rise(step >= 2)}
+      >
+        <div className="grid grid-cols-3 gap-2">
+          {ORG_FACTS.map(([label, value]) => (
+            <div key={label}>
+              <p className="text-[9px] uppercase tracking-wider text-white/40">{label}</p>
+              <p className="mt-0.5 text-[11px] font-semibold text-white/85">{value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export type DemoId =
   | "rewards"
   | "memberships"
@@ -713,6 +779,7 @@ export type DemoId =
   | "booking"
   | "invoicing"
   | "delivery"
+  | "organization"
   | "qrs"
   | "next";
 
@@ -724,6 +791,7 @@ export const STUDIO_DEMOS: Record<DemoId, (p: { on: boolean }) => JSX.Element> =
   booking: Booking,
   invoicing: Invoicing,
   delivery: Delivery,
+  organization: Organization,
   qrs: Qrs,
   next: WhatsNext,
 };

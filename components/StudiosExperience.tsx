@@ -46,7 +46,7 @@ type Tool = {
 /**
  * Everything, for less than the sum of it.
  *
- * Eight cards is eight decisions, and a shop owner who would happily take one
+ * Nine cards is nine decisions, and a shop owner who would happily take one
  * says no to the fourth simply because it is the fourth thing they have been
  * asked. One price is one decision. It is deliberately well under the running
  * total -- the saving is the offer, and without it there is no reason to take
@@ -72,7 +72,7 @@ const PRICE_NOTE = "Queso Ventures clients receive discounts";
  * Ordered the way it should be met: the one with a website of its own first,
  * because it is proof rather than a promise, then the tools in rough order of
  * how easily an owner can picture them, and the open slot last. That slot only
- * means anything once someone has seen eight finished things.
+ * means anything once someone has seen nine finished things.
  */
 const TOOLS: Tool[] = [
   {
@@ -125,6 +125,15 @@ const TOOLS: Tool[] = [
     tagline:
       "Type an address and get a real price, with traffic, weather and the time of day already in it. Then it hands your driver the route to drive.",
     accent: "#E64A37",
+  },
+  {
+    demo: "organization",
+    name: "Queso Organization",
+    price: "$250 / month",
+    tagline:
+      "A file for every customer, with everything about them already in it. What you agreed, what they owe, when they are due back, and every note anyone has written down.",
+    note: "Built for the businesses that live out of a filing cabinet. Bail bonds, garages, clinics, law offices.",
+    accent: "#2243AA",
   },
   {
     demo: "invoicing",
