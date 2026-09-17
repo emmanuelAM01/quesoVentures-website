@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Reveal from "components/Reveal";
 import { STUDIO_DEMOS, type DemoId } from "components/StudiosDemos";
 
@@ -175,18 +175,135 @@ const TOOLS: Tool[] = [
   },
 ];
 
+/**
+ * Whether a card is on screen, so its demo plays when you reach it.
+ *
+ * The carousel could rely on "is this the centred one", because there was only
+ * ever one. A catalogue has nine on the page at once, and nine loops all
+ * running is both a waste and a fairground. This plays the ones you are
+ * actually looking at and leaves the rest holding their finished state, which
+ * is what the demos already do when `on` is false.
+ */
+function useInView<T extends Element>(ref: React.RefObject<T | null>): boolean {
+  const [seen, setSeen] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") return setSeen(true);
+    const io = new IntersectionObserver(
+      ([entry]) => setSeen(entry.isIntersecting),
+      { rootMargin: "-10% 0px -10% 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ref]);
+  return seen;
+}
+
+function ToolCard({
+  tool,
+  onWant,
+}: {
+  tool: Tool;
+  onWant: () => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const live = useInView(ref);
+  const Demo = STUDIO_DEMOS[tool.demo];
+
+  return (
+    <div
+      ref={ref}
+      className="h-full"
+      onMouseMove={(e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
+      }}
+    >
+      <article className="group relative h-full overflow-hidden rounded-3xl border border-white/10 bg-white/[0.045] p-7 sm:p-8 flex flex-col gap-6 transition-[border-color,box-shadow] duration-500 hover:border-white/25"
+        style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)" }}
+      >
+        <div
+          aria-hidden
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          style={{ background: `radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), ${tool.accent}14, transparent 60%)` }}
+        />
+        <div
+          aria-hidden
+          className="absolute top-0 left-10 right-10 h-px transition-opacity duration-500 opacity-40 group-hover:opacity-100"
+          style={{ background: `linear-gradient(to right, transparent, ${tool.accent}, transparent)` }}
+        />
+
+        <div className="relative flex items-center justify-between gap-4">
+          <div className="flex gap-1.5">
+            <span className="w-7 h-1 rounded-full bg-[#C4161C]" />
+            <span className="w-7 h-1 rounded-full bg-[#FFD100]" />
+          </div>
+          <span tabIndex={0} className="group/price relative outline-none">
+            <span
+              className="text-sm font-bold rounded-full border px-4 py-1.5 whitespace-nowrap"
+              style={{ color: tool.accent, borderColor: `${tool.accent}55`, textShadow: `0 0 14px ${tool.accent}66` }}
+            >
+              {tool.price}
+              {tool.price.includes("$") && <span aria-hidden>*</span>}
+            </span>
+            {tool.price.includes("$") && (
+              <span
+                role="tooltip"
+                className="absolute right-0 top-full mt-2.5 w-max max-w-[230px] rounded-xl border border-white/15 bg-[#0A0C15]/95 backdrop-blur-md px-3.5 py-2 text-xs text-white/75 leading-snug opacity-0 translate-y-1 pointer-events-none transition-all duration-300 group-hover/price:opacity-100 group-hover/price:translate-y-0 group-focus/price:opacity-100 group-focus/price:translate-y-0 z-10"
+              >
+                {PRICE_NOTE}
+              </span>
+            )}
+          </span>
+        </div>
+
+        <div className="relative flex-1 flex flex-col gap-4">
+          <h3 className="text-2xl font-bold tracking-tight">{tool.name}</h3>
+
+          <div className="rounded-2xl border border-white/[0.07] bg-black/25 p-3.5">
+            <Demo on={live} />
+          </div>
+
+          <p className="text-sm sm:text-base text-white/55 leading-relaxed">{tool.tagline}</p>
+          {tool.note && (
+            <p className="border-t border-white/10 pt-3 text-xs leading-relaxed text-white/35">{tool.note}</p>
+          )}
+          {tool.href == null && tool.linkLabel && (
+            <p className="text-sm font-semibold text-white/40">{tool.linkLabel}</p>
+          )}
+
+          {/* mt-auto so every card's buttons sit on the same line, however
+              long the tagline above them runs. */}
+          <div className="mt-auto flex flex-wrap items-center gap-3 pt-1">
+            {tool.href && (
+              <a
+                href={tool.href}
+                className="inline-block rounded-xl bg-white text-black text-sm font-bold px-6 py-3.5 hover:bg-white/85 active:scale-[0.98] transition-all"
+              >
+                {tool.linkLabel}
+              </a>
+            )}
+            <button
+              type="button"
+              onClick={onWant}
+              className="inline-block rounded-xl border border-white/25 text-sm font-bold px-6 py-3.5 text-white/85 hover:text-white hover:border-white/50 active:scale-[0.98] transition-all"
+            >
+              Want this?
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+  );
+}
+
 export default function StudiosExperience() {
   const [showLeave, setShowLeave] = useState(false);
-  const [active, setActive] = useState(0);
   const [wantTool, setWantTool] = useState<string | null>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const frame = useRef(0);
   const glowRef = useRef<HTMLDivElement>(null);
-  const reducedMotion = useRef(false);
 
   useEffect(() => {
-    reducedMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const onScroll = () => setShowLeave(window.scrollY > window.innerHeight * 0.35);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -201,58 +318,6 @@ export default function StudiosExperience() {
     el.style.background = `radial-gradient(700px circle at ${e.clientX}px ${e.clientY}px, rgba(145,170,255,0.055), transparent 65%)`;
   }, []);
 
-  // Coverflow math: each card's distance from the track center drives its
-  // scale, tilt, and brightness. Runs on scroll inside rAF so swiping stays
-  // at frame rate.
-  const updateCards = useCallback(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const center = track.scrollLeft + track.clientWidth / 2;
-    let best = 0;
-    let bestDist = Infinity;
-    cardRefs.current.forEach((el, i) => {
-      if (!el) return;
-      const cardCenter = el.offsetLeft + el.offsetWidth / 2;
-      const d = cardCenter - center;
-      if (Math.abs(d) < bestDist) {
-        bestDist = Math.abs(d);
-        best = i;
-      }
-      if (reducedMotion.current) return;
-      /*
-        Deliberately gentle. The first pass swung 12 degrees and dropped 30% of
-        scale across the width of the track, so a flick of a trackpad threw the
-        whole row around and the carousel read as twitchy. The same gesture now
-        moves the cards about half as far, which is the difference between a
-        lineup turning and a lineup being shoved.
-      */
-      const norm = d / track.clientWidth;
-      const scale = Math.max(0.9, 1 - Math.abs(norm) * 0.16);
-      const tilt = Math.max(-7, Math.min(7, norm * -8.5));
-      el.style.transform = `perspective(1600px) rotateY(${tilt}deg) scale(${scale})`;
-      el.style.opacity = String(Math.max(0.42, 1 - Math.abs(norm) * 0.72));
-    });
-    setActive(best);
-  }, []);
-
-  /* One measurement per frame, however many scroll events arrive in it. */
-  const onTrackScroll = useCallback(() => {
-    if (frame.current) return;
-    frame.current = requestAnimationFrame(() => {
-      frame.current = 0;
-      updateCards();
-    });
-  }, [updateCards]);
-
-  useEffect(() => {
-    updateCards();
-    window.addEventListener("resize", updateCards);
-    return () => {
-      window.removeEventListener("resize", updateCards);
-      if (frame.current) cancelAnimationFrame(frame.current);
-    };
-  }, [updateCards]);
-
   // Modal: lock scroll and close on Escape while open.
   useEffect(() => {
     if (!wantTool) return;
@@ -266,24 +331,6 @@ export default function StudiosExperience() {
       window.removeEventListener("keydown", onKey);
     };
   }, [wantTool]);
-
-  const setCardRef = useMemo(
-    () =>
-      TOOLS.map((_, i) => (el: HTMLDivElement | null) => {
-        cardRefs.current[i] = el;
-      }),
-    []
-  );
-
-  const goTo = useCallback((index: number) => {
-    const track = trackRef.current;
-    const el = cardRefs.current[Math.max(0, Math.min(TOOLS.length - 1, index))];
-    if (!track || !el) return;
-    track.scrollTo({
-      left: el.offsetLeft - (track.clientWidth - el.offsetWidth) / 2,
-      behavior: reducedMotion.current ? "auto" : "smooth",
-    });
-  }, []);
 
   return (
     <div
@@ -414,195 +461,28 @@ export default function StudiosExperience() {
         </div>
       </section>
 
-      {/* Act two: the lineup */}
-      <section className="relative pb-16 sm:pb-24">
-        <div
-          ref={trackRef}
-          onScroll={onTrackScroll}
-          className="studios-no-scrollbar flex items-center gap-6 sm:gap-10 overflow-x-auto overscroll-x-contain snap-x snap-mandatory py-10"
-          style={{ paddingLeft: "max(1.5rem, calc(50vw - 300px))", paddingRight: "max(1.5rem, calc(50vw - 300px))" }}
-        >
-          {TOOLS.map((tool, i) => {
-            const isActive = i === active;
-            const Demo = STUDIO_DEMOS[tool.demo];
-            return (
-              <div
-                key={i}
-                ref={setCardRef[i]}
-                className={`snap-center shrink-0 w-[84vw] max-w-[600px] will-change-transform ${
-                  isActive ? "" : "cursor-pointer"
-                }`}
-                onMouseMove={(e) => {
-                  const r = e.currentTarget.getBoundingClientRect();
-                  e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
-                  e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
-                }}
-                onClickCapture={(e) => {
-                  // A side card is a navigation target, not a content surface:
-                  // clicking anywhere on it slides it to center instead of
-                  // activating its links or buttons.
-                  if (!isActive) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    goTo(i);
-                  }
-                }}
-              >
-                <article
-                  className={[
-                    "group relative overflow-hidden rounded-3xl border bg-white/[0.045]",
-                    "p-7 sm:p-9 flex flex-col gap-6",
-                    "transition-[border-color,box-shadow] duration-500",
-                    isActive ? "border-white/25" : "border-white/10",
-                  ].join(" ")}
-                  style={
-                    isActive
-                      ? { boxShadow: `0 0 90px -20px ${tool.accent}55, inset 0 1px 0 rgba(255,255,255,0.08)` }
-                      : { boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)" }
-                  }
-                >
-                  {/* Cursor spotlight (desktop only, cheap and glorious) */}
-                  <div
-                    aria-hidden
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                    style={{
-                      background: `radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), ${tool.accent}14, transparent 60%)`,
-                    }}
-                  />
-                  {/* Top edge laser */}
-                  <div
-                    aria-hidden
-                    className="absolute top-0 left-10 right-10 h-px"
-                    style={{
-                      background: `linear-gradient(to right, transparent, ${tool.accent}, transparent)`,
-                      opacity: isActive ? 1 : 0.35,
-                      transition: "opacity 0.5s",
-                    }}
-                  />
+      {/* Act two: the lineup, as a catalogue.
 
-                  <div className="relative flex items-center justify-between gap-4">
-                    <div className="flex gap-1.5">
-                      <span className="w-7 h-1 rounded-full bg-[#C4161C]" />
-                      <span className="w-7 h-1 rounded-full bg-[#FFD100]" />
-                    </div>
-                    <span tabIndex={0} className="group/price relative outline-none">
-                      <span
-                        className="text-sm font-bold rounded-full border px-4 py-1.5 whitespace-nowrap"
-                        style={{ color: tool.accent, borderColor: `${tool.accent}55`, textShadow: `0 0 14px ${tool.accent}66` }}
-                      >
-                        {tool.price}
-                        {tool.price.includes("$") && <span aria-hidden>*</span>}
-                      </span>
-                      {tool.price.includes("$") && (
-                      <span
-                        role="tooltip"
-                        className="absolute right-0 top-full mt-2.5 w-max max-w-[230px] rounded-xl border border-white/15 bg-[#0A0C15]/95 backdrop-blur-md px-3.5 py-2 text-xs text-white/75 leading-snug opacity-0 translate-y-1 pointer-events-none transition-all duration-300 group-hover/price:opacity-100 group-hover/price:translate-y-0 group-focus/price:opacity-100 group-focus/price:translate-y-0 z-10"
-                      >
-                        {PRICE_NOTE}
-                      </span>
-                      )}
-                    </span>
-                  </div>
+          It was a coverflow carousel: one card centred, the rest turned away
+          and dimmed, arrows and nine pips underneath. That works for three or
+          four and stops working at nine -- the page became a thing you operate
+          rather than a thing you read, the tool you wanted was always four
+          presses away, and the two half-cards either side of centre were
+          sliced by the viewport, which reads as text cut off rather than as a
+          deliberate peek.
 
-                  <div className="relative flex-1 flex flex-col gap-4">
-                    <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">{tool.name}</h3>
-
-                    {/*
-                      The demo. Mounted only while this card is the centred one,
-                      so exactly one of these is animating at a time — eight
-                      idle loops repainting behind the perspective transforms
-                      would cost frames on the swipe and buy nothing, since
-                      nobody can read a card that is turned 12 degrees away.
-                    */}
-                    <div className="rounded-2xl border border-white/[0.07] bg-black/25 p-3.5">
-                      {/*
-                        Always mounted. Swapping the demo for a spacer when the
-                        card left the centre meant every card you scrolled past
-                        visibly emptied and refilled, which read as the page
-                        glitching. Off does not mean gone: the demo holds its
-                        finished state and only the centred one replays, so the
-                        timers still run in exactly one place.
-                      */}
-                      <Demo on={isActive} />
-                    </div>
-
-                    <p className="text-sm sm:text-base text-white/55 leading-relaxed">
-                      {tool.tagline}
-                    </p>
-                    {tool.note && (
-                      <p className="border-t border-white/10 pt-3 text-xs leading-relaxed text-white/35">
-                        {tool.note}
-                      </p>
-                    )}
-                    {tool.href == null && tool.linkLabel && (
-                      <p className="text-sm font-semibold text-white/40">{tool.linkLabel}</p>
-                    )}
-                    <div className="flex flex-wrap items-center gap-3 pt-1">
-                      {tool.href && (
-                        <a
-                          href={tool.href}
-                          className="inline-block rounded-xl bg-white text-black text-sm font-bold px-6 py-3.5 hover:bg-white/85 active:scale-[0.98] transition-all"
-                        >
-                          {tool.linkLabel}
-                        </a>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => setWantTool(tool.name)}
-                        className="inline-block rounded-xl border border-white/25 text-sm font-bold px-6 py-3.5 text-white/85 hover:text-white hover:border-white/50 active:scale-[0.98] transition-all"
-                      >
-                        Want this?
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Controls */}
-        <div className="flex items-center justify-center gap-6 mt-2">
-          <button
-            type="button"
-            onClick={() => goTo(active - 1)}
-            disabled={active === 0}
-            aria-label="Previous tool"
-            className="w-11 h-11 rounded-full border border-white/15 text-white/70 hover:text-white hover:border-white/40 disabled:opacity-25 transition-all text-lg"
-          >
-            ←
-          </button>
-          <div className="flex gap-2.5">
-            {TOOLS.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => goTo(i)}
-                aria-label={`Go to tool ${i + 1}`}
-                /* The visible pip is 4px tall; the button around it is 36, or
-                   nobody on a phone ever hits it. */
-                className="group -my-4 flex h-9 items-center"
-              >
-                <span
-                  className={[
-                    "block h-1 rounded-full transition-all duration-500",
-                    i === active
-                      ? "w-10 bg-gradient-to-r from-[#C4161C] to-[#FFD100]"
-                      : "w-4 bg-white/20 group-hover:bg-white/40",
-                  ].join(" ")}
-                />
-              </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            onClick={() => goTo(active + 1)}
-            disabled={active === TOOLS.length - 1}
-            aria-label="Next tool"
-            className="w-11 h-11 rounded-full border border-white/15 text-white/70 hover:text-white hover:border-white/40 disabled:opacity-25 transition-all text-lg"
-          >
-            →
-          </button>
+          A grid shows all nine at once. Nothing is turned away, nothing is
+          clipped, and comparing two tools is looking at two tools instead of
+          remembering the one that scrolled past. Each card plays its demo
+          when it comes into view and holds its finished state otherwise, so
+          there is still exactly as much motion as you can look at. */}
+      <section className="relative px-5 sm:px-8 pb-16 sm:pb-24">
+        <div className="mx-auto grid max-w-[1500px] grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {TOOLS.map((tool) => (
+            <Reveal key={tool.name} className="h-full">
+              <ToolCard tool={tool} onWant={() => setWantTool(tool.name)} />
+            </Reveal>
+          ))}
         </div>
       </section>
 
