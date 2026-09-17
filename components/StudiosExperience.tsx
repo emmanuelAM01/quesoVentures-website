@@ -53,9 +53,17 @@ type Tool = {
  * this over the two tools you came for.
  *
  * The total is added up from the lineup rather than typed out, so changing a
- * price on a card can never leave this line quietly wrong.
+ * price on a card can never leave this line quietly wrong. The bundle itself
+ * is not, which is the half that needs watching: adding Queso Organization at
+ * $250 took the lineup to $960 and left this at $350, quietly turning a
+ * half-price offer into a two-thirds-off one nobody had decided to make.
+ *
+ * $450 is roughly the share that was already being given away -- a little over
+ * half off, which is what $350 against $710 was -- and it stays under the
+ * monthly rate, so the whole toolbox still reads as something added to Queso
+ * Ventures rather than a second thing the same size as it.
  */
-const BUNDLE_PRICE = 350;
+const BUNDLE_PRICE = 450;
 
 function oneAtATime(): number {
   return TOOLS.reduce((sum, t) => {
