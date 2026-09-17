@@ -32,6 +32,17 @@ type Tool = {
   href?: string;
   linkLabel?: string;
   /**
+   * Runs the width of the grid, for the one entry that is not a product.
+   *
+   * The open slot is an invitation, and sat in a column beside eight finished
+   * tools it read as a ninth thing you could buy that happened to have nothing
+   * in it -- with two empty cells beside it, which looked like the page had
+   * run out rather than finished.
+   */
+  wide?: boolean;
+  /** What its button says, where "Want this?" would be asking about nothing. */
+  cta?: string;
+  /**
    * The card's laser edge, glow, and price pill.
    *
    * Factory paint, with one house rule bent: a few of the palette's inks are
@@ -169,6 +180,8 @@ const TOOLS: Tool[] = [
     demo: "next",
     name: "Whatever you need next",
     price: "Let's talk",
+    wide: true,
+    cta: "I have an idea",
     tagline:
       "Every tool on this page started as somebody telling me what was slowing them down. Tell me yours and it is the next thing I build.",
     accent: "#FEA700",
@@ -206,6 +219,7 @@ function ToolCard({
   tool: Tool;
   onWant: () => void;
 }) {
+  const wide = tool.wide === true;
   const ref = useRef<HTMLDivElement>(null);
   const live = useInView(ref);
   const Demo = STUDIO_DEMOS[tool.demo];
@@ -258,12 +272,15 @@ function ToolCard({
           </span>
         </div>
 
-        <div className="relative flex-1 flex flex-col gap-4">
+        <div className={`relative flex-1 ${wide ? "lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center" : "flex flex-col gap-4"}`}>
+          <div className={wide ? "order-2 flex flex-col gap-4" : "contents"}>
           <h3 className="text-2xl font-bold tracking-tight">{tool.name}</h3>
 
-          <div className="rounded-2xl border border-white/[0.07] bg-black/25 p-3.5">
-            <Demo on={live} />
-          </div>
+          {!wide && (
+            <div className="rounded-2xl border border-white/[0.07] bg-black/25 p-3.5">
+              <Demo on={live} />
+            </div>
+          )}
 
           <p className="text-sm sm:text-base text-white/55 leading-relaxed">{tool.tagline}</p>
           {tool.note && (
@@ -289,9 +306,16 @@ function ToolCard({
               onClick={onWant}
               className="inline-block rounded-xl border border-white/25 text-sm font-bold px-6 py-3.5 text-white/85 hover:text-white hover:border-white/50 active:scale-[0.98] transition-all"
             >
-              Want this?
+              {tool.cta ?? "Want this?"}
             </button>
           </div>
+          </div>
+
+          {wide && (
+            <div className="order-1 mt-4 lg:mt-0 rounded-2xl border border-white/[0.07] bg-black/25 p-3.5">
+              <Demo on={live} />
+            </div>
+          )}
         </div>
       </article>
     </div>
@@ -300,7 +324,7 @@ function ToolCard({
 
 export default function StudiosExperience() {
   const [showLeave, setShowLeave] = useState(false);
-  const [wantTool, setWantTool] = useState<string | null>(null);
+  const [wantTool, setWantTool] = useState<{ name: string; idea: boolean } | null>(null);
   const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -479,8 +503,14 @@ export default function StudiosExperience() {
       <section className="relative px-5 sm:px-8 pb-16 sm:pb-24">
         <div className="mx-auto grid max-w-[1500px] grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {TOOLS.map((tool) => (
-            <Reveal key={tool.name} className="h-full">
-              <ToolCard tool={tool} onWant={() => setWantTool(tool.name)} />
+            <Reveal
+              key={tool.name}
+              className={`h-full ${tool.wide ? "md:col-span-2 xl:col-span-3" : ""}`}
+            >
+              <ToolCard
+                tool={tool}
+                onWant={() => setWantTool({ name: tool.name, idea: tool.wide === true })}
+              />
             </Reveal>
           ))}
         </div>
@@ -542,7 +572,7 @@ export default function StudiosExperience() {
             <div className="relative pt-9">
               <button
                 type="button"
-                onClick={() => setWantTool("The whole lineup")}
+                onClick={() => setWantTool({ name: "The whole lineup", idea: false })}
                 className="inline-block rounded-xl bg-white px-7 py-4 text-sm font-bold text-black transition-all hover:bg-white/85 active:scale-[0.98]"
               >
                 Want this?
@@ -569,13 +599,13 @@ export default function StudiosExperience() {
 
       {/* Want-this modal, in the house style */}
       {wantTool && (
-        <WantModal tool={wantTool} onClose={() => setWantTool(null)} />
+        <WantModal tool={wantTool.name} idea={wantTool.idea} onClose={() => setWantTool(null)} />
       )}
     </div>
   );
 }
 
-function WantModal({ tool, onClose }: { tool: string; onClose: () => void }) {
+function WantModal({ tool, idea, onClose }: { tool: string; idea?: boolean; onClose: () => void }) {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [error, setError] = useState("");
 
@@ -592,7 +622,7 @@ function WantModal({ tool, onClose }: { tool: string; onClose: () => void }) {
           name: formData.get("name"),
           contact: formData.get("contact"),
           business: tool,
-          message: `[Queso Studios: ${tool}] ${formData.get("message") || "Interested in this tool."}`,
+          message: `[Queso Studios: ${tool}] ${formData.get("message") || (idea ? "Has an idea." : "Interested in this tool.")}`,
           website: formData.get("website"), // honeypot
         }),
       });
@@ -630,7 +660,9 @@ function WantModal({ tool, onClose }: { tool: string; onClose: () => void }) {
         {status === "success" ? (
           <div className="py-8 text-center space-y-3">
             <p className="text-2xl font-bold tracking-tight">Got it.</p>
-            <p className="text-sm text-white/60">We will reach out about {tool}.</p>
+            <p className="text-sm text-white/60">
+              {idea ? "I will read it and get back to you." : `We will reach out about ${tool}.`}
+            </p>
             <button
               type="button"
               onClick={onClose}
@@ -642,8 +674,14 @@ function WantModal({ tool, onClose }: { tool: string; onClose: () => void }) {
         ) : (
           <form onSubmit={onSubmit} className="space-y-4">
             <div className="space-y-1.5 pr-8">
-              <h2 className="text-2xl font-bold tracking-tight">Want {tool}?</h2>
-              <p className="text-sm text-white/55">Leave your info and we will reach out.</p>
+              <h2 className="text-2xl font-bold tracking-tight">
+                {idea ? "What would you build?" : `Want ${tool}?`}
+              </h2>
+              <p className="text-sm text-white/55">
+                {idea
+                  ? "The thing that slows your week down. However small."
+                  : "Leave your info and we will reach out."}
+              </p>
             </div>
 
             <input
