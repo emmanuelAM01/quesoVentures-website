@@ -10,7 +10,6 @@ import {
   FaArrowDown,
   FaTriangleExclamation,
   FaTruckFast,
-  FaMagnifyingGlass,
 } from "react-icons/fa6";
 import { HiSparkles } from "react-icons/hi2";
 import { ASKS } from "./tools";
@@ -708,64 +707,51 @@ function WhatsNext({ on }: { on: boolean }) {
 
 // ─── organization ────────────────────────────────────────────────────────────
 //
-// The thing being sold is not a database, it is the end of hunting. So the
-// demo is the hunt, finished: type a name, the file is there, and everything
-// anybody has ever written down about them is on it.
+// The whole roster, not a search box.
+//
+// The first version typed a name and opened one file, which is the smallest
+// thing the tool does and the one a phone's contacts app already does. What it
+// replaces is a spreadsheet, napkin math and memory -- so the demo is the
+// thing none of those can give you: everybody at once, and where each of them
+// stands this morning.
 
-const ORG_FILES = ["Marcus Bell", "Dana Ruiz"] as const;
-const ORG_FACTS = [
-  ["Next check-in", "Friday, 10:00"],
-  ["Balance", "$1,250"],
-  ["Last note", "2 days ago"],
+const ORG_ROWS = [
+  { name: "Marcus Bell", state: "Due Friday", amount: "$1,250", tone: "#FEA700" },
+  { name: "Dana Ruiz", state: "Checked in", amount: "Paid", tone: "#7DC23B" },
+  { name: "Priya Shah", state: "3 days late", amount: "$400", tone: "#C4161C" },
 ] as const;
-const ORG_MARKS = [800, 1500] as const;
-const SLATE = "#5B8BD0";
+const ORG_MARKS = [420, 780, 1140] as const;
 
 function Organization({ on }: { on: boolean }) {
   const step = useScript(on, ORG_MARKS);
   return (
     <div className={BOX}>
-      <div className={`${PANE} p-2.5`}>
-        <div className="flex items-center gap-2 rounded-lg bg-white/[0.06] px-2.5 py-1">
-          <FaMagnifyingGlass size={9} className="shrink-0 text-white/40" />
-          <span className="text-[11px] font-medium text-white/70">
-            marcus
-            <span className="ml-px inline-block h-3 w-px translate-y-0.5 bg-white/50" />
-          </span>
-        </div>
-        <div className="mt-1.5 space-y-1">
-          {ORG_FILES.map((name, i) => {
-            const hit = i === 0 && step >= 1;
-            return (
-              <span
-                key={name}
-                className="flex items-center justify-between rounded-lg border px-2.5 py-1 text-[11px] font-medium transition-all duration-300"
-                style={
-                  hit
-                    ? { borderColor: SLATE, color: SLATE, backgroundColor: `${SLATE}1F` }
-                    : { borderColor: "rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.45)" }
-                }
-              >
-                {name}
-                {hit && <FaCheck size={9} />}
-              </span>
-            );
-          })}
-        </div>
+      <div className="flex items-baseline justify-between px-0.5">
+        <span className="text-[11px] font-semibold text-white/80">Everyone, right now</span>
+        <span className="text-[10px] text-white/40">24 open</span>
       </div>
 
-      <div
-        className={`${PANE} px-3.5 py-1.5 transition-all duration-500`}
-        style={rise(step >= 2)}
-      >
-        <div className="grid grid-cols-3 gap-2">
-          {ORG_FACTS.map(([label, value]) => (
-            <div key={label}>
-              <p className="text-[9px] uppercase tracking-wider text-white/40">{label}</p>
-              <p className="mt-0.5 text-[11px] font-semibold text-white/85">{value}</p>
-            </div>
-          ))}
-        </div>
+      <div className="space-y-1.5">
+        {ORG_ROWS.map((r, i) => (
+          <div
+            key={r.name}
+            className={`${PANE} flex items-center gap-2.5 px-3 py-1.5 transition-all duration-500`}
+            style={rise(step >= i + 1)}
+          >
+            <span
+              aria-hidden
+              className="h-1.5 w-1.5 shrink-0 rounded-full"
+              style={{ backgroundColor: r.tone }}
+            />
+            <span className="min-w-0 truncate text-[11px] font-medium text-white/85">{r.name}</span>
+            <span className="ml-auto shrink-0 text-[10px]" style={{ color: r.tone }}>
+              {r.state}
+            </span>
+            <span className="w-12 shrink-0 text-right text-[11px] font-semibold tabular-nums text-white/70">
+              {r.amount}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -150,8 +150,8 @@ const TOOLS: Tool[] = [
     name: "Queso Organization",
     price: "$250 / month",
     tagline:
-      "A file for every customer, with everything about them already in it. What you agreed, what they owe, when they are due back, and every note anyone has written down.",
-    note: "Built for the businesses that live out of a filing cabinet. Bail bonds, garages, clinics, law offices.",
+      "Every customer in one place, and where each one stands right now. What you agreed, what they owe, when they are due back, and every note anybody has written down.",
+    note: "For the businesses running on spreadsheets, napkin math and memory. Bail bonds, garages, clinics, law offices.",
     accent: "#2243AA",
   },
   {
