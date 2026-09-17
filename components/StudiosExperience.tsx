@@ -139,7 +139,7 @@ const TOOLS: Tool[] = [
   },
   {
     demo: "delivery",
-    name: "Delivery Fee Calculator",
+    name: "Deliveries",
     price: "$80 / month",
     tagline:
       "Type an address and get a real price, with traffic, weather and the time of day already in it. Then it hands your driver the route to drive.",
