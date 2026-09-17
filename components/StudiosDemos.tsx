@@ -582,7 +582,7 @@ function Qrs({ on }: { on: boolean }) {
 
   return (
     <div className={BOX}>
-      <div className="flex items-center gap-2.5 rounded-xl border border-dashed border-white/20 px-3.5 py-2">
+      <div className="flex items-center gap-2.5 rounded-xl border border-dashed border-white/20 px-3.5 py-1.5">
         <FaRegFileExcel size={13} className="shrink-0" style={{ color: GREEN }} />
         <span className="min-w-0 truncate text-[13px] text-white/85">last-quarter.xlsx</span>
         <span className={`ml-auto shrink-0 text-[10px] ${MUTED}`}>Read</span>
@@ -593,7 +593,7 @@ function Qrs({ on }: { on: boolean }) {
           return (
             <div
               key={f.label}
-              className={`${PANE} flex items-center gap-2.5 px-3 py-2 transition-all duration-500`}
+              className={`${PANE} flex items-center gap-2.5 px-3 py-1.5 transition-all duration-500`}
               style={rise(shown > i)}
             >
               <span
@@ -712,7 +712,7 @@ function WhatsNext({ on }: { on: boolean }) {
 // demo is the hunt, finished: type a name, the file is there, and everything
 // anybody has ever written down about them is on it.
 
-const ORG_FILES = ["Marcus Bell", "Dana Ruiz", "Priya Shah"] as const;
+const ORG_FILES = ["Marcus Bell", "Dana Ruiz"] as const;
 const ORG_FACTS = [
   ["Next check-in", "Friday, 10:00"],
   ["Balance", "$1,250"],
@@ -725,21 +725,21 @@ function Organization({ on }: { on: boolean }) {
   const step = useScript(on, ORG_MARKS);
   return (
     <div className={BOX}>
-      <div className={`${PANE} p-3`}>
-        <div className="flex items-center gap-2 rounded-lg bg-white/[0.06] px-2.5 py-1.5">
+      <div className={`${PANE} p-2.5`}>
+        <div className="flex items-center gap-2 rounded-lg bg-white/[0.06] px-2.5 py-1">
           <FaMagnifyingGlass size={9} className="shrink-0 text-white/40" />
           <span className="text-[11px] font-medium text-white/70">
             marcus
             <span className="ml-px inline-block h-3 w-px translate-y-0.5 bg-white/50" />
           </span>
         </div>
-        <div className="mt-2 space-y-1">
+        <div className="mt-1.5 space-y-1">
           {ORG_FILES.map((name, i) => {
             const hit = i === 0 && step >= 1;
             return (
               <span
                 key={name}
-                className="flex items-center justify-between rounded-lg border px-2.5 py-1.5 text-[11px] font-medium transition-all duration-300"
+                className="flex items-center justify-between rounded-lg border px-2.5 py-1 text-[11px] font-medium transition-all duration-300"
                 style={
                   hit
                     ? { borderColor: SLATE, color: SLATE, backgroundColor: `${SLATE}1F` }
@@ -755,7 +755,7 @@ function Organization({ on }: { on: boolean }) {
       </div>
 
       <div
-        className={`${PANE} px-3.5 py-2.5 transition-all duration-500`}
+        className={`${PANE} px-3.5 py-1.5 transition-all duration-500`}
         style={rise(step >= 2)}
       >
         <div className="grid grid-cols-3 gap-2">
