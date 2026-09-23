@@ -136,6 +136,10 @@ const TOOLS: Tool[] = [
     unbundled: true,
     tagline:
       "A phone agent that answers when you cannot. It takes the call, books the appointment, and keeps you the updated.",
+    // Every minute on the phone is paid for underneath, at roughly 18 cents.
+    // 1,500 minutes costs about $270 against the $500, and past it each minute
+    // bills at about double its cost, so a busy line pays for itself.
+    note: "Includes 1,500 call minutes a month, about six calls a day. Extra minutes are 35 cents each.",
     accent: "#C4161C",
   },
   {
