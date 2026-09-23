@@ -40,6 +40,14 @@ type Tool = {
    * run out rather than finished.
    */
   wide?: boolean;
+  /**
+   * Kept out of the lineup bundle and its running total.
+   *
+   * The bundle is priced for software that costs next to nothing to run per
+   * client. The AI Frontdesk pays per minute of phone call, and a busy line
+   * costs $400 to $500 a month to run by itself, so it cannot ride inside $450.
+   */
+  unbundled?: boolean;
   /** What its button says, where "Want this?" would be asking about nothing. */
   cta?: string;
   /**
@@ -77,7 +85,7 @@ type Tool = {
 const BUNDLE_PRICE = 450;
 
 function oneAtATime(): number {
-  return TOOLS.reduce((sum, t) => {
+  return TOOLS.filter((t) => !t.unbundled).reduce((sum, t) => {
     const n = Number(t.price.replace(/[^0-9]/g, ""));
     return sum + (Number.isFinite(n) ? n : 0);
   }, 0);
@@ -124,7 +132,8 @@ const TOOLS: Tool[] = [
   {
     demo: "frontdesk",
     name: "AI Frontdesk",
-    price: "$200 / month",
+    price: "$500 / month",
+    unbundled: true,
     tagline:
       "A phone agent that answers when you cannot. It takes the call, books the appointment, and keeps you the updated.",
     accent: "#C4161C",
@@ -536,7 +545,7 @@ export default function StudiosExperience() {
               aria-hidden
               className="absolute top-0 left-10 right-10 h-px"
               style={{
-                background: `linear-gradient(to right, transparent, ${TOOLS.map((t) => t.accent).join(", ")}, transparent)`,
+                background: `linear-gradient(to right, transparent, ${TOOLS.filter((t) => !t.unbundled).map((t) => t.accent).join(", ")}, transparent)`,
               }}
             />
 
@@ -546,7 +555,7 @@ export default function StudiosExperience() {
                   Take the whole lineup
                 </h3>
                 <p className="mt-3.5 max-w-xl text-sm sm:text-base leading-relaxed text-white/55">
-                  Every tool on this page, running for you, on one bill.
+                  Every tool on this page but the AI Frontdesk, running for you, on one bill.
                 </p>
               </div>
 
