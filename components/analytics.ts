@@ -37,7 +37,8 @@ export type Placement =
   | "areas"
   | "faq"
   | "price_estimator"
-  | "found_flyer";
+  | "found_flyer"
+  | "guide_membership";
 
 /**
  * Someone tapped a phone number.
