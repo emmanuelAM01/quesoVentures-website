@@ -9,6 +9,7 @@ import CtaLink from "components/guide/CtaLink";
 import DraftBanner from "components/guide/DraftBanner";
 import GuideGrid from "components/guide/GuideGrid";
 import PageviewTracker from "components/guide/PageviewTracker";
+import HeroCarousel from "components/guide/HeroCarousel";
 import { liveryAt, PAINT } from "components/livery";
 import {
   getCategories,
@@ -81,7 +82,17 @@ export default async function GuideArticle({ params }: { params: Params }) {
 
   const [related, categories] = await Promise.all([getRelated(entry), getCategories()]);
   const meta = derivedMeta(entry);
-  const hero = guideImageUrl(entry.hero_image_path);
+  // The header photos in order. Rows from before 089 only have the single
+  // cover columns, so fall back to those.
+  const heroes = (entry.hero_images?.length
+    ? entry.hero_images
+    : entry.hero_image_path
+      ? [{ path: entry.hero_image_path, alt: entry.hero_image_alt ?? "" }]
+      : []
+  )
+    .map((h) => ({ src: guideImageUrl(h.path), alt: h.alt || entry.business_name }))
+    .filter((h): h is { src: string; alt: string } => Boolean(h.src));
+  const hero = heroes[0];
   const paint = liveryAt(Math.max(0, categories.findIndex((c) => c.id === entry.category.id)));
   const visited = monthYear(entry.visited_on);
   const updated = shortDate(entry.updated_at);
@@ -137,11 +148,13 @@ export default async function GuideArticle({ params }: { params: Params }) {
                 {updated ? <span>Updated {updated}</span> : null}
               </p>
 
-              {hero ? (
+              {heroes.length > 1 ? (
+                <HeroCarousel slides={heroes} accent={paint.hex} />
+              ) : hero ? (
                 <figure className="relative mt-8 aspect-[16/10] overflow-hidden rounded-3xl bg-bandLight dark:bg-bandDark">
                   <Image
-                    src={hero}
-                    alt={entry.hero_image_alt || entry.business_name}
+                    src={hero.src}
+                    alt={hero.alt}
                     fill
                     priority
                     sizes="(min-width: 1024px) 720px, 100vw"

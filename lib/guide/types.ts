@@ -23,6 +23,8 @@ export type GuideHours = { days: GuideDay[]; opens: string; closes: string };
 export type GuideWhatToGet = { name: string; description: string };
 export type GuideFaq = { question: string; answer: string };
 export type GuideGalleryImage = { path: string; alt: string; caption?: string | null };
+/** One photo in the header. The first is the cover (migration 089). */
+export type GuideHeroImage = { path: string; alt: string };
 
 export type GuideCity = {
   id: string;
@@ -83,6 +85,9 @@ export type GuideArticle = {
   catering_info: string | null;
   parking: string | null;
 
+  /** The header photos, in order. Source of truth since 089. */
+  hero_images: GuideHeroImage[];
+  /** Always hero_images[0], kept in step by a trigger. Read it, never write it. */
   hero_image_path: string | null;
   hero_image_alt: string | null;
   gallery: GuideGalleryImage[];
@@ -118,7 +123,7 @@ type Defaulted<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 type ArticleDefaults =
   | 'id' | 'status' | 'membership' | 'author_name' | 'created_at' | 'updated_at'
-  | 'what_to_get' | 'good_to_know' | 'faqs' | 'hours' | 'gallery' | 'same_as';
+  | 'what_to_get' | 'good_to_know' | 'faqs' | 'hours' | 'gallery' | 'same_as' | 'hero_images';
 type ArticleNullable = {
   [K in keyof GuideArticle]: null extends GuideArticle[K] ? K : never;
 }[keyof GuideArticle];

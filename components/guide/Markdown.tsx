@@ -1,13 +1,20 @@
 import ReactMarkdown from "react-markdown";
+import remarkBreaks from "remark-breaks";
 
 /**
- * The story, rendered on the server into plain HTML. Raw HTML in the source is
+ * The story, rendered on the server into plain HTML.
+ *
+ * It is written in the admin's visual editor, which stores a small Markdown
+ * subset (bold, italic, links, lists, ## subheadings). In that editor Enter
+ * starts a new line, so remark-breaks keeps a single line break a line break
+ * here instead of Markdown's usual habit of joining the two lines. Raw HTML in the source is
  * not rendered (react-markdown's default), so a pasted <script> is text.
  * Headings inside a story start at h3: "The Story" is already the h2.
  */
 export default function Markdown({ source }: { source: string }) {
   return (
     <ReactMarkdown
+      remarkPlugins={[remarkBreaks]}
       components={{
         h1: ({ children }) => <h3 className={H}>{children}</h3>,
         h2: ({ children }) => <h3 className={H}>{children}</h3>,

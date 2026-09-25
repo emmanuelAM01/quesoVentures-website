@@ -66,10 +66,14 @@ function clean<T extends Record<string, unknown>>(obj: T): T {
 
 export function articleGraph(entry: GuideEntry, meta: { title: string; description: string }) {
   const url = `${SITE_URL}${entry.path}`;
-  const images = [
-    guideImageUrl(entry.hero_image_path),
-    ...(entry.gallery ?? []).map((g) => guideImageUrl(g.path)),
-  ].filter(Boolean) as string[];
+  const heroes = entry.hero_images?.length ? entry.hero_images.map((h) => h.path) : [entry.hero_image_path];
+  const images = Array.from(
+    new Set(
+      [...heroes, ...(entry.gallery ?? []).map((g) => g.path)]
+        .map((p) => guideImageUrl(p))
+        .filter(Boolean) as string[]
+    )
+  );
 
   const business = clean({
     "@type": entry.category.schema_type || "LocalBusiness",
