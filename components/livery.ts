@@ -23,12 +23,13 @@ export interface Paint {
 export const PAINT = {
   rossoCorsa: { name: "Rosso Corsa", hex: "#D40000", ink: "#A80000" },
   rossoScuderia: { name: "Rosso Scuderia", hex: "#FF2800", ink: "#C21C00" },
-  gialloOrion: { name: "Giallo Orion", hex: "#FEA700", ink: "#9C6700" },
-  // ink darkened past the obvious value: #8A7F00 only hit 3.9:1 on cream,
-  // which fails for the small monospace labels. #7E7300 clears 4.5:1.
-  gialloModena: { name: "Giallo Modena", hex: "#FCE903", ink: "#7E7300" },
+  // Inks are checked against the darkest light surface the site uses, the
+  // #E4E8ED section band, not just the page. Three had to come down a step
+  // when the ground moved from cream to grey; each still clears 4.5:1.
+  gialloOrion: { name: "Giallo Orion", hex: "#FEA700", ink: "#8D5D00" },
+  gialloModena: { name: "Giallo Modena", hex: "#FCE903", ink: "#716700" },
   arancioXanto: { name: "Arancio Xanto", hex: "#E64A37", ink: "#B33526" },
-  verdeMantis: { name: "Verde Mantis", hex: "#7DC23B", ink: "#4C7A22" },
+  verdeMantis: { name: "Verde Mantis", hex: "#7DC23B", ink: "#477220" },
   bluLeMans: { name: "Blu Le Mans", hex: "#0690FF", ink: "#0063B3" },
   bluTourDeFrance: { name: "Blu Tour de France", hex: "#2243AA", ink: "#2243AA" },
   violaPasifae: { name: "Viola Pasifae", hex: "#6B0686", ink: "#6B0686" },
