@@ -57,7 +57,11 @@ export async function POST(request: NextRequest) {
 async function pingIndexNow(paths: string[]): Promise<"sent" | "skipped" | string> {
   const key = process.env.INDEXNOW_KEY;
   if (!key || !paths.length) return "skipped";
-  const host = new URL(SITE_URL).host;
+  const origin = new URL(SITE_URL);
+  // Local and preview origins are not something a search engine can crawl, and
+  // IndexNow would only record them as junk submissions for this key.
+  if (origin.protocol !== "https:" || /^(localhost|127\.|0\.0\.0\.0)/.test(origin.hostname)) return "skipped";
+  const host = origin.host;
   try {
     const res = await fetch("https://api.indexnow.org/indexnow", {
       method: "POST",
