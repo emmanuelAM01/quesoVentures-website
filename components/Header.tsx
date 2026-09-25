@@ -59,7 +59,12 @@ const NO_HEADER = ["/studios", "/foundCode"];
 const useIsoLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
-export default function Header() {
+/**
+ * `guideInNav` comes from the root layout, which counts published guide
+ * entries on the server. The link has to be in the server HTML to count as a
+ * sitewide internal link, so it cannot be decided here in the browser.
+ */
+export default function Header({ guideInNav = false }: { guideInNav?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [overDark, setOverDark] = useState(false);
   const [workOpen, setWorkOpen] = useState(false);
@@ -411,6 +416,16 @@ export default function Header() {
                   </Link>
                 </li>
 
+                {/* Prospect first (Services, Who I Help), then the story
+                    (About), then the things worth showing off. */}
+                {guideInNav ? (
+                  <li>
+                    <Link href="/guide" className={navLinkClass}>
+                      Guide
+                    </Link>
+                  </li>
+                ) : null}
+
                 <li>
                   <Link href="/studios" className={`${navLinkClass} font-semibold`}>
                     <span className="inline-flex items-center gap-1.5">
@@ -536,6 +551,12 @@ export default function Header() {
               <Link href="/about" onClick={closeMobile} className={mobileLinkClass}>
                 About
               </Link>
+
+              {guideInNav ? (
+                <Link href="/guide" onClick={closeMobile} className={mobileLinkClass}>
+                  The Queso Guide
+                </Link>
+              ) : null}
 
               <Link href="/studios" onClick={closeMobile} className={`${mobileLinkClass} font-semibold`}>
                 <span className="inline-flex items-center gap-2">
