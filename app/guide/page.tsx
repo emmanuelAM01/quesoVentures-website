@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import GuideHeader from "components/guide/GuideHeader";
+import FeaturedEntry from "components/guide/FeaturedEntry";
+import FreeAudit from "components/FreeAudit";
+import LiveryCard from "components/LiveryCard";
+import StatementCopy from "components/StatementCopy";
+import Reveal from "components/Reveal";
+import { liveryAt, PAINT } from "components/livery";
 import GuideFilters from "components/guide/GuideFilters";
 import GuideGrid from "components/guide/GuideGrid";
 import { getActiveFacets, getCategories, SITE_URL } from "lib/guide/queries";
@@ -10,7 +15,25 @@ const TITLE = `${GUIDE_NAME} | Local businesses worth knowing`;
 const DESCRIPTION =
   "The Queso Guide is a collection of local businesses we have visited in person. Who runs them, what to get, and what to know before you go.";
 const INTRO =
-  "Local businesses we have visited in person. Who runs each one, what to get, and what to know before you go.";
+  "Local businesses worth knowing, written up after a visit. Who runs each one, what to get, and what to know before you go.";
+
+const STATEMENT =
+  "Every entry starts with a visit. Who runs the place, what to order, and what a first time customer should know, written down by someone who went. The facts sit in one box at the top, and every entry says plainly whether the business is a Queso Ventures client.";
+
+const PRINCIPLES = [
+  {
+    title: "Visited in person",
+    body: "Each entry is written after a visit, and the month of that visit is printed at the top.",
+  },
+  {
+    title: "A collection, not a ranking",
+    body: "Entries are listed in the order they were published. Nothing is numbered or sorted by how good we think it is.",
+  },
+  {
+    title: "Disclosed on every entry",
+    body: "Some businesses are Queso Ventures clients. The end of every entry says which, in plain words.",
+  },
+];
 
 type Search = { city?: string; category?: string };
 
@@ -56,6 +79,14 @@ export default async function GuideHome({ searchParams }: { searchParams: Search
   const shown = published.filter(
     (e) => (!city || e.city.slug === city) && (!category || e.category.slug === category)
   );
+  const categoryOrder = allCategories.map((c) => c.id);
+  const newest = published[0];
+  const filtered = Boolean(city || category);
+  const cityName = cities.find((c) => c.slug === city)?.name;
+  const categoryName = categories.find((c) => c.slug === category)?.plural_name;
+  const gridTitle = filtered
+    ? [categoryName ?? "Everything", cityName ? `in ${cityName}` : ""].filter(Boolean).join(" ")
+    : "The latest entries";
 
   const jsonLd = collectionGraph({
     path: "/guide",
@@ -68,40 +99,96 @@ export default async function GuideHome({ searchParams }: { searchParams: Search
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(jsonLd) }} />
-      <GuideHeader title={GUIDE_NAME} intro={INTRO}>
+
+      <GuideHeader
+        title={GUIDE_NAME}
+        intro={INTRO}
+        tall
+        aside={
+          newest ? (
+            <FeaturedEntry
+              entry={newest}
+              paint={liveryAt(Math.max(0, categoryOrder.indexOf(newest.category.id)))}
+            />
+          ) : undefined
+        }
+      >
         {published.length ? (
-          <GuideFilters
-            key={`${city ?? ""}|${category ?? ""}`}
-            cities={cities.map((c) => ({ slug: c.slug, label: `${c.name}, ${c.region}` }))}
-            categories={categories.map((c) => ({ slug: c.slug, label: c.plural_name }))}
-            city={city}
-            category={category}
-          />
+          <>
+            <GuideFilters
+              key={`${city ?? ""}|${category ?? ""}`}
+              cities={cities.map((c) => ({ slug: c.slug, label: `${c.name}, ${c.region}` }))}
+              categories={categories.map((c) => ({ slug: c.slug, label: c.plural_name }))}
+              city={city}
+              category={category}
+            />
+            <p className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-base text-white/65">
+              <span>
+                <span className="font-semibold text-white">{published.length}</span>{" "}
+                {published.length === 1 ? "entry" : "entries"}
+              </span>
+              <span aria-hidden className="h-1 w-1 rounded-full bg-white/40" />
+              <span>
+                <span className="font-semibold text-white">{cities.length}</span>{" "}
+                {cities.length === 1 ? "city" : "cities"}
+              </span>
+              <span aria-hidden className="h-1 w-1 rounded-full bg-white/40" />
+              <span>Every one visited in person</span>
+            </p>
+          </>
         ) : null}
       </GuideHeader>
 
-      <section className="container mx-auto px-4 py-16 sm:py-20">
+      <section id="entries" className="container mx-auto scroll-mt-24 px-4 py-20 sm:py-24">
         <div className="mx-auto max-w-6xl">
+          <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+            <h2 className="text-3xl tracking-tight text-lightText dark:text-darkText sm:text-4xl md:text-5xl">
+              {gridTitle}
+            </h2>
+            {filtered ? (
+              <a href="/guide" className="text-base font-medium text-lightAccent underline underline-offset-4 dark:text-darkAccent">
+                Show everything
+              </a>
+            ) : null}
+          </div>
           <GuideGrid
             entries={shown}
-            categoryOrder={allCategories.map((c) => c.id)}
+            categoryOrder={categoryOrder}
             empty={
               published.length
                 ? "Nothing in the guide matches that yet. Try another city or industry."
                 : "The first entries are on their way."
             }
           />
-          <p className="mt-16 max-w-2xl text-base font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-            Some businesses in the guide are Queso Ventures clients, and every entry says so plainly.{" "}
-            <Link
-              href="/guide/standards"
-              className="font-medium text-lightAccent underline underline-offset-4 dark:text-darkAccent"
-            >
-              How businesses are chosen
-            </Link>
-          </p>
         </div>
       </section>
+
+      {/* Full contrast statement, the same break the city pages use between
+          their hero and their cards. */}
+      <section id="about-the-guide" data-dark-section className="bg-inkLight">
+        <div className="container mx-auto px-4 py-24 sm:py-28">
+          <StatementCopy text={STATEMENT} tone="dark" paint={PAINT.gialloOrion} className="mx-auto max-w-4xl" />
+        </div>
+      </section>
+
+      <section id="how" className="scroll-mt-20 border-b border-lightBorder bg-bandLight dark:border-darkBorder dark:bg-bandDark">
+        <div className="container mx-auto px-4 py-20 sm:py-24">
+          <div className="mx-auto max-w-6xl">
+            <h2 className="mb-10 text-3xl tracking-tight text-lightText dark:text-darkText sm:text-4xl md:text-5xl">
+              How the guide works
+            </h2>
+            <div className="grid gap-4 md:grid-cols-3">
+              {PRINCIPLES.map((p, i) => (
+                <Reveal key={p.title} delay={i * 90}>
+                  <LiveryCard title={p.title} body={p.body} paint={liveryAt(i)} href="/guide/standards" />
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <FreeAudit />
     </>
   );
 }

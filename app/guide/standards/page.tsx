@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import GuideHeader from "components/guide/GuideHeader";
+import FreeAudit from "components/FreeAudit";
+import LiveryCard from "components/LiveryCard";
+import StatementCopy from "components/StatementCopy";
+import Reveal from "components/Reveal";
+import { liveryAt, PAINT } from "components/livery";
 import { SITE_URL } from "lib/guide/queries";
 import { guideTrail, GUIDE_NAME } from "lib/guide/jsonld";
 
@@ -16,8 +20,48 @@ export const metadata: Metadata = {
 };
 
 // TODO(Emmanuel): placeholder copy. Everything below restates only what the
-// guide already does in code. Edit freely, and do not add a policy here that
+// guide already does in code: entries follow a visit, are listed by date, and
+// end with the membership line. Edit freely, and do not add a policy here that
 // the guide does not actually follow.
+
+const STATEMENT =
+  "The guide is a record of local places worth knowing. Every entry follows a visit, every entry is dated, and every entry ends by saying whether the business is a Queso Ventures client.";
+
+const PRINCIPLES = [
+  {
+    title: "Every entry is a visit",
+    body: "Each entry is written after a visit, and the month of that visit is printed at the top. It covers who runs the business, what to get, and what is practical to know before you go.",
+  },
+  {
+    title: "A collection, not a ranking",
+    body: "Entries are listed in the order they were published. Nothing in the guide is numbered or sorted by how good we think it is.",
+  },
+  {
+    title: "Membership is disclosed",
+    body: "Queso Ventures builds websites and handles search for local businesses. A Queso Member is a business that is a client. The end of every entry says which it is.",
+  },
+  {
+    title: "Kept current",
+    body: "Hours and details change, so every entry shows the date it was last updated.",
+  },
+];
+
+// The two lines an entry can end with, shown exactly as they appear, with a
+// stand in name. Showing the real wording is a stronger promise than
+// describing it.
+const DISCLOSURES = [
+  {
+    label: "When the business is a client",
+    text: "Sample Bakery is a loud and proud member of the Queso Network (that means they are a client).",
+    link: "See how you could become one too.",
+  },
+  {
+    label: "When it is not",
+    text: "Sample Bakery is on The Queso Guide but is not a Queso Member yet.",
+    link: "Want to join?",
+  },
+];
+
 export default function Standards() {
   return (
     <>
@@ -25,46 +69,73 @@ export default function Standards() {
         title="How businesses are chosen"
         intro="What gets a business into The Queso Guide, and what we tell you about each one."
         trail={[...guideTrail(), { name: "Standards", path: "/guide/standards" }]}
+        tall
       />
-      <section className="container mx-auto px-4 py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl space-y-12 text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-          <div>
-            <h2 className={H2}>Every entry is a visit</h2>
-            <p>
-              Each entry is written after a visit, and the month of that visit is printed at the top.
-              We write about who runs the business, what to get, and what is practical to know before you go.
-            </p>
-          </div>
-          <div>
-            <h2 className={H2}>It is a collection, not a ranking</h2>
-            <p>
-              Entries are listed in the order they were published. Nothing in the guide is numbered or
-              sorted by how good we think it is.
-            </p>
-          </div>
-          <div>
-            <h2 className={H2}>What &ldquo;Queso Member&rdquo; means</h2>
-            <p>
-              Queso Ventures builds websites and handles search for local businesses. A Queso Member is a
-              business that is a Queso Ventures client. Some businesses in the guide are members and some
-              are not, and the end of every entry says which.
-            </p>
-          </div>
-          <div>
-            <h2 className={H2}>Keeping it current</h2>
-            <p>
-              Hours and details change. Every entry shows the date it was last updated. If something is
-              out of date,{" "}
-              <Link href="/contact" className="font-medium text-lightAccent underline underline-offset-4 dark:text-darkAccent">
-                tell us
-              </Link>
-              .
-            </p>
+
+      <section className="container mx-auto px-4 py-20 sm:py-28">
+        <StatementCopy text={STATEMENT} paint={PAINT.rossoCorsa} className="mx-auto max-w-4xl" />
+      </section>
+
+      <section id="rules" className="scroll-mt-20 border-y border-lightBorder bg-bandLight dark:border-darkBorder dark:bg-bandDark">
+        <div className="container mx-auto px-4 py-20 sm:py-24">
+          <div className="mx-auto max-w-6xl">
+            <h2 className="mb-10 text-3xl tracking-tight text-lightText dark:text-darkText sm:text-4xl md:text-5xl">
+              The four rules
+            </h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              {PRINCIPLES.map((p, i) => (
+                <Reveal key={p.title} delay={i * 90}>
+                  <LiveryCard title={p.title} body={p.body} paint={liveryAt(i)} />
+                </Reveal>
+              ))}
+            </div>
           </div>
         </div>
       </section>
+
+      <section id="endings" className="container mx-auto scroll-mt-20 px-4 py-20 sm:py-24">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="text-3xl tracking-tight text-lightText dark:text-darkText sm:text-4xl md:text-5xl">
+            How every entry ends
+          </h2>
+          <p className="mt-4 max-w-2xl text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted sm:text-xl">
+            One of these two lines, word for word, with the business named.
+          </p>
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
+            {DISCLOSURES.map((d, i) => (
+              <Reveal key={d.label} delay={i * 120}>
+                <figure className="flex h-full flex-col">
+                  <figcaption className="mb-3 text-base font-semibold text-lightText dark:text-darkText">
+                    {d.label}
+                  </figcaption>
+                  {/* Styled exactly like the note at the end of an article,
+                      link included, so this is the real thing and not a
+                      description of it. */}
+                  <blockquote className="flex-1 rounded-3xl bg-inkLight p-7 text-lg font-light leading-relaxed text-white/80 sm:p-9">
+                    {d.text}{" "}
+                    <a
+                      href="/contact"
+                      className="font-semibold text-darkAccent underline decoration-2 underline-offset-4 transition-colors hover:text-darkButtonHover"
+                    >
+                      {d.link}
+                    </a>
+                  </blockquote>
+                </figure>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <FreeAudit
+        copy={{
+          heading: "Know a place that belongs here?",
+          sub: "Tell us about a local business worth a visit, yours included.",
+          cta: "Suggest a Business",
+          ctaPrefill: "I'd like to suggest a business for The Queso Guide: ",
+          reassurance: "It comes straight to me.",
+        }}
+      />
     </>
   );
 }
-
-const H2 = "mb-3 text-2xl font-semibold tracking-tight text-lightText dark:text-darkText";
