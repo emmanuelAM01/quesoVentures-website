@@ -46,22 +46,6 @@ const PRINCIPLES = [
   },
 ];
 
-// The two lines an entry can end with, shown exactly as they appear, with a
-// stand in name. Showing the real wording is a stronger promise than
-// describing it.
-const DISCLOSURES = [
-  {
-    label: "When the business is a client",
-    text: "Sample Bakery is a loud and proud member of the Queso Network (that means they are a client).",
-    link: "See how you could become one too.",
-  },
-  {
-    label: "When it is not",
-    text: "Sample Bakery is on The Queso Guide but is not a Queso Member yet.",
-    link: "Want to join?",
-  },
-];
-
 export default function Standards() {
   return (
     <>
@@ -89,40 +73,6 @@ export default function Standards() {
                 </Reveal>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="endings" className="container mx-auto scroll-mt-20 px-4 py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="text-3xl tracking-tight text-lightText dark:text-darkText sm:text-4xl md:text-5xl">
-            How every entry ends
-          </h2>
-          <p className="mt-4 max-w-2xl text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted sm:text-xl">
-            One of these two lines, word for word, with the business named.
-          </p>
-          <div className="mt-10 grid gap-5 md:grid-cols-2">
-            {DISCLOSURES.map((d, i) => (
-              <Reveal key={d.label} delay={i * 120}>
-                <figure className="flex h-full flex-col">
-                  <figcaption className="mb-3 text-base font-semibold text-lightText dark:text-darkText">
-                    {d.label}
-                  </figcaption>
-                  {/* Styled exactly like the note at the end of an article,
-                      link included, so this is the real thing and not a
-                      description of it. */}
-                  <blockquote className="flex-1 rounded-3xl bg-inkLight p-7 text-lg font-light leading-relaxed text-white/80 sm:p-9">
-                    {d.text}{" "}
-                    <a
-                      href="/contact"
-                      className="font-semibold text-darkAccent underline decoration-2 underline-offset-4 transition-colors hover:text-darkButtonHover"
-                    >
-                      {d.link}
-                    </a>
-                  </blockquote>
-                </figure>
-              </Reveal>
-            ))}
           </div>
         </div>
       </section>
