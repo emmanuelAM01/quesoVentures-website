@@ -200,7 +200,11 @@ export default async function GuideArticle({ params }: { params: Params }) {
                     {whatToGet.map((item, i) => (
                       <li
                         key={i}
-                        className="relative overflow-hidden rounded-2xl border border-lightBorder bg-panelLight p-5 pl-6 dark:border-darkBorder dark:bg-panelDark"
+                        className={`relative overflow-hidden rounded-2xl border border-lightBorder bg-panelLight p-5 pl-6 dark:border-darkBorder dark:bg-panelDark ${
+                          // An odd count leaves the last card alone in its row,
+                          // so it takes the whole row instead.
+                          lastOfOdd(i, whatToGet.length) ? "sm:col-span-2" : ""
+                        }`}
                       >
                         <span aria-hidden className="absolute inset-y-0 left-0 w-1" style={{ background: liveryAt(i).hex }} />
                         <p className="text-lg font-semibold text-lightText dark:text-darkText">{item.name}</p>
@@ -263,9 +267,19 @@ export default async function GuideArticle({ params }: { params: Params }) {
                       const src = guideImageUrl(g.path);
                       if (!src) return null;
                       return (
-                        <figure key={i}>
-                          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-bandLight dark:bg-bandDark">
-                            <Image src={src} alt={g.alt || ""} fill sizes="(min-width: 640px) 360px, 100vw" className="object-cover" />
+                        <figure key={i} className={lastOfOdd(i, gallery.length) ? "sm:col-span-2" : ""}>
+                          <div
+                            className={`relative overflow-hidden rounded-2xl bg-bandLight dark:bg-bandDark ${
+                              lastOfOdd(i, gallery.length) ? "aspect-[4/3] sm:aspect-[16/7]" : "aspect-[4/3]"
+                            }`}
+                          >
+                            <Image
+                              src={src}
+                              alt={g.alt || ""}
+                              fill
+                              sizes={lastOfOdd(i, gallery.length) ? "(min-width: 640px) 720px, 100vw" : "(min-width: 640px) 360px, 100vw"}
+                              className="object-cover"
+                            />
                           </div>
                           {g.caption ? (
                             <figcaption className="mt-2 text-sm text-lightTextMuted dark:text-darkTextMuted">{g.caption}</figcaption>
@@ -297,6 +311,11 @@ export default async function GuideArticle({ params }: { params: Params }) {
       ) : null}
     </>
   );
+}
+
+/** The last item of an odd-length list, in a two column grid. */
+function lastOfOdd(i: number, length: number) {
+  return length % 2 === 1 && i === length - 1;
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {

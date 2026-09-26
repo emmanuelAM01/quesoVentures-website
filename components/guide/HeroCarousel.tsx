@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 type Slide = { src: string; alt: string };
 
-const INTERVAL_MS = 5500;
+const INTERVAL_MS = 5000;
 const SWIPE_PX = 40;
 
 /**
@@ -18,17 +18,21 @@ const SWIPE_PX = 40;
  * fade is the calmer motion for a header anyway.
  *
  * Every photo is an <img> in the server HTML, so crawlers and anyone without
- * JavaScript get all of them. It advances on its own and stops being clever
- * once someone shows they are looking: paused while hovered or focused, off
- * screen, or in a background tab; stopped for good after a swipe, a tap on a
- * control or an arrow key; never started for anyone who asked for reduced
- * motion.
+ * JavaScript get all of them.
+ *
+ * It keeps turning while someone looks at it. It used to pause on hover and
+ * on focus, and a reader's mouse resting on the header is exactly how people
+ * look at a header, so in practice it never moved. Now it only pauses when
+ * nobody can see it (scrolled away, background tab), and stops for good once
+ * the reader takes over: a swipe, an arrow, a dot, or an arrow key.
+ *
+ * A crossfade is not motion across the screen, so it runs under reduced
+ * motion too; only the transition itself is dropped there.
  */
 export default function HeroCarousel({ slides, accent }: { slides: Slide[]; accent: string }) {
   const root = useRef<HTMLElement>(null);
   const startX = useRef<number | null>(null);
   const [index, setIndex] = useState(0);
-  const [held, setHeld] = useState(false);
   const [stopped, setStopped] = useState(false);
   const [visible, setVisible] = useState(true);
   const count = slides.length;
@@ -48,13 +52,12 @@ export default function HeroCarousel({ slides, accent }: { slides: Slide[]; acce
   }, []);
 
   useEffect(() => {
-    if (count < 2 || held || stopped || !visible) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (count < 2 || stopped || !visible) return;
     const t = window.setTimeout(() => {
       if (!document.hidden) setIndex((i) => (i + 1) % count);
     }, INTERVAL_MS);
     return () => window.clearTimeout(t);
-  }, [count, held, stopped, visible, index]);
+  }, [count, stopped, visible, index]);
 
   const control =
     "absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur transition hover:bg-black/65 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white";
@@ -66,10 +69,6 @@ export default function HeroCarousel({ slides, accent }: { slides: Slide[]; acce
       aria-label="Photos"
       tabIndex={0}
       className="group relative mt-8 aspect-[16/10] touch-pan-y overflow-hidden rounded-3xl bg-bandLight outline-none focus-visible:ring-2 focus-visible:ring-lightAccent dark:bg-bandDark dark:focus-visible:ring-darkAccent"
-      onMouseEnter={() => setHeld(true)}
-      onMouseLeave={() => setHeld(false)}
-      onFocus={() => setHeld(true)}
-      onBlur={() => setHeld(false)}
       onKeyDown={(e) => {
         if (e.key === "ArrowRight") userGo(index + 1);
         if (e.key === "ArrowLeft") userGo(index - 1);
@@ -90,7 +89,7 @@ export default function HeroCarousel({ slides, accent }: { slides: Slide[]; acce
           aria-roledescription="slide"
           aria-label={`${i + 1} of ${count}`}
           aria-hidden={i !== index}
-          className={`absolute inset-0 transition-opacity duration-700 ease-out motion-reduce:transition-none ${
+          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${
             i === index ? "z-10 opacity-100" : "z-0 opacity-0"
           }`}
         >
