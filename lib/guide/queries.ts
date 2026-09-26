@@ -13,7 +13,7 @@ import {
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || BUSINESS.url).replace(/\/$/, "");
 
 export type CityRef = Pick<GuideCity, "id" | "slug" | "name" | "region">;
-export type CategoryRef = Pick<GuideCategory, "id" | "slug" | "name" | "plural_name" | "schema_type">;
+export type CategoryRef = Pick<GuideCategory, "id" | "slug" | "name" | "plural_name" | "schema_type" | "items_label">;
 
 export type GuideCard = Pick<
   GuideArticle,
@@ -32,10 +32,10 @@ export type GuideEntry = GuideArticle & { city: CityRef; category: CategoryRef; 
 
 const CARD_COLUMNS =
   "id, slug, business_name, dek, area, hero_image_path, hero_image_alt, published_at, updated_at, " +
-  "city:cities!inner(id, slug, name, region), category:categories!inner(id, slug, name, plural_name, schema_type)";
+  "city:cities!inner(id, slug, name, region), category:categories!inner(id, slug, name, plural_name, schema_type, items_label)";
 
 const ENTRY_COLUMNS =
-  "*, city:cities!inner(id, slug, name, region), category:categories!inner(id, slug, name, plural_name, schema_type)";
+  "*, city:cities!inner(id, slug, name, region), category:categories!inner(id, slug, name, plural_name, schema_type, items_label)";
 
 function withPath<T extends { slug: string; city: CityRef; category: CategoryRef }>(row: T) {
   return { ...row, path: guideArticlePath(row.city.slug, row.category.slug, row.slug) };

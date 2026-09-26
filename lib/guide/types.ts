@@ -11,6 +11,29 @@ export type GuideMembership = 'member' | 'not_member';
 export type GuideEventType = 'pageview' | 'cta_click' | 'badge_click';
 export type GuideReferrerClass = 'ai' | 'search' | 'social' | 'direct' | 'other';
 
+/**
+ * The heading over an article's item cards (migration 090). Stored as a key;
+ * the words are here, so rewording one changes every article at once.
+ */
+export type GuideItemsLabel = 'get' | 'order' | 'book' | 'best' | 'ask';
+
+export const GUIDE_ITEMS_LABELS: Record<GuideItemsLabel, { heading: string; fits: string }> = {
+  get: { heading: 'What to Get', fits: 'General' },
+  order: { heading: 'What to Order', fits: 'Food and drink' },
+  book: { heading: 'What to Book', fits: 'Appointments and lessons' },
+  best: { heading: 'What They Do Best', fits: 'Trades and services' },
+  ask: { heading: 'What to Ask For', fits: 'Shops where you ask at the counter' },
+};
+
+/** The article's own choice if it made one, otherwise its category's. */
+export function guideItemsHeading(
+  article: { items_label?: GuideItemsLabel | null },
+  category?: { items_label?: GuideItemsLabel | null } | null,
+): string {
+  const key = article.items_label ?? category?.items_label ?? 'get';
+  return (GUIDE_ITEMS_LABELS[key] ?? GUIDE_ITEMS_LABELS.get).heading;
+}
+
 export type GuideDay =
   | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
 
@@ -42,6 +65,8 @@ export type GuideCategory = {
   plural_name: string;
   schema_type: string;
   sensitive: boolean;
+  /** Default heading for its articles' item cards. */
+  items_label: GuideItemsLabel;
   sort_order: number;
 };
 
@@ -62,6 +87,8 @@ export type GuideArticle = {
   owner_quote: string | null;
   owner_quote_attribution: string | null;
   what_to_get: GuideWhatToGet[];
+  /** Overrides the category's heading for the item cards. NULL = use the category's. */
+  items_label: GuideItemsLabel | null;
   good_to_know: string[];
   who_its_for: string | null;
   faqs: GuideFaq[];
@@ -143,7 +170,7 @@ export type QuesoGuideSchema = {
     };
     categories: {
       Row: GuideCategory;
-      Insert: Defaulted<GuideCategory, 'id' | 'schema_type' | 'sensitive' | 'sort_order'>;
+      Insert: Defaulted<GuideCategory, 'id' | 'schema_type' | 'sensitive' | 'sort_order' | 'items_label'>;
       Update: Partial<GuideCategory>;
       Relationships: [];
     };

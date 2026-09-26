@@ -22,6 +22,7 @@ import {
 } from "lib/guide/queries";
 import { articleGraph, guideTrail, GUIDE_NAME, ldJson } from "lib/guide/jsonld";
 import { guideImageUrl } from "lib/guide/supabase";
+import { guideItemsHeading } from "lib/guide/types";
 import { monthYear, shortDate } from "lib/guide/format";
 
 export const revalidate = 86400;
@@ -195,7 +196,7 @@ export default async function GuideArticle({ params }: { params: Params }) {
               ) : null}
 
               {whatToGet.length ? (
-                <Section title="What to Get">
+                <Section title={guideItemsHeading(entry, entry.category)}>
                   <ul className="grid gap-4 sm:grid-cols-2">
                     {whatToGet.map((item, i) => (
                       <li
