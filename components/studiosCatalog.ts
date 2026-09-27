@@ -194,7 +194,7 @@ export const PRODUCTS: Product[] = [
     points: [
       "Tell it who your best customer is, once.",
       "It finds more of them, each with a way to reach them.",
-      "Every lead lands in Queso Organization, ready to work.",
+      "Every lead lands in the Queso Organizer, ready to work.",
     ],
   },
   {
@@ -218,7 +218,7 @@ export const PRODUCTS: Product[] = [
   // Get everything straightened out
   {
     key: "organization",
-    name: "Queso Organization",
+    name: "Queso Organizer",
     outcome: "organized",
     // It runs today, but shaped for one trade; until it configures itself
     // for any business it is sold as built to order.
@@ -329,7 +329,7 @@ export const PACKS: Pack[] = [
     key: "pipeline",
     name: "Find, reach and keep track",
     outcome: "leads",
-    line: "Lead Finder and Outreach, with Queso Organization thrown in to keep every lead straight.",
+    line: "Lead Finder and Outreach, with the Queso Organizer thrown in to keep every lead straight.",
     products: ["leads", "outreach", "organization"],
     list: 350,
     client: 250,
