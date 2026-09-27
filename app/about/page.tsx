@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Footer from "components/Footer";
 import Reveal from "components/Reveal";
 import AboutHero from "components/AboutHero";
-import AboutPortrait from "components/AboutPortrait";
 import AboutLinks from "components/AboutLinks";
 import AboutDeck, { type DeckCard } from "components/AboutDeck";
 import AboutChapters, { type Chapter } from "components/AboutChapters";
@@ -150,11 +149,11 @@ const what: DeckCard[] = [
   Still to fold in, in his words: 2024 was four promotions in six months, and
   leaving that job for a startup that actually got funded.
 
-  Photographs marked STAND-IN are borrowed from the old camera roll so the
-  layout can be judged; each year gets its own. A chapter with no image draws
-  its year instead, so a missing photo never leaves a hole.
+  Photos are his, chosen per year; several make a carousel. A chapter with no
+  photo draws a field of its colour instead, so a gap never leaves a hole.
+  The camera shot closes 2026 as the easter egg.
 
-  Layout keeps the rhythm: two splits that swap sides, then a full screen.
+  Layout keeps the rhythm: splits that swap sides, broken by a full screen.
 */
 const why: Chapter[] = [
   {
@@ -162,6 +161,13 @@ const why: Chapter[] = [
     mark: "2008",
     title: "One time at computer camp",
     body: "My parents enrolled me in a free computer camp. I spent it taking computers apart and putting them back together.",
+    photos: [
+      {
+        src: "/about/2008.jpg",
+        alt: "Emmanuel Mendieta as a kid, wearing a red paper crown",
+        position: "50% 30%",
+      },
+    ],
     layout: "left",
   },
   {
@@ -171,26 +177,30 @@ const why: Chapter[] = [
     body: "Edited my grades on the page before I showed my parents. Edited webpages as pranks.",
     story:
       "Built websites for fake businesses I thought were cool. Then real ones, for friends and family.",
-    // STAND-IN photo
-    image: {
-      src: "/hero/aboutCamera.jpg",
-      alt: "Emmanuel Mendieta holding the camera behind the photos on this site",
-      position: "50% 28%",
-    },
+    photos: [
+      {
+        src: "/about/2010s-box.jpg",
+        alt: "Emmanuel Mendieta as a kid, sitting in a cardboard box at home",
+        position: "50% 45%",
+      },
+      {
+        src: "/about/2010s-boat.jpg",
+        alt: "Emmanuel Mendieta sitting in a boat at a hilltop overlook at night",
+        position: "70% 50%",
+      },
+      {
+        src: "/about/2010s-skyline.jpg",
+        alt: "A selfie of Emmanuel Mendieta in front of a city skyline at night",
+      },
+    ],
     layout: "right",
   },
   {
-    // DRAFT
+    // DRAFT. No photo yet.
     mark: "2020",
     title: "Staring down unemployment",
     body: "I had to make money somehow. So I started making money off my hobby.",
-    // STAND-IN photo
-    image: {
-      src: "/hero/aboutTokyo.jpg",
-      alt: "Emmanuel Mendieta on an observation deck above Tokyo",
-      position: "50% 30%",
-    },
-    layout: "full",
+    layout: "left",
   },
   {
     mark: "2022",
@@ -198,7 +208,19 @@ const why: Chapter[] = [
     body: "Built two apps in college. Y Combinator never answered. Alliance DAO passed on the idea, not on me.",
     story:
       "Still in college, I helped build a stablecoin savings app. Then crypto crashed and took the idea with it. Next came a crime reporting app for Latin America, the first product I built on my own. Y Combinator never answered. Alliance DAO interviewed me three times between cupcake shop shifts, then passed on the idea. Never on whether I could build it.",
-    layout: "left",
+    photos: [
+      {
+        src: "/about/2022-mountain.jpg",
+        alt: "Emmanuel Mendieta standing on a snowy mountain pass",
+        position: "50% 62%",
+      },
+      {
+        src: "/about/2022-terrace.jpg",
+        alt: "Emmanuel Mendieta at a table on a terrace above a city at night",
+        position: "50% 62%",
+      },
+    ],
+    layout: "full",
   },
   {
     // DRAFT
@@ -206,12 +228,13 @@ const why: Chapter[] = [
     title: "Graduated, got a regular job",
     body: "Computer Science at the University of Houston (what a surprise).",
     story: "Then a regular job, because those were the rules of life. Or so I thought.",
-    // STAND-IN photo
-    image: {
-      src: "/hero/aboutHills.jpg",
-      alt: "Emmanuel Mendieta on a green hillside under a summer sky",
-      position: "50% 45%",
-    },
+    photos: [
+      {
+        src: "/hero/aboutHills.jpg",
+        alt: "Emmanuel Mendieta squinting into the sun on a green hillside",
+        position: "50% 45%",
+      },
+    ],
     layout: "right",
   },
   {
@@ -220,12 +243,13 @@ const why: Chapter[] = [
     body: "Hired at MARA for QA. Two months later I was leading six developers.",
     story:
       "Took a pay cut to join MARA as a contractor, hired for QA. There was no QA work my first week, so I built the frontend for their Bitcoin transaction accelerator and shipped it in days. Two months later I was leading six developers and a designer.",
-    // STAND-IN photo
-    image: {
-      src: "/hero/aboutColosseum.jpg",
-      alt: "Emmanuel Mendieta inside the Colosseum in Rome",
-      position: "50% 55%",
-    },
+    photos: [
+      {
+        src: "/hero/aboutTokyo.jpg",
+        alt: "Emmanuel Mendieta on an observation deck above Tokyo",
+        position: "50% 30%",
+      },
+    ],
     layout: "full",
   },
   {
@@ -234,6 +258,18 @@ const why: Chapter[] = [
     body: "An app full of AI agents. A whole bunch of technical jazz, but no users. Lesson learned: talk to people first.",
     story:
       "We raised $250K for Bitcoin backed lending. As CTO I built every pivot: trucking finance, logistics software, then an AI language coach on WhatsApp. One version paid truck drivers for texting a photo of their paperwork. It worked perfectly. Nobody signed up.",
+    photos: [
+      {
+        src: "/about/2025-mugello.jpg",
+        alt: "Emmanuel Mendieta in the grandstand at Mugello",
+        position: "50% 45%",
+      },
+      {
+        src: "/hero/aboutColosseum.jpg",
+        alt: "Emmanuel Mendieta inside the Colosseum in Rome",
+        position: "50% 55%",
+      },
+    ],
     layout: "left",
   },
   {
@@ -242,11 +278,23 @@ const why: Chapter[] = [
     title: "Queso Ventures",
     body: "Learned that lesson a little too late. So I started Queso Ventures.",
     story: "Everything I have learned, and everything I am still learning, in one place.",
-    // STAND-IN photo
-    image: {
-      src: "/hero/aboutClouds.JPEG",
-      alt: "Pine trees and clouds over the Alps",
-    },
+    photos: [
+      {
+        src: "/hero/aboutClouds.JPEG",
+        alt: "Pine trees and clouds over the Alps",
+      },
+      {
+        src: "/about.JPEG",
+        alt: "Portrait of Emmanuel Mendieta, founder of Queso Ventures",
+        position: "45% 30%",
+      },
+      {
+        src: "/hero/aboutCamera.jpg",
+        alt: "Emmanuel Mendieta holding the camera behind the photos on this site",
+        position: "50% 28%",
+        caught: true,
+      },
+    ],
     layout: "right",
   },
 ];
@@ -266,7 +314,7 @@ export default function AboutPage() {
         />
 
         {/* What Queso Ventures is */}
-        <section id="what" className="scroll-mt-20 container mx-auto px-4 py-24 sm:py-32">
+        <section id="what" className="container mx-auto px-4 py-24 sm:py-32 lg:py-0">
           <div className="max-w-6xl mx-auto">
             <AboutDeck cards={what}>
               <Reveal>
@@ -279,35 +327,11 @@ export default function AboutPage() {
         </section>
 
         {/*
-          Why I'm doing this: the title page of the story. The portrait keeps
-          its cheese; the chapters below are the book.
+          The story needs its heading for readers and crawlers, but on screen
+          the chapters open straight after the deck: a title page between them
+          only broke the flow.
         */}
-        <section className="bg-bandLight dark:bg-bandDark">
-          <div className="container mx-auto px-4 py-24 sm:py-32">
-            <div className="max-w-6xl mx-auto grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
-              <Reveal>
-                <AboutPortrait />
-              </Reveal>
-              <Reveal delay={120}>
-                <h2 className="text-5xl sm:text-6xl xl:text-7xl font-light leading-[1.02] tracking-tight text-balance text-lightText dark:text-darkText">
-                  Why I&apos;m doing this
-                </h2>
-                <span
-                  aria-hidden
-                  className="mt-8 block h-1 w-24 rounded-full"
-                  style={{
-                    backgroundImage: `linear-gradient(to right, ${PAINT.bluTourDeFrance.hex}, ${PAINT.gialloOrion.hex}, ${PAINT.rossoCorsa.hex})`,
-                  }}
-                />
-                {/* DRAFT */}
-                <p className="mt-8 max-w-md text-xl sm:text-2xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-                  Eighteen years of taking things apart to see how they work.
-                </p>
-              </Reveal>
-            </div>
-          </div>
-        </section>
-
+        <h2 className="sr-only">Why I&apos;m doing this</h2>
         <AboutChapters
           chapters={why}
           coda={

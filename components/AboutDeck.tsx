@@ -4,8 +4,6 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { IconType } from "react-icons";
 import {
-  PiArrowLeftBold,
-  PiArrowRightBold,
   PiBrowsersDuotone,
   PiCpuDuotone,
   PiPuzzlePieceDuotone,
@@ -43,11 +41,18 @@ const ICONS: Record<DeckCard["icon"], IconType> = {
  * the ones already read to the left and the ones still to come to the right,
  * each a step further back. It does not wrap: the order is the pitch.
  *
- * The deck used to sit alone in a full width row with nothing either side of
- * it. Now the heading and a numbered index hold the left of the row and the
- * deck the right, like a contents page beside the page it opens to. The index
- * and the deck are one control: pointing at a line lifts its card, choosing a
- * line brings the card forward, and choosing a card lights its line.
+ * The heading and an index hold the left of the row and the deck the right,
+ * like a contents page beside the page it opens to. The index and the deck are
+ * one control: pointing at a line lifts its card, choosing a line brings the
+ * card forward, and choosing a card lights its line. No numbers anywhere; the
+ * lines and the pile already say where you are.
+ *
+ * The page scrolls through the deck. The section is pinned for a screen per
+ * card and the scroll position picks the card, so reading down the page deals
+ * them one after another, then lets go. Clicking a line or a card scrolls to
+ * that card's stretch rather than jumping, so scroll and state never disagree.
+ * Without room for the pin (below lg) or with reduced motion, nothing is
+ * pinned and choosing works directly.
  *
  * The deck is a desktop idea only. Below lg a stack of tipped cards is a pile
  * of corners, so phones and tablets get the same faces one after another, open.
@@ -76,7 +81,51 @@ export default function AboutDeck({
   /** The deal has finished; from here on every move is immediate, no stagger. */
   const [settled, setSettled] = useState(false);
   const deck = useRef<HTMLDivElement>(null);
+  /** The tall run of page the pinned deck scrolls through. */
+  const track = useRef<HTMLDivElement>(null);
+  const [pinned, setPinned] = useState(false);
   const n = cards.length;
+
+  // Pinned only where there is a deck to show and motion is welcome.
+  useEffect(() => {
+    const wide = window.matchMedia("(min-width: 1024px)");
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const decide = () => setPinned(wide.matches && !calm.matches);
+    decide();
+    wide.addEventListener("change", decide);
+    calm.addEventListener("change", decide);
+    return () => {
+      wide.removeEventListener("change", decide);
+      calm.removeEventListener("change", decide);
+    };
+  }, []);
+
+  // Where the page is in the track decides the card: an equal stretch each.
+  useEffect(() => {
+    if (!pinned) return;
+    let raf = 0;
+    const update = () => {
+      const el = track.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const span = r.height - window.innerHeight;
+      if (span <= 0) return;
+      const p = Math.min(1, Math.max(0, -r.top / span));
+      setActive(Math.min(n - 1, Math.floor(p * n)));
+    };
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [pinned, n]);
 
   /*
     The deal. The deck waits as one squared up pile until it scrolls into
@@ -106,7 +155,18 @@ export default function AboutDeck({
     return () => clearTimeout(t);
   }, [dealt, n]);
 
-  const go = (i: number) => setActive(Math.max(0, Math.min(n - 1, i)));
+  const go = (to: number) => {
+    const i = Math.max(0, Math.min(n - 1, to));
+    const el = track.current;
+    if (!pinned || !el) {
+      setActive(i);
+      return;
+    }
+    // The middle of that card's stretch, so a small nudge does not leave it.
+    const span = el.offsetHeight - window.innerHeight;
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top: top + ((i + 0.5) / n) * span, behavior: "smooth" });
+  };
   const keys = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
       e.preventDefault();
@@ -126,161 +186,127 @@ export default function AboutDeck({
   const centre = (Math.min(...xs) + Math.max(...xs)) / 2;
 
   return (
-    <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,5fr),minmax(0,7fr)] lg:gap-10 xl:gap-16">
-      <div>
-        {children}
+    <div
+      ref={track}
+      // A screen for the first card and most of one more for each after it.
+      style={pinned ? { height: `calc(100vh + ${(n - 1) * 70}vh)` } : undefined}
+    >
+      <div className={pinned ? "sticky top-0 flex h-screen items-center pt-[76px]" : ""}>
+        <div className="grid w-full items-center gap-12 lg:grid-cols-[minmax(0,5fr),minmax(0,7fr)] lg:gap-10 xl:gap-16">
+          <div>
+            {children}
 
-        {/* The index. Desktop only, since below lg there is no deck to steer. */}
-        <ol className="mt-12 hidden lg:block" onMouseLeave={() => setPeek(null)} onKeyDown={keys}>
-          {cards.map((card, i) => {
-            const on = i === active;
-            const paint = liveryAt(i);
-            return (
-              <li key={card.title}>
-                <button
-                  type="button"
-                  aria-current={on}
-                  onClick={() => go(i)}
-                  onMouseEnter={() => setPeek(i === active ? null : i)}
-                  onFocus={() => go(i)}
-                  className="group flex w-full items-center gap-5 py-3.5 text-left focus:outline-none"
-                >
-                  <span
-                    className={`w-6 text-sm tabular-nums transition-colors duration-500 ${
-                      on ? "text-lightText dark:text-darkText" : "text-lightTextMuted/70 dark:text-darkTextMuted/60"
+            {/* The index. Desktop only, since below lg there is no deck to steer. */}
+            <ol className="mt-12 hidden lg:block" onMouseLeave={() => setPeek(null)} onKeyDown={keys}>
+              {cards.map((card, i) => {
+                const on = i === active;
+                const paint = liveryAt(i);
+                return (
+                  <li key={card.title}>
+                    <button
+                      type="button"
+                      aria-current={on}
+                      onClick={() => go(i)}
+                      onMouseEnter={() => setPeek(i === active ? null : i)}
+                      onFocus={() => go(i)}
+                      className="group flex w-full items-center gap-5 py-3.5 text-left focus:outline-none"
+                    >
+                      <span
+                        aria-hidden
+                        className={`h-[2px] rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                          on
+                            ? "w-14"
+                            : "w-5 bg-lightBorder dark:bg-darkBorder group-hover:w-9 group-hover:bg-lightTextMuted/50 dark:group-hover:bg-darkTextMuted/50"
+                        }`}
+                        style={on ? { backgroundColor: paint.hex } : undefined}
+                      />
+                      <span
+                        className={`text-2xl tracking-tight transition-all duration-500 ${
+                          on
+                            ? "font-medium text-lightText dark:text-darkText"
+                            : "font-light text-lightTextMuted dark:text-darkTextMuted group-hover:translate-x-1 group-hover:text-lightText dark:group-hover:text-darkText group-focus-visible:text-lightText"
+                        }`}
+                      >
+                        {card.mark}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
+
+          </div>
+
+          <div>
+            <div className="lg:hidden grid gap-4 sm:grid-cols-2">
+              {cards.map((card, i) => (
+                <Face key={card.title} card={card} index={i} state="on" />
+              ))}
+            </div>
+
+            <div
+              ref={deck}
+              tabIndex={0}
+              role="group"
+              aria-roledescription="deck"
+              aria-label={`What Queso Ventures is, card ${active + 1} of ${n}`}
+              onKeyDown={keys}
+              onMouseLeave={() => setPeek(null)}
+              className="relative hidden h-[27rem] rounded-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-lightAccent/40 dark:focus-visible:ring-darkAccent/40 lg:block"
+            >
+              {cards.map((card, i) => {
+                const d = i - active;
+                const a = Math.abs(d);
+                const on = dealt && d === 0;
+                const peeking = dealt && !on && peek === i;
+
+                let transform: string;
+                if (!dealt) {
+                  // Squared up in the middle, a hair of scatter so it reads as a pile.
+                  const pos = i - (n - 1) / 2;
+                  transform = `translateX(calc(-50% + ${pos * 3}%)) translateY(24px) rotate(${pos * 1.5}deg) scale(0.94)`;
+                } else {
+                  // Each step back: further out, lower, smaller, tipped a bit more.
+                  // A card being pointed at comes up and straightens partway.
+                  const lift = peeking ? -18 : 0;
+                  const tip = Math.sign(d) * Math.min(a, 3) * (peeking ? 2.5 : 4);
+                  transform = `translateX(calc(-50% + ${xs[i] - centre}%)) translateY(${a * 14 + lift}px) rotate(${tip}deg) scale(${1 - a * 0.07})`;
+                }
+
+                return (
+                  <div
+                    key={card.title}
+                    onMouseEnter={() => setPeek(i)}
+                    onClick={() => go(i)}
+                    onFocus={() => go(i)}
+                    className={`absolute left-1/2 top-3 h-[22.5rem] w-[58%] origin-bottom will-change-transform ${
+                      on ? "" : "cursor-pointer"
                     }`}
+                    style={{
+                      transform,
+                      /*
+                        The card coming forward jumps to the top at once. The one
+                        going back keeps its height until it is most of the way
+                        there, so it slides under its neighbour instead of
+                        vanishing behind it mid move.
+                      */
+                      transition: !dealt
+                        ? "none"
+                        : settled
+                          ? `transform ${MOVE_MS}ms ${EASE}, z-index 0s linear ${on ? 0 : MOVE_MS * 0.45}ms`
+                          : `transform ${MOVE_MS}ms ${EASE} ${i * DEAL_STAGGER_MS}ms`,
+                      zIndex: 40 - a,
+                    }}
                   >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span
-                    aria-hidden
-                    className={`h-[2px] rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                      on
-                        ? "w-14"
-                        : "w-5 bg-lightBorder dark:bg-darkBorder group-hover:w-9 group-hover:bg-lightTextMuted/50 dark:group-hover:bg-darkTextMuted/50"
-                    }`}
-                    style={on ? { backgroundColor: paint.hex } : undefined}
-                  />
-                  <span
-                    className={`text-2xl tracking-tight transition-all duration-500 ${
-                      on
-                        ? "font-medium text-lightText dark:text-darkText"
-                        : "font-light text-lightTextMuted dark:text-darkTextMuted group-hover:translate-x-1 group-hover:text-lightText dark:group-hover:text-darkText group-focus-visible:text-lightText"
-                    }`}
-                  >
-                    {card.mark}
-                  </span>
-                </button>
-              </li>
-            );
-          })}
-        </ol>
-
-        <div className="mt-8 hidden items-center gap-3 lg:flex">
-          <StepButton label="Previous card" disabled={active === 0} onClick={() => go(active - 1)}>
-            <PiArrowLeftBold className="h-4 w-4" />
-          </StepButton>
-          <StepButton label="Next card" disabled={active === n - 1} onClick={() => go(active + 1)}>
-            <PiArrowRightBold className="h-4 w-4" />
-          </StepButton>
-          <span className="ml-3 text-sm tabular-nums text-lightTextMuted dark:text-darkTextMuted">
-            {String(active + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
-          </span>
-        </div>
-      </div>
-
-      <div>
-        <div className="lg:hidden grid gap-4 sm:grid-cols-2">
-          {cards.map((card, i) => (
-            <Face key={card.title} card={card} index={i} state="on" />
-          ))}
-        </div>
-
-        <div
-          ref={deck}
-          tabIndex={0}
-          role="group"
-          aria-roledescription="deck"
-          aria-label={`What Queso Ventures is, card ${active + 1} of ${n}`}
-          onKeyDown={keys}
-          onMouseLeave={() => setPeek(null)}
-          className="relative hidden h-[27rem] rounded-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-lightAccent/40 dark:focus-visible:ring-darkAccent/40 lg:block"
-        >
-          {cards.map((card, i) => {
-            const d = i - active;
-            const a = Math.abs(d);
-            const on = dealt && d === 0;
-            const peeking = dealt && !on && peek === i;
-
-            let transform: string;
-            if (!dealt) {
-              // Squared up in the middle, a hair of scatter so it reads as a pile.
-              const pos = i - (n - 1) / 2;
-              transform = `translateX(calc(-50% + ${pos * 3}%)) translateY(24px) rotate(${pos * 1.5}deg) scale(0.94)`;
-            } else {
-              // Each step back: further out, lower, smaller, tipped a bit more.
-              // A card being pointed at comes up and straightens partway.
-              const lift = peeking ? -18 : 0;
-              const tip = Math.sign(d) * Math.min(a, 3) * (peeking ? 2.5 : 4);
-              transform = `translateX(calc(-50% + ${xs[i] - centre}%)) translateY(${a * 14 + lift}px) rotate(${tip}deg) scale(${1 - a * 0.07})`;
-            }
-
-            return (
-              <div
-                key={card.title}
-                onMouseEnter={() => setPeek(i)}
-                onClick={() => go(i)}
-                onFocus={() => go(i)}
-                className={`absolute left-1/2 top-3 h-[22.5rem] w-[58%] origin-bottom will-change-transform ${
-                  on ? "" : "cursor-pointer"
-                }`}
-                style={{
-                  transform,
-                  /*
-                    The card coming forward jumps to the top at once. The one
-                    going back keeps its height until it is most of the way
-                    there, so it slides under its neighbour instead of
-                    vanishing behind it mid move.
-                  */
-                  transition: !dealt
-                    ? "none"
-                    : settled
-                      ? `transform ${MOVE_MS}ms ${EASE}, z-index 0s linear ${on ? 0 : MOVE_MS * 0.45}ms`
-                      : `transform ${MOVE_MS}ms ${EASE} ${i * DEAL_STAGGER_MS}ms`,
-                  zIndex: 40 - a,
-                }}
-              >
-                <Face card={card} index={i} state={on ? "on" : peeking ? "peek" : "off"} />
-              </div>
-            );
-          })}
+                    <Face card={card} index={i} state={on ? "on" : peeking ? "peek" : "off"} />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  );
-}
-
-function StepButton({
-  label,
-  disabled,
-  onClick,
-  children,
-}: {
-  label: string;
-  disabled: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      disabled={disabled}
-      onClick={onClick}
-      className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-lightText/20 dark:border-darkText/25 text-lightText dark:text-darkText transition duration-300 hover:border-lightText dark:hover:border-darkText hover:bg-lightText hover:text-lightBG dark:hover:bg-darkText dark:hover:text-darkBG disabled:pointer-events-none disabled:opacity-30"
-    >
-      {children}
-    </button>
   );
 }
 

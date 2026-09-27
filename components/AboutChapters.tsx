@@ -4,6 +4,18 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { PAINT, type Paint } from "components/livery";
 
+export type Photo = {
+  src: string;
+  alt: string;
+  /** Where to hold the crop, since a split screen throws away much of a frame. */
+  position?: string;
+  /**
+   * The easter egg. Landing on this photo opens the contact modal, titled
+   * "Gotcha", once per visit and after a beat so the photo registers first.
+   */
+  caught?: boolean;
+};
+
 export type Chapter = {
   /** The year, or the span: "2008", "2010s". */
   mark: string;
@@ -13,10 +25,11 @@ export type Chapter = {
   /** The rest of it, for whoever stays. */
   story?: string;
   /**
-   * The photograph for the year. Without one the chapter still stands: the
-   * frame becomes a field of the year's colour.
+   * The photographs for the year, first one showing. More than one makes a
+   * carousel. None and the chapter still stands: the frame becomes a field of
+   * the year's colour.
    */
-  image?: { src: string; alt: string; position?: string };
+  photos?: Photo[];
   /**
    * "left" and "right" split the screen, the photograph edge to edge on that
    * side and the words on the page ground on the other. "full" puts the words
@@ -199,6 +212,7 @@ function ChapterScreen({
   coda?: React.ReactNode;
 }) {
   const { ref, seen } = useSeen<HTMLElement>();
+  const reel = useReel(chapter.photos ?? []);
   const full = chapter.layout === "full";
   const imageRight = chapter.layout === "right";
 
@@ -211,10 +225,10 @@ function ChapterScreen({
         data-dark-section
         className="relative flex min-h-[100svh] items-end overflow-hidden bg-[#0B0D12]"
       >
-        <Media chapter={chapter} paint={paint} seen={seen} from="bottom" />
+        <Media chapter={chapter} paint={paint} seen={seen} from="bottom" reel={reel} />
         <div
           aria-hidden
-          className="absolute inset-0"
+          className="pointer-events-none absolute inset-0"
           style={{
             background:
               "linear-gradient(to top, rgba(8,10,14,0.92) 0%, rgba(8,10,14,0.6) 32%, rgba(8,10,14,0.15) 65%, rgba(8,10,14,0.25) 100%)",
@@ -225,6 +239,8 @@ function ChapterScreen({
             <Words chapter={chapter} paint={paint} seen={seen} tone="dark" coda={coda} />
           </div>
         </div>
+        {/* Over the scrim, in a corner the words leave empty: top on phones, where the words run full width. */}
+        <Dots reel={reel} className="right-6 top-24 sm:bottom-20 sm:right-12 sm:top-auto xl:right-16" />
       </section>
     );
   }
@@ -241,7 +257,8 @@ function ChapterScreen({
           imageRight ? "lg:order-2" : ""
         }`}
       >
-        <Media chapter={chapter} paint={paint} seen={seen} from={imageRight ? "right" : "left"} />
+        <Media chapter={chapter} paint={paint} seen={seen} from={imageRight ? "right" : "left"} reel={reel} />
+        <Dots reel={reel} className="bottom-6 left-1/2 -translate-x-1/2" />
       </div>
       <div
         className={`flex items-center px-6 py-16 sm:px-12 lg:py-24 ${
@@ -267,14 +284,17 @@ function Media({
   paint,
   seen,
   from,
+  reel,
 }: {
   chapter: Chapter;
   paint: Paint;
   seen: boolean;
   from: "left" | "right" | "bottom";
+  reel: Reel;
 }) {
   const hidden =
     from === "left" ? "inset(0 100% 0 0)" : from === "right" ? "inset(0 0 0 100%)" : "inset(100% 0 0 0)";
+  const photos = chapter.photos ?? [];
 
   return (
     <div
@@ -286,15 +306,30 @@ function Media({
           seen ? "scale-100" : "scale-[1.12]"
         }`}
       >
-        {chapter.image ? (
-          <Image
-            src={chapter.image.src}
-            alt={chapter.image.alt}
-            fill
-            sizes={chapter.layout === "full" ? "100vw" : "(max-width: 1024px) 100vw, 50vw"}
-            className="object-cover"
-            style={{ objectPosition: chapter.image.position ?? "center" }}
-          />
+        {photos.length > 0 ? (
+          /*
+            Every frame is stacked and crossfaded rather than swapped, so the
+            next photo is already decoded and the frame never flashes empty.
+            The incoming one also settles from a hair of zoom.
+          */
+          photos.map((p, k) => (
+            <div
+              key={p.src}
+              aria-hidden={k !== reel.at}
+              className={`absolute inset-0 transition-[opacity,transform] duration-[1000ms] ${EASE} motion-reduce:transition-none ${
+                k === reel.at ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"
+              }`}
+            >
+              <Image
+                src={p.src}
+                alt={p.alt}
+                fill
+                sizes={chapter.layout === "full" ? "100vw" : "(max-width: 1024px) 100vw, 50vw"}
+                className="object-cover"
+                style={{ objectPosition: p.position ?? "center" }}
+              />
+            </div>
+          ))
         ) : (
           /*
             No photograph yet: a field of the year's colour over a fine dot
@@ -311,6 +346,97 @@ function Media({
           />
         )}
       </div>
+
+      {/* The whole frame is the next button, and a swipe on touch. */}
+      {reel.n > 1 && (
+        <button
+          type="button"
+          tabIndex={-1}
+          aria-hidden
+          onClick={() => reel.show(reel.at + 1)}
+          onTouchStart={reel.touchStart}
+          onTouchEnd={reel.touchEnd}
+          className="absolute inset-0 cursor-pointer"
+        />
+      )}
+    </div>
+  );
+}
+
+/*
+  One carousel per chapter. The egg fires once per page load, not once per
+  chapter, so it lives outside the component.
+*/
+let caughtThisVisit = false;
+const CAUGHT_DELAY_MS = 900;
+
+type Reel = ReturnType<typeof useReel>;
+
+function useReel(photos: Photo[]) {
+  const [at, setAt] = useState(0);
+  const touchX = useRef<number | null>(null);
+  const n = photos.length;
+
+  const show = (to: number) => {
+    if (n < 2) return;
+    const k = ((to % n) + n) % n;
+    setAt(k);
+    if (photos[k].caught && !caughtThisVisit) {
+      caughtThisVisit = true;
+      setTimeout(() => {
+        window.dispatchEvent(
+          new CustomEvent("contact:prefill", {
+            detail: { title: "Gotcha", message: "I like to click around." },
+          })
+        );
+        window.dispatchEvent(new CustomEvent("modal:open", { detail: { id: "contact-popup" } }));
+      }, CAUGHT_DELAY_MS);
+    }
+  };
+
+  return {
+    at,
+    n,
+    show,
+    touchStart: (e: React.TouchEvent) => (touchX.current = e.touches[0].clientX),
+    touchEnd: (e: React.TouchEvent) => {
+      if (touchX.current === null) return;
+      const dx = e.changedTouches[0].clientX - touchX.current;
+      touchX.current = null;
+      if (Math.abs(dx) > 40) show(at + (dx < 0 ? 1 : -1));
+    },
+  };
+}
+
+/**
+ * Where you are in a year's photos, without a number in sight. The current
+ * one is a short bar, the rest are dots, and a dot swells under the pointer.
+ */
+function Dots({ reel, className }: { reel: Reel; className: string }) {
+  if (reel.n < 2) return null;
+  return (
+    <div className={`absolute z-10 flex items-center gap-2.5 ${className}`}>
+      {Array.from({ length: reel.n }, (_, k) => {
+        const on = k === reel.at;
+        return (
+          <button
+            key={k}
+            type="button"
+            aria-label={`Photo ${k + 1} of ${reel.n}`}
+            aria-current={on}
+            onClick={() => reel.show(k)}
+            className="group grid h-6 place-items-center focus:outline-none"
+          >
+            <span
+              className={`block h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(0,0,0,0.45)] transition-all duration-500 ${EASE} ${
+                on
+                  ? "w-6 opacity-100"
+                  : "w-1.5 opacity-50 group-hover:w-2.5 group-hover:opacity-90 group-focus-visible:opacity-90"
+              }`}
+            />
+          </button>
+        );
+      })}
     </div>
   );
 }
