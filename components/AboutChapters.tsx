@@ -52,8 +52,10 @@ export type Chapter = {
  *
  * A thin rail of every year is pinned to the left edge while the chapters are
  * on screen, so you always know how far through you are and can jump. It is
- * drawn in `mix-blend-difference`, which keeps it legible over the pale page
- * and a dark photograph alike without having to know which it is over.
+ * drawn in the house colours, the same red to yellow as the rule under the
+ * hero, running down the years. Paint holds up on the pale page and over a
+ * photograph alike; each dot carries a thin dark ring so it never melts into
+ * a sunlit frame, and the year label sits on its own small dark pill.
  *
  * Each chapter reveals once as it arrives: the photograph uncovers from its
  * outer edge and settles from a slight zoom, the words rise in after it.
@@ -70,6 +72,20 @@ const RAMP: Paint[] = [
 ];
 
 const EASE = "ease-[cubic-bezier(0.22,1,0.36,1)]";
+
+/** The house colours: the ramp under the hero title, red to yellow. */
+const HOUSE = [PAINT.rossoCorsa.hex, PAINT.gialloOrion.hex, PAINT.gialloModena.hex];
+
+/** Year `i` of `n`, placed along the house ramp. */
+function houseAt(i: number, n: number) {
+  const t = n < 2 ? 0 : i / (n - 1);
+  const seg = Math.min(HOUSE.length - 2, Math.floor(t * (HOUSE.length - 1)));
+  const f = t * (HOUSE.length - 1) - seg;
+  const [a, b] = [HOUSE[seg], HOUSE[seg + 1]].map((h) =>
+    [1, 3, 5].map((k) => parseInt(h.slice(k, k + 2), 16))
+  );
+  return `#${a.map((v, k) => Math.round(v + (b[k] - v) * f).toString(16).padStart(2, "0")).join("")}`;
+}
 
 export const chapterId = (mark: string) => `year-${mark}`;
 
@@ -121,19 +137,28 @@ export default function AboutChapters({
     <div ref={book} className="relative">
       <nav
         aria-label="Years"
-        className={`fixed left-5 top-1/2 z-40 hidden -translate-y-1/2 text-white mix-blend-difference transition-opacity duration-500 lg:block xl:left-8 ${
+        className={`fixed left-5 top-1/2 z-40 hidden -translate-y-1/2 transition-opacity duration-500 lg:block xl:left-8 ${
           onScreen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
         <ol className="relative flex flex-col gap-5">
-          <span aria-hidden className="absolute bottom-1.5 left-[5px] top-1.5 w-px bg-white/30">
+          <span
+            aria-hidden
+            className="absolute bottom-1.5 left-[5px] top-1.5 w-px bg-[#7F8A96]/45"
+          >
+            {/* The line behind you fills with the ramp, top to where you are. */}
             <span
-              className={`block w-full bg-white transition-[height] duration-700 ${EASE}`}
-              style={{ height: n > 1 ? `${(active / (n - 1)) * 100}%` : "0%" }}
+              className={`block w-full transition-[height] duration-700 ${EASE}`}
+              style={{
+                height: n > 1 ? `${(active / (n - 1)) * 100}%` : "0%",
+                backgroundImage: `linear-gradient(to bottom, ${HOUSE.join(", ")})`,
+                backgroundSize: `100% ${n > 1 ? ((n - 1) / Math.max(active, 1)) * 100 : 100}%`,
+              }}
             />
           </span>
           {chapters.map((c, i) => {
             const on = i === active;
+            const hex = houseAt(i, n);
             return (
               <li key={c.mark}>
                 <a
@@ -142,15 +167,23 @@ export default function AboutChapters({
                   className="group relative flex items-center gap-4 focus:outline-none"
                 >
                   <span
-                    className={`block h-[11px] w-[11px] rounded-full border border-white transition-all duration-500 ${
-                      i <= active ? "bg-white" : "bg-black"
-                    } ${on ? "scale-125" : "group-hover:scale-125"}`}
+                    className={`block h-[11px] w-[11px] rounded-full border-2 transition-all duration-500 ${
+                      on ? "scale-125" : "group-hover:scale-125"
+                    }`}
+                    style={{
+                      borderColor: hex,
+                      // Passed years are solid; the ones ahead are rings.
+                      backgroundColor: i <= active ? hex : "transparent",
+                      boxShadow: on
+                        ? `0 0 0 1px rgba(8,10,14,0.35), 0 0 14px ${hex}`
+                        : "0 0 0 1px rgba(8,10,14,0.25)",
+                    }}
                   />
                   <span
-                    className={`text-xs font-medium tabular-nums tracking-[0.2em] transition-all duration-500 ${
+                    className={`rounded-full bg-[#0B0D12]/70 px-2.5 py-1 text-xs font-medium tabular-nums tracking-[0.2em] text-white backdrop-blur-sm transition-all duration-500 ${
                       on
                         ? "translate-x-0 opacity-100"
-                        : "-translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-70 group-focus-visible:opacity-70"
+                        : "-translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-90 group-focus-visible:opacity-90"
                     }`}
                   >
                     {c.mark}
