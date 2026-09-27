@@ -282,7 +282,7 @@ function ChapterScreen({
       className="relative grid bg-lightBG dark:bg-darkBG lg:min-h-[92svh] lg:grid-cols-2"
     >
       <div
-        className={`relative aspect-[4/5] overflow-hidden sm:aspect-[16/10] lg:aspect-auto ${
+        className={`relative aspect-[5/4] overflow-hidden sm:aspect-[16/10] lg:aspect-auto ${
           imageRight ? "lg:order-2" : ""
         }`}
       >

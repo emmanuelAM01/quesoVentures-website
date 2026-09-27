@@ -197,7 +197,7 @@ function PackCard({ pack, onWant }: { pack: Pack; onWant: () => void }) {
                 </span>
               )}
             </div>
-            <button type="button" onClick={onWant} className={arrowTone("dark")}>
+            <button type="button" onClick={onWant} className={`${arrowTone("dark")} text-left`}>
               <ArrowMark tone="dark" label="Get the complete experience" />
             </button>
           </div>
@@ -505,8 +505,19 @@ export default function StudiosExperience() {
   const [openProduct, setOpenProduct] = useState<Product | null>(null);
   const glowRef = useRef<HTMLDivElement>(null);
 
+  // Past the reveal, and only while heading back up: a pill pinned to the
+  // corner sat on top of every headline scrolling under it, most of all on a
+  // phone. Scrolling up is the gesture of someone looking for the way out.
   useEffect(() => {
-    const onScroll = () => setShowLeave(window.scrollY > window.innerHeight * 0.35);
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      // The page has no header or footer, so this is the only way out: it
+      // also stays up at the end, for whoever read to the bottom.
+      const atEnd = y + window.innerHeight > document.documentElement.scrollHeight - window.innerHeight * 0.6;
+      setShowLeave(y > window.innerHeight * 0.35 && (y < last || atEnd));
+      last = y;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
