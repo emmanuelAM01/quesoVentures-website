@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Reveal from "components/Reveal";
 import { STUDIO_DEMOS, type DemoId } from "components/StudiosDemos";
+import ArrowMark, { arrowTone } from "components/ArrowMark";
+import { houseGradient } from "components/livery";
 
 // The Queso Studios reveal. This page deliberately abandons the site's
 // chrome: no header, no footer, dark only. Act one is the wordmark alone in
@@ -225,50 +227,66 @@ function useInView<T extends Element>(ref: React.RefObject<T | null>): boolean {
   return seen;
 }
 
-function ToolCard({
+/** The anchor a tool's chapter lives at, for the rail. */
+const toolId = (t: Tool) => `tool-${t.demo}`;
+
+/**
+ * One tool, one screen: its chapter in the lineup.
+ *
+ * After the About page's years. The live demo takes one half, lit from behind
+ * in the tool's own colour; the words take the other: the price, the name in
+ * the thin display weight, the tool's line of paint, what it does, and the
+ * way forward. The sides alternate down the lineup.
+ *
+ * The demo plays while its chapter is on screen and holds its finished state
+ * otherwise, so there is only ever as much motion as you are looking at.
+ */
+function ToolChapter({
   tool,
+  index,
   onWant,
 }: {
   tool: Tool;
+  index: number;
   onWant: () => void;
 }) {
-  const wide = tool.wide === true;
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
   const live = useInView(ref);
   const Demo = STUDIO_DEMOS[tool.demo];
+  const flip = index % 2 === 1;
 
   return (
-    <div
+    <section
       ref={ref}
-      className="h-full"
-      onMouseMove={(e) => {
-        const r = e.currentTarget.getBoundingClientRect();
-        e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
-        e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
-      }}
+      id={toolId(tool)}
+      data-tool={index}
+      className="relative grid scroll-mt-0 border-t border-white/[0.06] lg:min-h-[88svh] lg:grid-cols-2"
     >
-      <article className="group relative h-full overflow-hidden rounded-3xl border border-white/10 bg-white/[0.045] p-7 sm:p-8 flex flex-col gap-6 transition-[border-color,box-shadow] duration-500 hover:border-white/25"
-        style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)" }}
+      <div
+        className={`relative flex items-center justify-center overflow-hidden px-6 py-16 sm:px-12 lg:py-20 ${
+          flip ? "lg:order-2" : ""
+        }`}
+        style={{ background: `radial-gradient(ellipse 70% 60% at 50% 55%, ${tool.accent}24, transparent 70%)` }}
       >
-        <div
-          aria-hidden
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          style={{ background: `radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), ${tool.accent}14, transparent 60%)` }}
-        />
-        <div
-          aria-hidden
-          className="absolute top-0 left-10 right-10 h-px transition-opacity duration-500 opacity-40 group-hover:opacity-100"
-          style={{ background: `linear-gradient(to right, transparent, ${tool.accent}, transparent)` }}
-        />
-
-        <div className="relative flex items-center justify-between gap-4">
-          <div className="flex gap-1.5">
-            <span className="w-7 h-1 rounded-full bg-[#C4161C]" />
-            <span className="w-7 h-1 rounded-full bg-[#FFD100]" />
+        <Reveal className="relative w-full max-w-md">
+          <div
+            className="rounded-3xl border border-white/10 bg-black/35 p-4 shadow-2xl shadow-black/60 backdrop-blur-sm sm:p-5"
+            style={{ boxShadow: `0 40px 120px -40px ${tool.accent}55, inset 0 1px 0 rgba(255,255,255,0.06)` }}
+          >
+            <Demo on={live} />
           </div>
-          <span tabIndex={0} className="group/price relative outline-none">
+        </Reveal>
+      </div>
+
+      <div
+        className={`flex items-center px-6 pb-20 sm:px-12 lg:py-20 ${
+          flip ? "lg:pl-28 lg:pr-16 xl:pl-36 xl:pr-24" : "lg:px-16 xl:px-24"
+        }`}
+      >
+        <Reveal delay={120} className="max-w-xl">
+          <span tabIndex={0} className="group/price relative inline-block outline-none">
             <span
-              className="text-sm font-bold rounded-full border px-4 py-1.5 whitespace-nowrap"
+              className="inline-block rounded-full border px-4 py-1.5 text-sm font-semibold tabular-nums whitespace-nowrap"
               style={{ color: tool.accent, borderColor: `${tool.accent}55`, textShadow: `0 0 14px ${tool.accent}66` }}
             >
               {tool.price}
@@ -277,61 +295,116 @@ function ToolCard({
             {tool.price.includes("$") && (
               <span
                 role="tooltip"
-                className="absolute right-0 top-full mt-2.5 w-max max-w-[230px] rounded-xl border border-white/15 bg-[#0A0C15]/95 backdrop-blur-md px-3.5 py-2 text-xs text-white/75 leading-snug opacity-0 translate-y-1 pointer-events-none transition-all duration-300 group-hover/price:opacity-100 group-hover/price:translate-y-0 group-focus/price:opacity-100 group-focus/price:translate-y-0 z-10"
+                className="pointer-events-none absolute left-0 top-full z-10 mt-2.5 w-max max-w-[230px] translate-y-1 rounded-xl border border-white/15 bg-[#0A0C15]/95 px-3.5 py-2 text-xs leading-snug text-white/75 opacity-0 backdrop-blur-md transition-all duration-300 group-hover/price:translate-y-0 group-hover/price:opacity-100 group-focus/price:translate-y-0 group-focus/price:opacity-100"
               >
                 {PRICE_NOTE}
               </span>
             )}
           </span>
-        </div>
 
-        <div className={`relative flex-1 ${wide ? "lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center" : "flex flex-col gap-4"}`}>
-          <div className={wide ? "order-2 flex flex-col gap-4" : "contents"}>
-          <h3 className="text-2xl font-bold tracking-tight">{tool.name}</h3>
-
-          {!wide && (
-            <div className="rounded-2xl border border-white/[0.07] bg-black/25 p-3.5">
-              <Demo on={live} />
-            </div>
-          )}
-
-          <p className="text-sm sm:text-base text-white/55 leading-relaxed">{tool.tagline}</p>
+          <h3 className="mt-8 text-5xl font-extralight leading-[0.95] tracking-tighter text-balance text-white sm:text-6xl xl:text-7xl">
+            {tool.name}
+          </h3>
+          <span aria-hidden className="mt-8 block h-[3px] w-14 rounded-full" style={{ backgroundColor: tool.accent }} />
+          <p className="mt-8 text-xl font-light leading-relaxed text-white/75">{tool.tagline}</p>
           {tool.note && (
-            <p className="border-t border-white/10 pt-3 text-xs leading-relaxed text-white/35">{tool.note}</p>
+            <p className="mt-5 border-t border-white/10 pt-4 text-sm leading-relaxed text-white/40">{tool.note}</p>
           )}
           {tool.href == null && tool.linkLabel && (
-            <p className="text-sm font-semibold text-white/40">{tool.linkLabel}</p>
+            <p className="mt-5 text-sm font-semibold text-white/40">{tool.linkLabel}</p>
           )}
 
-          {/* mt-auto so every card's buttons sit on the same line, however
-              long the tagline above them runs. */}
-          <div className="mt-auto flex flex-wrap items-center gap-3 pt-1">
+          <div className="mt-10 flex flex-wrap items-center gap-x-10 gap-y-5">
             {tool.href && (
-              <a
-                href={tool.href}
-                className="inline-block rounded-xl bg-white text-black text-sm font-bold px-6 py-3.5 hover:bg-white/85 active:scale-[0.98] transition-all"
-              >
-                {tool.linkLabel}
+              <a href={tool.href} className={arrowTone("dark")}>
+                <ArrowMark tone="dark" label={tool.linkLabel ?? "Visit"} />
               </a>
             )}
-            <button
-              type="button"
-              onClick={onWant}
-              className="inline-block rounded-xl border border-white/25 text-sm font-bold px-6 py-3.5 text-white/85 hover:text-white hover:border-white/50 active:scale-[0.98] transition-all"
-            >
-              {tool.cta ?? "Want this?"}
+            <button type="button" onClick={onWant} className={arrowTone("dark")}>
+              <ArrowMark tone="dark" label={tool.cta ?? "Want this?"} />
             </button>
           </div>
-          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
 
-          {wide && (
-            <div className="order-1 mt-4 lg:mt-0 rounded-2xl border border-white/[0.07] bg-black/25 p-3.5">
-              <Demo on={live} />
-            </div>
-          )}
-        </div>
-      </article>
-    </div>
+/**
+ * The lineup's contents, pinned to the left edge while the tools are on
+ * screen, the way the About page pins its years: a dot per tool in its own
+ * paint, the one you are on lit and named, the rest named on hover.
+ */
+function ToolRail({ tools }: { tools: Tool[] }) {
+  const [active, setActive] = useState(0);
+  const [onScreen, setOnScreen] = useState(false);
+
+  useEffect(() => {
+    const chapters = document.querySelectorAll("[data-tool]");
+    if (!chapters.length) return;
+    const current = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.tool));
+        }
+      },
+      { rootMargin: "-50% 0px -50% 0px" }
+    );
+    chapters.forEach((el) => current.observe(el));
+
+    const onScroll = () => {
+      const a = chapters[0].getBoundingClientRect();
+      const z = chapters[chapters.length - 1].getBoundingClientRect();
+      const mid = window.innerHeight / 2;
+      setOnScreen(a.top < mid && z.bottom > mid);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      current.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  return (
+    <nav
+      aria-label="The lineup"
+      className={`fixed left-5 top-1/2 z-40 hidden -translate-y-1/2 transition-opacity duration-500 lg:block xl:left-8 ${
+        onScreen ? "opacity-100" : "pointer-events-none opacity-0"
+      }`}
+    >
+      <ol className="relative flex flex-col gap-4">
+        <span aria-hidden className="absolute bottom-1.5 left-[5px] top-1.5 w-px bg-white/20" />
+        {tools.map((t, i) => {
+          const on = i === active;
+          return (
+            <li key={t.name}>
+              <a href={`#${toolId(t)}`} aria-current={on} className="group relative flex items-center gap-4 focus:outline-none">
+                <span
+                  className={`block h-[11px] w-[11px] rounded-full border-2 transition-all duration-500 ${
+                    on ? "scale-125" : "group-hover:scale-125"
+                  }`}
+                  style={{
+                    borderColor: t.accent,
+                    backgroundColor: i <= active ? t.accent : "#04050A",
+                    boxShadow: on ? `0 0 14px ${t.accent}` : "none",
+                  }}
+                />
+                <span
+                  className={`whitespace-nowrap rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium tracking-[0.12em] text-white backdrop-blur-sm transition-all duration-500 ${
+                    on
+                      ? "translate-x-0 opacity-100"
+                      : "-translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-90 group-focus-visible:opacity-90"
+                  }`}
+                >
+                  {t.name}
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
   );
 }
 
@@ -392,7 +465,7 @@ export default function StudiosExperience() {
       </Link>
 
       {/* Act one: the void and the name */}
-      <section className="relative h-[100dvh] flex items-center justify-center overflow-hidden">
+      <section className="relative flex h-[100dvh] min-h-[640px] overflow-hidden">
         {/* Laser field */}
         <div aria-hidden className="absolute inset-0 pointer-events-none">
           <div
@@ -419,38 +492,56 @@ export default function StudiosExperience() {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_45%,rgba(255,255,255,0.05),transparent_70%)]" />
         </div>
 
-        <div className="relative text-center px-6">
-          <div className="relative overflow-hidden">
-            <h1
-              className="studios-motion text-[clamp(2.5rem,7.5vw,5.5rem)] leading-[1.04] font-bold tracking-tight text-balance bg-gradient-to-b from-white via-white to-white/30 bg-clip-text text-transparent"
-              style={{ animation: "studios-rise 1.3s 0.3s cubic-bezier(0.16,1,0.3,1) both" }}
+        {/*
+          The site's hero, in the dark. The lasers stay, since they are this
+          page's own weather; the words move to the foot on the left like every
+          other hero: the name in the thin display weight, the house rule drawn
+          in under it, the line under that.
+        */}
+        <div className="relative w-full self-end">
+          <div className="mx-auto flex max-w-6xl items-end justify-between gap-10 px-6 pb-14 sm:px-10 sm:pb-20">
+            <div className="max-w-4xl">
+              <div className="relative overflow-hidden">
+                <h1
+                  className="studios-motion pb-2 text-[clamp(3.25rem,9vw,7.5rem)] font-extralight leading-[0.95] tracking-tighter text-balance bg-gradient-to-b from-white via-white to-white/50 bg-clip-text text-transparent"
+                  style={{ animation: "studios-rise 1.3s 0.3s cubic-bezier(0.16,1,0.3,1) both" }}
+                >
+                  Queso Studios
+                </h1>
+                {/* One-time light sweep across the wordmark */}
+                <div
+                  aria-hidden
+                  className="studios-motion absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                  style={{ animation: "studios-sweep 1.6s 1.3s ease-in-out both" }}
+                />
+              </div>
+
+              <div
+                aria-hidden
+                className="studios-motion mt-8 h-1 w-24 origin-left rounded-full"
+                style={{
+                  backgroundImage: houseGradient(),
+                  animation: "studios-laser-draw 1.2s 1.1s cubic-bezier(0.16,1,0.3,1) both",
+                }}
+              />
+
+              <p
+                className="studios-motion mt-8 max-w-2xl text-[clamp(1.2rem,2.2vw,1.6rem)] font-light leading-relaxed text-white/80 text-balance"
+                style={{ animation: "studios-rise 1.1s 1.5s cubic-bezier(0.16,1,0.3,1) both" }}
+              >
+                Building software for the companies that need it most.
+              </p>
+            </div>
+
+            <a
+              href={`#${toolId(TOOLS[0])}`}
+              aria-label="Go to the lineup"
+              className={`studios-motion ${arrowTone("dark")} hidden sm:inline-flex`}
+              style={{ animation: "studios-rise 1.1s 1.8s cubic-bezier(0.16,1,0.3,1) both" }}
             >
-              Queso Studios
-            </h1>
-            {/* One-time light sweep across the wordmark */}
-            <div
-              aria-hidden
-              className="studios-motion absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent"
-              style={{ animation: "studios-sweep 1.6s 1.3s ease-in-out both" }}
-            />
+              <ArrowMark tone="dark" direction="down" />
+            </a>
           </div>
-
-          <div
-            className="studios-motion mx-auto mt-10 h-px w-64 max-w-[70vw] origin-center bg-gradient-to-r from-transparent via-[#C4161C] to-transparent"
-            style={{ animation: "studios-laser-draw 1.2s 1.1s cubic-bezier(0.16,1,0.3,1) both" }}
-          />
-
-          {/* One line at desktop. The old sentence broke across two under a
-              wordmark five times its size, which is the exact hierarchy this
-              page should not have: cut to a single clause and set larger, so
-              the gap between the title and the line under it is a step rather
-              than a cliff. */}
-          <p
-            className="studios-motion mt-9 text-[clamp(1.2rem,2.4vw,1.75rem)] font-normal text-white/80 max-w-3xl mx-auto leading-relaxed text-balance"
-            style={{ animation: "studios-rise 1.1s 1.5s cubic-bezier(0.16,1,0.3,1) both" }}
-          >
-            Building software for the companies that need it most.
-          </p>
         </div>
       </section>
 
@@ -468,66 +559,47 @@ export default function StudiosExperience() {
         caps the headline at 3rem. Lengthen either one and the scale has to come
         down with it.
       */}
-      <section className="relative px-6 pt-16 sm:pt-24 pb-2">
-        <div className="mx-auto max-w-5xl text-center">
-          <Reveal>
-            <h2 className="text-[clamp(1.75rem,3.7vw,3rem)] font-bold leading-[1.12] tracking-tight text-balance bg-gradient-to-b from-white via-white to-white/70 bg-clip-text text-transparent">
+      <section className="relative px-6 py-28 sm:px-10 sm:py-40">
+        <div className="mx-auto max-w-6xl">
+          <Reveal className="max-w-4xl">
+            <span aria-hidden className="mb-10 block h-1 w-24 rounded-full" style={{ backgroundImage: houseGradient() }} />
+            <h2 className="text-4xl font-light leading-[1.08] tracking-tight text-balance text-white sm:text-5xl xl:text-6xl">
               Queso Ventures is a software company at heart
             </h2>
-          </Reveal>
-
-          <Reveal delay={160}>
-            <p className="mx-auto mt-7 max-w-4xl text-[clamp(1.05rem,1.55vw,1.5rem)] font-light leading-relaxed text-white/55 text-balance">
+            <p className="mt-8 max-w-3xl text-xl font-light leading-relaxed text-white/60 sm:text-2xl">
               Every tool on this page started with a conversation from a real business owner who needed help.
             </p>
           </Reveal>
 
-          <Reveal delay={300}>
-            <div
-              aria-hidden
-              className="mx-auto mt-10 h-px w-48 max-w-[55vw] bg-gradient-to-r from-transparent via-[#C4161C] to-transparent"
-            />
-          </Reveal>
-
-          <Reveal delay={420}>
-            <p className="mt-10 text-[clamp(1.75rem,3.7vw,3rem)] font-bold leading-[1.12] tracking-tight bg-gradient-to-r from-[#C4161C] via-[#FF7A1A] to-[#FFD100] bg-clip-text text-transparent">
+          <Reveal delay={200}>
+            <p className="mt-24 inline-block text-5xl font-extralight tracking-tighter bg-clip-text text-transparent sm:text-6xl xl:text-7xl" style={{ backgroundImage: houseGradient() }}>
               Go shopping
             </p>
           </Reveal>
-
         </div>
       </section>
 
-      {/* Act two: the lineup, as a catalogue.
+      {/*
+        Act two: the lineup, as chapters.
 
-          It was a coverflow carousel: one card centred, the rest turned away
-          and dimmed, arrows and nine pips underneath. That works for three or
-          four and stops working at nine -- the page became a thing you operate
-          rather than a thing you read, the tool you wanted was always four
-          presses away, and the two half-cards either side of centre were
-          sliced by the viewport, which reads as text cut off rather than as a
-          deliberate peek.
-
-          A grid shows all nine at once. Nothing is turned away, nothing is
-          clipped, and comparing two tools is looking at two tools instead of
-          remembering the one that scrolled past. Each card plays its demo
-          when it comes into view and holds its finished state otherwise, so
-          there is still exactly as much motion as you can look at. */}
-      <section className="relative px-5 sm:px-8 pb-16 sm:pb-24">
-        <div className="mx-auto grid max-w-[1500px] grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {TOOLS.map((tool) => (
-            <Reveal
-              key={tool.name}
-              className={`h-full ${tool.wide ? "md:col-span-2 xl:col-span-3" : ""}`}
-            >
-              <ToolCard
-                tool={tool}
-                onWant={() => setWantTool({ name: tool.name, idea: tool.wide === true })}
-              />
-            </Reveal>
-          ))}
-        </div>
-      </section>
+        It has been a coverflow carousel (fine for four, a thing you operate at
+        nine) and then a grid (everything at once, and every tool the same
+        small box). Now each tool gets a screen, the way the About page gives
+        each year one: the demo big enough to read on one half, the words on
+        the other, the sides alternating, and a rail at the edge naming every
+        tool so the one you came for is one click away.
+      */}
+      <ToolRail tools={TOOLS} />
+      <div className="relative">
+        {TOOLS.map((tool, i) => (
+          <ToolChapter
+            key={tool.name}
+            tool={tool}
+            index={i}
+            onWant={() => setWantTool({ name: tool.name, idea: tool.wide === true })}
+          />
+        ))}
+      </div>
 
       {/*
         Everything, on one row, under the things it replaces.
@@ -538,61 +610,51 @@ export default function StudiosExperience() {
         between, which is the problem it exists to solve. Here it is the answer
         to the question eight cards have just raised.
       */}
-      <section className="relative px-6 pb-20 sm:pb-28">
-        <Reveal>
-          <div
-            className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-white/15 bg-white/[0.045] p-8 sm:p-11"
-            style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)" }}
-          >
-            {/* Every paint at once, which is the offer said in one stroke. */}
-            <div
-              aria-hidden
-              className="absolute top-0 left-10 right-10 h-px"
-              style={{
-                background: `linear-gradient(to right, transparent, ${TOOLS.filter((t) => !t.unbundled).map((t) => t.accent).join(", ")}, transparent)`,
-              }}
-            />
+      <section className="relative border-t border-white/[0.06] px-6 py-28 sm:px-10 sm:py-40">
+        {/* Every paint at once, which is the offer said in one stroke. */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-px"
+          style={{
+            background: `linear-gradient(to right, transparent, ${TOOLS.filter((t) => !t.unbundled).map((t) => t.accent).join(", ")}, transparent)`,
+          }}
+        />
+        <div className="mx-auto grid max-w-6xl items-end gap-16 lg:grid-cols-2 lg:gap-20">
+          <Reveal>
+            <h2 className="text-4xl font-light leading-[1.05] tracking-tight text-balance text-white sm:text-5xl xl:text-6xl">
+              Take the whole lineup
+            </h2>
+            <span aria-hidden className="mt-8 block h-1 w-24 rounded-full" style={{ backgroundImage: houseGradient() }} />
+            <p className="mt-8 max-w-xl text-xl font-light leading-relaxed text-white/60">
+              Every tool on this page but the AI Frontdesk, running for you, on one bill.
+            </p>
+            <button
+              type="button"
+              onClick={() => setWantTool({ name: "The whole lineup", idea: false })}
+              className={`${arrowTone("dark")} mt-10`}
+            >
+              <ArrowMark tone="dark" label="Want this?" />
+            </button>
+          </Reveal>
 
-            <div className="relative flex flex-wrap items-end justify-between gap-x-10 gap-y-7">
-              <div className="min-w-0">
-                <h3 className="text-[clamp(1.75rem,3.2vw,2.75rem)] font-bold leading-[1.1] tracking-tight">
-                  Take the whole lineup
-                </h3>
-                <p className="mt-3.5 max-w-xl text-sm sm:text-base leading-relaxed text-white/55">
-                  Every tool on this page but the AI Frontdesk, running for you, on one bill.
-                </p>
-              </div>
-
-              <div className="flex-shrink-0">
-                <p className="text-[clamp(2.25rem,4.6vw,3.5rem)] font-bold leading-none tracking-tight tabular-nums bg-gradient-to-r from-[#C4161C] via-[#FF7A1A] to-[#FFD100] bg-clip-text text-transparent">
-                  ${BUNDLE_PRICE}
-                  <span className="ml-2 align-middle text-base font-medium text-white/45">
-                    / month
-                  </span>
-                </p>
-                <p className="mt-2.5 text-sm text-white/40 tabular-nums">
-                  ${oneAtATime()} one at a time
-                </p>
-                {/* Said out loud rather than hidden behind the asterisk the
-                    cards use. A hover note is fine on a price you are reading
-                    one of; on the row asking for the whole lineup, the thing
-                    that changes the number is worth a line of its own, and a
-                    tooltip is nothing at all on a phone. */}
-                <p className="mt-1 text-sm text-white/40">{PRICE_NOTE}</p>
-              </div>
-            </div>
-
-            <div className="relative pt-9">
-              <button
-                type="button"
-                onClick={() => setWantTool({ name: "The whole lineup", idea: false })}
-                className="inline-block rounded-xl bg-white px-7 py-4 text-sm font-bold text-black transition-all hover:bg-white/85 active:scale-[0.98]"
+          <Reveal delay={150}>
+            <p className="flex items-baseline gap-4">
+              <span
+                className="bg-clip-text text-[6.5rem] font-extralight leading-[0.85] tracking-tighter tabular-nums text-transparent sm:text-[8rem] xl:text-[10rem]"
+                style={{ backgroundImage: houseGradient() }}
               >
-                Want this?
-              </button>
-            </div>
-          </div>
-        </Reveal>
+                ${BUNDLE_PRICE}
+              </span>
+              <span className="text-xl font-light text-white/50">/ month</span>
+            </p>
+            <p className="mt-6 text-base text-white/45 tabular-nums">${oneAtATime()} one at a time</p>
+            {/* Said out loud rather than hidden behind the asterisk the
+                tools use: on the row asking for the whole lineup, the thing
+                that changes the number is worth a line of its own, and a
+                tooltip is nothing at all on a phone. */}
+            <p className="mt-1 text-base text-white/45">{PRICE_NOTE}</p>
+          </Reveal>
+        </div>
       </section>
 
       {/* Outro: just the mark */}
@@ -672,22 +734,18 @@ function WantModal({ tool, idea, onClose }: { tool: string; idea?: boolean; onCl
 
         {status === "success" ? (
           <div className="py-8 text-center space-y-3">
-            <p className="text-2xl font-bold tracking-tight">Got it.</p>
+            <p className="text-3xl font-light tracking-tight">Got it.</p>
             <p className="text-sm text-white/60">
               {idea ? "I will read it and get back to you." : `We will reach out about ${tool}.`}
             </p>
-            <button
-              type="button"
-              onClick={onClose}
-              className="mt-2 rounded-xl bg-white text-black text-sm font-bold px-6 py-3 hover:bg-white/85 transition-all"
-            >
-              Close
+            <button type="button" onClick={onClose} className={`${arrowTone("dark")} mt-4`}>
+              <ArrowMark tone="dark" label="Close" />
             </button>
           </div>
         ) : (
           <form onSubmit={onSubmit} className="space-y-4">
             <div className="space-y-1.5 pr-8">
-              <h2 className="text-2xl font-bold tracking-tight">
+              <h2 className="text-3xl font-light tracking-tight">
                 {idea ? "What would you build?" : `Want ${tool}?`}
               </h2>
               <p className="text-sm text-white/55">
@@ -726,9 +784,9 @@ function WantModal({ tool, idea, onClose }: { tool: string; idea?: boolean; onCl
             <button
               type="submit"
               disabled={status === "sending"}
-              className="w-full rounded-xl bg-white text-black text-sm font-bold py-3.5 hover:bg-white/85 disabled:opacity-50 active:scale-[0.99] transition-all"
+              className="w-full rounded-full bg-white py-4 text-[13px] font-semibold uppercase tracking-[0.22em] text-black transition-all hover:bg-white/85 active:scale-[0.99] disabled:opacity-50"
             >
-              {status === "sending" ? "Sending…" : "Send"}
+              {status === "sending" ? "Sending" : "Send"}
             </button>
           </form>
         )}
