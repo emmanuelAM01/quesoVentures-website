@@ -3,23 +3,18 @@ import Footer from "components/Footer";
 import FreeAudit from "components/FreeAudit";
 import Reveal from "components/Reveal";
 import PageHero from "components/PageHero";
+import Deck, { type DeckCard } from "components/Deck";
+import SectionHeading from "components/SectionHeading";
+import { SITE_COPY } from "components/siteCopy";
 import IndustryLinks from "components/IndustryLinks";
 import FaqDeck from "components/FaqDeck";
 import { MONTHLY_PLAN_OFFER, PRICING } from "components/pricingCopy";
-import { liveryAt } from "components/livery";
-import Glow from "components/Glow";
 import {
   BUSINESS,
   LOCAL_BUSINESS_SCHEMA,
   AREA_SERVED_SCHEMA,
   breadcrumbSchema,
 } from "components/businessInfo";
-import {
-  FaGlobe,
-  FaMapMarkerAlt,
-  FaWrench,
-  FaMobileAlt,
-} from "react-icons/fa";
 
 const SERVICES_TITLE = "Websites, SEO, AI-SEO & Google Business Profile";
 const SERVICES_DESCRIPTION =
@@ -151,25 +146,33 @@ const jsonLd = {
   were — web design, local SEO, Google Business Profile, Google Maps, AI-SEO.
   What changed is who is speaking, and how many times.
 */
-const services = [
+/*
+  The four things, as the About page's deck. `mark` is the one word the index
+  and the card lead with; the heading is the card's title.
+*/
+const services: DeckCard[] = [
   {
-    icon: FaMobileAlt,
-    heading: "You need a website",
+    mark: "Websites",
+    icon: "browser",
+    title: "You need a website",
     body: "I build it around what your customers are already searching for. Fast on a phone, and clear enough that visitors actually call.",
   },
   {
-    icon: FaMapMarkerAlt,
-    heading: "You need to come up on Google",
+    mark: "Google",
+    icon: "pin",
+    title: "You need to come up on Google",
     body: "SEO for the search results, and your Google listing for the map. Most people pick from the first three on Maps and never scroll.",
   },
   {
-    icon: FaGlobe,
-    heading: "You need to be found on AI search too",
+    mark: "AI search",
+    icon: "globe",
+    title: "You need to be found on AI search too",
     body: "When someone asks ChatGPT or Siri who to call, AI-SEO is what makes your business the answer they get.",
   },
   {
-    icon: FaWrench,
-    heading: "Grab some tools to help you grow",
+    mark: "Tools",
+    icon: "wrench",
+    title: "Grab some tools to help you grow",
     body: "Rewards, an AI front desk, booking, invoicing, a read on your own numbers. Software built for your business, not rented from somebody else.",
   },
 ];
@@ -184,6 +187,7 @@ export default function ServicesPage() {
       <main>
         <PageHero
           headline="From invisible to obvious."
+          sub={SITE_COPY.hero.sub}
           prefill="I want to see what my website could look like."
           image={{
             src: "/hero/servicesMain.JPEG",
@@ -191,59 +195,26 @@ export default function ServicesPage() {
           }}
         />
 
-        {/* Services */}
-        <section className="bg-panelLight dark:bg-panelDark border-y border-lightBorder dark:border-darkBorder">
-          <div className="container mx-auto px-4 py-24">
-          <div className="max-w-6xl mx-auto grid sm:grid-cols-2 gap-6">
-            {services.map((svc, i) => {
-              const Icon = svc.icon;
-              return (
-                <Reveal key={i} delay={(i % 2) * 120}>
-                  <Glow color={liveryAt(i).hex} radius="rounded-3xl" lift={false}>
-                  <div className="relative h-full overflow-hidden rounded-3xl border border-lightBorder dark:border-darkBorder bg-lightBG dark:bg-darkBG p-8 pt-10">
-                    <span
-                      className="absolute inset-x-0 top-0 h-1.5"
-                      style={{ backgroundColor: liveryAt(i).hex }}
-                    />
-                    <span
-                      className="inline-flex h-12 w-12 items-center justify-center rounded-xl mb-5"
-                      style={{
-                        backgroundColor: `${liveryAt(i).hex}1A`,
-                        color: liveryAt(i).ink,
-                      }}
-                    >
-                      <Icon size={22} />
-                    </span>
-                    <h2 className="text-2xl sm:text-3xl font-semibold text-lightText dark:text-darkText leading-snug mb-3">
-                      {svc.heading}
-                    </h2>
-                    <p className="text-lg leading-relaxed text-lightTextMuted dark:text-darkTextMuted font-light">
-                      {svc.body}
-                    </p>
-                  </div>
-                  </Glow>
-                </Reveal>
-              );
-            })}
-          </div>
-
-          {/*
-            The price, once, quietly, under the four things it buys.
-
-            This page lost its only visible figure when the tools block came
-            out, which left the schema saying $500 and the page itself saying
-            nothing — fine for a machine, useless for the person reading it.
-
-            "Yours for" and not "all of this for": the plan is to sell tools
-            separately later, the way AWS sells services, so nothing here
-            promises the four cards are the whole of what exists.
-          */}
-          <p className="mx-auto mt-10 max-w-6xl text-center text-lg font-light text-lightTextMuted dark:text-darkTextMuted">
-            Yours for{" "}
-            <span className="font-semibold text-lightText dark:text-darkText">
-              {PRICING.monthlyLabel} a month
-            </span>
-          </p>
+        {/* Services, dealt by scroll like the About page's deck. */}
+        <section className="container mx-auto px-4 py-24 sm:py-32 lg:py-0">
+          <div className="max-w-6xl mx-auto">
+            <Deck cards={services} label="What you get">
+              <Reveal>
+                <SectionHeading>What you get</SectionHeading>
+                {/*
+                  The price, once, quietly, under the four things it buys.
+                  "Yours for" and not "all of this for": the plan is to sell
+                  tools separately later, so nothing here promises the four
+                  cards are the whole of what exists.
+                */}
+                <p className="mt-6 text-xl font-light text-lightTextMuted dark:text-darkTextMuted">
+                  Yours for{" "}
+                  <span className="font-normal text-lightText dark:text-darkText">
+                    {PRICING.monthlyLabel} a month
+                  </span>
+                </p>
+              </Reveal>
+            </Deck>
           </div>
         </section>
 

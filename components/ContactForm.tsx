@@ -6,6 +6,8 @@ import { trackContactSubmit } from "./analytics";
 import CopyEmail from "./CopyEmail";
 import BusinessPicker from "./BusinessPicker";
 import { formatContactInput } from "./phone";
+import ArrowMark, { arrowTone } from "./ArrowMark";
+import { PiCaretRightBold } from "react-icons/pi";
 
 const inputClass =
   "w-full rounded-xl border border-transparent bg-black/[0.04] dark:bg-white/[0.06] px-4 py-3 text-base text-lightText dark:text-darkText placeholder:text-lightTextMuted/50 dark:placeholder:text-darkTextMuted/50 focus:outline-none focus:border-lightAccent/40 dark:focus:border-darkAccent/40 focus:bg-white dark:focus:bg-transparent transition-colors";
@@ -140,12 +142,8 @@ export default function ContactForm({
           </div>
         )}
         {onClose && (
-          <button
-            type="button"
-            onClick={onClose}
-            className="mt-7 rounded-xl bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover px-6 py-3 text-base font-semibold text-white dark:text-darkBG transition-colors"
-          >
-            Close
+          <button type="button" onClick={onClose} className={`${arrowTone("light")} mt-8`}>
+            <ArrowMark label="Close" />
           </button>
         )}
       </div>
@@ -217,12 +215,21 @@ export default function ContactForm({
         </div>
       )}
 
+      {/*
+        The one filled button on the site: a form needs its way forward to be
+        unmistakable. It still speaks the house language, spaced capitals and
+        a caret that slides through on hover like the circled arrows do.
+      */}
       <button
         type="submit"
         disabled={status === "sending"}
-        className="mt-1 w-full inline-flex items-center justify-center rounded-xl bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover px-8 py-4 text-lg font-semibold text-lightBG dark:text-darkBG transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+        className="group mt-2 inline-flex w-full items-center justify-center gap-3 rounded-full bg-lightButton px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-lightButtonHover disabled:cursor-not-allowed disabled:opacity-60 dark:bg-darkButton dark:text-darkBG dark:hover:bg-darkButtonHover"
       >
-        {status === "sending" ? "Sending..." : submitLabel}
+        {status === "sending" ? "Sending" : submitLabel}
+        <span aria-hidden className="relative h-4 w-4 overflow-hidden">
+          <PiCaretRightBold className="absolute inset-0 h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-5" />
+          <PiCaretRightBold className="absolute inset-0 h-4 w-4 -translate-x-5 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
+        </span>
       </button>
     </form>
   );

@@ -6,8 +6,11 @@ import type { IconType } from "react-icons";
 import {
   PiBrowsersDuotone,
   PiCpuDuotone,
+  PiGlobeHemisphereWestDuotone,
+  PiMapPinDuotone,
   PiPuzzlePieceDuotone,
   PiSquaresFourDuotone,
+  PiWrenchDuotone,
 } from "react-icons/pi";
 import ArrowMark, { arrowTone } from "components/ArrowMark";
 import { liveryAt } from "components/livery";
@@ -17,7 +20,7 @@ export type DeckCard = {
   mark?: string;
   title: string;
   body: string;
-  icon?: "browser" | "cpu" | "puzzle" | "tools";
+  icon?: "browser" | "cpu" | "puzzle" | "tools" | "pin" | "globe" | "wrench";
   href?: string;
   cta?: string;
 };
@@ -32,6 +35,9 @@ const ICONS: Record<DeckCard["icon"], IconType> = {
   cpu: PiCpuDuotone,
   puzzle: PiPuzzlePieceDuotone,
   tools: PiSquaresFourDuotone,
+  pin: PiMapPinDuotone,
+  globe: PiGlobeHemisphereWestDuotone,
+  wrench: PiWrenchDuotone,
 };
 
 /**

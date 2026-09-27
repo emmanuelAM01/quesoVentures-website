@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Footer from "components/Footer";
 import ContactForm from "components/ContactForm";
-import Glow from "components/Glow";
-import { PAINT } from "components/livery";
+import LavaLamp from "components/LavaLamp";
+import Reveal from "components/Reveal";
+import { houseGradient } from "components/livery";
 import {
   BUSINESS,
   LOCAL_BUSINESS_SCHEMA,
@@ -80,40 +81,50 @@ export default function ContactPage() {
           sits in the middle of the space it actually has, and py-24 keeps it
           clear of the bar on a short screen where the content wins.
         */}
-        <section className="container mx-auto flex min-h-[calc(100svh-76px)] items-center px-4 py-24">
-          <div className="mx-auto w-full max-w-xl">
-            <div className="text-center">
-              <h1 className="font-sans text-4xl sm:text-5xl tracking-tight text-balance text-lightText dark:text-darkText">
-                Tell me about your business.
-              </h1>
-              <p className="mx-auto mt-6 max-w-lg text-xl font-light text-lightTextMuted dark:text-darkTextMuted">
-                I&apos;ll look at where you show up today and get back to you.
-                Free either way.
-              </p>
-            </div>
-
-            <Glow color={PAINT.rossoCorsa.hex} radius="rounded-3xl" lift={false} spread={480}>
-            <div className="relative mt-12 rounded-3xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark p-8 sm:p-10">
-              <ContactForm />
-            </div>
-            </Glow>
-
-
-            <dl className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-base">
-              <div className="flex gap-2">
-                <dt className="font-semibold text-lightText dark:text-darkText">
-                  Email
-                </dt>
-                <dd>
+        {/*
+          As a full screen spread: the ask on the left, over the blob field,
+          set the way every hero on the site is set (title, the house rule,
+          the line under it, bottom left); the form on the right, on white,
+          with nothing around it. On a phone the ask comes first and the form
+          follows.
+        */}
+        <section className="-mt-[76px] grid lg:min-h-[100svh] lg:grid-cols-2">
+          <div
+            data-dark-section
+            className="relative flex min-h-[70svh] items-end overflow-hidden lg:min-h-0"
+          >
+            <LavaLamp scrim={0.5} />
+            <div className="relative w-full px-6 pb-14 pt-40 sm:px-12 lg:px-16 lg:pb-20 xl:px-24">
+              <Reveal>
+                <h1 className="text-5xl sm:text-6xl xl:text-7xl font-light leading-[1.02] tracking-tight text-balance text-white">
+                  Tell me about your business.
+                </h1>
+                <span
+                  aria-hidden
+                  className="mt-8 block h-1 w-24 rounded-full"
+                  style={{ backgroundImage: houseGradient() }}
+                />
+                <p className="mt-8 max-w-md text-xl sm:text-2xl font-light leading-relaxed text-white/85">
+                  I&apos;ll look at where you show up today and get back to you.
+                  Free either way.
+                </p>
+                <p className="mt-10 text-base font-light text-white/60">
+                  Or write to{" "}
                   <a
                     href={BUSINESS.emailHref}
-                    className="inline-block py-1.5 font-light text-lightTextMuted transition-colors hover:text-lightText dark:text-darkTextMuted dark:hover:text-darkText"
+                    className="text-white underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-white"
                   >
                     {BUSINESS.email}
                   </a>
-                </dd>
-              </div>
-            </dl>
+                </p>
+              </Reveal>
+            </div>
+          </div>
+
+          <div className="flex items-center bg-panelLight px-6 py-16 dark:bg-panelDark sm:px-12 lg:px-16 lg:pt-32 xl:px-24">
+            <Reveal delay={150} className="mx-auto w-full max-w-lg">
+              <ContactForm />
+            </Reveal>
           </div>
         </section>
       </main>
