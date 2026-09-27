@@ -157,27 +157,23 @@ const what: DeckCard[] = [
 */
 const why: Chapter[] = [
   {
-    // DRAFT. The camp story is his to tell.
+    /*
+      DRAFT. 2008 and the 2010s are one chapter: the point of those years is
+      that he built sites for fun and messed with technology, and 2020 is when
+      he started doing it for people. There are no digital photos from 2008, so
+      the mark is where the story starts and the photos run through the decade.
+    */
     mark: "2008",
-    title: "One time at computer camp",
-    body: "My parents enrolled me in a free computer camp. I spent it taking computers apart and putting them back together.",
+    title: "The younger years",
+    body: "Took computers apart to see how they worked. Built websites for fun, and messed with any tech I could get my hands on.",
+    story:
+      "Edited my grades on the page before I showed my parents. Edited webpages as pranks. Built sites for fake businesses I thought were cool, then real ones for friends and family.",
     photos: [
       {
         src: "/about/2008.jpg",
         alt: "Emmanuel Mendieta as a kid, wearing a red paper crown",
         position: "50% 30%",
       },
-    ],
-    layout: "left",
-  },
-  {
-    // DRAFT
-    mark: "2010s",
-    title: "School, and a lot of messing around",
-    body: "Edited my grades on the page before I showed my parents. Edited webpages as pranks.",
-    story:
-      "Built websites for fake businesses I thought were cool. Then real ones, for friends and family.",
-    photos: [
       {
         src: "/about/2010s-box.jpg",
         alt: "Emmanuel Mendieta as a kid, sitting in a cardboard box at home",
@@ -206,11 +202,6 @@ const why: Chapter[] = [
         alt: "Emmanuel Mendieta resting his head beside a laptop full of code",
         position: "35% 50%",
       },
-      {
-        src: "/about/2020-brooklyn.jpg",
-        alt: "Emmanuel Mendieta in Brooklyn at night, the Manhattan Bridge behind him",
-        position: "50% 60%",
-      },
     ],
     layout: "left",
   },
@@ -224,11 +215,6 @@ const why: Chapter[] = [
       {
         src: "/about/2022-mountain.jpg",
         alt: "Emmanuel Mendieta standing on a snowy mountain pass",
-        position: "50% 62%",
-      },
-      {
-        src: "/about/2022-terrace.jpg",
-        alt: "Emmanuel Mendieta at a table on a terrace above a city at night",
         position: "50% 62%",
       },
     ],
