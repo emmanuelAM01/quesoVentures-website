@@ -271,75 +271,6 @@ function Rewards({ on }: { on: boolean }) {
  * actually post, and it must not imply a POS is connected. Nothing here knows
  * what anybody spent.
  */
-const MEMBER_MARKS = [350, 1150, 2200] as const;
-
-const POSTS: { label: string; tag: string; live: boolean }[] = [
-  { label: "$2 off any plate today", tag: "Scan to redeem", live: true },
-  { label: "Birria is back on Fridays", tag: "Update", live: false },
-];
-
-function Memberships({ on }: { on: boolean }) {
-  const step = useScript(on, MEMBER_MARKS);
-
-  return (
-    <div className={BOX}>
-      {/* The counter. */}
-      <div
-        className={`${PANE} flex items-center gap-2.5 px-3 py-1.5 transition-all duration-500`}
-        style={rise(step >= 1)}
-      >
-        <span
-          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-black"
-          style={{ backgroundColor: GREEN }}
-        >
-          <FaQrcode size={12} />
-        </span>
-        <p className="text-[12px] text-white/70">Scan the code by the register</p>
-      </div>
-
-      {/* Their page, which is the actual product. */}
-      <div
-        className={`${PANE} overflow-hidden transition-all duration-500`}
-        style={rise(step >= 2)}
-      >
-        <div className="border-b border-white/10 px-3 py-1">
-          <span className={`rounded-full bg-white/[0.08] px-2 py-0.5 text-[9px] ${MUTED}`}>
-            quesorewards.com/your-shop/news
-          </span>
-        </div>
-        {POSTS.map((post) => (
-          <div
-            key={post.label}
-            className="flex items-center gap-2 px-3 py-1 [&+&]:border-t [&+&]:border-white/[0.06]"
-          >
-            <p className="min-w-0 flex-1 truncate text-[12px] text-white/85">
-              {post.label}
-            </p>
-            <span
-              className="shrink-0 rounded-full px-2 py-0.5 text-[9px] font-semibold"
-              style={
-                post.live
-                  ? { backgroundColor: `${GREEN}26`, color: GREEN }
-                  : { backgroundColor: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.45)" }
-              }
-            >
-              {post.tag}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      {/* The one line the owner is actually here for. */}
-      <p
-        className={`text-center text-[10px] transition-opacity duration-500 ${MUTED}`}
-        style={{ opacity: step >= 3 ? 1 : 0 }}
-      >
-        That is Maria&apos;s 4th check-in this month.
-      </p>
-    </div>
-  );
-}
-
 const CHAT_MARKS = [700, 1800] as const;
 
 function Chat({ on }: { on: boolean }) {
@@ -757,9 +688,183 @@ function Organization({ on }: { on: boolean }) {
   );
 }
 
+/* ------------------------------------------------------------------ */
+
+/**
+ * Email Newsletter: the week's special, written and sent to everybody who
+ * scanned the code at the counter. The count is the point.
+ */
+const NEWS_SUBJECT = "Birria is back this Friday";
+const NEWS_MARKS = [1500, 2300, 3000] as const;
+
+function Newsletter({ on }: { on: boolean }) {
+  const typed = useTyped(NEWS_SUBJECT, on, 45);
+  const step = useScript(on, NEWS_MARKS);
+  return (
+    <div className={BOX}>
+      <div className={`${PANE} space-y-1.5 px-3 py-2.5`}>
+        <p className={`text-[10px] ${MUTED}`}>To: everyone who signed up (98)</p>
+        <p className="flex items-center gap-1 text-[12px] font-medium text-white/90">
+          {typed}
+          {typed.length < NEWS_SUBJECT.length && <span className="caret inline-block h-3 w-[2px] bg-white/60" />}
+        </p>
+        <div className="space-y-1 pt-0.5">
+          <div className="h-1.5 w-11/12 rounded bg-white/15" />
+          <div className="h-1.5 w-8/12 rounded bg-white/10" />
+        </div>
+      </div>
+      <div className="flex items-center justify-between gap-2">
+        <span
+          className="flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold text-black transition-all duration-500"
+          style={{ ...rise(step >= 1), backgroundColor: GREEN }}
+        >
+          <FaCheck size={9} /> Sent to 98 regulars
+        </span>
+        <span className={`text-[10px] transition-opacity duration-500 ${MUTED}`} style={{ opacity: step >= 2 ? 1 : 0 }}>
+          6 new sign ups this week
+        </span>
+      </div>
+      <p className={`text-center text-[10px] transition-opacity duration-500 ${MUTED}`} style={{ opacity: step >= 3 ? 1 : 0 }}>
+        They joined by scanning the code at the counter.
+      </p>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+/**
+ * Lead Finder: the owner's best customer, described once, and the week's
+ * matches arriving with a way to reach each one.
+ */
+const LEADS = [
+  { name: "Northside Dental Group", why: "New location, Humble", reach: "Email + phone" },
+  { name: "Kingwood HOA", why: "Asked for bids this month", reach: "Email" },
+  { name: "Summit Roofing", why: "Hiring 3 techs", reach: "Phone" },
+] as const;
+const LEAD_MARKS = [500, 950, 1400, 2100] as const;
+
+function Leads({ on }: { on: boolean }) {
+  const step = useScript(on, LEAD_MARKS);
+  return (
+    <div className={BOX}>
+      <p className={`px-0.5 text-[10px] ${MUTED}`}>Looking for: offices near Kingwood that need cleaning</p>
+      <div className="space-y-1.5">
+        {LEADS.map((l, i) => (
+          <div
+            key={l.name}
+            className={`${PANE} flex items-center gap-2.5 px-3 py-1.5 transition-all duration-500`}
+            style={rise(step >= i + 1)}
+          >
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: RED }} />
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-[11px] font-medium text-white/85">{l.name}</span>
+              <span className={`block truncate text-[9px] ${MUTED}`}>{l.why}</span>
+            </span>
+            <span className="shrink-0 text-[10px] text-white/60">{l.reach}</span>
+          </div>
+        ))}
+      </div>
+      <p className={`text-center text-[10px] transition-opacity duration-500 ${MUTED}`} style={{ opacity: step >= 4 ? 1 : 0 }}>
+        62 more this week, in your Organizer.
+      </p>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+/**
+ * Outreach: one lead, followed up with until they answer. Email, a second
+ * email, a call, and the reply that stops it all.
+ */
+const REACH = [
+  { day: "Mon", what: "Intro email sent", tone: BLUE },
+  { day: "Thu", what: "Follow up sent", tone: BLUE },
+  { day: "Fri", what: "Called, left a message", tone: YELLOW },
+] as const;
+const REACH_MARKS = [450, 900, 1350, 2200] as const;
+
+function Outreach({ on }: { on: boolean }) {
+  const step = useScript(on, REACH_MARKS);
+  return (
+    <div className={BOX}>
+      <p className="px-0.5 text-[11px] font-semibold text-white/80">Northside Dental Group</p>
+      <div className="space-y-1.5">
+        {REACH.map((r, i) => (
+          <div
+            key={r.what}
+            className="flex items-center gap-2.5 px-1 transition-all duration-500"
+            style={rise(step >= i + 1)}
+          >
+            <span className={`w-7 shrink-0 text-[10px] ${MUTED}`}>{r.day}</span>
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: r.tone }} />
+            <span className="text-[11px] text-white/80">{r.what}</span>
+          </div>
+        ))}
+      </div>
+      <Bubble side="them" shown={step >= 4}>
+        Can you come by Tuesday for a quote?
+      </Bubble>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+/**
+ * Forms: the QR code on the counter, the answers filling in, and the note in
+ * the owner's inbox that it arrived.
+ */
+const FORM_MARKS = [500, 1000, 1500, 2300] as const;
+
+function Forms({ on }: { on: boolean }) {
+  const step = useScript(on, FORM_MARKS);
+  const fields = [
+    ["Name", "Dana Ruiz"],
+    ["Phone", "(281) 555 0142"],
+    ["Need", "Quote for a patio"],
+  ] as const;
+  return (
+    <div className={BOX}>
+      <div className="flex gap-2.5">
+        <span
+          className="flex h-[4.6rem] w-[4.6rem] shrink-0 items-center justify-center rounded-xl text-black"
+          style={{ backgroundColor: GREEN }}
+        >
+          <FaQrcode size={34} />
+        </span>
+        <div className="min-w-0 flex-1 space-y-1">
+          {fields.map(([label, value], i) => (
+            <div key={label} className={`${PANE} flex items-center gap-2 px-2.5 py-1`}>
+              <span className={`w-10 shrink-0 text-[9px] ${MUTED}`}>{label}</span>
+              <span
+                className="truncate text-[11px] text-white/85 transition-opacity duration-500"
+                style={{ opacity: step >= i + 1 ? 1 : 0 }}
+              >
+                {value}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div
+        className={`${PANE} flex items-center gap-2 px-3 py-1.5 transition-all duration-500`}
+        style={rise(step >= 4)}
+      >
+        <FaCheck size={10} style={{ color: GREEN }} />
+        <span className="text-[11px] text-white/80">New answer in your inbox and your customer list</span>
+      </div>
+    </div>
+  );
+}
+
 export type DemoId =
   | "rewards"
-  | "memberships"
+  | "newsletter"
+  | "leads"
+  | "outreach"
+  | "forms"
   | "chat"
   | "frontdesk"
   | "booking"
@@ -771,7 +876,10 @@ export type DemoId =
 
 export const STUDIO_DEMOS: Record<DemoId, (p: { on: boolean }) => JSX.Element> = {
   rewards: Rewards,
-  memberships: Memberships,
+  newsletter: Newsletter,
+  leads: Leads,
+  outreach: Outreach,
+  forms: Forms,
   chat: Chat,
   frontdesk: Frontdesk,
   booking: Booking,

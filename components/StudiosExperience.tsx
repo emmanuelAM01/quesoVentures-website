@@ -4,213 +4,39 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Reveal from "components/Reveal";
-import { STUDIO_DEMOS, type DemoId } from "components/StudiosDemos";
+import { STUDIO_DEMOS } from "components/StudiosDemos";
 import ArrowMark, { arrowTone } from "components/ArrowMark";
 import { houseGradient } from "components/livery";
+import {
+  BUNDLE,
+  OUTCOMES,
+  PACKS,
+  oneAtATime,
+  packFor,
+  productsFor,
+  type Outcome,
+  type Product,
+} from "components/studiosCatalog";
 
-// The Queso Studios reveal. This page deliberately abandons the site's
-// chrome: no header, no footer, dark only. Act one is the wordmark alone in
-// a black void with laser light. Act two is the lineup, a center-snapped
-// glass carousel where side cards fall away in perspective. The only way
-// out is the "Leave" pill, which appears once the reveal has done its job.
+// The Queso Studios shop. This page deliberately abandons the site's chrome:
+// no header, no footer, dark only. Act one is the wordmark alone in a black
+// void with laser light. Act two is the shop, laid out by what an owner wants
+// (more calls, regulars back, new customers, a business that is straightened
+// out, real numbers) rather than by the names of the tools. The only way out
+// is the "Leave" pill, which appears once the reveal has done its job.
 //
-// Every card in the lineup carries a working demo of the tool it is selling,
-// running only while that card is centred. A tagline can tell a shop owner
-// there is a booking tool; watching a slot get picked and confirmed is the
-// only version of that sentence they can actually picture.
-
-type Tool = {
-  /** Keys the live demo in StudiosDemos. */
-  demo: DemoId;
-  name: string;
-  price: string;
-  tagline: string;
-  /**
-   * A quieter line under the tagline. Used where the strongest thing about a
-   * tool would swallow the sentence that explains it, so it gets set small and
-   * separated instead, and reads like fine print that happens to be a flex.
-   */
-  note?: string;
-  href?: string;
-  linkLabel?: string;
-  /**
-   * Runs the width of the grid, for the one entry that is not a product.
-   *
-   * The open slot is an invitation, and sat in a column beside eight finished
-   * tools it read as a ninth thing you could buy that happened to have nothing
-   * in it -- with two empty cells beside it, which looked like the page had
-   * run out rather than finished.
-   */
-  wide?: boolean;
-  /**
-   * Kept out of the lineup bundle and its running total.
-   *
-   * The bundle is priced for software that costs next to nothing to run per
-   * client. The AI Frontdesk pays per minute of phone call, and a busy line
-   * costs $400 to $500 a month to run by itself, so it cannot ride inside $450.
-   */
-  unbundled?: boolean;
-  /** What its button says, where "Want this?" would be asking about nothing. */
-  cta?: string;
-  /**
-   * The card's laser edge, glow, and price pill.
-   *
-   * Factory paint, with one house rule bent: a few of the palette's inks are
-   * mixed for legibility on cream and go nearly black against this page, so
-   * where that happens the brighter sibling is used instead. One colour per
-   * tool, so flipping the lineup feels like flipping a lineup rather than
-   * scrolling a spec sheet.
-   */
-  accent: string;
-};
+// Every product on the shelf carries a working demo of itself, and opens into
+// a popup with the rest: what you get, what it costs, and the way to ask for
+// it. A tagline can tell a shop owner there is a booking tool; watching a slot
+// get picked and confirmed is the only version they can actually picture.
+//
+// Names and prices come from components/studiosCatalog.ts, which mirrors the
+// portal's catalogue so the shop and the portal never quote two numbers.
 
 /**
- * Everything, for less than the sum of it.
- *
- * Nine cards is nine decisions, and a shop owner who would happily take one
- * says no to the fourth simply because it is the fourth thing they have been
- * asked. One price is one decision. It is deliberately well under the running
- * total -- the saving is the offer, and without it there is no reason to take
- * this over the two tools you came for.
- *
- * The total is added up from the lineup rather than typed out, so changing a
- * price on a card can never leave this line quietly wrong. The bundle itself
- * is not, which is the half that needs watching: adding Queso Organization at
- * $250 took the lineup to $960 and left this at $350, quietly turning a
- * half-price offer into a two-thirds-off one nobody had decided to make.
- *
- * $450 is roughly the share that was already being given away -- a little over
- * half off, which is what $350 against $710 was -- and it stays under the
- * monthly rate, so the whole toolbox still reads as something added to Queso
- * Ventures rather than a second thing the same size as it.
- */
-const BUNDLE_PRICE = 450;
-
-function oneAtATime(): number {
-  return TOOLS.filter((t) => !t.unbundled).reduce((sum, t) => {
-    const n = Number(t.price.replace(/[^0-9]/g, ""));
-    return sum + (Number.isFinite(n) ? n : 0);
-  }, 0);
-}
-
-const PRICE_NOTE = "Queso Ventures clients receive discounts";
-
-/**
- * The lineup.
- *
- * Ordered the way it should be met: the one with a website of its own first,
- * because it is proof rather than a promise, then the tools in rough order of
- * how easily an owner can picture them, and the open slot last. That slot only
- * means anything once someone has seen nine finished things.
- */
-const TOOLS: Tool[] = [
-  {
-    demo: "rewards",
-    name: "Queso Rewards",
-    price: "$100 / month",
-    tagline:
-      "A punch card that lives on your customer's phone. It fills as they come back, and it texts them when they are one are getting closer to their reward.",
-    href: "https://www.quesorewards.com",
-    linkLabel: "Visit quesorewards.com",
-    accent: "#FEA700",
-  },
-  {
-    demo: "memberships",
-    name: "Memberships",
-    price: "$80 / month",
-    tagline:
-      "A QR code by the register that opens your own page of deals and store news. Post whatever you want that week, and every scan tells you who came back for it.",
-    note: "Not a punch card. You write the offer, change it whenever, and see which customers keep showing up.",
-    accent: "#7DC23B",
-  },
-  {
-    demo: "chat",
-    name: "AI Chat",
-    price: "$80 / month",
-    tagline:
-      "A chat box on your website that knows your policies, rules, business both inside and out. Only answers how you would answer.",
-    accent: "#A855F7",
-  },
-  {
-    demo: "frontdesk",
-    name: "AI Frontdesk",
-    price: "$500 / month",
-    unbundled: true,
-    tagline:
-      "A phone agent that answers when you cannot. It takes the call, books the appointment, and keeps you the updated.",
-    // Every minute on the phone is paid for underneath, at roughly 18 cents.
-    // 1,500 minutes costs about $270 against the $500, and past it each minute
-    // bills at about double its cost, so a busy line pays for itself.
-    note: "Includes 1,500 call minutes a month, about six calls a day. Extra minutes are 35 cents each.",
-    accent: "#C4161C",
-  },
-  {
-    demo: "booking",
-    name: "Booking",
-    price: "$70 / month",
-    tagline:
-      "They pick a time and get a confirmation, then a reminder. No confusion, no double bookings, just simple cohesion.",
-    accent: "#0690FF",
-  },
-  {
-    demo: "delivery",
-    name: "Deliveries",
-    price: "$80 / month",
-    tagline:
-      "Type an address and get a real price, with traffic, weather and the time of day already in it. Then it hands your driver the route to drive.",
-    accent: "#E64A37",
-  },
-  {
-    demo: "organization",
-    name: "Queso Organization",
-    price: "$250 / month",
-    tagline:
-      "Every customer in one place, and where each one stands right now. What you agreed, what they owe, when they are due back, and every note anybody has written down.",
-    note: "For the businesses running on spreadsheets, napkin math and memory. Bail bonds, garages, clinics, law offices.",
-    accent: "#2243AA",
-  },
-  {
-    demo: "invoicing",
-    name: "Invoicing",
-    price: "$100 / month",
-    tagline:
-      "Ask for it the way you would ask a person. It builds the invoice, sends it by email and text, and chases it if it goes unpaid. (Because this part is never fun)",
-    accent: "#FFD100",
-  },
-  {
-    demo: "qrs",
-    name: "Queso Revenue System",
-    price: "Priced per case",
-    tagline:
-      "Think IRS, but on your side. Upload your numbers and it shows you what is working, what needs attention, and what to do about it.",
-    note: "Prepared by licensed CPAs, Harvard economists, Wharton MBAs, and CFOs out of nationwide logistics firms. (a bunch of number nerds)",
-    accent: "#7692A5",
-  },
-  /*
-    The empty slot, and the only card here that is not software. Eight finished
-    tools make the case that things get built; this one says the list is not
-    closed, which is the part no platform can copy.
-  */
-  {
-    demo: "next",
-    name: "Whatever you need next",
-    price: "Let's talk",
-    wide: true,
-    cta: "I have an idea",
-    tagline:
-      "Every tool on this page started as somebody telling me what was slowing them down. Tell me yours and it is the next thing I build.",
-    accent: "#FEA700",
-  },
-];
-
-/**
- * Whether a card is on screen, so its demo plays when you reach it.
- *
- * The carousel could rely on "is this the centred one", because there was only
- * ever one. A catalogue has nine on the page at once, and nine loops all
- * running is both a waste and a fairground. This plays the ones you are
- * actually looking at and leaves the rest holding their finished state, which
- * is what the demos already do when `on` is false.
+ * Whether an element is on screen, so its demo plays when you reach it and
+ * holds its finished state otherwise. Only as much motion as you are looking
+ * at.
  */
 function useInView<T extends Element>(ref: React.RefObject<T | null>): boolean {
   const [seen, setSeen] = useState(false);
@@ -227,131 +53,152 @@ function useInView<T extends Element>(ref: React.RefObject<T | null>): boolean {
   return seen;
 }
 
-/** The anchor a tool's chapter lives at, for the rail. */
-const toolId = (t: Tool) => `tool-${t.demo}`;
+const outcomeId = (o: Outcome) => `outcome-${o.key}`;
+
+/** "$99 / month", or the note that stands in for a number. */
+function listPrice(p: { list: number | null; priceNote?: string }) {
+  return p.list != null ? `$${p.list} / month` : p.priceNote ?? "";
+}
+
+/** "$49 for Queso clients", or its stand in. Null when there is nothing to say. */
+function clientPrice(p: { client: number | null; clientNote?: string; list: number | null }) {
+  if (p.client != null) return `$${p.client} for Queso clients`;
+  if (p.clientNote) return p.clientNote;
+  return null;
+}
 
 /**
- * One tool, one screen: its chapter in the lineup.
- *
- * After the About page's years. The live demo takes one half, lit from behind
- * in the tool's own colour; the words take the other: the price, the name in
- * the thin display weight, the tool's line of paint, what it does, and the
- * way forward. The sides alternate down the lineup.
- *
- * The demo plays while its chapter is on screen and holds its finished state
- * otherwise, so there is only ever as much motion as you are looking at.
+ * One product on the shelf: its demo running on the left, the words on the
+ * right, the whole row a button that opens the popup. Pointing at it lifts
+ * the edge into the product's colour.
  */
-function ToolChapter({
-  tool,
+function ShelfItem({ product, onOpen }: { product: Product; onOpen: () => void }) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const live = useInView(ref);
+  const Demo = STUDIO_DEMOS[product.demo];
+  const forClients = clientPrice(product);
+
+  return (
+    <button
+      ref={ref}
+      type="button"
+      onClick={onOpen}
+      aria-haspopup="dialog"
+      className="group relative grid w-full gap-6 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] p-5 text-left transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.06] focus:outline-none focus-visible:border-white/40 sm:grid-cols-[15rem,1fr] sm:p-6"
+      style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)" }}
+    >
+      <span
+        aria-hidden
+        className="absolute inset-x-8 top-0 h-px opacity-40 transition-opacity duration-500 group-hover:opacity-100"
+        style={{ background: `linear-gradient(to right, transparent, ${product.accent}, transparent)` }}
+      />
+      <div className="rounded-2xl border border-white/[0.07] bg-black/30 p-3">
+        <Demo on={live} />
+      </div>
+      <div className="flex min-w-0 flex-col justify-center">
+        <p className="text-3xl font-extralight tracking-tight text-white">{product.name}</p>
+        <span aria-hidden className="mt-4 block h-[3px] w-10 rounded-full" style={{ backgroundColor: product.accent }} />
+        <p className="mt-4 text-base font-light leading-relaxed text-white/65">{product.line}</p>
+        <div className="mt-5 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <span className="text-lg font-light tabular-nums text-white">{listPrice(product)}</span>
+          {forClients && <span className="text-sm text-white/45">{forClients}</span>}
+        </div>
+        <span className={`${arrowTone("dark")} mt-6`}>
+          <ArrowMark tone="dark" size="sm" label="See what you get" />
+        </span>
+      </div>
+    </button>
+  );
+}
+
+/**
+ * One outcome, one chapter: the question on the left, held in place while its
+ * shelf scrolls past on the right, with the pack that goes with it (if there
+ * is one) under the question.
+ */
+function OutcomeChapter({
+  outcome,
   index,
+  onOpen,
   onWant,
 }: {
-  tool: Tool;
+  outcome: Outcome;
   index: number;
-  onWant: () => void;
+  onOpen: (p: Product) => void;
+  onWant: (name: string) => void;
 }) {
-  const ref = useRef<HTMLElement>(null);
-  const live = useInView(ref);
-  const Demo = STUDIO_DEMOS[tool.demo];
-  const flip = index % 2 === 1;
+  const shelf = productsFor(outcome.key);
+  const pack = packFor(outcome.key);
 
   return (
     <section
-      ref={ref}
-      id={toolId(tool)}
-      data-tool={index}
-      className="relative grid scroll-mt-0 border-t border-white/[0.06] lg:min-h-[88svh] lg:grid-cols-2"
+      id={outcomeId(outcome)}
+      data-outcome={index}
+      className="relative border-t border-white/[0.06] px-6 py-24 sm:px-10 sm:py-32"
     >
       <div
-        className={`relative flex items-center justify-center overflow-hidden px-6 py-16 sm:px-12 lg:py-20 ${
-          flip ? "lg:order-2" : ""
-        }`}
-        style={{ background: `radial-gradient(ellipse 70% 60% at 50% 55%, ${tool.accent}24, transparent 70%)` }}
-      >
-        <Reveal className="relative w-full max-w-md">
-          <div
-            className="rounded-3xl border border-white/10 bg-black/35 p-4 shadow-2xl shadow-black/60 backdrop-blur-sm sm:p-5"
-            style={{ boxShadow: `0 40px 120px -40px ${tool.accent}55, inset 0 1px 0 rgba(255,255,255,0.06)` }}
-          >
-            <Demo on={live} />
-          </div>
-        </Reveal>
-      </div>
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: `radial-gradient(ellipse 50% 40% at 15% 20%, ${outcome.accent}1c, transparent 70%)` }}
+      />
+      <div className="relative mx-auto grid max-w-6xl gap-12 lg:grid-cols-[minmax(0,5fr),minmax(0,7fr)] lg:gap-16">
+        <div>
+          <Reveal className="lg:sticky lg:top-24 lg:pl-12 xl:pl-0">
+            <h2 className="text-5xl font-extralight leading-[0.98] tracking-tighter text-balance text-white sm:text-6xl">
+              {outcome.label}
+            </h2>
+            <span aria-hidden className="mt-8 block h-1 w-16 rounded-full" style={{ backgroundColor: outcome.accent }} />
+            <p className="mt-8 max-w-md text-xl font-light leading-relaxed text-white/65">{outcome.line}</p>
 
-      <div
-        className={`flex items-center px-6 pb-20 sm:px-12 lg:py-20 ${
-          flip ? "lg:pl-28 lg:pr-16 xl:pl-36 xl:pr-24" : "lg:px-16 xl:px-24"
-        }`}
-      >
-        <Reveal delay={120} className="max-w-xl">
-          <span tabIndex={0} className="group/price relative inline-block outline-none">
-            <span
-              className="inline-block rounded-full border px-4 py-1.5 text-sm font-semibold tabular-nums whitespace-nowrap"
-              style={{ color: tool.accent, borderColor: `${tool.accent}55`, textShadow: `0 0 14px ${tool.accent}66` }}
-            >
-              {tool.price}
-              {tool.price.includes("$") && <span aria-hidden>*</span>}
-            </span>
-            {tool.price.includes("$") && (
-              <span
-                role="tooltip"
-                className="pointer-events-none absolute left-0 top-full z-10 mt-2.5 w-max max-w-[230px] translate-y-1 rounded-xl border border-white/15 bg-[#0A0C15]/95 px-3.5 py-2 text-xs leading-snug text-white/75 opacity-0 backdrop-blur-md transition-all duration-300 group-hover/price:translate-y-0 group-hover/price:opacity-100 group-focus/price:translate-y-0 group-focus/price:opacity-100"
-              >
-                {PRICE_NOTE}
-              </span>
+            {pack && (
+              <div className="mt-12 border-t border-white/10 pt-8">
+                <p className="text-sm text-white/45">Better together</p>
+                <p className="mt-2 text-2xl font-light tracking-tight text-white">{pack.name}</p>
+                <p className="mt-2 max-w-sm text-base font-light leading-relaxed text-white/60">{pack.line}</p>
+                <p className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <span className="text-lg font-light tabular-nums text-white">${pack.list} / month</span>
+                  <span className="text-sm text-white/45">${pack.client} for Queso clients</span>
+                </p>
+                <button type="button" onClick={() => onWant(pack.name)} className={`${arrowTone("dark")} mt-6`}>
+                  <ArrowMark tone="dark" size="sm" label="Want both?" />
+                </button>
+              </div>
             )}
-          </span>
+          </Reveal>
+        </div>
 
-          <h3 className="mt-8 text-5xl font-extralight leading-[0.95] tracking-tighter text-balance text-white sm:text-6xl xl:text-7xl">
-            {tool.name}
-          </h3>
-          <span aria-hidden className="mt-8 block h-[3px] w-14 rounded-full" style={{ backgroundColor: tool.accent }} />
-          <p className="mt-8 text-xl font-light leading-relaxed text-white/75">{tool.tagline}</p>
-          {tool.note && (
-            <p className="mt-5 border-t border-white/10 pt-4 text-sm leading-relaxed text-white/40">{tool.note}</p>
-          )}
-          {tool.href == null && tool.linkLabel && (
-            <p className="mt-5 text-sm font-semibold text-white/40">{tool.linkLabel}</p>
-          )}
-
-          <div className="mt-10 flex flex-wrap items-center gap-x-10 gap-y-5">
-            {tool.href && (
-              <a href={tool.href} className={arrowTone("dark")}>
-                <ArrowMark tone="dark" label={tool.linkLabel ?? "Visit"} />
-              </a>
-            )}
-            <button type="button" onClick={onWant} className={arrowTone("dark")}>
-              <ArrowMark tone="dark" label={tool.cta ?? "Want this?"} />
-            </button>
-          </div>
-        </Reveal>
+        <div className="space-y-5">
+          {shelf.map((p, i) => (
+            <Reveal key={p.key} delay={i * 90}>
+              <ShelfItem product={p} onOpen={() => onOpen(p)} />
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
 /**
- * The lineup's contents, pinned to the left edge while the tools are on
- * screen, the way the About page pins its years: a dot per tool in its own
- * paint, the one you are on lit and named, the rest named on hover.
+ * The shop's contents, pinned to the left edge while the outcomes are on
+ * screen: a dot per outcome in its colour, the one you are in lit and named.
  */
-function ToolRail({ tools }: { tools: Tool[] }) {
+function OutcomeRail() {
   const [active, setActive] = useState(0);
   const [onScreen, setOnScreen] = useState(false);
 
   useEffect(() => {
-    const chapters = document.querySelectorAll("[data-tool]");
+    const chapters = document.querySelectorAll("[data-outcome]");
     if (!chapters.length) return;
     const current = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
-          if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.tool));
+          if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.outcome));
         }
       },
       { rootMargin: "-50% 0px -50% 0px" }
     );
     chapters.forEach((el) => current.observe(el));
-
     const onScroll = () => {
       const a = chapters[0].getBoundingClientRect();
       const z = chapters[chapters.length - 1].getBoundingClientRect();
@@ -368,36 +215,32 @@ function ToolRail({ tools }: { tools: Tool[] }) {
 
   return (
     <nav
-      aria-label="The lineup"
+      aria-label="The shop"
       className={`fixed left-5 top-1/2 z-40 hidden -translate-y-1/2 transition-opacity duration-500 lg:block xl:left-8 ${
         onScreen ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
-      <ol className="relative flex flex-col gap-4">
+      <ol className="relative flex flex-col gap-5">
         <span aria-hidden className="absolute bottom-1.5 left-[5px] top-1.5 w-px bg-white/20" />
-        {tools.map((t, i) => {
+        {OUTCOMES.map((o, i) => {
           const on = i === active;
           return (
-            <li key={t.name}>
-              <a href={`#${toolId(t)}`} aria-current={on} className="group relative flex items-center gap-4 focus:outline-none">
+            <li key={o.key}>
+              <a href={`#${outcomeId(o)}`} aria-current={on} className="group relative flex items-center gap-4 focus:outline-none">
                 <span
                   className={`block h-[11px] w-[11px] rounded-full border-2 transition-all duration-500 ${
                     on ? "scale-125" : "group-hover:scale-125"
                   }`}
                   style={{
-                    borderColor: t.accent,
-                    backgroundColor: i <= active ? t.accent : "#04050A",
-                    boxShadow: on ? `0 0 14px ${t.accent}` : "none",
+                    borderColor: o.accent,
+                    backgroundColor: i <= active ? o.accent : "#04050A",
+                    boxShadow: on ? `0 0 14px ${o.accent}` : "none",
                   }}
                 />
-                <span
-                  className={`whitespace-nowrap rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium tracking-[0.12em] text-white backdrop-blur-sm transition-all duration-500 ${
-                    on
-                      ? "translate-x-0 opacity-100"
-                      : "-translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-90 group-focus-visible:opacity-90"
-                  }`}
-                >
-                  {t.name}
+                {/* Named on hover only: the outcome you are in is already the
+                    biggest words on screen, and the pill would sit on them. */}
+                <span className="-translate-x-1 whitespace-nowrap rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium tracking-[0.08em] text-white opacity-0 backdrop-blur-sm transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-90 group-focus-visible:opacity-90">
+                  {o.label}
                 </span>
               </a>
             </li>
@@ -408,9 +251,133 @@ function ToolRail({ tools }: { tools: Tool[] }) {
   );
 }
 
+/** The open slot's demo, playing while it is on screen. */
+function IdeaDemo() {
+  const ref = useRef<HTMLDivElement>(null);
+  const live = useInView(ref);
+  const Demo = STUDIO_DEMOS.next;
+  return (
+    <div ref={ref}>
+      <Demo on={live} />
+    </div>
+  );
+}
+
+/**
+ * The product popup: everything on the shelf plus what the shelf has no room
+ * for. The demo big on one side; on the other the price for anybody and for a
+ * Queso client, what it covers when it is billed by use, what you get, and the
+ * way to ask. Built to order is said plainly, and framed the way it works:
+ * the first businesses to ask shape it.
+ */
+function ProductModal({
+  product,
+  onClose,
+  onWant,
+}: {
+  product: Product;
+  onClose: () => void;
+  onWant: () => void;
+}) {
+  const Demo = STUDIO_DEMOS[product.demo];
+  const forClients = clientPrice(product);
+  const pack = PACKS.find((p) => p.products.includes(product.key));
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const r = requestAnimationFrame(() => setShown(true));
+    return () => cancelAnimationFrame(r);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-[70] flex items-end justify-center sm:items-center sm:px-4" role="dialog" aria-modal="true" aria-label={product.name}>
+      <div
+        className={`absolute inset-0 bg-black/75 backdrop-blur-sm transition-opacity duration-500 ${shown ? "opacity-100" : "opacity-0"}`}
+        onClick={onClose}
+      />
+      <div
+        className={`relative max-h-[92svh] w-full max-w-5xl overflow-y-auto rounded-t-3xl border border-white/15 bg-[#0A0C15]/95 backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:rounded-3xl ${
+          shown ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+        }`}
+      >
+        <span
+          aria-hidden
+          className="absolute inset-x-10 top-0 h-px"
+          style={{ background: `linear-gradient(to right, transparent, ${product.accent}, transparent)` }}
+        />
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full border border-white/15 text-white/60 transition-all hover:border-white/40 hover:text-white"
+        >
+          ✕
+        </button>
+
+        <div className="grid lg:grid-cols-2">
+          <div
+            className="flex items-center justify-center px-6 py-12 sm:px-10"
+            style={{ background: `radial-gradient(ellipse 70% 60% at 50% 55%, ${product.accent}24, transparent 70%)` }}
+          >
+            <div
+              className="w-full max-w-sm rounded-3xl border border-white/10 bg-black/35 p-4"
+              style={{ boxShadow: `0 40px 120px -40px ${product.accent}66` }}
+            >
+              <Demo on />
+            </div>
+          </div>
+
+          <div className="px-6 pb-10 pt-4 sm:px-10 lg:py-12 lg:pr-14">
+            <h2 className="pr-10 text-4xl font-extralight leading-[1] tracking-tighter text-white sm:text-5xl">{product.name}</h2>
+            <span aria-hidden className="mt-6 block h-[3px] w-12 rounded-full" style={{ backgroundColor: product.accent }} />
+            <p className="mt-6 text-lg font-light leading-relaxed text-white/75">{product.line}</p>
+
+            <div className="mt-8 border-y border-white/10 py-5">
+              <p className="text-3xl font-extralight tabular-nums text-white">{listPrice(product)}</p>
+              {forClients && <p className="mt-1 text-base text-white/55">{forClients}</p>}
+              {product.usage && <p className="mt-3 text-sm text-white/45">{product.usage}</p>}
+            </div>
+
+            <ul className="mt-6 space-y-3">
+              {product.points.map((pt) => (
+                <li key={pt} className="flex gap-4 text-base font-light leading-relaxed text-white/80">
+                  <span aria-hidden className="mt-[0.8rem] h-[2px] w-4 flex-shrink-0 rounded-full" style={{ backgroundColor: product.accent }} />
+                  {pt}
+                </li>
+              ))}
+            </ul>
+
+            {!product.built && (
+              <p className="mt-6 text-sm leading-relaxed text-white/45">
+                Built to order. The first businesses to ask get it shaped around them.
+              </p>
+            )}
+            {pack && (
+              <p className="mt-4 text-sm leading-relaxed text-white/45">
+                Part of {pack.name}: ${pack.list} a month, ${pack.client} for Queso clients.
+              </p>
+            )}
+
+            <div className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-5">
+              <button type="button" onClick={onWant} className={arrowTone("dark")}>
+                <ArrowMark tone="dark" label="Want this?" />
+              </button>
+              {product.href && (
+                <a href={product.href} className={arrowTone("dark")}>
+                  <ArrowMark tone="dark" label={product.linkLabel ?? "Visit"} />
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function StudiosExperience() {
   const [showLeave, setShowLeave] = useState(false);
   const [wantTool, setWantTool] = useState<{ name: string; idea: boolean } | null>(null);
+  const [openProduct, setOpenProduct] = useState<Product | null>(null);
   const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -428,19 +395,22 @@ export default function StudiosExperience() {
     el.style.background = `radial-gradient(700px circle at ${e.clientX}px ${e.clientY}px, rgba(145,170,255,0.055), transparent 65%)`;
   }, []);
 
-  // Modal: lock scroll and close on Escape while open.
+  // Popups: lock scroll and close on Escape while one is open. The ask sits
+  // over the product, so Escape closes the ask first.
   useEffect(() => {
-    if (!wantTool) return;
+    if (!wantTool && !openProduct) return;
     document.body.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setWantTool(null);
+      if (e.key !== "Escape") return;
+      if (wantTool) setWantTool(null);
+      else setOpenProduct(null);
     };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
     };
-  }, [wantTool]);
+  }, [wantTool, openProduct]);
 
   return (
     <div
@@ -545,8 +515,8 @@ export default function StudiosExperience() {
         {/* Centred by its row, since the rise animation owns its transform. */}
         <div className="absolute inset-x-0 bottom-10 flex justify-center">
           <a
-            href={`#${toolId(TOOLS[0])}`}
-            aria-label="Go to the lineup"
+            href={`#${outcomeId(OUTCOMES[0])}`}
+            aria-label="Go to the shop"
             className={`studios-motion ${arrowTone("dark")}`}
             style={{ animation: "studios-rise 1.1s 1.9s cubic-bezier(0.16,1,0.3,1) both" }}
           >
@@ -590,57 +560,72 @@ export default function StudiosExperience() {
       </section>
 
       {/*
-        Act two: the lineup, as chapters.
+        Act two: the shop, by outcome.
 
-        It has been a coverflow carousel (fine for four, a thing you operate at
-        nine) and then a grid (everything at once, and every tool the same
-        small box). Now each tool gets a screen, the way the About page gives
-        each year one: the demo big enough to read on one half, the words on
-        the other, the sides alternating, and a rail at the edge naming every
-        tool so the one you came for is one click away.
+        It has been a coverflow carousel, then a grid, then a chapter per
+        tool, and every version was organised by the names of the tools. An
+        owner does not come looking for "booking"; they come wanting more
+        calls. So each outcome is a chapter, its question held on the left,
+        its tools on the shelf beside it, and every product opens into a
+        popup with the rest. The rail at the edge names the outcomes.
       */}
-      <ToolRail tools={TOOLS} />
+      <OutcomeRail />
       <div className="relative">
-        {TOOLS.map((tool, i) => (
-          <ToolChapter
-            key={tool.name}
-            tool={tool}
+        {OUTCOMES.map((o, i) => (
+          <OutcomeChapter
+            key={o.key}
+            outcome={o}
             index={i}
-            onWant={() => setWantTool({ name: tool.name, idea: tool.wide === true })}
+            onOpen={setOpenProduct}
+            onWant={(name) => setWantTool({ name, idea: false })}
           />
         ))}
       </div>
 
-      {/*
-        Everything, on one row, under the things it replaces.
+      {/* The open slot, last: it only means anything once someone has seen the shelf. */}
+      <section className="relative border-t border-white/[0.06] px-6 py-24 sm:px-10 sm:py-32">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <Reveal>
+            <h2 className="text-5xl font-extralight leading-[0.98] tracking-tighter text-balance text-white sm:text-6xl">
+              Whatever you need next
+            </h2>
+            <span aria-hidden className="mt-8 block h-1 w-16 rounded-full" style={{ backgroundImage: houseGradient() }} />
+            <p className="mt-8 max-w-md text-xl font-light leading-relaxed text-white/65">
+              Every tool on this page started as somebody telling me what was slowing their week down. Tell me yours and it is the next thing I build.
+            </p>
+            <button type="button" onClick={() => setWantTool({ name: "Whatever you need next", idea: true })} className={`${arrowTone("dark")} mt-10`}>
+              <ArrowMark tone="dark" label="I have an idea" />
+            </button>
+          </Reveal>
+          <Reveal delay={120} className="mx-auto w-full max-w-md">
+            <div className="rounded-3xl border border-white/10 bg-black/35 p-4">
+              <IdeaDemo />
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
-        Full width and below the lineup on purpose. Above it, it would be the
-        first offer read and every card after it a smaller version of one
-        already made. Inside the carousel it would be a ninth thing to choose
-        between, which is the problem it exists to solve. Here it is the answer
-        to the question eight cards have just raised.
-      */}
       <section className="relative border-t border-white/[0.06] px-6 py-28 sm:px-10 sm:py-40">
         {/* Every paint at once, which is the offer said in one stroke. */}
         <div
           aria-hidden
           className="absolute inset-x-0 top-0 h-px"
           style={{
-            background: `linear-gradient(to right, transparent, ${TOOLS.filter((t) => !t.unbundled).map((t) => t.accent).join(", ")}, transparent)`,
+            background: `linear-gradient(to right, transparent, ${OUTCOMES.map((o) => o.accent).join(", ")}, transparent)`,
           }}
         />
         <div className="mx-auto grid max-w-6xl items-end gap-16 lg:grid-cols-2 lg:gap-20">
           <Reveal>
             <h2 className="text-4xl font-light leading-[1.05] tracking-tight text-balance text-white sm:text-5xl xl:text-6xl">
-              Take the whole lineup
+              {BUNDLE.name}
             </h2>
             <span aria-hidden className="mt-8 block h-1 w-24 rounded-full" style={{ backgroundImage: houseGradient() }} />
             <p className="mt-8 max-w-xl text-xl font-light leading-relaxed text-white/60">
-              Every tool on this page but the AI Frontdesk, running for you, on one bill.
+              {BUNDLE.line}
             </p>
             <button
               type="button"
-              onClick={() => setWantTool({ name: "The whole lineup", idea: false })}
+              onClick={() => setWantTool({ name: BUNDLE.name, idea: false })}
               className={`${arrowTone("dark")} mt-10`}
             >
               <ArrowMark tone="dark" label="Want this?" />
@@ -653,16 +638,14 @@ export default function StudiosExperience() {
                 className="bg-clip-text text-[6.5rem] font-extralight leading-[0.85] tracking-tighter tabular-nums text-transparent sm:text-[8rem] xl:text-[10rem]"
                 style={{ backgroundImage: houseGradient() }}
               >
-                ${BUNDLE_PRICE}
+                ${BUNDLE.list}
               </span>
               <span className="text-xl font-light text-white/50">/ month</span>
             </p>
-            <p className="mt-6 text-base text-white/45 tabular-nums">${oneAtATime()} one at a time</p>
-            {/* Said out loud rather than hidden behind the asterisk the
-                tools use: on the row asking for the whole lineup, the thing
-                that changes the number is worth a line of its own, and a
-                tooltip is nothing at all on a phone. */}
-            <p className="mt-1 text-base text-white/45">{PRICE_NOTE}</p>
+            <p className="mt-6 text-lg text-white/70 tabular-nums">${BUNDLE.client} a month for Queso clients</p>
+            <p className="mt-2 text-base text-white/45 tabular-nums">
+              ${oneAtATime().list} one at a time (${oneAtATime().client} for Queso clients)
+            </p>
           </Reveal>
         </div>
       </section>
@@ -682,7 +665,15 @@ export default function StudiosExperience() {
         />
       </section>
 
-      {/* Want-this modal, in the house style */}
+      {openProduct && (
+        <ProductModal
+          product={openProduct}
+          onClose={() => setOpenProduct(null)}
+          onWant={() => setWantTool({ name: openProduct.name, idea: false })}
+        />
+      )}
+
+      {/* Want-this modal, in the house style, over the product when there is one */}
       {wantTool && (
         <WantModal tool={wantTool.name} idea={wantTool.idea} onClose={() => setWantTool(null)} />
       )}
