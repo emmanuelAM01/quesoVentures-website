@@ -209,9 +209,9 @@ function PackCard({ pack, onWant }: { pack: Pack; onWant: () => void }) {
 }
 
 /**
- * One outcome, one magazine spread: the question as the headline with its
- * answer as the standfirst, the tools as stories in columns under it, and the
- * complete experience across the foot of the spread.
+ * One outcome, one magazine spread: the question as the headline, the tools
+ * as stories in columns under it, and the complete experience across the foot
+ * of the spread.
  */
 function OutcomeChapter({
   outcome,
@@ -239,16 +239,14 @@ function OutcomeChapter({
         style={{ background: `radial-gradient(ellipse 50% 40% at 15% 20%, ${outcome.accent}1c, transparent 70%)` }}
       />
       <div className="relative mx-auto max-w-6xl lg:pl-10 xl:pl-0">
-        {/* The spread's headline: the question large, its answer set as the standfirst. */}
+        {/* The spread's headline: the question, and its colour under it. The
+            stories below say the rest, so there is no standfirst. */}
         <Reveal>
-          <div className="grid items-end gap-8 border-b border-white/10 pb-10 lg:grid-cols-12 lg:gap-12">
-            <h2 className="text-5xl font-extralight leading-[0.98] tracking-tighter text-balance text-white sm:text-6xl lg:col-span-7 xl:text-7xl">
+          <div className="border-b border-white/10 pb-10">
+            <h2 className="text-5xl font-extralight leading-[0.98] tracking-tighter text-balance text-white sm:text-6xl xl:text-7xl">
               {outcome.label}
             </h2>
-            <div className="lg:col-span-5">
-              <span aria-hidden className="block h-1 w-16 rounded-full" style={{ backgroundColor: outcome.accent }} />
-              <p className="mt-6 text-xl font-light leading-relaxed text-white/65">{outcome.line}</p>
-            </div>
+            <span aria-hidden className="mt-8 block h-1 w-16 rounded-full" style={{ backgroundColor: outcome.accent }} />
           </div>
         </Reveal>
 
@@ -676,8 +674,9 @@ export default function StudiosExperience() {
             </p>
           </Reveal>
 
-          <Reveal delay={200}>
-            <p className="mt-24 inline-block text-5xl font-extralight tracking-tighter bg-clip-text text-transparent sm:text-6xl xl:text-7xl" style={{ backgroundImage: houseGradient() }}>
+          {/* Centred: the one line that turns the page from the pitch to the shop. */}
+          <Reveal delay={200} className="text-center">
+            <p className="mt-24 inline-block pb-3 text-5xl font-extralight leading-tight tracking-tighter bg-clip-text text-transparent sm:text-6xl xl:text-7xl" style={{ backgroundImage: houseGradient() }}>
               Go shopping
             </p>
           </Reveal>
