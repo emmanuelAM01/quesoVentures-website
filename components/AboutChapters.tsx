@@ -17,8 +17,11 @@ export type Photo = {
 };
 
 export type Chapter = {
-  /** The year, or the span: "2008", "2010s". */
-  mark: string;
+  /**
+   * The year, set huge. Optional: a stretch of time with no single year
+   * (the younger years) leaves it out, and the title takes its place.
+   */
+  mark?: string;
   title: string;
   /** The line you read first. */
   body: string;
@@ -87,7 +90,11 @@ function houseAt(i: number, n: number) {
   return `#${a.map((v, k) => Math.round(v + (b[k] - v) * f).toString(16).padStart(2, "0")).join("")}`;
 }
 
-export const chapterId = (mark: string) => `year-${mark}`;
+/** What names a chapter on the rail and in its anchor: the year, or else the title. */
+const labelOf = (c: Chapter) => c.mark ?? c.title;
+
+export const chapterId = (c: Chapter) =>
+  `year-${labelOf(c).toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 
 export default function AboutChapters({
   chapters,
@@ -160,9 +167,9 @@ export default function AboutChapters({
             const on = i === active;
             const hex = houseAt(i, n);
             return (
-              <li key={c.mark}>
+              <li key={labelOf(c)}>
                 <a
-                  href={`#${chapterId(c.mark)}`}
+                  href={`#${chapterId(c)}`}
                   aria-current={on}
                   className="group relative flex items-center gap-4 focus:outline-none"
                 >
@@ -180,13 +187,15 @@ export default function AboutChapters({
                     }}
                   />
                   <span
-                    className={`rounded-full bg-[#0B0D12]/70 px-2.5 py-1 text-xs font-medium tabular-nums tracking-[0.2em] text-white backdrop-blur-sm transition-all duration-500 ${
-                      on
+                    className={`whitespace-nowrap rounded-full bg-[#0B0D12]/70 px-2.5 py-1 text-xs font-medium tabular-nums tracking-[0.2em] text-white backdrop-blur-sm transition-all duration-500 ${
+                      // A chapter with no year has its title on screen already,
+                      // and the longer pill would run into it: hover only.
+                      on && c.mark
                         ? "translate-x-0 opacity-100"
                         : "-translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-90 group-focus-visible:opacity-90"
                     }`}
                   >
-                    {c.mark}
+                    {labelOf(c)}
                   </span>
                 </a>
               </li>
@@ -197,7 +206,7 @@ export default function AboutChapters({
 
       {chapters.map((c, i) => (
         <ChapterScreen
-          key={c.mark}
+          key={labelOf(c)}
           chapter={c}
           index={i}
           paint={paintAt(i)}
@@ -253,7 +262,7 @@ function ChapterScreen({
     return (
       <section
         ref={ref}
-        id={chapterId(chapter.mark)}
+        id={chapterId(chapter)}
         data-i={index}
         data-dark-section
         className="relative flex min-h-[100svh] items-end overflow-hidden bg-[#0B0D12]"
@@ -281,7 +290,7 @@ function ChapterScreen({
   return (
     <section
       ref={ref}
-      id={chapterId(chapter.mark)}
+      id={chapterId(chapter)}
       data-i={index}
       className="relative grid bg-lightBG dark:bg-darkBG lg:min-h-[92svh] lg:grid-cols-2"
     >
@@ -495,32 +504,51 @@ function Words({
     style: { transitionDelay: `${delay}ms` },
   });
 
+  const ink = dark ? "text-white" : "text-lightText dark:text-darkText";
+  const rule = (
+    <span
+      aria-hidden
+      className={`mt-8 block h-[3px] rounded-full transition-[width] duration-[1200ms] ${EASE} motion-reduce:transition-none`}
+      style={{ width: seen ? "3.5rem" : "0rem", transitionDelay: "500ms", backgroundColor: paint.hex }}
+    />
+  );
+
   return (
     <>
-      <p
-        aria-hidden
-        style={rise(250).style}
-        className={`${rise(250).className} text-[5.5rem] font-extralight leading-[0.85] tracking-tighter tabular-nums sm:text-[7rem] xl:text-[9rem] ${
-          dark ? "text-white" : "text-lightText dark:text-darkText"
-        }`}
-      >
-        {chapter.mark}
-      </p>
-      <span
-        aria-hidden
-        className={`mt-8 block h-[3px] rounded-full transition-[width] duration-[1200ms] ${EASE} motion-reduce:transition-none`}
-        style={{ width: seen ? "3.5rem" : "0rem", transitionDelay: "500ms", backgroundColor: paint.hex }}
-      />
-      <h3
-        style={rise(400).style}
-        className={`${rise(400).className} mt-8 text-3xl font-light tracking-tight text-balance sm:text-4xl xl:text-5xl ${
-          dark ? "text-white" : "text-lightText dark:text-darkText"
-        }`}
-      >
-        {/* The year is read out here, since the big numeral is aria-hidden. */}
-        <span className="sr-only">{chapter.mark}: </span>
-        {chapter.title}
-      </h3>
+      {chapter.mark ? (
+        <>
+          <p
+            aria-hidden
+            style={rise(250).style}
+            className={`${rise(250).className} text-[5.5rem] font-extralight leading-[0.85] tracking-tighter tabular-nums sm:text-[7rem] xl:text-[9rem] ${ink}`}
+          >
+            {chapter.mark}
+          </p>
+          {rule}
+          <h3
+            style={rise(400).style}
+            className={`${rise(400).className} mt-8 text-3xl font-light tracking-tight text-balance sm:text-4xl xl:text-5xl ${ink}`}
+          >
+            {/* The year is read out here, since the big numeral is aria-hidden. */}
+            <span className="sr-only">{chapter.mark}: </span>
+            {chapter.title}
+          </h3>
+        </>
+      ) : (
+        <>
+          {/*
+            No year: the title is the display line, in the numeral's weight
+            but a size down, since it is words rather than four digits.
+          */}
+          <h3
+            style={rise(250).style}
+            className={`${rise(250).className} text-6xl font-extralight leading-[0.95] tracking-tighter text-balance sm:text-7xl ${ink}`}
+          >
+            {chapter.title}
+          </h3>
+          {rule}
+        </>
+      )}
       <p
         style={rise(520).style}
         className={`${rise(520).className} mt-6 text-xl font-light leading-relaxed ${

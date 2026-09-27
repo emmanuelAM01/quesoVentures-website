@@ -19,7 +19,7 @@ Rebuilt on 2026-09-27 as a book, after Ferrari's pages: full width screens mixed
 ## Open items
 
 1. **Photos.** Emmanuel's photos are in `public/about/` (converted from HEIC where needed, rotated upright, all metadata including GPS stripped, long edge 2400px). The Colosseum shot was put in 2025 (same Italy trip as Mugello?) without being asked: confirm. Alt texts on his new photos are guesses: have him check them.
-2. **Timeline copy.** Entries marked `// DRAFT` in `app/about/page.tsx` (2008 "The younger years", which merges 2008 and the 2010s; 2020, 2023, 2026) were written from Emmanuel's notes as placeholders; he rewrites them himself. Not yet in the copy: 2024 was four promotions in six months, then leaving for a startup that got funded.
+2. **Timeline copy.** Entries marked `// DRAFT` in `app/about/page.tsx` ("The younger years", which merges 2008 and the 2010s and has no year; 2020, 2023, 2026) were written from Emmanuel's notes as placeholders; he rewrites them himself. Not yet in the copy: 2024 was four promotions in six months, then leaving for a startup that got funded.
 3. **GPS EXIF** is still in `public/hero/businessCard.JPEG`, `servicesMain.JPEG` and `ctaHero.JPEG` (used on other pages). Strip only the GPS tag (tag 34853) with Python PIL. MPO files can't use `quality='keep'`, so re-encode them at quality 92.
 4. **Next up after the About page:** the Queso Studios page needs conversion work, and the main site pricing needs work (the price stays $500).
 

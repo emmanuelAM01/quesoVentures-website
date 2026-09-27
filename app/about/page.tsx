@@ -160,10 +160,9 @@ const why: Chapter[] = [
     /*
       DRAFT. 2008 and the 2010s are one chapter: the point of those years is
       that he built sites for fun and messed with technology, and 2020 is when
-      he started doing it for people. There are no digital photos from 2008, so
-      the mark is where the story starts and the photos run through the decade.
+      he started doing it for people. No year on it, on purpose: it is a
+      stretch of growing up, not a date.
     */
-    mark: "2008",
     title: "The younger years",
     body: "Took computers apart to see how they worked. Built websites for fun, and messed with any tech I could get my hands on.",
     story:
