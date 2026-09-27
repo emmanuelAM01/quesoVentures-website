@@ -99,8 +99,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           measures this site on, and it is the only way to see that one city page
           is slow because of its hero photograph while the rest are fine.
 
-          Speed Insights was switched on for the project months ago and was
-          collecting nothing, because nothing on the site was sending it.
+          Speed Insights is a PAID add-on, not part of the Pro plan. It was
+          enabled on this project on 2026-09-12; check the billing page before
+          assuming it is free. Removing this component stops the data being
+          sent, but does not disable the feature on the project.
         */}
         <SpeedInsights />
       </body>
