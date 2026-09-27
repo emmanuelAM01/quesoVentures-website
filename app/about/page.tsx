@@ -5,8 +5,8 @@ import Reveal from "components/Reveal";
 import AboutPortrait from "components/AboutPortrait";
 import AboutPhotoRoll from "components/AboutPhotoRoll";
 import AboutLinks from "components/AboutLinks";
-import AboutHand, { type HandCard } from "components/AboutHand";
-import StoryCards, { type StoryCard } from "components/StoryCards";
+import AboutDeck, { type DeckCard } from "components/AboutDeck";
+import AboutTimeline, { type TimelineEntry } from "components/AboutTimeline";
 import { PAINT } from "components/livery";
 import Glow from "components/Glow";
 import NicheCtaButton from "components/NicheCtaButton";
@@ -115,7 +115,7 @@ const jsonLd = {
   the pricing pages, and a number of clients invites the wrong comparison.
 */
 
-const what: HandCard[] = [
+const what: DeckCard[] = [
   {
     mark: "Websites",
     icon: "browser",
@@ -144,11 +144,33 @@ const what: HandCard[] = [
   },
 ];
 
-const why: StoryCard[] = [
+/*
+  The story, oldest first. Drafts from Emmanuel's notes are marked DRAFT: he
+  rewrites those in his own words. 2022, 2024 and 2025 are his already.
+
+  Still to fold in, in his words: 2024 was four promotions in six months, and
+  leaving that job for a startup that actually got funded.
+*/
+const why: TimelineEntry[] = [
   {
+    // DRAFT. The camp story is his to tell.
     mark: "2008",
     title: "One time at computer camp",
-    body: "My parents enrolled me in a free computer ",
+    body: "My parents enrolled me in a free computer camp. I spent it taking computers apart and putting them back together.",
+  },
+  {
+    // DRAFT
+    mark: "2010s",
+    title: "School, and a lot of messing around",
+    body: "Edited my grades on the page before I showed my parents. Edited webpages as pranks.",
+    story:
+      "Built websites for fake businesses I thought were cool. Then real ones, for friends and family.",
+  },
+  {
+    // DRAFT
+    mark: "2020",
+    title: "Staring down unemployment",
+    body: "I had to make money somehow. So I started making money off my hobby.",
   },
   {
     mark: "2022",
@@ -156,6 +178,13 @@ const why: StoryCard[] = [
     body: "Built two apps in college. Y Combinator never answered. Alliance DAO passed on the idea, not on me.",
     story:
       "Still in college, I helped build a stablecoin savings app. Then crypto crashed and took the idea with it. Next came a crime reporting app for Latin America, the first product I built on my own. Y Combinator never answered. Alliance DAO interviewed me three times between cupcake shop shifts, then passed on the idea. Never on whether I could build it.",
+  },
+  {
+    // DRAFT
+    mark: "2023",
+    title: "Graduated, got a regular job",
+    body: "Computer Science at the University of Houston (what a surprise).",
+    story: "Then a regular job, because those were the rules of life. Or so I thought.",
   },
   {
     mark: "2024",
@@ -171,50 +200,14 @@ const why: StoryCard[] = [
     story:
       "We raised $250K for Bitcoin backed lending. As CTO I built every pivot: trucking finance, logistics software, then an AI language coach on WhatsApp. One version paid truck drivers for texting a photo of their paperwork. It worked perfectly. Nobody signed up.",
   },
+  {
+    // DRAFT
+    mark: "2026",
+    title: "Queso Ventures",
+    body: "Learned that lesson a little too late. So I started Queso Ventures.",
+    story: "Everything I have learned, and everything I am still learning, in one place.",
+  },
 ];
-
-/*
-  The degree, between the rows rather than in a card of its own.
-
-  Nothing changed about the work in 2023, the paper just caught up with it. A
-  card would give it the same weight as becoming a CTO; a line across the gap
-  gives it the weight it has, and the joke lands better as an aside.
-
-  Arancio Xanto, because the cards on either side already speak for red and
-  yellow. The ink is the darkened variant for type on the light page; the
-  factory hex is right on the dark one.
-*/
-const graduated = (
-  <Reveal className="sm:col-span-2">
-    <div
-      className="flex items-center gap-5 py-2"
-      style={
-        {
-          "--paint": PAINT.arancioXanto.hex,
-          "--paint-ink": PAINT.arancioXanto.ink,
-        } as React.CSSProperties
-      }
-    >
-      <span
-        aria-hidden
-        className="hidden h-px flex-1 sm:block"
-        style={{ backgroundImage: "linear-gradient(to right, transparent, var(--paint))" }}
-      />
-      <p className="text-center text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-        <span className="font-semibold text-[color:var(--paint-ink)] dark:text-[color:var(--paint)]">
-          2023
-        </span>{" "}
-        &middot; Graduated from the University of Houston in Computer Science
-        (what a surprise).
-      </p>
-      <span
-        aria-hidden
-        className="hidden h-px flex-1 sm:block"
-        style={{ backgroundImage: "linear-gradient(to left, transparent, var(--paint))" }}
-      />
-    </div>
-  </Reveal>
-);
 
 export default function AboutPage() {
   return (
@@ -246,7 +239,9 @@ export default function AboutPage() {
               What Queso Ventures is
             </h2>
           </Reveal>
-          <AboutHand cards={what} />
+          <div className="max-w-6xl mx-auto">
+            <AboutDeck cards={what} />
+          </div>
         </section>
 
         {/* The camera roll. Tokyo at rest, the rest of the roll on click. */}
@@ -263,13 +258,9 @@ export default function AboutPage() {
               Why I&apos;m doing this
             </h2>
           </Reveal>
-          <StoryCards
-            cards={why}
-            offset={4}
-            between={{ index: 1, node: graduated }}
-          />
-          {/* Right after the résumé, where someone checking up on me looks next. */}
           <div className="max-w-6xl mx-auto">
+            <AboutTimeline entries={why} />
+            {/* Right after the résumé, where someone checking up on me looks next. */}
             <AboutLinks github={GITHUB} linkedin={LINKEDIN} />
           </div>
         </section>
