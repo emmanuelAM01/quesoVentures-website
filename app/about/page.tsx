@@ -196,10 +196,22 @@ const why: Chapter[] = [
     layout: "right",
   },
   {
-    // DRAFT. No photo yet.
+    // DRAFT
     mark: "2020",
     title: "Staring down unemployment",
     body: "I had to make money somehow. So I started making money off my hobby.",
+    photos: [
+      {
+        src: "/about/2020-laptop.jpg",
+        alt: "Emmanuel Mendieta resting his head beside a laptop full of code",
+        position: "35% 50%",
+      },
+      {
+        src: "/about/2020-brooklyn.jpg",
+        alt: "Emmanuel Mendieta in Brooklyn at night, the Manhattan Bridge behind him",
+        position: "50% 60%",
+      },
+    ],
     layout: "left",
   },
   {
