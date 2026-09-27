@@ -164,9 +164,15 @@
   0%, 100% { opacity: 0.25; }
   50% { opacity: 0.7; }
 }
-@keyframes studios-sweep {
-  from { transform: translateX(-140%) skewX(-18deg); }
-  to { transform: translateX(240%) skewX(-18deg); }
+/* The Studios wordmark's glint: a streak of house light that runs through
+   the letters once, left to right, and fades. It lives in the type (the
+   layer is clipped to the glyphs), so it never shows as a box. The gradient
+   is three times the word's width; moving the window from 100% to 0% carries
+   the streak across. */
+@keyframes studios-glint {
+  0% { background-position: 100% 0; opacity: 1; }
+  80% { opacity: 1; }
+  100% { background-position: 0% 0; opacity: 0; }
 }
 /* Queso Rewards demo. Each punch lands like a stamp coming down rather than a
    circle quietly changing colour: it overshoots small, settles, and leaves a
@@ -233,6 +239,9 @@
   }
   .lightbar {
     animation: none;
+  }
+  .studios-glint {
+    display: none;
   }
   .studios-motion {
     animation: none !important;

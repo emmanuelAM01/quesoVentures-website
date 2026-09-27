@@ -493,55 +493,65 @@ export default function StudiosExperience() {
         </div>
 
         {/*
-          The site's hero, in the dark. The lasers stay, since they are this
-          page's own weather; the words move to the foot on the left like every
-          other hero: the name in the thin display weight, the house rule drawn
-          in under it, the line under that.
+          The site's hero, in the dark, and the one hero that stays centred:
+          this page is a reveal, and the name alone in the middle of the void
+          is the reveal. It still speaks the house language: the name in the
+          thin display weight, the house rule drawn in under it, the line under
+          that, the circled arrow at the foot.
         */}
-        <div className="relative w-full self-end">
-          <div className="mx-auto flex max-w-6xl items-end justify-between gap-10 px-6 pb-14 sm:px-10 sm:pb-20">
-            <div className="max-w-4xl">
-              <div className="relative overflow-hidden">
-                <h1
-                  className="studios-motion pb-2 text-[clamp(3.25rem,9vw,7.5rem)] font-extralight leading-[0.95] tracking-tighter text-balance bg-gradient-to-b from-white via-white to-white/50 bg-clip-text text-transparent"
-                  style={{ animation: "studios-rise 1.3s 0.3s cubic-bezier(0.16,1,0.3,1) both" }}
-                >
-                  Queso Studios
-                </h1>
-                {/* One-time light sweep across the wordmark */}
-                <div
-                  aria-hidden
-                  className="studios-motion absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent"
-                  style={{ animation: "studios-sweep 1.6s 1.3s ease-in-out both" }}
-                />
-              </div>
-
-              <div
-                aria-hidden
-                className="studios-motion mt-8 h-1 w-24 origin-left rounded-full"
-                style={{
-                  backgroundImage: houseGradient(),
-                  animation: "studios-laser-draw 1.2s 1.1s cubic-bezier(0.16,1,0.3,1) both",
-                }}
-              />
-
-              <p
-                className="studios-motion mt-8 max-w-2xl text-[clamp(1.2rem,2.2vw,1.6rem)] font-light leading-relaxed text-white/80 text-balance"
-                style={{ animation: "studios-rise 1.1s 1.5s cubic-bezier(0.16,1,0.3,1) both" }}
-              >
-                Building software for the companies that need it most.
-              </p>
-            </div>
-
-            <a
-              href={`#${toolId(TOOLS[0])}`}
-              aria-label="Go to the lineup"
-              className={`studios-motion ${arrowTone("dark")} hidden sm:inline-flex`}
-              style={{ animation: "studios-rise 1.1s 1.8s cubic-bezier(0.16,1,0.3,1) both" }}
+        <div className="relative m-auto px-6 text-center">
+          <h1
+            className="studios-motion relative pb-2 text-[clamp(3.25rem,10vw,8rem)] font-extralight leading-[0.95] tracking-tighter text-balance bg-gradient-to-b from-white via-white to-white/50 bg-clip-text text-transparent"
+            style={{ animation: "studios-rise 1.3s 0.3s cubic-bezier(0.16,1,0.3,1) both" }}
+          >
+            Queso Studios
+            {/*
+              The glint: the same word again, over the first, painted with a
+              narrow streak of house light and clipped to the letters, so the
+              light runs through the type itself once and is gone.
+            */}
+            <span
+              aria-hidden
+              className="studios-glint pointer-events-none absolute inset-0 pb-2 bg-clip-text text-transparent"
+              style={{
+                backgroundImage:
+                  "linear-gradient(100deg, transparent 38%, rgba(255,209,0,0.9) 45%, #ffffff 50%, rgba(196,22,28,0.9) 55%, transparent 62%)",
+                backgroundSize: "300% 100%",
+                backgroundPosition: "100% 0",
+                animation: "studios-glint 1.8s 1.35s cubic-bezier(0.45,0,0.2,1) both",
+              }}
             >
-              <ArrowMark tone="dark" direction="down" />
-            </a>
-          </div>
+              Queso Studios
+            </span>
+          </h1>
+
+          <div
+            aria-hidden
+            className="studios-motion mx-auto mt-9 h-1 w-24 origin-center rounded-full"
+            style={{
+              backgroundImage: houseGradient(),
+              animation: "studios-laser-draw 1.2s 1.1s cubic-bezier(0.16,1,0.3,1) both",
+            }}
+          />
+
+          <p
+            className="studios-motion mx-auto mt-9 max-w-2xl text-[clamp(1.2rem,2.2vw,1.6rem)] font-light leading-relaxed text-white/80 text-balance"
+            style={{ animation: "studios-rise 1.1s 1.5s cubic-bezier(0.16,1,0.3,1) both" }}
+          >
+            Building software for the companies that need it most.
+          </p>
+        </div>
+
+        {/* Centred by its row, since the rise animation owns its transform. */}
+        <div className="absolute inset-x-0 bottom-10 flex justify-center">
+          <a
+            href={`#${toolId(TOOLS[0])}`}
+            aria-label="Go to the lineup"
+            className={`studios-motion ${arrowTone("dark")}`}
+            style={{ animation: "studios-rise 1.1s 1.9s cubic-bezier(0.16,1,0.3,1) both" }}
+          >
+            <ArrowMark tone="dark" direction="down" />
+          </a>
         </div>
       </section>
 
