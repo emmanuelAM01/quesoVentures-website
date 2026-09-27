@@ -1,13 +1,16 @@
 "use client";
 
 import { trackCtaClick, type Placement } from "components/analytics";
+import ArrowMark, { arrowTone, type ArrowTone } from "components/ArrowMark";
 
 interface Props {
   message: string;
   label: string;
   /** "onDark" is the hero and closing CTA: house yellow, which is the only
    *  button that holds its own against the blob field or a photograph. */
-  variant?: "primary" | "secondary" | "onDark" | "pill";
+  variant?: "primary" | "secondary" | "onDark" | "pill" | "arrow";
+  /** For "arrow" only: on the page ground, or over a photograph. */
+  tone?: ArrowTone;
   /** Where this button sits, so the dashboard can rank CTA sources. */
   from?: Placement;
 }
@@ -16,6 +19,7 @@ export default function NicheCtaButton({
   message,
   label,
   variant = "primary",
+  tone = "light",
   from = "hero",
 }: Props) {
   const open = () => {
@@ -25,6 +29,14 @@ export default function NicheCtaButton({
     );
     window.dispatchEvent(new CustomEvent("modal:open", { detail: { id: "contact-popup" } }));
   };
+
+  if (variant === "arrow") {
+    return (
+      <button type="button" onClick={open} className={arrowTone(tone)}>
+        <ArrowMark label={label} tone={tone} />
+      </button>
+    );
+  }
 
   if (variant === "pill") {
     return (

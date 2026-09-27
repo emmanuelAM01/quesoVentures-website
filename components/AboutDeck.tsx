@@ -11,6 +11,7 @@ import {
   PiPuzzlePieceDuotone,
   PiSquaresFourDuotone,
 } from "react-icons/pi";
+import ArrowMark, { arrowTone } from "components/ArrowMark";
 import { liveryAt } from "components/livery";
 
 export type DeckCard = {
@@ -35,22 +36,18 @@ const ICONS: Record<DeckCard["icon"], IconType> = {
 };
 
 /**
- * What Queso Ventures is, as a deck you page through.
+ * What Queso Ventures is, as a deck you page through, with its own index.
  *
- * Modelled on the free report's PillarDeck in the portal, which is the version
- * that worked. The fan this replaced left every card where it was dealt and
- * only lifted the one under the pointer, so nothing ever moved and there was
- * no sense of being partway through anything.
+ * Modelled on the free report's PillarDeck in the portal. The chosen card
+ * sits upright in front and the rest are stacked behind it in reading order,
+ * the ones already read to the left and the ones still to come to the right,
+ * each a step further back. It does not wrap: the order is the pitch.
  *
- * Here the chosen card sits upright in front and the rest are stacked behind
- * it in reading order, the ones already read to the left and the ones still to
- * come to the right, each a step further back. Where you are is answered by
- * the shape of the pile before anyone looks at the pips. Pointing at a card
- * behind lifts it a little, clicking brings it forward, and the arrows, the
- * pips and the arrow keys all do the same.
- *
- * Unlike the report's three card loop, this deck does not wrap. The order is
- * the pitch, and a loop would put the last card beside the first.
+ * The deck used to sit alone in a full width row with nothing either side of
+ * it. Now the heading and a numbered index hold the left of the row and the
+ * deck the right, like a contents page beside the page it opens to. The index
+ * and the deck are one control: pointing at a line lifts its card, choosing a
+ * line brings the card forward, and choosing a card lights its line.
  *
  * The deck is a desktop idea only. Below lg a stack of tipped cards is a pile
  * of corners, so phones and tablets get the same faces one after another, open.
@@ -63,9 +60,16 @@ const DEAL_STAGGER_MS = 90;
 
 /** Horizontal place of a card `d` steps from the chosen one, in % of a card's width. */
 const place = (d: number) =>
-  d === 0 ? 0 : Math.sign(d) * (48 + (Math.abs(d) - 1) * 13);
+  d === 0 ? 0 : Math.sign(d) * (40 + (Math.abs(d) - 1) * 12);
 
-export default function AboutDeck({ cards }: { cards: DeckCard[] }) {
+export default function AboutDeck({
+  cards,
+  children,
+}: {
+  cards: DeckCard[];
+  /** The heading, set above the index. */
+  children: React.ReactNode;
+}) {
   const [active, setActive] = useState(0);
   const [peek, setPeek] = useState<number | null>(null);
   const [dealt, setDealt] = useState(false);
@@ -103,42 +107,104 @@ export default function AboutDeck({ cards }: { cards: DeckCard[] }) {
   }, [dealt, n]);
 
   const go = (i: number) => setActive(Math.max(0, Math.min(n - 1, i)));
+  const keys = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      go(active - 1);
+    } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      go(active + 1);
+    }
+  };
 
   /*
     Stacking everything to one side of the chosen card leaves the other side
     empty on the first and last card. The whole deck is shifted so the pile,
-    not the chosen card, sits in the middle of the row.
+    not the chosen card, sits in the middle of its column.
   */
   const xs = cards.map((_, i) => place(i - active));
   const centre = (Math.min(...xs) + Math.max(...xs)) / 2;
-  const paint = liveryAt(active);
 
   return (
-    <>
-      <div className="lg:hidden grid gap-4 sm:grid-cols-2">
-        {cards.map((card, i) => (
-          <Face key={card.title} card={card} index={i} state="on" />
-        ))}
+    <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,5fr),minmax(0,7fr)] lg:gap-10 xl:gap-16">
+      <div>
+        {children}
+
+        {/* The index. Desktop only, since below lg there is no deck to steer. */}
+        <ol className="mt-12 hidden lg:block" onMouseLeave={() => setPeek(null)} onKeyDown={keys}>
+          {cards.map((card, i) => {
+            const on = i === active;
+            const paint = liveryAt(i);
+            return (
+              <li key={card.title}>
+                <button
+                  type="button"
+                  aria-current={on}
+                  onClick={() => go(i)}
+                  onMouseEnter={() => setPeek(i === active ? null : i)}
+                  onFocus={() => go(i)}
+                  className="group flex w-full items-center gap-5 py-3.5 text-left focus:outline-none"
+                >
+                  <span
+                    className={`w-6 text-sm tabular-nums transition-colors duration-500 ${
+                      on ? "text-lightText dark:text-darkText" : "text-lightTextMuted/70 dark:text-darkTextMuted/60"
+                    }`}
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span
+                    aria-hidden
+                    className={`h-[2px] rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      on
+                        ? "w-14"
+                        : "w-5 bg-lightBorder dark:bg-darkBorder group-hover:w-9 group-hover:bg-lightTextMuted/50 dark:group-hover:bg-darkTextMuted/50"
+                    }`}
+                    style={on ? { backgroundColor: paint.hex } : undefined}
+                  />
+                  <span
+                    className={`text-2xl tracking-tight transition-all duration-500 ${
+                      on
+                        ? "font-medium text-lightText dark:text-darkText"
+                        : "font-light text-lightTextMuted dark:text-darkTextMuted group-hover:translate-x-1 group-hover:text-lightText dark:group-hover:text-darkText group-focus-visible:text-lightText"
+                    }`}
+                  >
+                    {card.mark}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+
+        <div className="mt-8 hidden items-center gap-3 lg:flex">
+          <StepButton label="Previous card" disabled={active === 0} onClick={() => go(active - 1)}>
+            <PiArrowLeftBold className="h-4 w-4" />
+          </StepButton>
+          <StepButton label="Next card" disabled={active === n - 1} onClick={() => go(active + 1)}>
+            <PiArrowRightBold className="h-4 w-4" />
+          </StepButton>
+          <span className="ml-3 text-sm tabular-nums text-lightTextMuted dark:text-darkTextMuted">
+            {String(active + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
+          </span>
+        </div>
       </div>
 
-      <div className="hidden lg:block">
+      <div>
+        <div className="lg:hidden grid gap-4 sm:grid-cols-2">
+          {cards.map((card, i) => (
+            <Face key={card.title} card={card} index={i} state="on" />
+          ))}
+        </div>
+
         <div
           ref={deck}
           tabIndex={0}
           role="group"
           aria-roledescription="deck"
           aria-label={`What Queso Ventures is, card ${active + 1} of ${n}`}
-          onKeyDown={(e) => {
-            if (e.key === "ArrowLeft") {
-              e.preventDefault();
-              go(active - 1);
-            } else if (e.key === "ArrowRight") {
-              e.preventDefault();
-              go(active + 1);
-            }
-          }}
+          onKeyDown={keys}
           onMouseLeave={() => setPeek(null)}
-          className="relative h-[27rem] rounded-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-lightAccent/40 dark:focus-visible:ring-darkAccent/40"
+          className="relative hidden h-[27rem] rounded-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-lightAccent/40 dark:focus-visible:ring-darkAccent/40 lg:block"
         >
           {cards.map((card, i) => {
             const d = i - active;
@@ -154,7 +220,7 @@ export default function AboutDeck({ cards }: { cards: DeckCard[] }) {
             } else {
               // Each step back: further out, lower, smaller, tipped a bit more.
               // A card being pointed at comes up and straightens partway.
-              const lift = peeking ? -16 : 0;
+              const lift = peeking ? -18 : 0;
               const tip = Math.sign(d) * Math.min(a, 3) * (peeking ? 2.5 : 4);
               transform = `translateX(calc(-50% + ${xs[i] - centre}%)) translateY(${a * 14 + lift}px) rotate(${tip}deg) scale(${1 - a * 0.07})`;
             }
@@ -165,7 +231,7 @@ export default function AboutDeck({ cards }: { cards: DeckCard[] }) {
                 onMouseEnter={() => setPeek(i)}
                 onClick={() => go(i)}
                 onFocus={() => go(i)}
-                className={`absolute left-1/2 top-2 h-[23rem] w-[36%] origin-bottom will-change-transform ${
+                className={`absolute left-1/2 top-3 h-[22.5rem] w-[58%] origin-bottom will-change-transform ${
                   on ? "" : "cursor-pointer"
                 }`}
                 style={{
@@ -189,50 +255,8 @@ export default function AboutDeck({ cards }: { cards: DeckCard[] }) {
             );
           })}
         </div>
-
-        {/* Where you are, and the way to the next one. */}
-        <div className="mt-8 flex items-center justify-center gap-5">
-          <StepButton label="Previous card" disabled={active === 0} onClick={() => go(active - 1)}>
-            <PiArrowLeftBold className="h-4 w-4" />
-          </StepButton>
-
-          <div className="flex items-center gap-2">
-            {cards.map((card, i) => (
-              <button
-                key={card.title}
-                type="button"
-                aria-label={card.mark}
-                aria-current={i === active}
-                onClick={() => go(i)}
-                className="group flex h-6 items-center"
-              >
-                <span
-                  className={`block h-1.5 rounded-full transition-all duration-500 ${
-                    i === active
-                      ? "w-14"
-                      : "w-8 bg-lightBorder dark:bg-darkBorder group-hover:bg-lightTextMuted/40 dark:group-hover:bg-darkTextMuted/40"
-                  }`}
-                  style={i === active ? { backgroundColor: liveryAt(i).hex } : undefined}
-                />
-              </button>
-            ))}
-          </div>
-
-          <StepButton label="Next card" disabled={active === n - 1} onClick={() => go(active + 1)}>
-            <PiArrowRightBold className="h-4 w-4" />
-          </StepButton>
-        </div>
-        <p className="mt-3 text-center text-sm text-lightTextMuted dark:text-darkTextMuted tabular-nums">
-          <span
-            className="font-semibold text-[color:var(--paint-ink)] dark:text-[color:var(--paint)]"
-            style={{ "--paint": paint.hex, "--paint-ink": paint.ink } as React.CSSProperties}
-          >
-            {cards[active].mark}
-          </span>{" "}
-          &middot; {String(active + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
-        </p>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -253,7 +277,7 @@ function StepButton({
       aria-label={label}
       disabled={disabled}
       onClick={onClick}
-      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark text-lightText dark:text-darkText transition hover:-translate-y-0.5 hover:shadow-md disabled:pointer-events-none disabled:opacity-30"
+      className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-lightText/20 dark:border-darkText/25 text-lightText dark:text-darkText transition duration-300 hover:border-lightText dark:hover:border-darkText hover:bg-lightText hover:text-lightBG dark:hover:bg-darkText dark:hover:text-darkBG disabled:pointer-events-none disabled:opacity-30"
     >
       {children}
     </button>
@@ -274,7 +298,7 @@ function Face({
 
   return (
     <div
-      className={`relative flex h-full flex-col overflow-hidden rounded-3xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark p-7 pt-9 transition-shadow duration-500 ${
+      className={`relative flex h-full flex-col overflow-hidden rounded-3xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark p-8 pt-10 transition-shadow duration-500 ${
         state === "on"
           ? "shadow-2xl shadow-black/10 dark:shadow-black/40"
           : "shadow-lg shadow-black/5"
@@ -297,25 +321,21 @@ function Face({
 
       {/* Ink on the light page, the factory paint on the dark one. */}
       <p
-        className="mt-6 text-3xl xl:text-4xl font-semibold tracking-tight text-balance text-[color:var(--paint-ink)] dark:text-[color:var(--paint)]"
+        className="mt-7 text-3xl xl:text-4xl font-semibold tracking-tight text-balance text-[color:var(--paint-ink)] dark:text-[color:var(--paint)]"
         style={{ "--paint": paint.hex, "--paint-ink": paint.ink } as React.CSSProperties}
       >
         {card.mark}
       </p>
-      <h3 className="mt-3 text-xl font-semibold tracking-tight text-lightText dark:text-darkText text-balance">
+      <h3 className="mt-3 text-xl xl:text-2xl font-semibold tracking-tight text-lightText dark:text-darkText text-balance">
         {card.title}
       </h3>
-      <p className="mt-2 text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
+      <p className="mt-3 text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
         {card.body}
       </p>
 
       {card.href && card.cta && (
-        <Link
-          href={card.href}
-          className="mt-auto inline-flex items-center gap-2 pt-5 text-base font-semibold text-lightText dark:text-darkText hover:gap-3 transition-all"
-        >
-          {card.cta}
-          <PiArrowRightBold className="h-4 w-4" aria-hidden />
+        <Link href={card.href} className={`${arrowTone("light")} mt-auto pt-6`}>
+          <ArrowMark label={card.cta} />
         </Link>
       )}
 
