@@ -12,6 +12,7 @@ import {
   OUTCOMES,
   PACKS,
   PRODUCTS as PRODUCT_LIST,
+  packTitle,
   oneAtATime,
   packFor,
   productsFor,
@@ -70,11 +71,15 @@ function clientPrice(p: { client: number | null; clientNote?: string; list: numb
 }
 
 /**
- * One product on the shelf: its demo running on the left, the words on the
- * right, the whole row a button that opens the popup. Pointing at it lifts
- * the edge into the product's colour.
+ * One product as a magazine story: its demo shot on a backdrop of its own
+ * colour, like product photography, then the headline, the standfirst, the
+ * price, and the way in. The whole story is a button that opens the popup.
+ *
+ * `feature` is the lead story of a spread: the backdrop runs taller and the
+ * type a size up, so a spread of three reads as one big story and two
+ * smaller ones rather than three equal boxes.
  */
-function ShelfItem({ product, onOpen }: { product: Product; onOpen: () => void }) {
+function Story({ product, feature = false, onOpen }: { product: Product; feature?: boolean; onOpen: () => void }) {
   const ref = useRef<HTMLButtonElement>(null);
   const live = useInView(ref);
   const Demo = STUDIO_DEMOS[product.demo];
@@ -86,21 +91,32 @@ function ShelfItem({ product, onOpen }: { product: Product; onOpen: () => void }
       type="button"
       onClick={onOpen}
       aria-haspopup="dialog"
-      className="group relative grid w-full gap-6 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] p-5 text-left transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.06] focus:outline-none focus-visible:border-white/40 sm:grid-cols-[15rem,1fr] sm:p-6"
-      style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)" }}
+      className="group flex h-full w-full flex-col text-left focus:outline-none"
     >
-      <span
-        aria-hidden
-        className="absolute inset-x-8 top-0 h-px opacity-40 transition-opacity duration-500 group-hover:opacity-100"
-        style={{ background: `linear-gradient(to right, transparent, ${product.accent}, transparent)` }}
-      />
-      <div className="rounded-2xl border border-white/[0.07] bg-black/30 p-3">
-        <Demo on={live} />
+      <div
+        className={`relative flex w-full items-center justify-center overflow-hidden rounded-3xl border border-white/10 px-6 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:border-white/25 group-focus-visible:border-white/40 ${
+          feature ? "py-16 lg:min-h-[26rem]" : "py-10"
+        }`}
+        style={{ background: `radial-gradient(ellipse 75% 70% at 50% 60%, ${product.accent}2e, transparent 72%), rgba(255,255,255,0.025)` }}
+      >
+        <div className="w-full max-w-sm transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]">
+          <div
+            className="rounded-2xl border border-white/10 bg-black/40 p-3.5"
+            style={{ boxShadow: `0 30px 90px -40px ${product.accent}88` }}
+          >
+            <Demo on={live} />
+          </div>
+        </div>
       </div>
-      <div className="flex min-w-0 flex-col justify-center">
-        <p className="text-3xl font-extralight tracking-tight text-white">{product.name}</p>
-        <span aria-hidden className="mt-4 block h-[3px] w-10 rounded-full" style={{ backgroundColor: product.accent }} />
-        <p className="mt-4 text-base font-light leading-relaxed text-white/65">{product.line}</p>
+
+      <div className="mt-7 flex flex-1 flex-col">
+        <span aria-hidden className="block h-[3px] w-10 rounded-full transition-[width] duration-500 group-hover:w-16" style={{ backgroundColor: product.accent }} />
+        <p className={`mt-5 font-extralight tracking-tight text-white ${feature ? "text-4xl sm:text-5xl" : "text-3xl"}`}>
+          {product.name}
+        </p>
+        <p className={`mt-3 font-light leading-relaxed text-white/65 ${feature ? "max-w-xl text-lg" : "text-base"}`}>
+          {product.line}
+        </p>
         <div className="mt-5 flex flex-wrap items-baseline gap-x-4 gap-y-1">
           <span className="text-lg font-light tabular-nums text-white">{listPrice(product)}</span>
           {forClients && <span className="text-sm text-white/45">{forClients}</span>}
@@ -114,7 +130,7 @@ function ShelfItem({ product, onOpen }: { product: Product; onOpen: () => void }
 }
 
 /**
- * The pack, as the last and loudest thing on the shelf.
+ * The complete experience, across the foot of the spread.
  *
  * It sat under the outcome's line in small type, and even the person who
  * wrote it read past it. Now it closes the shelf as its own card, edged in the
@@ -146,33 +162,31 @@ function PackCard({ pack, onWant }: { pack: Pack; onWant: () => void }) {
           className="pointer-events-none absolute inset-0 opacity-[0.12]"
           style={{ backgroundImage: edge }}
         />
-        <div className="relative">
-          <p className="text-4xl font-extralight leading-[1] tracking-tighter text-white sm:text-5xl">
-            The complete experience
-          </p>
-          <p className="mt-5 text-xl font-light text-white">{pack.name}</p>
-          <p className="mt-2 max-w-lg text-base font-light leading-relaxed text-white/65">{pack.line}</p>
+        <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1.35fr),minmax(0,1fr)] lg:gap-14">
+          <div>
+            <p className="text-4xl font-extralight leading-[1.02] tracking-tighter text-balance text-white sm:text-5xl">
+              {packTitle(pack)}
+            </p>
+            <p className="mt-5 max-w-lg text-lg font-light leading-relaxed text-white/70">{pack.line}</p>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {inside.map((p) => (
+                <li
+                  key={p.key}
+                  className="flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-sm text-white/85"
+                >
+                  <span aria-hidden className="h-2 w-2 rounded-full" style={{ backgroundColor: p.accent }} />
+                  {p.name}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          <ul className="mt-6 flex flex-wrap gap-2">
-            {inside.map((p) => (
-              <li
-                key={p.key}
-                className="flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-sm text-white/85"
-              >
-                <span aria-hidden className="h-2 w-2 rounded-full" style={{ backgroundColor: p.accent }} />
-                {p.name}
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-8 flex flex-wrap items-end justify-between gap-x-8 gap-y-6 border-t border-white/10 pt-7">
+          <div className="flex flex-col justify-between gap-6 border-t border-white/10 pt-7 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
             <div>
               <p className="flex flex-wrap items-baseline gap-x-3">
-                <span className="text-5xl font-extralight tracking-tighter tabular-nums text-white">${pack.list}</span>
+                <span className="text-6xl font-extralight tracking-tighter tabular-nums text-white">${pack.list}</span>
                 <span className="text-base text-white/50">/ month</span>
-                {saves > 0 && (
-                  <span className="text-base text-white/40 line-through tabular-nums">${separately}</span>
-                )}
+                {saves > 0 && <span className="text-base text-white/40 line-through tabular-nums">${separately}</span>}
               </p>
               <p className="mt-2 text-base text-white/60">${pack.client} for Queso clients</p>
               {saves > 0 && (
@@ -195,9 +209,9 @@ function PackCard({ pack, onWant }: { pack: Pack; onWant: () => void }) {
 }
 
 /**
- * One outcome, one chapter: the question on the left, held in place while its
- * shelf scrolls past on the right, with the pack that goes with it (if there
- * is one) under the question.
+ * One outcome, one magazine spread: the question as the headline with its
+ * answer as the standfirst, the tools as stories in columns under it, and the
+ * complete experience across the foot of the spread.
  */
 function OutcomeChapter({
   outcome,
@@ -224,30 +238,49 @@ function OutcomeChapter({
         className="pointer-events-none absolute inset-0"
         style={{ background: `radial-gradient(ellipse 50% 40% at 15% 20%, ${outcome.accent}1c, transparent 70%)` }}
       />
-      <div className="relative mx-auto grid max-w-6xl gap-12 lg:grid-cols-[minmax(0,5fr),minmax(0,7fr)] lg:gap-16">
-        <div>
-          <Reveal className="lg:sticky lg:top-24 lg:pl-12 xl:pl-0">
-            <h2 className="text-5xl font-extralight leading-[0.98] tracking-tighter text-balance text-white sm:text-6xl">
+      <div className="relative mx-auto max-w-6xl lg:pl-10 xl:pl-0">
+        {/* The spread's headline: the question large, its answer set as the standfirst. */}
+        <Reveal>
+          <div className="grid items-end gap-8 border-b border-white/10 pb-10 lg:grid-cols-12 lg:gap-12">
+            <h2 className="text-5xl font-extralight leading-[0.98] tracking-tighter text-balance text-white sm:text-6xl lg:col-span-7 xl:text-7xl">
               {outcome.label}
             </h2>
-            <span aria-hidden className="mt-8 block h-1 w-16 rounded-full" style={{ backgroundColor: outcome.accent }} />
-            <p className="mt-8 max-w-md text-xl font-light leading-relaxed text-white/65">{outcome.line}</p>
+            <div className="lg:col-span-5">
+              <span aria-hidden className="block h-1 w-16 rounded-full" style={{ backgroundColor: outcome.accent }} />
+              <p className="mt-6 text-xl font-light leading-relaxed text-white/65">{outcome.line}</p>
+            </div>
+          </div>
+        </Reveal>
 
+        {/* The stories. Three make a lead story and two beside it; two sit as a pair. */}
+        {shelf.length >= 3 ? (
+          <div className="mt-14 grid gap-x-10 gap-y-16 lg:grid-cols-12">
+            <Reveal className="lg:col-span-7">
+              <Story product={shelf[0]} feature onOpen={() => onOpen(shelf[0])} />
+            </Reveal>
+            <div className="grid gap-16 sm:grid-cols-2 lg:col-span-5 lg:grid-cols-1">
+              {shelf.slice(1).map((p, i) => (
+                <Reveal key={p.key} delay={(i + 1) * 100}>
+                  <Story product={p} onOpen={() => onOpen(p)} />
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="mt-14 grid gap-x-10 gap-y-16 md:grid-cols-2">
+            {shelf.map((p, i) => (
+              <Reveal key={p.key} delay={i * 100}>
+                <Story product={p} onOpen={() => onOpen(p)} />
+              </Reveal>
+            ))}
+          </div>
+        )}
+
+        {pack && (
+          <Reveal className="mt-20">
+            <PackCard pack={pack} onWant={() => onWant(packTitle(pack))} />
           </Reveal>
-        </div>
-
-        <div className="space-y-5">
-          {shelf.map((p, i) => (
-            <Reveal key={p.key} delay={i * 90}>
-              <ShelfItem product={p} onOpen={() => onOpen(p)} />
-            </Reveal>
-          ))}
-          {pack && (
-            <Reveal delay={shelf.length * 90}>
-              <PackCard pack={pack} onWant={() => onWant(pack.name)} />
-            </Reveal>
-          )}
-        </div>
+        )}
       </div>
     </section>
   );
@@ -334,6 +367,28 @@ function IdeaDemo() {
     <div ref={ref}>
       <Demo on={live} />
     </div>
+  );
+}
+
+/**
+ * In the product popup: the cheaper way to get this, said plainly. Which
+ * tools come with it, what the lot costs, and what that saves.
+ */
+function PackNote({ product, pack }: { product: Product; pack: Pack }) {
+  const others = pack.products
+    .filter((k) => k !== product.key)
+    .map((k) => PRODUCT_LIST.find((p) => p.key === k)?.name)
+    .filter(Boolean) as string[];
+  const separately = pack.products.reduce(
+    (sum, k) => sum + (PRODUCT_LIST.find((p) => p.key === k)?.list ?? 0),
+    0
+  );
+  const withWhat = others.length > 1 ? `${others.slice(0, -1).join(", ")} and ${others[others.length - 1]}` : others[0];
+  return (
+    <p className="mt-5 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm leading-relaxed text-white/70">
+      Cheaper with {withWhat}: {pack.products.length === 2 ? "both" : `all ${pack.products.length}`} for $
+      {pack.list} a month instead of ${separately}, or ${pack.client} for Queso clients.
+    </p>
   );
 }
 
@@ -425,11 +480,7 @@ function ProductModal({
                 Built to order. The first businesses to ask get it shaped around them.
               </p>
             )}
-            {pack && (
-              <p className="mt-4 text-sm leading-relaxed text-white/45">
-                Part of {pack.name}: ${pack.list} a month, ${pack.client} for Queso clients.
-              </p>
-            )}
+            {pack && <PackNote product={product} pack={pack} />}
 
             <div className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-5">
               <button type="button" onClick={onWant} className={arrowTone("dark")}>

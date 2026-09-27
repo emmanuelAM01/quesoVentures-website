@@ -766,7 +766,7 @@ function Leads({ on }: { on: boolean }) {
         ))}
       </div>
       <p className={`text-center text-[10px] transition-opacity duration-500 ${MUTED}`} style={{ opacity: step >= 4 ? 1 : 0 }}>
-        62 more this week, in your Organizer.
+        62 more this week, in your lead list.
       </p>
     </div>
   );

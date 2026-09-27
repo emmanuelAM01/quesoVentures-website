@@ -194,7 +194,8 @@ export const PRODUCTS: Product[] = [
     points: [
       "Tell it who your best customer is, once.",
       "It finds more of them, each with a way to reach them.",
-      "Every lead lands in the Queso Organizer, ready to work.",
+      "Every lead lands in your lead list, ready to work.",
+      "Add the Queso Organizer and they sit with everyone else you do business with.",
     ],
   },
   {
@@ -306,7 +307,6 @@ export const PRODUCTS: Product[] = [
 
 export type Pack = {
   key: string;
-  name: string;
   outcome: OutcomeKey;
   line: string;
   products: string[];
@@ -314,27 +314,57 @@ export type Pack = {
   client: number;
 };
 
-/** Two tools that are one job, sold together. Mirrors PACKS in the portal. */
+/**
+ * The complete experience for an outcome: every tool on its shelf, for less
+ * than buying them one at a time. One per outcome that can have one; Ditch the
+ * napkin math has none, since the Revenue System is quoted per case. Nothing
+ * is given away inside a pack: each is priced as a discount on exactly the
+ * tools in it. Mirrors PACKS in the portal.
+ */
 export const PACKS: Pack[] = [
   {
+    key: "calling",
+    outcome: "calling",
+    line: "Every call picked up, every question on your site answered, and all of it booked onto one calendar.",
+    products: ["frontdesk", "chat", "booking"],
+    // $300 one at a time, $200 for a client.
+    list: 250,
+    client: 170,
+  },
+  {
     key: "regulars",
-    name: "Loyalty + Newsletter",
     outcome: "returning",
     line: "Punch cards and the emails, to the same list of regulars.",
     products: ["rewards", "email"],
+    // $160 one at a time, $80 for a client.
     list: 120,
     client: 60,
   },
   {
     key: "pipeline",
-    name: "Find, reach and keep track",
     outcome: "leads",
-    line: "Lead Finder and Outreach, with the Queso Organizer thrown in to keep every lead straight.",
-    products: ["leads", "outreach", "organization"],
+    line: "New leads found every week, and every one of them followed up with until they answer.",
+    products: ["leads", "outreach"],
+    // $400 one at a time, $300 for a client.
     list: 350,
     client: 250,
   },
+  {
+    key: "organized",
+    outcome: "organized",
+    line: "Everyone you do business with in one place, the forms that fill it, and the invoices that get you paid.",
+    products: ["organization", "forms", "invoicing"],
+    // $170 one at a time, $80 for a client (Forms is included for clients).
+    list: 140,
+    client: 70,
+  },
 ];
+
+/** "The complete experience to find new customers." */
+export function packTitle(pack: Pack): string {
+  const outcome = OUTCOMES.find((o) => o.key === pack.outcome);
+  return outcome ? `The complete experience to ${outcome.label.charAt(0).toLowerCase()}${outcome.label.slice(1)}` : "The complete experience";
+}
 
 /** Every tool but the ones that cost money per use. Mirrors BUNDLE in the portal. */
 export const BUNDLE = {
