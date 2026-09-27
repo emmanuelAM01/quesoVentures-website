@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import ArrowMark, { arrowTone } from "components/ArrowMark";
 import GuideHeader from "components/guide/GuideHeader";
 import { BUSINESS } from "components/businessInfo";
 import { SITE_URL } from "lib/guide/queries";
@@ -39,19 +40,16 @@ export default function Editor() {
         intro="Editor of The Queso Guide."
         trail={[...guideTrail(), { name: "Editor", path: "/guide/editor" }]}
       />
-      <section className="container mx-auto px-4 py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl space-y-6 text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
+      <section className="container mx-auto px-4 py-24 sm:py-32">
+        <div className="mx-auto max-w-3xl space-y-6 text-xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
           <p>
             I run Queso Ventures, which builds websites and handles search for local businesses from{" "}
             {BUSINESS.addressLine}. I write every entry in the guide myself, after visiting in person.
           </p>
-          <p>
-            Want to know more about the work?{" "}
-            <Link href="/about" className="font-medium text-lightAccent underline underline-offset-4 dark:text-darkAccent">
-              Read about Queso Ventures
-            </Link>
-            .
-          </p>
+          <p>Want to know more about the work?</p>
+          <Link href="/about" className={`${arrowTone("light")} pt-2`}>
+            <ArrowMark label="Read about Queso Ventures" />
+          </Link>
         </div>
       </section>
     </>

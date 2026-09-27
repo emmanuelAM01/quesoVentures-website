@@ -16,6 +16,15 @@ Rebuilt on 2026-09-27 as a book, after Ferrari's pages: full width screens mixed
 - **Buttons:** `components/ArrowMark.tsx`, the label plus circled arrow. `NicheCtaButton` has an `arrow` variant.
 - **JSON-LD:** AboutPage + Person, unchanged.
 
+## Site wide: every page is now in the About page's voice (2026-09-27)
+
+Emmanuel made the About page the standard for all Queso branding. Shared pieces:
+- `PageHero`: every hero but the homepage's. Full screen, photo or blob field, title bottom left, the house rule, subtitle, circled arrow CTA, optional `above`, `aside`, `slides`.
+- `HomeHero`: the homepage's own hero, kept as it was but full height (his choice).
+- `Deck` (scroll dealt cards, `AboutDeck` re-exports it), `PainDeck`, `ChangeList`, `StatementSection`, `SectionHeading`, `FaqDeck`, `FreeAudit` (full screen close), `IndustryLinks`/`PlaceLinks` (indexes), `ArrowMark` (every button), `houseAt`/`houseGradient` in `livery.ts`.
+- Studios is a book of tool chapters with a rail; the guide uses the shared hero, articles open on their photos.
+- No numbering anywhere (Emmanuel dislikes it): dots, lines and rails instead.
+
 ## Open items
 
 1. **Photos.** Emmanuel's photos are in `public/about/` (converted from HEIC where needed, rotated upright, all metadata including GPS stripped, long edge 2400px). The Colosseum shot was put in 2025 (same Italy trip as Mugello?) without being asked: confirm. Alt texts on his new photos are guesses: have him check them.
