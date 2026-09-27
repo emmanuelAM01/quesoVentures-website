@@ -147,7 +147,8 @@ function PackCard({ pack, onWant }: { pack: Pack; onWant: () => void }) {
 
   return (
     <div
-      className="group relative rounded-3xl p-[1.5px] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5"
+      id={`pack-${pack.key}`}
+      className="group relative scroll-mt-24 rounded-3xl p-[1.5px] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5"
       style={{ backgroundImage: edge }}
     >
       {/* The glow the edge throws, stronger under the pointer. */}
@@ -369,24 +370,22 @@ function IdeaDemo() {
 }
 
 /**
- * In the product popup: the cheaper way to get this, said plainly. Which
- * tools come with it, what the lot costs, and what that saves.
+ * In the product popup: one line saying it is cheaper bundled, and a way to
+ * the bundle. No arithmetic here; the card it leads to has the numbers.
  */
-function PackNote({ product, pack }: { product: Product; pack: Pack }) {
+function PackNote({ product, pack, onSee }: { product: Product; pack: Pack; onSee: () => void }) {
   const others = pack.products
     .filter((k) => k !== product.key)
     .map((k) => PRODUCT_LIST.find((p) => p.key === k)?.name)
     .filter(Boolean) as string[];
-  const separately = pack.products.reduce(
-    (sum, k) => sum + (PRODUCT_LIST.find((p) => p.key === k)?.list ?? 0),
-    0
-  );
   const withWhat = others.length > 1 ? `${others.slice(0, -1).join(", ")} and ${others[others.length - 1]}` : others[0];
   return (
-    <p className="mt-5 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm leading-relaxed text-white/70">
-      Cheaper with {withWhat}: {pack.products.length === 2 ? "both" : `all ${pack.products.length}`} for $
-      {pack.list} a month instead of ${separately}, or ${pack.client} for Queso clients.
-    </p>
+    <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4">
+      <p className="text-base font-light text-white/80">Save when you bundle it with {withWhat}.</p>
+      <button type="button" onClick={onSee} className={arrowTone("dark")}>
+        <ArrowMark tone="dark" size="sm" label="See the bundle" />
+      </button>
+    </div>
   );
 }
 
@@ -473,12 +472,17 @@ function ProductModal({
               ))}
             </ul>
 
-            {!product.built && (
-              <p className="mt-6 text-sm leading-relaxed text-white/45">
-                Built to order. The first businesses to ask get it shaped around them.
-              </p>
+            {pack && (
+              <PackNote
+                product={product}
+                pack={pack}
+                onSee={() => {
+                  onClose();
+                  // After the popup lets go of the page's scroll.
+                  setTimeout(() => document.getElementById(`pack-${pack.key}`)?.scrollIntoView({ behavior: "smooth", block: "center" }), 60);
+                }}
+              />
             )}
-            {pack && <PackNote product={product} pack={pack} />}
 
             <div className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-5">
               <button type="button" onClick={onWant} className={arrowTone("dark")}>
