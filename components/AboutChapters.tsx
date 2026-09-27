@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { PAINT, type Paint } from "components/livery";
+import { PAINT, houseAt, HOUSE, type Paint } from "components/livery";
 
 export type Photo = {
   src: string;
@@ -76,19 +76,6 @@ const RAMP: Paint[] = [
 
 const EASE = "ease-[cubic-bezier(0.22,1,0.36,1)]";
 
-/** The house colours: the ramp under the hero title, red to yellow. */
-const HOUSE = [PAINT.rossoCorsa.hex, PAINT.gialloOrion.hex, PAINT.gialloModena.hex];
-
-/** Year `i` of `n`, placed along the house ramp. */
-function houseAt(i: number, n: number) {
-  const t = n < 2 ? 0 : i / (n - 1);
-  const seg = Math.min(HOUSE.length - 2, Math.floor(t * (HOUSE.length - 1)));
-  const f = t * (HOUSE.length - 1) - seg;
-  const [a, b] = [HOUSE[seg], HOUSE[seg + 1]].map((h) =>
-    [1, 3, 5].map((k) => parseInt(h.slice(k, k + 2), 16))
-  );
-  return `#${a.map((v, k) => Math.round(v + (b[k] - v) * f).toString(16).padStart(2, "0")).join("")}`;
-}
 
 /** What names a chapter on the rail and in its anchor: the year, or else the title. */
 const labelOf = (c: Chapter) => c.mark ?? c.title;

@@ -58,3 +58,24 @@ export const liveryAt = (i: number): Paint => LIVERY[i % LIVERY.length];
 
 /** The "and more" card is always Giallo Orion — the house yellow. */
 export const OPEN_ENDED = PAINT.gialloOrion;
+
+/**
+ * The house colours: the ramp under every hero title, red to yellow. Used
+ * whole as a gradient, or spread along a sequence with `houseAt`.
+ */
+export const HOUSE = [PAINT.rossoCorsa.hex, PAINT.gialloOrion.hex, PAINT.gialloModena.hex];
+
+/** Item `i` of `n`, placed along the house ramp, as a hex. */
+export function houseAt(i: number, n: number) {
+  const t = n < 2 ? 0 : i / (n - 1);
+  const seg = Math.min(HOUSE.length - 2, Math.floor(t * (HOUSE.length - 1)));
+  const f = t * (HOUSE.length - 1) - seg;
+  const [a, b] = [HOUSE[seg], HOUSE[seg + 1]].map((h) =>
+    [1, 3, 5].map((k) => parseInt(h.slice(k, k + 2), 16))
+  );
+  return `#${a.map((v, k) => Math.round(v + (b[k] - v) * f).toString(16).padStart(2, "0")).join("")}`;
+}
+
+/** The house ramp as a CSS gradient, left to right unless told otherwise. */
+export const houseGradient = (direction = "to right") =>
+  `linear-gradient(${direction}, ${HOUSE.join(", ")})`;

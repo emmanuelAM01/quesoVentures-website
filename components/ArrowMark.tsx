@@ -38,11 +38,14 @@ export default function ArrowMark({
   label,
   tone = "light",
   direction = "right",
+  size = "md",
 }: {
   /** Omit for a bare ring, like the hero's scroll cue. */
   label?: string;
   tone?: ArrowTone;
   direction?: "right" | "down";
+  /** "sm" for a row in a list, where a full size ring would shout. */
+  size?: "sm" | "md";
 }) {
   const t = TONES[tone];
   const Caret = direction === "down" ? PiCaretDownBold : PiCaretRightBold;
@@ -64,7 +67,7 @@ export default function ArrowMark({
       )}
       <span
         aria-hidden
-        className={`relative grid h-12 w-12 flex-shrink-0 place-items-center overflow-hidden rounded-full border transition-colors duration-500 ${t.ring}`}
+        className={`relative grid ${size === "sm" ? "h-10 w-10" : "h-12 w-12"} flex-shrink-0 place-items-center overflow-hidden rounded-full border transition-colors duration-500 ${t.ring}`}
       >
         <span
           className={`absolute inset-0 scale-0 rounded-full transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100 group-focus-visible:scale-100 ${t.fill}`}
