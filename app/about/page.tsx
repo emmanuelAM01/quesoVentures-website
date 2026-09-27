@@ -1,29 +1,31 @@
 import type { Metadata } from "next";
-import { Fragment } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import Footer from "components/Footer";
 import Reveal from "components/Reveal";
 import AboutPortrait from "components/AboutPortrait";
-import { liveryAt, PAINT } from "components/livery";
+import AboutPhotoRoll from "components/AboutPhotoRoll";
+import AboutLinks from "components/AboutLinks";
+import AboutHand, { type HandCard } from "components/AboutHand";
+import StoryCards, { type StoryCard } from "components/StoryCards";
+import { PAINT } from "components/livery";
 import Glow from "components/Glow";
 import NicheCtaButton from "components/NicheCtaButton";
-import {
-  BUSINESS,
-  LOCAL_BUSINESS_SCHEMA,
-  POSTAL_ADDRESS,
-  breadcrumbSchema,
-} from "components/businessInfo";
+import { BUSINESS, breadcrumbSchema } from "components/businessInfo";
+
+const GITHUB = "https://github.com/emmanuelAM01";
+const LINKEDIN = "https://www.linkedin.com/in/emmanuelmendieta/";
+
+const TITLE = "About Queso Ventures | Founded by Emmanuel Mendieta";
+const DESCRIPTION =
+  "Why Queso Ventures exists and who built it. Emmanuel Mendieta has been building software since 2020 and now helps local businesses get found on Google, Maps, and AI search, bring customers back, and run smoothly.";
 
 export const metadata: Metadata = {
-  title: "About Emmanuel | Queso Ventures",
-  description:
-    "Seven years building software for startups, fintech, and venture backed AI products. Now I help local businesses get found online.",
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: "https://www.quesoventures.com/about" },
   openGraph: {
-    title: "About Emmanuel | Queso Ventures",
-    description:
-      "Seven years building software for startups, fintech, and venture backed AI products. Now I help local businesses get found online.",
+    title: TITLE,
+    description: DESCRIPTION,
     url: "https://www.quesoventures.com/about",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
@@ -32,65 +34,191 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "About Emmanuel | Queso Ventures",
-    description:
-      "Seven years building software for startups, fintech, and venture backed AI products. Now I help local businesses get found online.",
+    title: TITLE,
+    description: DESCRIPTION,
     images: ["/logo.png"],
   },
 };
 
+/*
+  The business itself is not repeated here. LOCAL_BUSINESS_SCHEMA is emitted in
+  full on the home, services, contact and every city and industry page, all
+  under the same @id, so this page points at it rather than restating it.
+*/
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
-    LOCAL_BUSINESS_SCHEMA,
+    {
+      "@type": "AboutPage",
+      "@id": `${BUSINESS.url}/about#webpage`,
+      url: `${BUSINESS.url}/about`,
+      name: TITLE,
+      description: DESCRIPTION,
+      about: { "@id": `${BUSINESS.url}/#localbusiness` },
+      mainEntity: { "@id": `${BUSINESS.url}/about#person` },
+      breadcrumb: { "@id": `${BUSINESS.url}/about#breadcrumb` },
+    },
     {
       "@type": "Person",
       "@id": `${BUSINESS.url}/about#person`,
       name: "Emmanuel Mendieta",
+      givenName: "Emmanuel",
+      familyName: "Mendieta",
       jobTitle: "Founder",
+      description:
+        "Founder of Queso Ventures and a software engineer since 2020. Former CTO of a venture backed startup and tech lead at MARA Digital Holdings. Builds the tools local businesses use to get found on Google, Maps, and AI search, bring customers back, and run smoothly.",
       url: `${BUSINESS.url}/about`,
       image: `${BUSINESS.url}/about.JPEG`,
-      telephone: BUSINESS.phoneE164,
-      email: BUSINESS.email,
       worksFor: { "@id": `${BUSINESS.url}/#localbusiness` },
-      address: POSTAL_ADDRESS,
+      homeLocation: { "@type": "City", name: "Houston, Texas" },
+      alumniOf: {
+        "@type": "CollegeOrUniversity",
+        name: "University of Houston",
+        sameAs: "https://www.uh.edu",
+      },
+      hasCredential: {
+        "@type": "EducationalOccupationalCredential",
+        credentialCategory: "degree",
+        name: "Computer Science",
+        recognizedBy: { "@type": "CollegeOrUniversity", name: "University of Houston" },
+      },
+      /*
+        The facts people and answer engines check a founder against: who they
+        built for before, and what they know. Each one is also on the page in
+        plain text, which is what makes it citable rather than a claim.
+      */
       knowsAbout: [
-        "Web Design",
         "Local SEO",
+        "AI Search Optimization",
+        "Generative Engine Optimization",
         "Google Business Profile Optimization",
+        "Web Design",
+        "Web Development",
         "Software Engineering",
+        "Full Stack Development",
+        "AI Agents",
+        "Blockchain",
       ],
+      sameAs: [LINKEDIN, GITHUB, BUSINESS.instagram, BUSINESS.youtube],
     },
     breadcrumbSchema([{ name: "About", path: "/about" }]),
   ],
 };
 
-const chapters = [
+/*
+  Cards are statements, not paragraphs. The bold line should land on its own;
+  the body is one or two short sentences for whoever slows down.
+
+  The order of the first row is the pitch: websites are how an owner meets
+  Queso Ventures, the engineering is why it works, and the tools are where it
+  is going. No client counts and no price here; the price varies and lives on
+  the pricing pages, and a number of clients invites the wrong comparison.
+*/
+
+const what: HandCard[] = [
   {
-    year: "2019",
-    label: "Started at 18",
-    body: "COVID closed every job in town, so I taught myself web development and started freelancing. First client at $15 an hour. I've been building for people ever since.",
+    mark: "Websites",
+    icon: "browser",
+    title: "How I got this ball rolling",
+    body: "A site that brings in new business and keeps them coming back.",
   },
   {
-    year: "2022",
-    label: "Rose to tech lead",
-    body: "I joined a tech company as the newest engineer on the team. Within a year, I was leading it. When something needed to get built, I was the one who did it, and real people were using what I made.",
+    mark: "Overqualified",
+    icon: "cpu",
+    title: "I put the FUN in fundamentals",
+    body: "Websites are just the beginning. Ventures is plural for a reason.",
   },
   {
-    year: "2024",
-    label: "Became a CTO",
-    body: "My brother and I started our own company, and investors put real money behind us. As CTO, I built the entire product myself, and that meant building the AI inside it: teaching it to think correctly, pull the right information, and answer questions plainly, the same way AI search does today. I know how it works because I built it from under the hood.",
+    mark: "Helpful",
+    icon: "puzzle",
+    title: "Not just assuming",
+    body: "Tools that are tailored for you to get more customers or to run your shop smarter.",
   },
   {
-    year: "Now",
-    label: "Bringing it all together",
-    body: "Queso Ventures is where all of it lands. Enterprise grade technology for the businesses in my own backyard, serving owners across the Houston area. The big companies already have engineers like me. The businesses that actually matter, the ones down the street, deserve one too.",
+    mark: "Growing pretty fast",
+    icon: "tools",
+    title: "The real product",
+    body: "Queso Studios. Loyalty rewards, an AI front desk, and more. Turn one on and it runs.",
+    href: "/studios",
+    cta: "See Queso Studios",
   },
 ];
 
+const why: StoryCard[] = [
+  {
+    mark: "2008",
+    title: "One time at computer camp",
+    body: "My parents enrolled me in a free computer ",
+  },
+  {
+    mark: "2022",
+    title: "First startups",
+    body: "Built two apps in college. Y Combinator never answered. Alliance DAO passed on the idea, not on me.",
+    story:
+      "Still in college, I helped build a stablecoin savings app. Then crypto crashed and took the idea with it. Next came a crime reporting app for Latin America, the first product I built on my own. Y Combinator never answered. Alliance DAO interviewed me three times between cupcake shop shifts, then passed on the idea. Never on whether I could build it.",
+  },
+  {
+    mark: "2024",
+    title: "QA hire to tech lead",
+    body: "Hired at MARA for QA. Two months later I was leading six developers.",
+    story:
+      "Took a pay cut to join MARA as a contractor, hired for QA. There was no QA work my first week, so I built the frontend for their Bitcoin transaction accelerator and shipped it in days. Two months later I was leading six developers and a designer.",
+  },
+  {
+    mark: "2025",
+    title: "CTO, raised $250K",
+    body: "An app full of AI agents. A whole bunch of technical jazz, but no users. Lesson learned: talk to people first.",
+    story:
+      "We raised $250K for Bitcoin backed lending. As CTO I built every pivot: trucking finance, logistics software, then an AI language coach on WhatsApp. One version paid truck drivers for texting a photo of their paperwork. It worked perfectly. Nobody signed up.",
+  },
+];
+
+/*
+  The degree, between the rows rather than in a card of its own.
+
+  Nothing changed about the work in 2023, the paper just caught up with it. A
+  card would give it the same weight as becoming a CTO; a line across the gap
+  gives it the weight it has, and the joke lands better as an aside.
+
+  Arancio Xanto, because the cards on either side already speak for red and
+  yellow. The ink is the darkened variant for type on the light page; the
+  factory hex is right on the dark one.
+*/
+const graduated = (
+  <Reveal className="sm:col-span-2">
+    <div
+      className="flex items-center gap-5 py-2"
+      style={
+        {
+          "--paint": PAINT.arancioXanto.hex,
+          "--paint-ink": PAINT.arancioXanto.ink,
+        } as React.CSSProperties
+      }
+    >
+      <span
+        aria-hidden
+        className="hidden h-px flex-1 sm:block"
+        style={{ backgroundImage: "linear-gradient(to right, transparent, var(--paint))" }}
+      />
+      <p className="text-center text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
+        <span className="font-semibold text-[color:var(--paint-ink)] dark:text-[color:var(--paint)]">
+          2023
+        </span>{" "}
+        &middot; Graduated from the University of Houston in Computer Science
+        (what a surprise).
+      </p>
+      <span
+        aria-hidden
+        className="hidden h-px flex-1 sm:block"
+        style={{ backgroundImage: "linear-gradient(to left, transparent, var(--paint))" }}
+      />
+    </div>
+  </Reveal>
+);
+
 export default function AboutPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-lightBG dark:bg-darkBG">
+    <div className="flex flex-col min-h-screen overflow-x-clip bg-lightBG dark:bg-darkBG">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -101,129 +229,48 @@ export default function AboutPage() {
           <div className="max-w-6xl mx-auto grid lg:grid-cols-[1.2fr,1fr] gap-12 items-center">
             <div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight text-lightText dark:text-darkText mb-6 text-balance">
-                Hey, I&apos;m Emmanuel.
+                More customers, less busywork and guessing.
               </h1>
               <p className="max-w-2xl text-xl sm:text-2xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-                In my career I&apos;ve worn lots of hats: AI engineer, software
-                engineer (there is a bit of a difference), blockchain engineer,
-                all the way to CTO of a venture-backed startup.
-              </p>
-              <p className="mt-5 max-w-2xl text-xl sm:text-2xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-                Now I&apos;m bringing it all together and applying it to the
-                businesses back home.
+                Queso Ventures builds the tools local businesses need to grab more customers and keep them coming back.
               </p>
             </div>
             <AboutPortrait />
           </div>
         </section>
 
-        {/* Chapters — read as a build sheet, not a brochure. Each chapter
-            carries its own factory paint, a spec index, and a year. */}
-        <section className="container mx-auto px-4 py-16">
-          <div className="max-w-6xl mx-auto grid sm:grid-cols-2 gap-5">
-            {chapters.map((chapter, i) => {
-              const paint = liveryAt(i);
-              return (
-                <Fragment key={i}>
-                <Reveal delay={i * 120}>
-                  <Glow color={paint.hex} radius="rounded-3xl" lift={false}>
-                  <div className="relative h-full overflow-hidden rounded-3xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark">
-                    {/* Livery stripe across the top, full bleed. */}
-                    <span
-                      className="absolute inset-x-0 top-0 h-1.5"
-                      style={{ backgroundColor: paint.hex }}
-                    />
-                    <div className="p-8 pt-10">
-                      <p
-                        className="text-3xl sm:text-4xl font-semibold tracking-tight mb-3"
-                        style={{ color: paint.ink }}
-                      >
-                        {chapter.year}
-                      </p>
+        {/* What Queso Ventures is */}
+        <section className="container mx-auto px-4 py-12">
+          <Reveal className="max-w-6xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl tracking-tight text-lightText dark:text-darkText mb-8 text-balance">
+              What Queso Ventures is
+            </h2>
+          </Reveal>
+          <AboutHand cards={what} />
+        </section>
 
-                      <p className="text-2xl font-semibold text-lightText dark:text-darkText mb-4 tracking-tight">
-                        {chapter.label}
-                      </p>
-                      <p className="text-lg font-light text-lightTextMuted dark:text-darkTextMuted leading-relaxed">
-                        {chapter.body}
-                      </p>
+        {/* The camera roll. Tokyo at rest, the rest of the roll on click. */}
+        <section className="container mx-auto px-4 py-8">
+          <Reveal className="max-w-6xl mx-auto">
+            <AboutPhotoRoll />
+          </Reveal>
+        </section>
 
-                      <div className="mt-8 pt-5 border-t border-lightBorder dark:border-darkBorder">
-                        <span
-                          className="block h-1 w-10 rounded-full transition-all duration-300 group-hover:w-24"
-                          style={{ backgroundColor: paint.hex }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  </Glow>
-                </Reveal>
-
-                {/*
-                  The degree, between the rows rather than in a card of its own.
-
-                  It belongs on the timeline and it is the one beat that is not
-                  a chapter: nothing changed about the work in 2023, the paper
-                  just caught up with it. A card would give it the same weight
-                  as becoming a CTO. A line across the gap gives it the weight
-                  it has, and the joke lands better in an aside than in a
-                  headline.
-                */}
-                {i === 1 && (
-                  <Reveal className="sm:col-span-2">
-                    {/*
-                      Arancio Xanto, and not by coincidence.
-
-                      Red and yellow are already spoken for by the two cards it
-                      sits between, so the divider needed a paint that reads as
-                      house livery without echoing either neighbour. The rules
-                      run out of it and fade to nothing at both ends, which is
-                      the only ornament here: everything else is the sentence.
-
-                      Two values from the same paint. The ink is the darkened
-                      variant, the only one legible setting type on cream; the
-                      factory hex is far too bright there and exactly right on
-                      the dark panel. Passed as custom properties so the palette
-                      module stays the single source for both.
-                    */}
-                    <div
-                      className="flex items-center gap-5 py-2"
-                      style={
-                        {
-                          "--paint": PAINT.arancioXanto.hex,
-                          "--paint-ink": PAINT.arancioXanto.ink,
-                        } as React.CSSProperties
-                      }
-                    >
-                      <span
-                        aria-hidden
-                        className="hidden h-px flex-1 sm:block"
-                        style={{
-                          backgroundImage:
-                            "linear-gradient(to right, transparent, var(--paint))",
-                        }}
-                      />
-                      <p className="text-center text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-                        <span className="font-semibold text-[color:var(--paint-ink)] dark:text-[color:var(--paint)]">
-                          2023
-                        </span>{" "}
-                        &middot; Graduated from the University of Houston,
-                        majoring in Computer Science (what a surprise).
-                      </p>
-                      <span
-                        aria-hidden
-                        className="hidden h-px flex-1 sm:block"
-                        style={{
-                          backgroundImage:
-                            "linear-gradient(to left, transparent, var(--paint))",
-                        }}
-                      />
-                    </div>
-                  </Reveal>
-                )}
-                </Fragment>
-              );
-            })}
+        {/* Why I'm doing this */}
+        <section className="container mx-auto px-4 py-12">
+          <Reveal className="max-w-6xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl tracking-tight text-lightText dark:text-darkText mb-8 text-balance">
+              Why I&apos;m doing this
+            </h2>
+          </Reveal>
+          <StoryCards
+            cards={why}
+            offset={4}
+            between={{ index: 1, node: graduated }}
+          />
+          {/* Right after the résumé, where someone checking up on me looks next. */}
+          <div className="max-w-6xl mx-auto">
+            <AboutLinks github={GITHUB} linkedin={LINKEDIN} />
           </div>
         </section>
 
@@ -312,7 +359,7 @@ export default function AboutPage() {
                     style={{ background: "rgba(16,18,22,0.66)" }}
                   />
                   <p className="relative bg-gradient-to-b from-white from-[55%] to-[#FFE0A0] bg-clip-text text-4xl font-light leading-tight tracking-tight text-transparent sm:text-5xl md:text-6xl">
-                    Why Queso Ventures exists
+                    Outcomes, not words
                   </p>
                   <span
                     className="relative mt-7 block h-1 w-24 rounded-full"
@@ -333,45 +380,18 @@ export default function AboutPage() {
                       style={{ backgroundColor: PAINT.gialloOrion.hex }}
                     />
 
-                    <p className="mt-8 text-3xl sm:text-4xl md:text-5xl font-light leading-tight tracking-tight text-balance text-[#F5F7FA]">
-                      Big brands have dedicated engineers 
-                    </p>
-
                     {/*
-                      One paragraph, one column. StatementCopy split this into
-                      newspaper columns, which is right for a wall of text at the
-                      top of a page and wrong here: two ragged columns under a
-                      centred lead read as a layout accident.
+                      The real heading. The centred title above is aria-hidden
+                      and fades out as this fades in, so the words live in the
+                      document once, here.
                     */}
-                    {/*
-                      Three sentences, down from five.
+                    <h2 className="mt-8 text-3xl sm:text-4xl md:text-5xl font-light leading-tight tracking-tight text-balance text-[#F5F7FA]">
+                      Outcomes, not words
+                    </h2>
 
-                      The cut ones were the agency swipe and the sentence
-                      explaining that AI is changing search — both true, both
-                      already made by the headline above and the whole page
-                      below. What is left is the only part nobody else on this
-                      market can say: I built the thing, and you get me.
-
-                      The price went with them. It is on the pricing card, the
-                      services page and this page's own schema; a fourth
-                      appearance inside the emotional beat was the one place it
-                      was doing no work.
-                    */}
-                    {/*
-                      Houston is written out, not interpolated.
-
-                      ${city} inside JSX text prints the dollar sign and the
-                      braces exactly as typed — JSX needs {city}, and there is
-                      no `city` here to reach for anyway. This page is the
-                      flagship About page rather than one of the city-templated
-                      geo pages, so the name is simply the name. If Queso
-                      Ventures ever gets a second About page per metro, this is
-                      the line that becomes a prop.
-                    */}
-                    <p className="mx-auto mt-7 max-w-2xl text-xl font-light leading-relaxed text-[#B7C0C8]">
-                      The local places that Houston is built on do not. I built
-                      Queso Ventures to help level the playing field with
-                      technology.
+                    <p className="mx-auto mt-7 max-w-2xl text-lg sm:text-xl font-light leading-relaxed text-[#B7C0C8]">
+                      Anyone can say &ldquo;I build websites&rdquo; now. I sell
+                      the result: more calls, more walk ins, more orders.
                     </p>
 
                     <div className="mt-10 flex justify-center">
