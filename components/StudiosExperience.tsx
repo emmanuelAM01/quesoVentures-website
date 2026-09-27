@@ -8,12 +8,10 @@ import { STUDIO_DEMOS } from "components/StudiosDemos";
 import ArrowMark, { arrowTone } from "components/ArrowMark";
 import { houseGradient } from "components/livery";
 import {
-  BUNDLE,
   OUTCOMES,
   PACKS,
   PRODUCTS as PRODUCT_LIST,
   packTitle,
-  oneAtATime,
   packFor,
   productsFor,
   type Outcome,
@@ -733,50 +731,6 @@ export default function StudiosExperience() {
         </div>
       </section>
 
-      <section className="relative border-t border-white/[0.06] px-6 py-28 sm:px-10 sm:py-40">
-        {/* Every paint at once, which is the offer said in one stroke. */}
-        <div
-          aria-hidden
-          className="absolute inset-x-0 top-0 h-px"
-          style={{
-            background: `linear-gradient(to right, transparent, ${OUTCOMES.map((o) => o.accent).join(", ")}, transparent)`,
-          }}
-        />
-        <div className="mx-auto grid max-w-6xl items-end gap-16 lg:grid-cols-2 lg:gap-20">
-          <Reveal>
-            <h2 className="text-4xl font-light leading-[1.05] tracking-tight text-balance text-white sm:text-5xl xl:text-6xl">
-              {BUNDLE.name}
-            </h2>
-            <span aria-hidden className="mt-8 block h-1 w-24 rounded-full" style={{ backgroundImage: houseGradient() }} />
-            <p className="mt-8 max-w-xl text-xl font-light leading-relaxed text-white/60">
-              {BUNDLE.line}
-            </p>
-            <button
-              type="button"
-              onClick={() => setWantTool({ name: BUNDLE.name, idea: false })}
-              className={`${arrowTone("dark")} mt-10`}
-            >
-              <ArrowMark tone="dark" label="Want this?" />
-            </button>
-          </Reveal>
-
-          <Reveal delay={150}>
-            <p className="flex items-baseline gap-4">
-              <span
-                className="bg-clip-text text-[6.5rem] font-extralight leading-[0.85] tracking-tighter tabular-nums text-transparent sm:text-[8rem] xl:text-[10rem]"
-                style={{ backgroundImage: houseGradient() }}
-              >
-                ${BUNDLE.list}
-              </span>
-              <span className="text-xl font-light text-white/50">/ month</span>
-            </p>
-            <p className="mt-6 text-lg text-white/70 tabular-nums">${BUNDLE.client} a month for Queso clients</p>
-            <p className="mt-2 text-base text-white/45 tabular-nums">
-              ${oneAtATime().list} one at a time (${oneAtATime().client} for Queso clients)
-            </p>
-          </Reveal>
-        </div>
-      </section>
 
       {/* Outro: just the mark */}
       <section className="relative px-6 pb-16 sm:pb-20 text-center">

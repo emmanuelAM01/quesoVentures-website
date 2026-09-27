@@ -4,9 +4,9 @@ import type { DemoId } from "components/StudiosDemos";
  * The Queso Studios catalogue, as the Studios page sells it.
  *
  * The source of truth is the portal's product catalogue
- * (queso-portal, packages/products/src/index.ts): names, prices, packs and
- * the bundle there are what clients see in their portal and what they are
- * billed. This repo cannot import that package, so it is mirrored here. When
+ * (queso-portal, packages/products/src/index.ts): names, prices and packs
+ * there are what clients see in their portal and what they are billed. The
+ * shop does not sell the portal's every-tool bundle. This repo cannot import that package, so it is mirrored here. When
  * a price or a name changes there, change it here in the same breath, or the
  * shop and the portal will quote a client two different numbers.
  *
@@ -364,24 +364,6 @@ export const PACKS: Pack[] = [
 export function packTitle(pack: Pack): string {
   const outcome = OUTCOMES.find((o) => o.key === pack.outcome);
   return outcome ? `The complete experience to ${outcome.label.charAt(0).toLowerCase()}${outcome.label.slice(1)}` : "The complete experience";
-}
-
-/** Every tool but the ones that cost money per use. Mirrors BUNDLE in the portal. */
-export const BUNDLE = {
-  name: "Take every tool",
-  line: "Every tool on this page but Front Desk, Lead Finder and Outreach, on one bill.",
-  list: 280,
-  client: 150,
-  excluded: ["frontdesk", "leads", "outreach"],
-};
-
-/** What the bundle's tools cost one at a time, added up from the shelf. */
-export function oneAtATime(): { list: number; client: number } {
-  const inBundle = PRODUCTS.filter((p) => !BUNDLE.excluded.includes(p.key));
-  return {
-    list: inBundle.reduce((sum, p) => sum + (p.list ?? 0), 0),
-    client: inBundle.reduce((sum, p) => sum + (p.client ?? 0), 0),
-  };
 }
 
 export const productsFor = (outcome: OutcomeKey) => PRODUCTS.filter((p) => p.outcome === outcome);
