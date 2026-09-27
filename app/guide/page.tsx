@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import GuideHeader from "components/guide/GuideHeader";
 import FeaturedEntry from "components/guide/FeaturedEntry";
 import FreeAudit from "components/FreeAudit";
-import LiveryCard from "components/LiveryCard";
-import StatementCopy from "components/StatementCopy";
-import Reveal from "components/Reveal";
-import { liveryAt, PAINT } from "components/livery";
+import Link from "next/link";
+import ArrowMark, { arrowTone } from "components/ArrowMark";
+import ChangeList from "components/ChangeList";
+import SectionHeading from "components/SectionHeading";
+import StatementSection from "components/StatementSection";
+import { liveryAt } from "components/livery";
 import GuideFilters from "components/guide/GuideFilters";
 import GuideGrid from "components/guide/GuideGrid";
 import { getActiveFacets, getCategories, SITE_URL } from "lib/guide/queries";
@@ -139,15 +141,13 @@ export default async function GuideHome({ searchParams }: { searchParams: Search
         ) : null}
       </GuideHeader>
 
-      <section id="entries" className="container mx-auto scroll-mt-24 px-4 py-20 sm:py-24">
+      <section id="entries" className="container mx-auto scroll-mt-24 px-4 py-24 sm:py-32">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
-            <h2 className="text-3xl tracking-tight text-lightText dark:text-darkText sm:text-4xl md:text-5xl">
-              {gridTitle}
-            </h2>
+          <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
+            <SectionHeading>{gridTitle}</SectionHeading>
             {filtered ? (
-              <a href="/guide" className="text-base font-medium text-lightAccent underline underline-offset-4 dark:text-darkAccent">
-                Show everything
+              <a href="/guide" className={arrowTone("light")}>
+                <ArrowMark label="Show everything" size="sm" />
               </a>
             ) : null}
           </div>
@@ -163,30 +163,17 @@ export default async function GuideHome({ searchParams }: { searchParams: Search
         </div>
       </section>
 
-      {/* Full contrast statement, the same break the city pages use between
-          their hero and their cards. */}
-      <section id="about-the-guide" data-dark-section className="bg-inkLight">
-        <div className="container mx-auto px-4 py-24 sm:py-28">
-          <StatementCopy text={STATEMENT} tone="dark" paint={PAINT.gialloOrion} className="mx-auto max-w-4xl" />
-        </div>
-      </section>
+      <div id="about-the-guide">
+        <StatementSection text={STATEMENT} />
+      </div>
 
-      <section id="how" className="scroll-mt-20 border-b border-lightBorder bg-bandLight dark:border-darkBorder dark:bg-bandDark">
-        <div className="container mx-auto px-4 py-20 sm:py-24">
-          <div className="mx-auto max-w-6xl">
-            <h2 className="mb-10 text-3xl tracking-tight text-lightText dark:text-darkText sm:text-4xl md:text-5xl">
-              How the guide works
-            </h2>
-            <div className="grid gap-4 md:grid-cols-3">
-              {PRINCIPLES.map((p, i) => (
-                <Reveal key={p.title} delay={i * 90}>
-                  <LiveryCard title={p.title} body={p.body} paint={liveryAt(i)} href="/guide/standards" />
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <div id="how" className="scroll-mt-20">
+        <ChangeList heading="How the guide works" items={PRINCIPLES}>
+          <Link href="/guide/standards" className={`${arrowTone("light")} mt-10`}>
+            <ArrowMark label="The standards" />
+          </Link>
+        </ChangeList>
+      </div>
 
       <FreeAudit />
     </>

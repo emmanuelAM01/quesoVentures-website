@@ -31,7 +31,7 @@ export default function IndustryLinks({ current, heading }: Props) {
     ...shown.map((i) => ({ label: i.label, line: i.tagline, href: i.slug ?? "/services" })),
     {
       label: "And plenty more",
-      line: "This list grows every month. Don’t see your trade? Ask me.",
+      line: "This list grows every month. Don't see your trade? Ask me.",
       href: "/contact",
     },
   ];

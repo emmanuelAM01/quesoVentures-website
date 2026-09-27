@@ -9,8 +9,9 @@ import CtaLink from "components/guide/CtaLink";
 import DraftBanner from "components/guide/DraftBanner";
 import GuideGrid from "components/guide/GuideGrid";
 import PageviewTracker from "components/guide/PageviewTracker";
-import HeroCarousel from "components/guide/HeroCarousel";
-import { liveryAt, PAINT } from "components/livery";
+import PageHero from "components/PageHero";
+import SectionHeading from "components/SectionHeading";
+import { liveryAt, houseGradient } from "components/livery";
 import {
   getCategories,
   getEntry,
@@ -93,8 +94,6 @@ export default async function GuideArticle({ params }: { params: Params }) {
   )
     .map((h) => ({ src: guideImageUrl(h.path), alt: h.alt || entry.business_name }))
     .filter((h): h is { src: string; alt: string } => Boolean(h.src));
-  const hero = heroes[0];
-  const paint = liveryAt(Math.max(0, categories.findIndex((c) => c.id === entry.category.id)));
   const visited = monthYear(entry.visited_on);
   const updated = shortDate(entry.updated_at);
   const trail = guideTrail({
@@ -116,55 +115,44 @@ export default async function GuideArticle({ params }: { params: Params }) {
       />
       {draft ? <DraftBanner path={entry.path} status={entry.status} /> : <PageviewTracker articleId={entry.id} />}
 
-      <article className="container mx-auto px-4 pb-20 pt-8 sm:pt-12">
+      {/*
+        The entry opens on its own photographs, full screen, the way every
+        page on the site opens: the trade and the place over the breadcrumb,
+        the headline, the house rule, the dek, then the byline. Several header
+        photos crossfade slowly, with dots to pick one.
+      */}
+      <PageHero
+        headline={entry.headline || entry.business_name}
+        sub={entry.dek || undefined}
+        slides={heroes.length ? heroes : undefined}
+        above={
+          <>
+            <Breadcrumbs trail={trail} tone="dark" />
+            <p className="mt-5 text-base font-medium text-white/90">
+              {entry.category.name} in {entry.area || entry.city.name}
+            </p>
+          </>
+        }
+      >
+        <p className="flex flex-wrap gap-x-5 gap-y-1 text-base font-light text-white/70">
+          <span>
+            By{" "}
+            <Link
+              href="/guide/editor"
+              rel="author"
+              className="text-white underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-white"
+            >
+              {entry.author_name}
+            </Link>
+          </span>
+          {visited ? <span>Visited {visited}</span> : null}
+          {updated ? <span>Updated {updated}</span> : null}
+        </p>
+      </PageHero>
+
+      <article className="container mx-auto px-4 pb-24 pt-20 sm:pt-28">
         <div className="mx-auto max-w-6xl">
-          <Breadcrumbs trail={trail} />
-
-          <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-14">
-            {/* Header. First on every screen. */}
-            <header className="lg:col-start-1">
-              <p className="text-base font-semibold" style={{ color: paint.ink }}>
-                {entry.category.name} in {entry.area || entry.city.name}
-              </p>
-              <h1 className="mt-3 text-4xl tracking-tight text-balance text-lightText dark:text-darkText sm:text-5xl lg:text-6xl">
-                {entry.headline || entry.business_name}
-              </h1>
-              {entry.dek ? (
-                <p className="mt-5 text-xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted sm:text-2xl">
-                  {entry.dek}
-                </p>
-              ) : null}
-              <p className="mt-6 flex flex-wrap gap-x-4 gap-y-1 text-base text-lightTextMuted dark:text-darkTextMuted">
-                <span>
-                  By{" "}
-                  <Link
-                    href="/guide/editor"
-                    rel="author"
-                    className="font-medium text-lightText underline underline-offset-4 dark:text-darkText"
-                  >
-                    {entry.author_name}
-                  </Link>
-                </span>
-                {visited ? <span>Visited {visited}</span> : null}
-                {updated ? <span>Updated {updated}</span> : null}
-              </p>
-
-              {heroes.length > 1 ? (
-                <HeroCarousel slides={heroes} accent={paint.hex} />
-              ) : hero ? (
-                <figure className="relative mt-8 aspect-[16/10] overflow-hidden rounded-3xl bg-bandLight dark:bg-bandDark">
-                  <Image
-                    src={hero.src}
-                    alt={hero.alt}
-                    fill
-                    priority
-                    sizes="(min-width: 1024px) 720px, 100vw"
-                    className="object-cover"
-                  />
-                  <span aria-hidden className="absolute inset-x-0 bottom-0 h-1.5" style={{ background: paint.hex }} />
-                </figure>
-              ) : null}
-            </header>
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-16">
 
             {/* Under the header on a phone, a sticky sidebar from lg up. */}
             <aside className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
@@ -183,8 +171,9 @@ export default async function GuideArticle({ params }: { params: Params }) {
               ) : null}
 
               {entry.owner_quote ? (
-                <figure className="mt-14 border-l-4 pl-6 sm:pl-8" style={{ borderColor: PAINT.gialloOrion.hex }}>
-                  <blockquote className="text-2xl font-medium leading-snug tracking-tight text-lightText dark:text-darkText sm:text-3xl">
+                <figure className="mt-20">
+                  <span aria-hidden className="mb-8 block h-1 w-24 rounded-full" style={{ backgroundImage: houseGradient() }} />
+                  <blockquote className="text-3xl font-light leading-snug tracking-tight text-balance text-lightText dark:text-darkText sm:text-4xl">
                     <p>&ldquo;{entry.owner_quote}&rdquo;</p>
                   </blockquote>
                   {entry.owner_quote_attribution ? (
@@ -197,23 +186,25 @@ export default async function GuideArticle({ params }: { params: Params }) {
 
               {whatToGet.length ? (
                 <Section title={guideItemsHeading(entry, entry.category)}>
-                  <ul className="grid gap-4 sm:grid-cols-2">
+                  <ul className="grid border-b border-lightText/15 dark:border-darkText/15 sm:grid-cols-2 sm:gap-x-10">
                     {whatToGet.map((item, i) => (
                       <li
                         key={i}
-                        className={`relative overflow-hidden rounded-2xl border border-lightBorder bg-panelLight p-5 pl-6 dark:border-darkBorder dark:bg-panelDark ${
-                          // An odd count leaves the last card alone in its row,
+                        className={`flex gap-5 border-t border-lightText/15 py-6 dark:border-darkText/15 ${
+                          // An odd count leaves the last one alone in its row,
                           // so it takes the whole row instead.
                           lastOfOdd(i, whatToGet.length) ? "sm:col-span-2" : ""
                         }`}
                       >
-                        <span aria-hidden className="absolute inset-y-0 left-0 w-1" style={{ background: liveryAt(i).hex }} />
-                        <p className="text-lg font-semibold text-lightText dark:text-darkText">{item.name}</p>
-                        {item.description ? (
-                          <p className="mt-1.5 text-base font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-                            {item.description}
-                          </p>
-                        ) : null}
+                        <span aria-hidden className="mt-[0.9rem] h-[2px] w-6 shrink-0 rounded-full" style={{ background: liveryAt(i).hex }} />
+                        <div>
+                          <p className="text-xl font-light tracking-tight text-lightText dark:text-darkText">{item.name}</p>
+                          {item.description ? (
+                            <p className="mt-1.5 text-base font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
+                              {item.description}
+                            </p>
+                          ) : null}
+                        </div>
                       </li>
                     ))}
                   </ul>
@@ -225,7 +216,7 @@ export default async function GuideArticle({ params }: { params: Params }) {
                   <ul className="space-y-3 text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
                     {goodToKnow.map((line, i) => (
                       <li key={i} className="flex gap-3">
-                        <span aria-hidden className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-lightAccent dark:bg-darkAccent" />
+                        <span aria-hidden className="mt-[0.85rem] h-[2px] w-4 shrink-0 rounded-full bg-lightAccent dark:bg-darkAccent" />
                         <span>{line}</span>
                       </li>
                     ))}
@@ -243,10 +234,10 @@ export default async function GuideArticle({ params }: { params: Params }) {
 
               {faqs.length ? (
                 <Section title="Questions">
-                  <div className="divide-y divide-lightBorder rounded-2xl border border-lightBorder bg-panelLight dark:divide-darkBorder dark:border-darkBorder dark:bg-panelDark">
+                  <div className="divide-y divide-lightText/15 border-y border-lightText/15 dark:divide-darkText/15 dark:border-darkText/15">
                     {faqs.map((f, i) => (
-                      <details key={i} className="group p-5" open={i === 0}>
-                        <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-lg font-semibold text-lightText dark:text-darkText [&::-webkit-details-marker]:hidden">
+                      <details key={i} className="group py-6" open={i === 0}>
+                        <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-xl font-light tracking-tight text-lightText dark:text-darkText [&::-webkit-details-marker]:hidden">
                           <span>{f.question}</span>
                           <span aria-hidden className="mt-0.5 text-2xl leading-none transition-transform group-open:rotate-45">
                             +
@@ -300,11 +291,9 @@ export default async function GuideArticle({ params }: { params: Params }) {
 
       {related.length ? (
         <section className="border-t border-lightBorder bg-bandLight dark:border-darkBorder dark:bg-bandDark">
-          <div className="container mx-auto px-4 py-16 sm:py-20">
+          <div className="container mx-auto px-4 py-24 sm:py-32">
             <div className="mx-auto max-w-6xl">
-              <h2 className="mb-10 text-3xl tracking-tight text-lightText dark:text-darkText sm:text-4xl">
-                More from {GUIDE_NAME}
-              </h2>
+              <SectionHeading className="mb-12">More from {GUIDE_NAME}</SectionHeading>
               <GuideGrid entries={related} categoryOrder={categories.map((c) => c.id)} />
             </div>
           </div>
@@ -321,8 +310,8 @@ function lastOfOdd(i: number, length: number) {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="mt-14 first:mt-0">
-      <h2 className="mb-6 text-2xl font-semibold tracking-tight text-lightText dark:text-darkText sm:text-3xl">
+    <section className="mt-20 first:mt-0">
+      <h2 className="mb-8 text-3xl font-light tracking-tight text-lightText dark:text-darkText sm:text-4xl">
         {title}
       </h2>
       {children}

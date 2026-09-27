@@ -26,10 +26,14 @@ import type { Placement } from "components/analytics";
  * With no photograph the ground is the blob field, which is the house's own
  * moving light rather than a stock image standing in for one.
  */
+/** How long each photograph holds before the next fades in. */
+const SLIDE_MS = 6000;
+
 export default function PageHero({
   headline,
   sub,
   image,
+  slides,
   prefill,
   ctaLabel = "Get My Free Report",
   from = "hero",
@@ -42,6 +46,11 @@ export default function PageHero({
   sub?: string;
   /** Full bleed photograph. Without one the ground is the blob field. */
   image?: { src: string; alt: string; position?: string };
+  /**
+   * Several photographs instead of one: they crossfade slowly on their own,
+   * with dots beside the scroll cue to pick one. Takes precedence over `image`.
+   */
+  slides?: { src: string; alt: string; position?: string }[];
   /** The contact form's opening line. With it, the hero carries the CTA. */
   prefill?: string;
   ctaLabel?: string;
@@ -56,6 +65,10 @@ export default function PageHero({
   children?: React.ReactNode;
 }) {
   const [ready, setReady] = useState(false);
+  const photos = slides?.length ? slides : image ? [image] : [];
+  const [at, setAt] = useState(0);
+  /** Bumped by a click on a dot, so the slideshow waits a full turn after it. */
+  const [picked, setPicked] = useState(0);
   const section = useRef<HTMLElement>(null);
   const photo = useRef<HTMLDivElement>(null);
   const copy = useRef<HTMLDivElement>(null);
@@ -89,6 +102,14 @@ export default function PageHero({
     };
   }, []);
 
+  // The slideshow: a slow turn, still under reduced motion.
+  useEffect(() => {
+    if (photos.length < 2) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => setAt((a) => (a + 1) % photos.length), SLIDE_MS);
+    return () => clearInterval(t);
+  }, [photos.length, picked]);
+
   const rise = (delay: number) => ({
     className: `transition-all duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
       ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
@@ -107,24 +128,34 @@ export default function PageHero({
     <section
       ref={section}
       data-dark-section
-      className="relative -mt-[76px] h-[100svh] min-h-[640px] overflow-hidden bg-[#0B0D12]"
+      className="relative -mt-[76px] flex min-h-[100svh] items-end overflow-hidden bg-[#0B0D12]"
     >
-      {image ? (
+      {photos.length ? (
         <div ref={photo} className="absolute inset-0 will-change-transform">
           <div
             className={`absolute inset-0 transition-transform duration-[2600ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
               ready ? "scale-100" : "scale-110"
             }`}
           >
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-              style={{ objectPosition: image.position ?? "center" }}
-            />
+            {photos.map((p, k) => (
+              <div
+                key={p.src}
+                aria-hidden={k !== at}
+                className={`absolute inset-0 transition-opacity duration-[1400ms] ease-in-out motion-reduce:transition-none ${
+                  k === at ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                <Image
+                  src={p.src}
+                  alt={p.alt}
+                  fill
+                  priority={k === 0}
+                  sizes="100vw"
+                  className="object-cover"
+                  style={{ objectPosition: p.position ?? "center" }}
+                />
+              </div>
+            ))}
           </div>
         </div>
       ) : (
@@ -146,8 +177,9 @@ export default function PageHero({
         }}
       />
 
-      <div ref={copy} className="relative flex h-full items-end will-change-transform">
-        <div className="container mx-auto px-4 pb-14 sm:pb-20">
+      {/* At least a screen; taller only when the words and controls need it. */}
+      <div ref={copy} className="relative w-full will-change-transform">
+        <div className="container mx-auto px-4 pb-14 pt-40 sm:pb-20">
           <div className="mx-auto flex max-w-6xl items-end justify-between gap-10">
             <div className="max-w-4xl" style={{ textShadow: "0 2px 30px rgba(0,0,0,0.45)" }}>
               {above && (
@@ -206,15 +238,39 @@ export default function PageHero({
                 {aside}
               </div>
             ) : (
-              <button
-                type="button"
-                onClick={onward}
-                aria-label="Scroll to the next section"
-                style={rise(900).style}
-                className={`${rise(900).className} ${arrowTone("dark")} hidden sm:inline-flex`}
-              >
-                <ArrowMark tone="dark" direction="down" />
-              </button>
+              <div style={rise(900).style} className={`${rise(900).className} hidden items-center gap-8 sm:flex`}>
+                {photos.length > 1 && (
+                  <div className="flex items-center gap-2.5">
+                    {photos.map((p, k) => (
+                      <button
+                        key={p.src}
+                        type="button"
+                        aria-label={`Photo ${k + 1} of ${photos.length}`}
+                        aria-current={k === at}
+                        onClick={() => {
+                          setAt(k);
+                          setPicked((n) => n + 1);
+                        }}
+                        className="group grid h-6 place-items-center focus:outline-none"
+                      >
+                        <span
+                          className={`block h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(0,0,0,0.45)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                            k === at ? "w-6" : "w-1.5 opacity-50 group-hover:w-2.5 group-hover:opacity-90"
+                          }`}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={onward}
+                  aria-label="Scroll to the next section"
+                  className={arrowTone("dark")}
+                >
+                  <ArrowMark tone="dark" direction="down" />
+                </button>
+              </div>
             )}
           </div>
         </div>

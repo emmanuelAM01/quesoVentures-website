@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import GuideHeader from "components/guide/GuideHeader";
 import FreeAudit from "components/FreeAudit";
-import LiveryCard from "components/LiveryCard";
-import StatementCopy from "components/StatementCopy";
-import Reveal from "components/Reveal";
-import { liveryAt, PAINT } from "components/livery";
+import ChangeList from "components/ChangeList";
+import StatementSection from "components/StatementSection";
 import { SITE_URL } from "lib/guide/queries";
 import { guideTrail, GUIDE_NAME } from "lib/guide/jsonld";
 
@@ -56,26 +54,11 @@ export default function Standards() {
         tall
       />
 
-      <section className="container mx-auto px-4 py-20 sm:py-28">
-        <StatementCopy text={STATEMENT} paint={PAINT.rossoCorsa} className="mx-auto max-w-4xl" />
-      </section>
+      <StatementSection text={STATEMENT} />
 
-      <section id="rules" className="scroll-mt-20 border-y border-lightBorder bg-bandLight dark:border-darkBorder dark:bg-bandDark">
-        <div className="container mx-auto px-4 py-20 sm:py-24">
-          <div className="mx-auto max-w-6xl">
-            <h2 className="mb-10 text-3xl tracking-tight text-lightText dark:text-darkText sm:text-4xl md:text-5xl">
-              The four rules
-            </h2>
-            <div className="grid gap-4 md:grid-cols-2">
-              {PRINCIPLES.map((p, i) => (
-                <Reveal key={p.title} delay={i * 90}>
-                  <LiveryCard title={p.title} body={p.body} paint={liveryAt(i)} />
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <div id="rules" className="scroll-mt-20">
+        <ChangeList heading="The four rules" items={PRINCIPLES} />
+      </div>
 
       <FreeAudit
         copy={{

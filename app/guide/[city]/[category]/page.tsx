@@ -67,7 +67,7 @@ export default async function CategoryHub({ params }: { params: Params }) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(jsonLd) }} />
-      <GuideHeader title={title} trail={trail}>
+      <GuideHeader title={title} intro={description} trail={trail}>
         {siblings.length > 1 ? (
           <Chips
             items={siblings.map((c) => ({

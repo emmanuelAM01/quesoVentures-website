@@ -16,10 +16,13 @@ import { houseAt } from "components/livery";
  */
 export default function ChangeList({
   items,
-  heading = "Here’s what changes",
+  heading = "Here's what changes",
+  children,
 }: {
   items: { title: string; body: string }[];
   heading?: string;
+  /** Under the heading, in its column: a link onward, say. */
+  children?: React.ReactNode;
 }) {
   return (
     <section className="bg-bandLight dark:bg-bandDark">
@@ -28,6 +31,7 @@ export default function ChangeList({
           <div>
             <Reveal className="lg:sticky lg:top-32">
               <SectionHeading>{heading}</SectionHeading>
+              {children}
             </Reveal>
           </div>
 

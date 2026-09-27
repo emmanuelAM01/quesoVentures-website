@@ -42,7 +42,7 @@ export default function GuideFilters({
     "w-full appearance-none rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-base text-white focus:outline-none focus:ring-2 focus:ring-darkAccent [&>option]:text-[#101216]";
 
   return (
-    <form ref={form} action="/guide" method="get" className="mt-10 grid max-w-2xl gap-3 sm:grid-cols-2">
+    <form ref={form} action="/guide" method="get" className="grid max-w-2xl gap-3 sm:grid-cols-2">
       <label className="block">
         <span className="mb-2 block text-sm text-white/70">City</span>
         <select name="city" defaultValue={city ?? ""} onChange={go} className={select}>
