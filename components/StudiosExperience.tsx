@@ -11,10 +11,12 @@ import {
   BUNDLE,
   OUTCOMES,
   PACKS,
+  PRODUCTS as PRODUCT_LIST,
   oneAtATime,
   packFor,
   productsFor,
   type Outcome,
+  type Pack,
   type Product,
 } from "components/studiosCatalog";
 
@@ -112,6 +114,87 @@ function ShelfItem({ product, onOpen }: { product: Product; onOpen: () => void }
 }
 
 /**
+ * The pack, as the last and loudest thing on the shelf.
+ *
+ * It sat under the outcome's line in small type, and even the person who
+ * wrote it read past it. Now it closes the shelf as its own card, edged in the
+ * paints of the tools inside it: the complete experience in the display
+ * weight, what is in it, the price, and what it saves, said as a number.
+ */
+function PackCard({ pack, onWant }: { pack: Pack; onWant: () => void }) {
+  const inside = pack.products
+    .map((k) => PRODUCT_LIST.find((p) => p.key === k))
+    .filter((p): p is Product => Boolean(p));
+  const separately = inside.reduce((sum, p) => sum + (p.list ?? 0), 0);
+  const saves = separately - pack.list;
+  const edge = `linear-gradient(120deg, ${inside.map((p) => p.accent).join(", ")})`;
+
+  return (
+    <div
+      className="group relative rounded-3xl p-[1.5px] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5"
+      style={{ backgroundImage: edge }}
+    >
+      {/* The glow the edge throws, stronger under the pointer. */}
+      <div
+        aria-hidden
+        className="absolute -inset-3 -z-10 rounded-[2rem] opacity-40 blur-2xl transition-opacity duration-500 group-hover:opacity-70"
+        style={{ backgroundImage: edge }}
+      />
+      <div className="relative overflow-hidden rounded-[calc(1.5rem-1.5px)] bg-[#0A0C15] px-6 py-8 sm:px-9 sm:py-10">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.12]"
+          style={{ backgroundImage: edge }}
+        />
+        <div className="relative">
+          <p className="text-4xl font-extralight leading-[1] tracking-tighter text-white sm:text-5xl">
+            The complete experience
+          </p>
+          <p className="mt-5 text-xl font-light text-white">{pack.name}</p>
+          <p className="mt-2 max-w-lg text-base font-light leading-relaxed text-white/65">{pack.line}</p>
+
+          <ul className="mt-6 flex flex-wrap gap-2">
+            {inside.map((p) => (
+              <li
+                key={p.key}
+                className="flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-sm text-white/85"
+              >
+                <span aria-hidden className="h-2 w-2 rounded-full" style={{ backgroundColor: p.accent }} />
+                {p.name}
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-8 flex flex-wrap items-end justify-between gap-x-8 gap-y-6 border-t border-white/10 pt-7">
+            <div>
+              <p className="flex flex-wrap items-baseline gap-x-3">
+                <span className="text-5xl font-extralight tracking-tighter tabular-nums text-white">${pack.list}</span>
+                <span className="text-base text-white/50">/ month</span>
+                {saves > 0 && (
+                  <span className="text-base text-white/40 line-through tabular-nums">${separately}</span>
+                )}
+              </p>
+              <p className="mt-2 text-base text-white/60">${pack.client} for Queso clients</p>
+              {saves > 0 && (
+                <span
+                  className="mt-4 inline-block rounded-full px-3.5 py-1 text-sm font-semibold text-black"
+                  style={{ backgroundImage: houseGradient() }}
+                >
+                  Save ${saves} a month
+                </span>
+              )}
+            </div>
+            <button type="button" onClick={onWant} className={arrowTone("dark")}>
+              <ArrowMark tone="dark" label="Get the complete experience" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
  * One outcome, one chapter: the question on the left, held in place while its
  * shelf scrolls past on the right, with the pack that goes with it (if there
  * is one) under the question.
@@ -150,20 +233,6 @@ function OutcomeChapter({
             <span aria-hidden className="mt-8 block h-1 w-16 rounded-full" style={{ backgroundColor: outcome.accent }} />
             <p className="mt-8 max-w-md text-xl font-light leading-relaxed text-white/65">{outcome.line}</p>
 
-            {pack && (
-              <div className="mt-12 border-t border-white/10 pt-8">
-                <p className="text-sm text-white/45">Better together</p>
-                <p className="mt-2 text-2xl font-light tracking-tight text-white">{pack.name}</p>
-                <p className="mt-2 max-w-sm text-base font-light leading-relaxed text-white/60">{pack.line}</p>
-                <p className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <span className="text-lg font-light tabular-nums text-white">${pack.list} / month</span>
-                  <span className="text-sm text-white/45">${pack.client} for Queso clients</span>
-                </p>
-                <button type="button" onClick={() => onWant(pack.name)} className={`${arrowTone("dark")} mt-6`}>
-                  <ArrowMark tone="dark" size="sm" label="Want both?" />
-                </button>
-              </div>
-            )}
           </Reveal>
         </div>
 
@@ -173,6 +242,11 @@ function OutcomeChapter({
               <ShelfItem product={p} onOpen={() => onOpen(p)} />
             </Reveal>
           ))}
+          {pack && (
+            <Reveal delay={shelf.length * 90}>
+              <PackCard pack={pack} onWant={() => onWant(pack.name)} />
+            </Reveal>
+          )}
         </div>
       </div>
     </section>
