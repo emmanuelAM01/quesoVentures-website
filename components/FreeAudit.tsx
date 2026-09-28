@@ -21,7 +21,8 @@ export default function FreeAuditSection({
   copy = SITE_COPY.audit,
   image,
 }: {
-  copy?: SiteCopy["audit"];
+  /** The small line under the button is optional; the site default has none. */
+  copy?: SiteCopy["audit"] & { reassurance?: string };
   /**
    * Optional photograph behind the close. Homepage only, on purpose: every
    * other page opens on a photograph of its own place or trade, so its close

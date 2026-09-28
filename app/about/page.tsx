@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Footer from "components/Footer";
 import Reveal from "components/Reveal";
 import AboutHero from "components/AboutHero";
-import AboutLinks from "components/AboutLinks";
 import AboutDeck, { type DeckCard } from "components/AboutDeck";
 import AboutChapters, { type Chapter } from "components/AboutChapters";
 import { PAINT } from "components/livery";
@@ -135,7 +134,7 @@ const what: DeckCard[] = [
     mark: "Growing pretty fast",
     icon: "tools",
     title: "The real product",
-    body: "Queso Studios. Loyalty rewards, an AI front desk, and more. Turn one on and it runs.",
+    body: "Software that gets people calling, gets them walking back in, and ends the napkin math. Turn it on and it runs.",
     href: "/studios",
     cta: "See Queso Studios",
   },
@@ -164,13 +163,13 @@ const why: Chapter[] = [
       stretch of growing up, not a date.
     */
     title: "The younger years",
-    body: "Took computers apart to see how they worked. Built websites for fun, and messed with any tech I could get my hands on.",
+    body: "Started out by taking computers apart and putting them back together. 75% success rate overall.",
     story:
-      "Edited my grades on the page before I showed my parents. Edited webpages as pranks. Built sites for fake businesses I thought were cool, then real ones for friends and family.",
+      "Edited my grades and webpages online to prank my friends. Built sites for fake businesses I thought were cool, then real ones for friends and family. As most kids don't, I did not realzie how important this hobby would be.",
     photos: [
       {
         src: "/about/2008.jpg",
-        alt: "Emmanuel Mendieta as a kid, wearing a red paper crown",
+        alt: "Emmanuel Mendieta as a kid, king of Fogo de Chão",
         position: "50% 30%",
       },
       {
@@ -179,13 +178,13 @@ const why: Chapter[] = [
         position: "50% 45%",
       },
       {
+        src: "/about/2010s-skyline.jpg",
+        alt: "A selfie of Emmanuel Mendieta and his brother in front of a city skyline at night",
+      },
+      {
         src: "/about/2010s-boat.jpg",
         alt: "Emmanuel Mendieta sitting in a boat at a hilltop overlook at night",
         position: "70% 50%",
-      },
-      {
-        src: "/about/2010s-skyline.jpg",
-        alt: "A selfie of Emmanuel Mendieta in front of a city skyline at night",
       },
     ],
     layout: "right",
@@ -195,6 +194,7 @@ const why: Chapter[] = [
     mark: "2020",
     title: "Staring down unemployment",
     body: "I had to make money somehow. So I started making money off my hobby.",
+    story: "In college and Covid just closed every store that was hiring. The bills were still coming so I had to think fast. I don't know why it did not occur to me earlier to make websites for money, but I started freelancing. $15/hour, then it doubled and grew from there.",
     photos: [
       {
         src: "/about/2020-laptop.jpg",
@@ -207,13 +207,13 @@ const why: Chapter[] = [
   {
     mark: "2022",
     title: "First startups",
-    body: "Built two apps in college. Y Combinator never answered. Alliance DAO passed on the idea, not on me.",
+    body: "Built apps in college alongside my brother. Y Combinator were not feeling it, and investor conversations did not work out.",
     story:
-      "Still in college, I helped build a stablecoin savings app. Then crypto crashed and took the idea with it. Next came a crime reporting app for Latin America, the first product I built on my own. Y Combinator never answered. Alliance DAO interviewed me three times between cupcake shop shifts, then passed on the idea. Never on whether I could build it.",
+      "I helped build a stablecoin savings app. Then crypto crashed and took the idea with it. Next came a crime reporting app for Latin America. Had investor calls in between school and cupcake shop shifts (progress isn't linear). Things fell through in the end, I though it was because I did not build it correctly, I had not learned my lesson yet though.",
     photos: [
       {
         src: "/about/2022-mountain.jpg",
-        alt: "Emmanuel Mendieta standing on a snowy mountain pass",
+        alt: "Emmanuel Mendieta standing on a snowy mountain pass near Tbilisi, Georgia",
         position: "50% 62%",
       },
     ],
@@ -224,7 +224,7 @@ const why: Chapter[] = [
     mark: "2023",
     title: "Graduated, got a regular job",
     body: "Computer Science at the University of Houston (what a surprise).",
-    story: "Then a regular job, because those were the rules of life. Or so I thought.",
+    story: "After the ups and downs of freelance work and trying to create a company in college, I was relieved that I had an engineering job lined up for me immediately out of college. For 6 months I was reminded why working a regular job and carrying out the plan of life (college -> job -> vacations to break up the mundane) was not for me.",
     photos: [
       {
         src: "/hero/aboutHills.jpg",
@@ -236,10 +236,10 @@ const why: Chapter[] = [
   },
   {
     mark: "2024",
-    title: "QA hire to tech lead",
-    body: "Hired at MARA for QA. Two months later I was leading six developers.",
+    title: "Better engineering job ",
+    body: "This job operated like a startup. I was hired for a specific role and within 2 months I was leading the team.",
     story:
-      "Took a pay cut to join MARA as a contractor, hired for QA. There was no QA work my first week, so I built the frontend for their Bitcoin transaction accelerator and shipped it in days. Two months later I was leading six developers and a designer.",
+      "Took a gamble and a paycut to join this company. Went from cushy W2 to unstable 1099 with the hopes of creating something real. The story of this job was that I was always avaiable and I grew pretty rapidly. Issue is i grew a bit too fast, there is only so much you can do when the company is not yours.",
     photos: [
       {
         src: "/hero/aboutTokyo.jpg",
@@ -251,10 +251,10 @@ const why: Chapter[] = [
   },
   {
     mark: "2025",
-    title: "CTO, raised $250K",
-    body: "An app full of AI agents. A whole bunch of technical jazz, but no users. Lesson learned: talk to people first.",
+    title: "Back to startups",
+    body: "My brother and I did it, we got funding.",
     story:
-      "We raised $250K for Bitcoin backed lending. As CTO I built every pivot: trucking finance, logistics software, then an AI language coach on WhatsApp. One version paid truck drivers for texting a photo of their paperwork. It worked perfectly. Nobody signed up.",
+      "We raised for Bitcoin backed lending: think a high yield savings account that puts your deposits to work in an industry that needs the money. Real estate, movies, and AI datacenters all came up before we settled on logistics, because it is real and always moving. We dropped the crypto, built logistics finance software, and gave that industry everything we had. It gave back hardly anything. The final form was a WhatsApp language tutor that graded your voice notes on grammar, authenticity, relevance, and accuracy, then kept the conversation going. My biggest technical feat, yet we burnt out building it instead of talking to the people it was for.",
     photos: [
       {
         src: "/about/2025-mugello.jpg",
@@ -273,8 +273,9 @@ const why: Chapter[] = [
     // DRAFT
     mark: "2026",
     title: "Queso Ventures",
-    body: "Learned that lesson a little too late. So I started Queso Ventures.",
-    story: "Everything I have learned, and everything I am still learning, in one place.",
+    body: "Everything I have learned, and everything I am still learning.",
+    story:
+      "The common theme in every year before this: I like to build stuff, but nobody really uses it. So I did the inverse, talk then build stuff. It worked, and it is still how Queso Ventures operates today. I only build what people actually need, and the only way to know that is to talk to them, not guess.",
     photos: [
       {
         src: "/hero/aboutClouds.JPEG",
@@ -329,13 +330,7 @@ export default function AboutPage() {
           only broke the flow.
         */}
         <h2 className="sr-only">Why I&apos;m doing this</h2>
-        <AboutChapters
-          chapters={why}
-          coda={
-            // Right after the résumé, where someone checking up on me looks next.
-            <AboutLinks github={GITHUB} linkedin={LINKEDIN} />
-          }
-        />
+        <AboutChapters chapters={why} />
 
         {/*
           The last page. After Ferrari's centred blocks: one statement, one
