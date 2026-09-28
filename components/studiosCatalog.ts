@@ -195,7 +195,6 @@ export const PRODUCTS: Product[] = [
       "Tell it who your best customer is, once.",
       "It finds more of them, each with a way to reach them.",
       "Every lead lands in your lead list, ready to work.",
-      "Add the Queso Organizer and they sit with everyone else you do business with.",
     ],
   },
   {
@@ -221,9 +220,7 @@ export const PRODUCTS: Product[] = [
     key: "organization",
     name: "Queso Organizer",
     outcome: "organized",
-    // It runs today, but shaped for one trade; until it configures itself
-    // for any business it is sold as built to order.
-    built: false,
+    built: true,
     list: 100,
     client: 50,
     accent: "#7692A5",
@@ -232,7 +229,8 @@ export const PRODUCTS: Product[] = [
     points: [
       "Everybody at once: who is due, who owes, who went quiet.",
       "Notes and history on every one of them.",
-      "Leads, forms and bookings land in it on their own.",
+      "Customers and the vendors you buy from, each in their own list.",
+      "Set up in your words in a few minutes, and your numbers on one page.",
     ],
   },
   {
