@@ -3,37 +3,47 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { PiCaretDownBold, PiCaretRightBold } from "react-icons/pi";
 import ThemeSwitch from "./ThemeSwitch";
 import { INDUSTRIES, LISTED_FEATURED } from "./serviceAreas";
 import { CITIES, ALL_NEIGHBORHOODS } from "components/places";
 import NicheCtaButton from "./NicheCtaButton";
 import { SITE_COPY } from "./siteCopy";
+import { houseGradient } from "./livery";
+
+/**
+ * The bar, on every page but Studios and the stamp landing.
+ *
+ * Laid out in the order a prospect needs it: what I do (Services), who for
+ * (Who I Help), what I have built (Studios), then the brand (the Guide, and
+ * About). The Free Report closes the row, because it is where every one of
+ * those is meant to lead.
+ *
+ * Three columns, so the nav sits at the true centre without measuring
+ * anything: the logo holds the left, the actions the right, and the middle
+ * column is the nav. It used to slide sideways on trade pages to make room
+ * for the page's name; the Who I Help item names the page instead, which says
+ * the same thing without the bar moving under the pointer.
+ *
+ * On a phone the bar is the logo, the Free Report in the middle, and the menu.
+ * The menu is a full screen page of its own: it scrolls by itself, the page
+ * underneath is locked while it is open, and it closes on a tap, a link, or
+ * Escape.
+ */
+const NO_HEADER = ["/studios", "/foundCode"];
 
 const navLinkClass =
-  "relative whitespace-nowrap text-[15px] font-medium text-lightText dark:text-darkText px-4 py-2 rounded-full transition-colors " +
-  "after:content-[''] after:absolute after:left-4 after:right-4 after:bottom-1 after:h-[2px] " +
-  "after:origin-left after:scale-x-0 after:transition-transform after:duration-200 " +
-  "after:bg-lightAccent dark:after:bg-darkAccent hover:after:scale-x-100";
-
-const mobileLinkClass =
-  "block w-full text-left px-3 py-3.5 text-lg font-medium text-lightText dark:text-darkText rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors";
-
-const dropdownHeadingClass =
-  "mb-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-lightTextMuted dark:text-darkTextMuted";
+  "relative whitespace-nowrap text-[15px] font-medium text-lightText dark:text-darkText px-3.5 py-2 transition-colors " +
+  "after:content-[''] after:absolute after:left-3.5 after:right-3.5 after:bottom-0.5 after:h-[2px] after:rounded-full " +
+  "after:origin-left after:scale-x-0 after:transition-transform after:duration-300 " +
+  "after:bg-lightAccent dark:after:bg-darkAccent hover:after:scale-x-100 focus-visible:after:scale-x-100 focus:outline-none";
 
 const dropdownLinkClass =
   "block py-[7px] text-[15px] leading-snug text-lightTextMuted transition-colors " +
   "hover:text-lightText dark:text-darkTextMuted dark:hover:text-darkText";
 
-/**
- * What the "Who I Help" item should say on this page.
- *
- * Null everywhere except a trade or area page, where the nav stops being a
- * menu and starts telling you where you are. Unlisted trades count: Food Trucks
- * is kept out of the dropdown, but someone who landed on that page should still
- * see it named rather than see the generic label.
- */
+/** The trade or town a page is about, for the Who I Help label. */
 function selectedPlaceOrTrade(pathname: string | null): string | null {
   if (!pathname) return null;
   const trade = INDUSTRIES.find((i) => i.slug && i.slug === pathname);
@@ -45,25 +55,6 @@ function selectedPlaceOrTrade(pathname: string | null): string | null {
   return null;
 }
 
-/**
- * Routes that bring their own chrome.
- *
- * /studios is a deliberate departure from the rest of the site and has no
- * header at all; /foundCode uses SimpleHeader. Both used to get this simply by
- * not rendering it, which stopped being an option once it moved into the root
- * layout.
- */
-const NO_HEADER = ["/studios", "/foundCode"];
-
-/** Layout effect on the client, plain effect on the server. */
-const useIsoLayoutEffect =
-  typeof window !== "undefined" ? useLayoutEffect : useEffect;
-
-/**
- * The Queso Guide is in the main nav on every page, on desktop and in the
- * phone menu. It used to wait for three published entries; it is a standing
- * part of the site now, so it is always there.
- */
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [overDark, setOverDark] = useState(false);
@@ -71,83 +62,11 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileWorkOpen, setMobileWorkOpen] = useState(false);
   const workRef = useRef<HTMLLIElement>(null);
+  const menuRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
   const selected = useMemo(() => selectedPlaceOrTrade(pathname), [pathname]);
 
-  /*
-    The slide.
-
-    With nothing selected the nav sits in the middle of the bar. Land on a
-    trade or an area page and it slides right, out of the way, and the name of
-    where you are takes the middle. Going back slides it home again.
-
-    It is one element that moves rather than two that swap, because a swap
-    cannot be animated: the nav is always laid out on the right, next to the
-    button, and a transform carries it to the centre when there is nothing to
-    put there. Transforms do not touch layout, so nothing else on the bar
-    shifts while it travels.
-
-    Measured with offsetLeft rather than getBoundingClientRect, and that is
-    load-bearing: offsetLeft is a layout value and ignores transforms, so a
-    re-measure returns the same answer no matter what offset is currently
-    applied. Rects do not, and reading one while the nav is already displaced
-    compounds the previous measurement — the nav walks off the left edge the
-    moment the web font swaps in and triggers a second pass.
-  */
-  const navRef = useRef<HTMLElement>(null);
-  const centerRef = useRef<HTMLSpanElement>(null);
-  const [shift, setShift] = useState(0);
-  const [measured, setMeasured] = useState(false);
-  /* Below this the name is not drawn, so the nav has no reason to move. */
-  const [wide, setWide] = useState(false);
-
-  const measure = useCallback(() => {
-    const nav = navRef.current;
-    const mark = centerRef.current;
-    if (!nav || !mark) return;
-    /* Both are positioned against the same offsetParent (the bar row), so the
-       difference is the distance the nav has to travel to sit dead centre. */
-    setShift(mark.offsetLeft - (nav.offsetLeft + nav.offsetWidth / 2));
-    setMeasured(true);
-  }, []);
-
-  useIsoLayoutEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    setWide(mq.matches);
-    const onChange = () => {
-      setWide(mq.matches);
-      measure();
-    };
-    mq.addEventListener("change", onChange);
-    measure();
-    window.addEventListener("resize", measure);
-
-    /*
-      The first measurement happens before Inter Tight has loaded, so it sizes
-      the nav in the fallback face and centres it about 45px off. Watching the
-      nav's own box catches the font swap, and anything else that resizes it,
-      without guessing at a delay.
-    */
-    const ro = new ResizeObserver(measure);
-    if (navRef.current) ro.observe(navRef.current);
-
-    return () => {
-      mq.removeEventListener("change", onChange);
-      window.removeEventListener("resize", measure);
-      ro.disconnect();
-    };
-  }, [measure]);
-
-  /** Centre the nav unless a name has taken the middle. */
-  const centred = !selected || !wide;
-  const offset = centred ? shift : 0;
-  /**
-   * Below lg the centred name is not drawn, so the nav item carries it instead.
-   * Above lg it must go back to saying "Who I Help" — the same word in the
-   * middle of the bar and again in the menu label reads as a rendering bug.
-   */
-  const inlineLabel = selected && !wide ? selected : "Who I Help";
-
+  // Light or dark by what is under the bar, and a firmer edge once scrolled.
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 6);
@@ -165,13 +84,46 @@ export default function Header() {
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (workRef.current && !workRef.current.contains(e.target as Node)) {
-        setWorkOpen(false);
-      }
+      if (workRef.current && !workRef.current.contains(e.target as Node)) setWorkOpen(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+  // Every navigation closes whatever was open.
+  useEffect(() => {
+    setMobileOpen(false);
+    setWorkOpen(false);
+  }, [pathname]);
+
+  /*
+    While the phone menu is open the page underneath does not move. Without
+    this a swipe on the menu scrolled the page behind it, and the menu itself
+    could not be scrolled at all.
+
+    Done with listeners rather than overflow: hidden. The body here carries
+    overflow-x: hidden, so any overflow lock on the root turns the body into
+    its own scroll container, and the sticky bar then sticks to the top of the
+    body, far above the screen once the page is scrolled. Swallowing the
+    wheel and touch moves that start outside the menu stops the page, and
+    overscroll-contain on the menu stops a swipe at its end handing over.
+  */
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const block = (e: Event) => {
+      if (menuRef.current?.contains(e.target as Node)) return;
+      e.preventDefault();
+    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMobileOpen(false);
+    document.addEventListener("wheel", block, { passive: false });
+    document.addEventListener("touchmove", block, { passive: false });
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("wheel", block);
+      document.removeEventListener("touchmove", block);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [mobileOpen]);
 
   const closeMobile = () => setMobileOpen(false);
 
@@ -180,98 +132,38 @@ export default function Header() {
   return (
     <header
       className={[
-        "sticky top-0 z-50 w-full pt-3 px-3 sm:px-4",
-        "transition-all duration-200",
-        overDark ? "dark" : "",
+        "sticky top-0 z-50 w-full pt-3 px-3 sm:px-4 transition-all duration-200",
+        // The open menu is on the page ground, so the bar follows it.
+        overDark && !mobileOpen ? "dark" : "",
       ].join(" ")}
     >
       <div className="container mx-auto">
         <div className="relative rounded-full">
-          <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
-            <div className="navbar-glow absolute inset-x-0 -top-4 h-10 blur-xl opacity-30 dark:opacity-15" />
-            <div className="absolute inset-0 bg-headerLight dark:bg-headerDark backdrop-blur-md" />
+          <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-full">
+            <div className="navbar-glow absolute inset-x-0 -top-4 h-10 opacity-30 blur-xl dark:opacity-15" />
+            <div className="absolute inset-0 bg-headerLight backdrop-blur-md dark:bg-headerDark" />
           </div>
-
           <div
-            className={[
-              "absolute inset-0 rounded-full pointer-events-none transition-all duration-200",
+            className={`pointer-events-none absolute inset-0 rounded-full ring-1 transition-all duration-200 ${
               scrolled
-                ? "ring-1 ring-lightBorder/90 dark:ring-darkBorder/90 shadow-md shadow-black/5 dark:shadow-black/20"
-                : "ring-1 ring-lightBorder/60 dark:ring-darkBorder/60 shadow-sm shadow-black/5 dark:shadow-black/10",
-            ].join(" ")}
+                ? "shadow-md shadow-black/5 ring-lightBorder/90 dark:shadow-black/20 dark:ring-darkBorder/90"
+                : "shadow-sm shadow-black/5 ring-lightBorder/60 dark:shadow-black/10 dark:ring-darkBorder/60"
+            }`}
           />
 
-          {/* Logo left, everything else right, and the true centre marked by a
-              zero-width span the transform can measure against. */}
-          <div className="relative px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-            <span
-              ref={centerRef}
-              aria-hidden
-              className="pointer-events-none absolute left-1/2 top-0 h-0 w-0"
-            />
-
-            <div className="flex shrink-0 items-center justify-start">
-              <Link
-                href="/"
-                className="relative flex items-center gap-2 px-1 py-3 text-lg font-medium text-lightText dark:text-darkText transition-colors
-                  after:content-[''] after:absolute after:left-1 after:right-1 after:bottom-1 after:h-[2px]
-                  after:origin-left after:scale-x-0 after:transition-transform after:duration-200
-                  after:bg-lightAccent dark:after:bg-darkAccent
-                  hover:after:scale-x-100"
-              >
-                <Image
-                  src="/logo.png"
-                  alt="Queso Ventures logo"
-                  width={26}
-                  height={26}
-                  className="object-contain"
-                  priority={false}
-                />
-                <span className="hidden whitespace-nowrap sm:inline">Queso Ventures</span>
-              </Link>
-            </div>
-
-            {/* The name of the page you are on, in the middle of the bar,
-                wearing the house gradient.
-
-                Two ramps, not one. Over a dark hero the logo's red-to-yellow
-                reads fine; on the cream header further down the page the yellow
-                end lands at about 1.3:1 and the last syllable of the town
-                simply vanishes. The light ramp stops at bronze instead, which
-                still reads as the house colours and still reads as words.
-
-                Only from lg up. Narrower than that the nav is already using
-                most of the width, so the name would collide with it; there the
-                "Who I Help" item carries the label inline instead. */}
-            <span
-              aria-hidden
-              style={{
-                /* In behind the nav: wait for it to clear, or the two words
-                   overlap mid-travel and read as one broken string. Out ahead
-                   of it: the name goes first, then the nav comes home. */
-                transitionDelay: selected && wide ? "260ms" : "0ms",
-                transitionDuration: selected && wide ? "420ms" : "180ms",
-              }}
-              className={`pointer-events-none absolute left-1/2 top-1/2 hidden -translate-y-1/2 whitespace-nowrap bg-gradient-to-r from-[#C4161C] to-[#B87200] bg-clip-text text-[22px] font-semibold tracking-tight text-transparent transition-all ease-out dark:from-[#FF5A4E] dark:to-[#FFD100] lg:block ${
-                selected && wide
-                  ? "-translate-x-1/2 opacity-100 blur-0"
-                  : "-translate-x-[calc(50%+12px)] opacity-0 blur-[2px]"
-              }`}
+          <div className="relative grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 sm:px-6">
+            {/* Left: the logo. */}
+            <Link
+              href="/"
+              className="flex items-center gap-2 justify-self-start py-3 text-lg font-medium text-lightText dark:text-darkText"
             >
-              {selected}
-            </span>
+              <Image src="/logo.png" alt="Queso Ventures logo" width={26} height={26} className="object-contain" />
+              <span className="hidden whitespace-nowrap sm:inline">Queso Ventures</span>
+            </Link>
 
-            <div className="hidden shrink-0 md:flex items-center justify-end gap-3">
-            <nav
-              ref={navRef}
-              style={{ transform: `translateX(${offset}px)` }}
-              className={`flex items-center ${
-                measured
-                  ? "transition-transform duration-[550ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-                  : ""
-              }`}
-            >
-              <ul className="flex items-center space-x-1">
+            {/* Middle: the nav on desktop, the Free Report on a phone. */}
+            <nav aria-label="Main" className="hidden lg:block">
+              <ul className="flex items-center">
                 <li>
                   <Link href="/services" className={navLinkClass}>
                     Services
@@ -279,108 +171,61 @@ export default function Header() {
                 </li>
 
                 <li ref={workRef} className="relative">
-                  {/*
-                    On a trade or area page this item names the page instead of
-                    the menu, with the underline left drawn.
-
-                    A nav that reads the same on every page makes eleven pages
-                    feel like one; this is the cheapest possible way to tell
-                    someone which of the eleven they are standing on, and it
-                    costs no extra row, no breadcrumb and no second colour. The
-                    label is keyed so it animates in on arrival rather than
-                    simply being different.
-                  */}
+                  {/* On a trade or town page this item names the page, with its
+                      line drawn, which is how you know which of the pages you
+                      are on without a breadcrumb. */}
                   <button
                     type="button"
                     onClick={() => setWorkOpen((o) => !o)}
-                    className={`${navLinkClass} ${
-                      selected ? "after:scale-x-100" : ""
-                    }`}
+                    className={`${navLinkClass} inline-flex items-center gap-1.5 ${selected ? "after:scale-x-100" : ""}`}
                     aria-expanded={workOpen}
                   >
-                    {/* No marker dot: Studios already owns a dot in this row,
-                        and two different dots meaning two different things is
-                        exactly the noise the dropdown rewrite removed. The
-                        changed word plus the drawn underline is the state. */}
-                    <span key={inlineLabel} className="nav-swap">
-                      {inlineLabel}
-                    </span>
-                    <span
-                      className={`ml-1 inline-block text-xs transition-transform duration-200 ${
-                        workOpen ? "rotate-180" : ""
-                      }`}
-                    >
-                      ▾
-                    </span>
+                    {/* No entrance animation on the label: it left the text on a
+                        compositing layer that painted it grey beside its neighbours. */}
+                    <span>{selected ?? "Who I Help"}</span>
+                    <PiCaretDownBold
+                      aria-hidden
+                      className={`h-3 w-3 transition-transform duration-300 ${workOpen ? "rotate-180" : ""}`}
+                    />
                   </button>
 
-                  {/* Always in the DOM, toggled with CSS. Mounting this
-                      conditionally kept every link out of the server HTML,
-                      which is why Google never crawled those pages.
-
-                      Two labelled columns rather than two undifferentiated
-                      stacks. Twelve links of identical weight on a dark slab
-                      gave the eye nowhere to land and read as a wall; the
-                      headings say what each column is, and dropping the hover
-                      fills for a colour change takes the noise out. */}
+                  {/* Always in the DOM, toggled with CSS, so every link is in
+                      the server HTML for crawlers. */}
                   <div
                     className={`${
-                      workOpen ? "block" : "hidden"
-                    } absolute left-1/2 top-full z-50 mt-3 w-[34rem] -translate-x-1/2 rounded-2xl border border-lightBorder bg-panelLight p-6 shadow-xl shadow-black/10 dark:border-darkBorder dark:bg-panelDark dark:shadow-black/40`}
+                      workOpen ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0"
+                    } absolute left-1/2 top-full z-50 mt-4 w-[36rem] -translate-x-1/2 rounded-3xl border border-lightBorder bg-panelLight p-7 shadow-2xl shadow-black/10 transition-all duration-300 dark:border-darkBorder dark:bg-panelDark dark:shadow-black/40`}
                   >
-                    <div className="grid grid-cols-2 gap-x-8">
+                    <span
+                      aria-hidden
+                      className="absolute inset-x-7 top-0 h-[2px] rounded-full"
+                      style={{ backgroundImage: houseGradient() }}
+                    />
+                    <div className="grid grid-cols-2 gap-x-10">
                       <div>
-                        <p className={dropdownHeadingClass}>By trade</p>
+                        <p className="mb-3 text-sm text-lightTextMuted dark:text-darkTextMuted">By trade</p>
                         {LISTED_FEATURED.map((item) => (
                           <Link
                             key={item.slug}
                             href={item.slug}
-                            onClick={() => setWorkOpen(false)}
                             aria-current={item.slug === pathname ? "page" : undefined}
                             className={`${dropdownLinkClass} ${
-                              item.slug === pathname
-                                ? "font-medium text-lightText dark:text-darkText"
-                                : ""
+                              item.slug === pathname ? "font-medium text-lightText dark:text-darkText" : ""
                             }`}
                           >
                             {item.label}
                           </Link>
                         ))}
-                        {/* A link rather than dead italic text: /services is
-                            the page that lists every trade, which is exactly
-                            what someone who did not find theirs above wants. */}
-                        <Link
-                          href="/services"
-                          onClick={() => setWorkOpen(false)}
-                          className={`${dropdownLinkClass} italic`}
-                        >
+                        <Link href="/services" className={`${dropdownLinkClass} italic`}>
                           and many more
                         </Link>
                       </div>
                       <div>
-                        <p className={dropdownHeadingClass}>By area</p>
-                        {/*
-                          Metro first, towns underneath it.
-
-                          The column used to be a flat list of six towns with no
-                          Houston in it at all, so the one page that covers the
-                          whole metro was reachable only from the footer — which
-                          is backwards, because it is the parent of every other
-                          page in the group and the one carrying the broadest
-                          search. The nesting here is the same tree that
-                          places.ts already describes and that the breadcrumbs
-                          and the sitemap already follow; the nav was the last
-                          place still pretending it was flat.
-
-                          It also scales: the day a second metro is added, it
-                          arrives as another block rather than eleven more towns
-                          in one undifferentiated stack.
-                        */}
+                        <p className="mb-3 text-sm text-lightTextMuted dark:text-darkTextMuted">By area</p>
                         {CITIES.map((city) => (
                           <div key={city.slug} className="mb-1 last:mb-0">
                             <Link
                               href={city.slug}
-                              onClick={() => setWorkOpen(false)}
                               aria-current={city.slug === pathname ? "page" : undefined}
                               className={`${dropdownLinkClass} font-medium text-lightText dark:text-darkText`}
                             >
@@ -391,12 +236,9 @@ export default function Header() {
                                 <Link
                                   key={item.slug}
                                   href={item.slug}
-                                  onClick={() => setWorkOpen(false)}
                                   aria-current={item.slug === pathname ? "page" : undefined}
                                   className={`${dropdownLinkClass} ${
-                                    item.slug === pathname
-                                      ? "font-medium text-lightText dark:text-darkText"
-                                      : ""
+                                    item.slug === pathname ? "font-medium text-lightText dark:text-darkText" : ""
                                   }`}
                                 >
                                   {item.name}
@@ -411,130 +253,142 @@ export default function Header() {
                 </li>
 
                 <li>
-                  <Link href="/about" className={navLinkClass}>
-                    About
+                  <Link href="/studios" className={`${navLinkClass} inline-flex items-center gap-1.5`}>
+                    <span aria-hidden className="h-1.5 w-1.5 rounded-full" style={{ backgroundImage: houseGradient() }} />
+                    Studios
                   </Link>
                 </li>
-
-                {/* Prospect first (Services, Who I Help), then the story
-                    (About), then the things worth showing off. */}
                 <li>
                   <Link href="/guide" className={navLinkClass}>
                     Guide
                   </Link>
                 </li>
-
                 <li>
-                  <Link href="/studios" className={`${navLinkClass} font-semibold`}>
-                    <span className="inline-flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#C4161C] to-[#FFD100]" />
-                      Studios
-                    </span>
+                  <Link href="/about" className={navLinkClass}>
+                    About
                   </Link>
                 </li>
               </ul>
             </nav>
 
-            {/* Right zone.
-                The pill used to be the phone number, on every page. Every call
-                it produced was spam, so the most valuable button on the site
-                was working for nobody. The form takes the pill; the number
-                stays beside it as a quiet link, because a visible local number
-                is still a trust signal and still has to match the Google
-                Business Profile. */}
-              <NicheCtaButton
-                from="header"
-                variant="pill"
-                message={SITE_COPY.audit.ctaPrefill}
-                label="Free Report"
-              />
-              <ThemeSwitch />
-            </div>
-
-            {/* Mobile: the form is always one tap, outside the drawer. */}
-            <div className="flex items-center justify-end gap-1 md:hidden">
+            {/* The Free Report, dead centre on a phone: the one thing the bar
+                is for, one tap away, without the drawer. */}
+            <div className="lg:hidden">
               <NicheCtaButton
                 from="header_mobile"
                 variant="pill"
                 message={SITE_COPY.audit.ctaPrefill}
                 label="Free Report"
               />
-              <ThemeSwitch />
+            </div>
+
+            {/* Right: theme and the Free Report on desktop, the menu on a phone. */}
+            <div className="flex items-center justify-self-end gap-2">
+              <div className="hidden items-center gap-2 lg:flex">
+                <ThemeSwitch />
+                <NicheCtaButton
+                  from="header"
+                  variant="pill"
+                  message={SITE_COPY.audit.ctaPrefill}
+                  label="Free Report"
+                />
+              </div>
               <button
                 type="button"
                 onClick={() => setMobileOpen((o) => !o)}
                 aria-label={mobileOpen ? "Close menu" : "Open menu"}
                 aria-expanded={mobileOpen}
-                className="p-2 rounded-lg text-lightText dark:text-darkText hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+                className="grid h-10 w-10 place-items-center rounded-full text-lightText transition-colors hover:bg-black/5 dark:text-darkText dark:hover:bg-white/10 lg:hidden"
               >
-                {mobileOpen ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                )}
+                <span aria-hidden className="relative block h-3.5 w-5">
+                  <span
+                    className={`absolute left-0 h-[2px] w-5 rounded-full bg-current transition-all duration-300 ${
+                      mobileOpen ? "top-1.5 rotate-45" : "top-0"
+                    }`}
+                  />
+                  <span
+                    className={`absolute left-0 top-1.5 h-[2px] w-5 rounded-full bg-current transition-opacity duration-200 ${
+                      mobileOpen ? "opacity-0" : "opacity-100"
+                    }`}
+                  />
+                  <span
+                    className={`absolute left-0 h-[2px] w-5 rounded-full bg-current transition-all duration-300 ${
+                      mobileOpen ? "top-1.5 -rotate-45" : "top-3"
+                    }`}
+                  />
+                </span>
               </button>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Mobile menu */}
-        {mobileOpen && (
-          <nav className="md:hidden mt-2 rounded-3xl ring-1 ring-lightBorder/90 dark:ring-darkBorder/90 bg-panelLight dark:bg-panelDark shadow-xl overflow-hidden">
-            <div className="px-4 py-3 flex flex-col gap-0.5">
-              <Link href="/services" onClick={closeMobile} className={mobileLinkClass}>
-                Services
-              </Link>
+      {/*
+        The phone menu: a page of its own under the bar. It is its own scroll
+        container (overscroll-contain, so reaching its end does not hand the
+        swipe to the page), and the page is locked while it is open.
+      */}
+      <div
+        className={`fixed inset-0 top-0 z-[-1] bg-lightBG transition-opacity duration-300 dark:bg-darkBG lg:hidden ${
+          mobileOpen ? "visible opacity-100" : "invisible opacity-0"
+        }`}
+        aria-hidden={!mobileOpen}
+      >
+        <nav
+          ref={menuRef}
+          aria-label="Menu"
+          className="h-full overflow-y-auto overscroll-contain px-6 pb-12 pt-28"
+        >
+          <ul className="border-b border-lightText/10 dark:border-darkText/10">
+            <MenuLink href="/services" onClick={closeMobile} shown={mobileOpen} i={0}>
+              Services
+            </MenuLink>
 
-              <div>
-                <button
-                  type="button"
-                  onClick={() => setMobileWorkOpen((o) => !o)}
-                  className={`${mobileLinkClass} flex items-center justify-between`}
-                  aria-expanded={mobileWorkOpen}
-                >
-                  <span key={selected ?? "menu"} className="nav-swap">
-                    {selected ?? "Who I Help"}
-                  </span>
-                  <span
-                    className={`inline-block transition-transform duration-200 text-sm ${
-                      mobileWorkOpen ? "rotate-180" : ""
-                    }`}
-                  >
-                    ▾
-                  </span>
-                </button>
-                {mobileWorkOpen && (
-                  <div className="pl-3 flex flex-col gap-0.5 mt-0.5 mb-1">
+            <li className="border-t border-lightText/10 dark:border-darkText/10" style={stagger(mobileOpen, 1)}>
+              <button
+                type="button"
+                onClick={() => setMobileWorkOpen((o) => !o)}
+                className="flex w-full items-center justify-between py-5 text-left text-3xl font-light tracking-tight text-lightText dark:text-darkText"
+                aria-expanded={mobileWorkOpen}
+              >
+                {selected ?? "Who I Help"}
+                <PiCaretDownBold
+                  aria-hidden
+                  className={`h-5 w-5 transition-transform duration-300 ${mobileWorkOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+              {mobileWorkOpen && (
+                <div className="grid gap-8 pb-6 sm:grid-cols-2">
+                  <div>
+                    <p className="mb-2 text-sm text-lightTextMuted dark:text-darkTextMuted">By trade</p>
                     {LISTED_FEATURED.map((item) => (
                       <Link
                         key={item.slug}
                         href={item.slug}
                         onClick={closeMobile}
-                        className="block px-3 py-2.5 text-base text-lightTextMuted dark:text-darkTextMuted rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                        className="block py-2.5 text-lg font-light text-lightText dark:text-darkText"
                       >
                         {item.label}
                       </Link>
                     ))}
+                    <Link href="/services" onClick={closeMobile} className="block py-2.5 text-lg font-light italic text-lightTextMuted dark:text-darkTextMuted">
+                      and many more
+                    </Link>
+                  </div>
+                  <div>
+                    <p className="mb-2 text-sm text-lightTextMuted dark:text-darkTextMuted">By area</p>
                     {CITIES.map((city) => (
                       <div key={city.slug}>
-                        <Link
-                          href={city.slug}
-                          onClick={closeMobile}
-                          className="block px-3 py-2.5 text-base font-medium text-lightText dark:text-darkText rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                        >
+                        <Link href={city.slug} onClick={closeMobile} className="block py-2.5 text-lg text-lightText dark:text-darkText">
                           All of {city.name}
                         </Link>
-                        <div className="ml-3 border-l border-lightBorder pl-2 dark:border-darkBorder">
+                        <div className="ml-1 border-l border-lightText/15 pl-4 dark:border-darkText/15">
                           {city.neighborhoods.map((item) => (
                             <Link
                               key={item.slug}
                               href={item.slug}
                               onClick={closeMobile}
-                              className="block px-3 py-2.5 text-base text-lightTextMuted dark:text-darkTextMuted rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                              className="block py-2.5 text-lg font-light text-lightTextMuted dark:text-darkTextMuted"
                             >
                               {item.name}
                             </Link>
@@ -543,35 +397,77 @@ export default function Header() {
                       </div>
                     ))}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
+            </li>
 
-              <Link href="/about" onClick={closeMobile} className={mobileLinkClass}>
-                About
-              </Link>
+            <MenuLink href="/studios" onClick={closeMobile} shown={mobileOpen} i={2}>
+              <span className="inline-flex items-center gap-3">
+                <span aria-hidden className="h-2 w-2 rounded-full" style={{ backgroundImage: houseGradient() }} />
+                Studios
+              </span>
+            </MenuLink>
+            <MenuLink href="/guide" onClick={closeMobile} shown={mobileOpen} i={3}>
+              The Queso Guide
+            </MenuLink>
+            <MenuLink href="/about" onClick={closeMobile} shown={mobileOpen} i={4}>
+              About
+            </MenuLink>
+            <MenuLink href="/contact" onClick={closeMobile} shown={mobileOpen} i={5}>
+              Contact
+            </MenuLink>
+          </ul>
 
-              <Link href="/guide" onClick={closeMobile} className={mobileLinkClass}>
-                The Queso Guide
-              </Link>
-
-              <Link href="/studios" onClick={closeMobile} className={`${mobileLinkClass} font-semibold`}>
-                <span className="inline-flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#C4161C] to-[#FFD100]" />
-                  Studios
-                </span>
-              </Link>
-
-              <Link
-                href="/contact"
-                onClick={closeMobile}
-                className={`${mobileLinkClass} text-lightButton dark:text-darkButton font-semibold`}
-              >
-                Contact
-              </Link>
-            </div>
-          </nav>
-        )}
+          <div className="mt-10 flex items-center justify-between gap-6" style={stagger(mobileOpen, 6)}>
+            <NicheCtaButton
+              from="header_mobile"
+              variant="arrow"
+              message={SITE_COPY.audit.ctaPrefill}
+              label="Get My Free Report"
+            />
+            <ThemeSwitch />
+          </div>
+        </nav>
       </div>
     </header>
+  );
+}
+
+/** Each line of the phone menu rises in a beat after the one above it. */
+function stagger(shown: boolean, i: number): React.CSSProperties {
+  return {
+    opacity: shown ? 1 : 0,
+    transform: shown ? "none" : "translateY(10px)",
+    transition: `opacity 500ms cubic-bezier(0.22,1,0.36,1) ${shown ? 60 + i * 45 : 0}ms, transform 500ms cubic-bezier(0.22,1,0.36,1) ${shown ? 60 + i * 45 : 0}ms`,
+  };
+}
+
+function MenuLink({
+  href,
+  onClick,
+  shown,
+  i,
+  children,
+}: {
+  href: string;
+  onClick: () => void;
+  shown: boolean;
+  i: number;
+  children: React.ReactNode;
+}) {
+  return (
+    <li className="border-t border-lightText/10 dark:border-darkText/10" style={stagger(shown, i)}>
+      <Link
+        href={href}
+        onClick={onClick}
+        className="group flex items-center justify-between py-5 text-3xl font-light tracking-tight text-lightText dark:text-darkText"
+      >
+        {children}
+        <PiCaretRightBold
+          aria-hidden
+          className="h-5 w-5 text-lightTextMuted transition-transform duration-300 group-hover:translate-x-1 dark:text-darkTextMuted"
+        />
+      </Link>
+    </li>
   );
 }

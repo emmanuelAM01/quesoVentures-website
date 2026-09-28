@@ -252,24 +252,29 @@ function ChapterScreen({
         id={chapterId(chapter)}
         data-i={index}
         data-dark-section
-        className="relative flex min-h-[100svh] items-end overflow-hidden bg-[#0B0D12]"
+        // On a phone a full screen chapter stacks like a split one, photo
+        // then words: over a tall narrow frame the words covered the photo.
+        className="relative overflow-hidden bg-[#0B0D12] lg:flex lg:min-h-[100svh] lg:items-end"
       >
-        <Media chapter={chapter} paint={paint} seen={seen} from="bottom" reel={reel} />
+        <div className="relative aspect-[4/5] sm:aspect-[16/10] lg:absolute lg:inset-0 lg:aspect-auto">
+          <Media chapter={chapter} paint={paint} seen={seen} from="bottom" reel={reel} />
+          <Dots reel={reel} className="bottom-5 left-1/2 -translate-x-1/2 lg:hidden" />
+        </div>
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0"
+          className="pointer-events-none absolute inset-0 hidden lg:block"
           style={{
             background:
               "linear-gradient(to top, rgba(8,10,14,0.92) 0%, rgba(8,10,14,0.6) 32%, rgba(8,10,14,0.15) 65%, rgba(8,10,14,0.25) 100%)",
           }}
         />
-        <div className="relative w-full px-6 pb-20 pt-40 sm:px-12 lg:pl-28 xl:pl-36">
+        <div className="relative w-full px-6 py-16 sm:px-12 lg:pb-20 lg:pl-28 lg:pt-40 xl:pl-36">
           <div className="max-w-2xl" style={{ textShadow: "0 2px 24px rgba(0,0,0,0.4)" }}>
             <Words chapter={chapter} paint={paint} seen={seen} tone="dark" coda={coda} />
           </div>
         </div>
-        {/* Over the scrim, in a corner the words leave empty: top on phones, where the words run full width. */}
-        <Dots reel={reel} className="right-6 top-24 sm:bottom-20 sm:right-12 sm:top-auto xl:right-16" />
+        {/* Over the scrim, in the corner the words leave empty. On a phone the dots sit in the photo instead. */}
+        <Dots reel={reel} className="hidden bottom-20 right-12 lg:flex xl:right-16" />
       </section>
     );
   }
@@ -282,7 +287,7 @@ function ChapterScreen({
       className="relative grid bg-lightBG dark:bg-darkBG lg:min-h-[92svh] lg:grid-cols-2"
     >
       <div
-        className={`relative aspect-[5/4] overflow-hidden sm:aspect-[16/10] lg:aspect-auto ${
+        className={`relative aspect-[4/5] overflow-hidden sm:aspect-[16/10] lg:aspect-auto ${
           imageRight ? "lg:order-2" : ""
         }`}
       >
@@ -349,12 +354,27 @@ function Media({
                 k === reel.at ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"
               }`}
             >
+              {/*
+                On a phone the whole photograph shows, never cropped: it sits
+                inside the frame over a soft, blown up copy of itself, so a
+                portrait shot fills it and a landscape one floats in its own
+                colour. Cropping for a narrow screen cut the faces out of most
+                of them. From sm up the frame is wide enough to fill as usual.
+              */}
+              <Image
+                src={p.src}
+                alt=""
+                aria-hidden
+                fill
+                sizes="(max-width: 640px) 60vw, 1px"
+                className="scale-110 object-cover opacity-60 blur-2xl sm:hidden"
+              />
               <Image
                 src={p.src}
                 alt={p.alt}
                 fill
                 sizes={chapter.layout === "full" ? "100vw" : "(max-width: 1024px) 100vw, 50vw"}
-                className="object-cover"
+                className="object-contain sm:object-cover"
                 style={{ objectPosition: p.position ?? "center" }}
               />
             </div>
