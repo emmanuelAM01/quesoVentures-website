@@ -15,16 +15,16 @@ import { collectionGraph, guideTrail, GUIDE_NAME, ldJson } from "lib/guide/jsonl
 
 const TITLE = `${GUIDE_NAME} | Local businesses worth knowing`;
 const DESCRIPTION =
-  "Local businesses I have actually been to. Who runs them, what to get, and what to know before you go.";
-const INTRO = "Local spots worth knowing. I go, I try it, then I write it up.";
+  "A spotlight on local businesses that stand out, around the places I spend my time. Who runs them, what they are known for, and what to know before you go.";
+const INTRO = "A spotlight on the local businesses that stand out, around the places I spend my time.";
 
 const STATEMENT =
-  "Every entry starts with me walking through the door. Who runs the place, what to order, and what I wish I knew before I went. The basics sit in one box at the top, and the bottom tells you if the business is a Queso Ventures client.";
+  "Some local businesses just do it better. This is where they get the spotlight: who runs them, what they are known for, and what is good to know before you go. The bottom of every entry tells you if the business is a Queso Ventures client.";
 
 const PRINCIPLES = [
   {
-    title: "I actually went",
-    body: "Every entry is written after a visit. The month I went is right at the top.",
+    title: "Places that stand out",
+    body: "If a local business is doing something worth noticing, it belongs here.",
   },
   {
     title: "No rankings",
@@ -133,8 +133,6 @@ export default async function GuideHome({ searchParams }: { searchParams: Search
                 <span className="font-semibold text-white">{cities.length}</span>{" "}
                 {cities.length === 1 ? "city" : "cities"}
               </span>
-              <span aria-hidden className="h-1 w-1 rounded-full bg-white/40" />
-              <span>I have been to every one</span>
             </p>
           </>
         ) : null}

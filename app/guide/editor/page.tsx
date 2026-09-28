@@ -44,7 +44,8 @@ export default function Editor() {
         <div className="mx-auto max-w-3xl space-y-6 text-xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
           <p>
             I run Queso Ventures out of {BUSINESS.addressLine}. We build websites and help local
-            businesses get found. Every entry in the guide is mine, and I have been to every place in it.
+            businesses get found. I write every entry in the guide, and every place in it is one I think
+            more people should know about.
           </p>
           <p>Curious about the rest of what I do?</p>
           <Link href="/about" className={`${arrowTone("light")} pt-2`}>

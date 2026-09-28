@@ -18,16 +18,17 @@ export const metadata: Metadata = {
 };
 
 // Everything below restates only what the guide already does in code:
-// entries follow a visit, are listed by date, and end with the membership
-// line. Do not add a policy here that the guide does not actually follow.
+// entries are listed by date, kept dated, and end with the membership line.
+// Do not add a policy here that the guide does not actually follow. The
+// guide is a spotlight, not a review: nothing here claims to grade anyone.
 
 const STATEMENT =
-  "The guide is my list of local places worth knowing. I visit every one, I date every entry, and I tell you when a business is a Queso Ventures client.";
+  "The guide is a spotlight on local places worth knowing. Nothing is ranked, every entry is dated, and I tell you when a business is a Queso Ventures client.";
 
 const PRINCIPLES = [
   {
-    title: "Every entry is a visit",
-    body: "I go before I write. The month I went is at the top, along with who runs it, what to get, and what is good to know before you go.",
+    title: "Places that stand out",
+    body: "If a local business is doing something worth noticing, it belongs here. Every entry covers who runs it, what they are known for, and what is good to know before you go.",
   },
   {
     title: "No rankings",
