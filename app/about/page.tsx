@@ -350,9 +350,9 @@ export default function AboutPage() {
                 }}
               />
               <p className="mx-auto mt-9 max-w-2xl text-xl sm:text-2xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-                I have built software for funded startups and a public company.
-                Now I build it for local businesses, and it shows up as more
-                calls, more walk ins, and more orders.
+                I have built software for my own startups, for a publicly traded
+                company, and for everything in between. Now I build it for the
+                ones who deserve it most: you. Let&apos;s get you overengineered.
               </p>
               <div className="mt-12 flex justify-center">
                 <NicheCtaButton
