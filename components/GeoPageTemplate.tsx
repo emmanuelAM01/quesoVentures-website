@@ -2,10 +2,9 @@ import Footer from "components/Footer";
 import FreeAudit from "components/FreeAudit";
 import FaqDeck from "components/FaqDeck";
 import PageHero from "components/PageHero";
-import LiveryCard from "components/LiveryCard";
-import StatementCopy from "components/StatementCopy";
-import Glow from "components/Glow";
-import { liveryAt, PAINT } from "components/livery";
+import StatementSection from "components/StatementSection";
+import PainDeck from "components/PainDeck";
+import ChangeList from "components/ChangeList";
 import { siteCopy } from "components/siteCopy";
 import PlaceLinks from "components/PlaceLinks";
 import { placeTrail } from "components/places";
@@ -105,84 +104,11 @@ export default function GeoPageTemplate({ data }: { data: GeoPageData }) {
           image={heroImage}
         />
 
-        {/* Full-contrast statement. Breaks the page up so the local framing
-            reads as a design moment rather than another paragraph. */}
-        <section data-dark-section className="bg-inkLight">
-          <div className="container mx-auto px-4 py-28">
-            <StatementCopy
-              text={intro}
-              tone="dark"
-              paint={PAINT.gialloOrion}
-              className="max-w-4xl mx-auto"
-            />
-            {/*
-              The visible "Atascocita, TX 77346" line is gone.
+        <StatementSection text={intro} />
 
-              It was doing nothing a reader wanted and everything a reader
-              notices: a postcode printed under a sentence is the single most
-              recognisable tell of a page written for a search engine. The code
-              itself is still load-bearing — it is in this page's PostalAddress
-              schema below, which is where it was ever read.
-            */}
-          </div>
-        </section>
+        <PainDeck items={painPoints} />
 
-        {/* Pain points as cards, not a stacked wall of paragraphs. */}
-        <section className="container mx-auto px-4 py-24">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl text-lightText dark:text-darkText mb-12">
-              Sound familiar?
-            </h2>
-            <div className="grid md:grid-cols-3 gap-4">
-              {painPoints.map((item, i) => (
-                <LiveryCard
-                  key={i}
-                  title={item.heading}
-                  body={item.body}
-                  paint={liveryAt(i)}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-bandLight dark:bg-bandDark border-y border-lightBorder dark:border-darkBorder">
-          <div className="container mx-auto px-4 py-24">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl text-lightText dark:text-darkText mb-12">
-                Here&apos;s what changes
-              </h2>
-              <div className="space-y-5">
-                {whatChanges.map((item, i) => (
-                  <Glow
-                    key={i}
-                    color={liveryAt(i + 2).hex}
-                    radius="rounded-3xl"
-                    lift={false}
-                    spread={340}
-                  >
-                  <div className="relative flex gap-5 rounded-3xl border border-lightBorder dark:border-darkBorder bg-lightBG dark:bg-darkBG p-8">
-                    <span
-                      className="font-bold text-2xl mt-0.5 shrink-0"
-                      style={{ color: liveryAt(i + 2).ink }}
-                    >
-                      {i + 1}
-                    </span>
-                    <div>
-                      <p className="text-xl sm:text-2xl font-semibold text-lightText dark:text-darkText mb-2">
-                        {item.title}
-                      </p>
-                      <p className="text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-                        {item.body}
-                      </p>
-                    </div>
-                  </div>
-                  </Glow>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        <ChangeList items={whatChanges} />
 
         <FaqDeck
           heading={`Questions ${city} business owners ask`}

@@ -11,6 +11,8 @@ import ScrollDivider from "components/ScrollDivider";
 import LightBar from "components/LightBar";
 import KonamiEasterEgg from "components/KonamiEasterEgg";
 import Link from "next/link";
+import ArrowMark, { arrowTone } from "components/ArrowMark";
+import { houseGradient } from "components/livery";
 import { PRICING, MONTHLY_PLAN_OFFER } from "components/pricingCopy";
 import { metaFor } from "components/siteCopy";
 import {
@@ -200,20 +202,20 @@ export default function Page() {
 
         {/* Credibility. One line: the whole argument is that a software
             engineer is doing this, not a marketing agency. */}
-        <section className="container mx-auto px-4 py-20">
-          <div className="mx-auto max-w-3xl text-center">
-            <Reveal>
-              <p className="text-2xl sm:text-3xl md:text-4xl font-light leading-snug text-balance text-lightText dark:text-darkText">
-                Industry-trained software engineer, working for the businesses that rarely get one.
-              </p>
-              <Link
-                href="/about"
-                className="mt-4 inline-block py-2 text-base font-semibold text-lightAccent dark:text-darkAccent transition-opacity hover:opacity-70"
-              >
-                Meet the founder →
-              </Link>
-            </Reveal>
-          </div>
+        <section className="container mx-auto px-4 py-28 sm:py-36">
+          <Reveal className="mx-auto max-w-4xl text-center">
+            <p className="text-3xl sm:text-4xl md:text-5xl font-light leading-tight tracking-tight text-balance text-lightText dark:text-darkText">
+              Industry-trained software engineer, working for the businesses that rarely get one.
+            </p>
+            <span
+              aria-hidden
+              className="mx-auto mt-9 block h-1 w-24 rounded-full"
+              style={{ backgroundImage: houseGradient() }}
+            />
+            <Link href="/about" className={`${arrowTone("light")} mt-10`}>
+              <ArrowMark label="Meet the founder" />
+            </Link>
+          </Reveal>
         </section>
 
         <Showcase />

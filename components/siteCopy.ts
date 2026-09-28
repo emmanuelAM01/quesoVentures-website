@@ -178,10 +178,6 @@ export function siteCopy({ city }: PlaceContext = {}) {
       cta: "Get My Free Report",
       ctaPrefill:
         "I'd like the free report on where my business shows up.",
-      // Worth saying now that it is true. "Free" invites the assumption that
-      // it arrives whenever somebody gets round to it; a minute is the whole
-      // difference between asking now and meaning to ask later.
-      reassurance: "It lands in your inbox in about a minute.",
     },
   };
 }

@@ -1,22 +1,18 @@
-import { FaCheck } from "react-icons/fa";
 import Reveal from "./Reveal";
 import NicheCtaButton from "./NicheCtaButton";
 import LavaLamp from "./LavaLamp";
+import { houseAt, houseGradient } from "./livery";
 import { SITE_COPY, type SiteCopy } from "./siteCopy";
 
 /**
- * The price, on a card floating over the blob field.
+ * The price, as a full screen spread over the blob field.
  *
- * Centred type on flat cream read as a slide someone forgot to design. The
- * section is the moment the whole page has been walking toward, so it gets the
- * same treatment as the close: dark ground, live colour behind it, and a single
- * panel holding everything. The card does the containing that a bare centre
- * axis could not.
- *
- * Widened from max-w-xl once the checklist was rewritten: every line now clears
- * the card in one pass. If a line is ever added that wraps, shorten the line
- * rather than widening the card again — past this width the price stops
- * reading as a single object and starts reading as a table.
+ * The section the whole page has been walking toward. It was a frosted card
+ * floating in the middle; now it is set the way the About page sets its
+ * years: the heading, the house rule, then the amount in the thin display
+ * weight at the size of a chapter's year, with the one way forward under it.
+ * What the price includes runs down the other half as rows between hairlines,
+ * each with a short line of house paint where a tick used to be.
  */
 export default function Pricing({
   copy = SITE_COPY.pricing,
@@ -27,53 +23,56 @@ export default function Pricing({
     <section
       id="pricing"
       data-dark-section
-      className="relative overflow-hidden scroll-mt-16"
+      className="relative flex min-h-[100svh] scroll-mt-16 items-center overflow-hidden"
     >
-      <LavaLamp scrim={0.62} />
+      <LavaLamp scrim={0.66} />
 
-      <div className="relative container mx-auto px-4 py-28 sm:py-32">
-        <Reveal>
-          <div className="mx-auto max-w-2xl rounded-3xl border border-white/10 bg-[#14171D]/80 p-8 backdrop-blur-xl sm:p-12">
-            <div className="text-center">
-              <h2 className="text-3xl sm:text-4xl tracking-tight text-[#F5F7FA]">
+      <div className="relative w-full">
+        <div className="container mx-auto px-4 py-28 sm:py-32">
+          <div className="mx-auto grid max-w-6xl items-center gap-16 lg:grid-cols-2 lg:gap-20">
+            <Reveal>
+              <h2 className="text-4xl sm:text-5xl xl:text-6xl font-light leading-[1.05] tracking-tight text-balance text-white">
                 {copy.heading}
               </h2>
-
-              <p className="mt-6 text-6xl sm:text-7xl font-semibold tracking-tight text-white">
-                {copy.amount}
-                <span className="align-middle text-xl font-light text-white/50">
-                  {" "}
-                  {copy.period}
+              <span
+                aria-hidden
+                className="mt-8 block h-1 w-24 rounded-full"
+                style={{ backgroundImage: houseGradient() }}
+              />
+              <p className="mt-10 flex items-baseline gap-4 text-white">
+                <span className="text-[6.5rem] font-extralight leading-[0.85] tracking-tighter tabular-nums sm:text-[8rem] xl:text-[10rem]">
+                  {copy.amount}
                 </span>
+                <span className="text-xl font-light text-white/55">{copy.period}</span>
               </p>
-
-              <div className="mt-8 flex justify-center">
+              <div className="mt-12">
                 <NicheCtaButton
+                  from="hero"
+                  variant="arrow"
+                  tone="dark"
                   message={copy.ctaPrefill}
                   label={copy.cta}
-                  variant="onDark"
                 />
               </div>
-            </div>
+            </Reveal>
 
-            <ul className="mt-10 space-y-3.5 border-t border-white/10 pt-8">
-              {copy.included.map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <span className="mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-darkButton/15 text-darkButton">
-                    <FaCheck size={10} />
-                  </span>
-                  <span className="text-base font-light text-white/85">
-                    {item}
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-            <p className="mt-8 text-center text-sm font-light leading-relaxed text-white/45">
-              {copy.terms}
-            </p>
+            <Reveal delay={150}>
+              <ul className="border-b border-white/15">
+                {copy.included.map((item, i) => (
+                  <li key={item} className="flex items-start gap-5 border-t border-white/15 py-5">
+                    <span
+                      aria-hidden
+                      className="mt-[0.8rem] h-[2px] w-6 flex-shrink-0 rounded-full"
+                      style={{ backgroundColor: houseAt(i, copy.included.length) }}
+                    />
+                    <span className="text-lg font-light leading-relaxed text-white/85">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-8 text-sm font-light leading-relaxed text-white/50">{copy.terms}</p>
+            </Reveal>
           </div>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

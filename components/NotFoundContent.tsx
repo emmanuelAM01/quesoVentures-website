@@ -5,6 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import Footer from "components/Footer";
 import NicheCtaButton from "components/NicheCtaButton";
+import LavaLamp from "components/LavaLamp";
+import ArrowMark, { arrowTone } from "components/ArrowMark";
+import { houseGradient } from "components/livery";
 
 const BORING_MS = 2000;
 
@@ -18,47 +21,41 @@ export default function NotFoundContent() {
 
   return (
     <div className="flex flex-col min-h-screen bg-lightBG dark:bg-darkBG">
-      <main className="flex-1 flex items-center">
-        <section className="container mx-auto px-4 py-24">
+      <main>
+        <section data-dark-section className="relative -mt-[76px] flex min-h-[100svh] items-end overflow-hidden">
+          <LavaLamp scrim={0.45} />
           <div
-            className={`max-w-6xl mx-auto text-center transition-all duration-700 ease-out ${
-              phase === "fun" ? "opacity-100 scale-100" : "opacity-0 scale-95"
+            className={`relative w-full transition-all duration-700 ease-out ${
+              phase === "fun" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            <div className="relative w-20 h-20 mx-auto mb-8">
-              <Image
-                src="/logo.png"
-                alt="Queso Ventures logo"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-
-            <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-tight text-lightText dark:text-darkText mb-6 text-balance">
-              You really thought I wasn&apos;t going to have fun on this page?
-            </h1>
-
-            <p className="max-w-6xl mx-auto text-lg sm:text-xl font-light text-lightTextMuted dark:text-darkTextMuted mb-1">
-              My favorite bands are MGMT, Foster the People, The Strokes, The Voidz (how on earth did i find them?) and
-              Communicant.
-            </p>
-
-            <p className="mb-10 text-sm sm:text-base italic font-light text-lightTextMuted dark:text-darkTextMuted">
-              
-            </p>
-
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-4">
-              <NicheCtaButton
-                message="I ended up on your 404 page and figured I'd still reach out."
-                label="Get My Free Report"
-              />
-              <Link
-                href="/"
-                className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl border border-lightBorder dark:border-darkBorder px-6 py-3.5 text-base font-semibold text-lightText dark:text-darkText hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
-              >
-                Ready to leave the party? →
-              </Link>
+            <div className="container mx-auto px-4 pb-16 pt-40 sm:pb-24">
+              <div className="mx-auto max-w-6xl">
+                <div className="max-w-4xl">
+                  <div className="relative mb-8 h-14 w-14">
+                    <Image src="/logo.png" alt="Queso Ventures logo" fill className="object-contain" priority />
+                  </div>
+                  <h1 className="text-5xl font-light leading-[1.02] tracking-tight text-balance text-white sm:text-6xl lg:text-7xl">
+                    You really thought I wasn&apos;t going to have fun on this page?
+                  </h1>
+                  <span aria-hidden className="mt-8 block h-1 w-24 rounded-full" style={{ backgroundImage: houseGradient() }} />
+                  <p className="mt-8 max-w-2xl text-xl font-light leading-relaxed text-white/85 sm:text-2xl">
+                    My favorite bands are MGMT, Foster the People, The Strokes, The Voidz (how on earth did i find them?) and
+                    Communicant.
+                  </p>
+                  <div className="mt-10 flex flex-wrap items-center gap-x-10 gap-y-5">
+                    <NicheCtaButton
+                      variant="arrow"
+                      tone="dark"
+                      message="I ended up on your 404 page and figured I'd still reach out."
+                      label="Get My Free Report"
+                    />
+                    <Link href="/" className={arrowTone("dark")}>
+                      <ArrowMark tone="dark" label="Ready to leave the party?" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>

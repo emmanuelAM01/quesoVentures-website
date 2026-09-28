@@ -3,13 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { FaSearch, FaStar, FaMapMarkerAlt } from "react-icons/fa";
 import { HiSparkles } from "react-icons/hi2";
-import { PAINT } from "./livery";
+import { PAINT, houseGradient } from "./livery";
+import Reveal from "./Reveal";
+import SectionHeading from "./SectionHeading";
 import ToolCarousel from "./ToolCarousel";
 import { useBusinessSearch } from "./useBusinessSearch";
 import { SITE_COPY, type SiteCopy } from "./siteCopy";
 
 /**
- * Two cards: where you rank, and what runs the shop afterwards.
+ * Two halves: where you rank, and what runs the shop afterwards.
  *
  * This replaced three icon cards. The icons were decoration — a globe next to
  * the words "they find you" tells a reader nothing the words did not — and the
@@ -225,6 +227,12 @@ function SearchCard({ on }: { on: boolean }) {
   );
 }
 
+/**
+ * The two halves, as the Ferrari pair: a centred title, then two panels side
+ * by side, each edge to edge and nearly a screen tall, the words at the foot
+ * of each. The search on the ink, the tools on the page ground, so the pair
+ * reads as night and day rather than two boxes on a page.
+ */
 export default function Showcase({
   copy = SITE_COPY.showcase,
 }: {
@@ -233,57 +241,57 @@ export default function Showcase({
   const { ref, on } = useOnScreen<HTMLDivElement>();
 
   return (
-    <section className="container mx-auto px-4 py-20">
-      <div ref={ref} className="mx-auto max-w-6xl">
-        <div className="text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl text-balance text-lightText dark:text-darkText">
+    <section>
+      <div className="container mx-auto px-4 py-24 sm:py-32">
+        <Reveal className="mx-auto max-w-3xl text-center">
+          <SectionHeading align="center" sub={copy.sub}>
             {copy.heading}
-          </h2>
-          <p className="mt-3 text-lg sm:text-xl font-light text-lightTextMuted dark:text-darkTextMuted">
-            {copy.sub}
-          </p>
-        </div>
+          </SectionHeading>
+          <span
+            aria-hidden
+            className="mx-auto mt-9 block h-1 w-24 rounded-full"
+            style={{ backgroundImage: houseGradient() }}
+          />
+        </Reveal>
+      </div>
 
-        <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-2">
-          <div className="relative flex flex-col overflow-hidden rounded-3xl bg-inkLight p-8 sm:p-10">
-            <span
-              aria-hidden
-              className="absolute inset-x-0 top-0 h-1.5"
-              style={{ backgroundColor: PAINT.rossoCorsa.hex }}
-            />
-            <div className="flex flex-1 items-center justify-center py-6">
-              <div className="w-full max-w-sm">
-                <SearchCard on={on} />
-              </div>
+      <div ref={ref} className="grid lg:grid-cols-2">
+        <div
+          data-dark-section
+          className="relative flex flex-col justify-between gap-12 overflow-hidden bg-inkLight px-6 py-16 sm:px-12 lg:min-h-[92svh] lg:px-16 lg:py-20 xl:px-24"
+        >
+          <div className="flex flex-1 items-center justify-center">
+            <div className="w-full max-w-sm">
+              <SearchCard on={on} />
             </div>
-            <p className="mt-6 text-xl sm:text-2xl font-medium leading-snug text-balance text-white">
+          </div>
+          <Reveal>
+            <span aria-hidden className="block h-[3px] w-14 rounded-full" style={{ backgroundColor: PAINT.rossoCorsa.hex }} />
+            <p className="mt-7 text-3xl sm:text-4xl font-light leading-tight tracking-tight text-balance text-white">
               {copy.cards[0].title}
             </p>
-            <p className="mt-2 text-base font-light leading-relaxed text-white/60">
+            <p className="mt-4 max-w-md text-lg font-light leading-relaxed text-white/65">
               {copy.cards[0].body}
             </p>
-          </div>
+          </Reveal>
+        </div>
 
-          <div className="relative flex flex-col overflow-hidden rounded-3xl border border-lightBorder bg-panelLight p-8 sm:p-10 dark:border-darkBorder dark:bg-panelDark">
-            <span
-              aria-hidden
-              className="absolute inset-x-0 top-0 h-1.5"
-              style={{ backgroundColor: PAINT.gialloOrion.hex }}
-            />
-            {/* Full width, unlike the search card. That one is a search box and
-                a search box has a natural size; this is a screen, and a screen
-                boxed to 384px inside a 480px card reads as a thumbnail of
-                something rather than the thing. */}
-            <div className="flex flex-1 items-start py-6">
-              <ToolCarousel running={on} />
-            </div>
-            <p className="mt-6 text-xl sm:text-2xl font-medium leading-snug text-balance text-lightText dark:text-darkText">
+        <div className="relative flex flex-col justify-between gap-12 overflow-hidden bg-panelLight px-6 py-16 dark:bg-panelDark sm:px-12 lg:min-h-[92svh] lg:px-16 lg:py-20 xl:px-24">
+          {/* Full width, unlike the search. A search box has a natural size;
+              this is a screen, and a screen boxed small reads as a thumbnail
+              of something rather than the thing. */}
+          <div className="flex flex-1 items-center">
+            <ToolCarousel running={on} />
+          </div>
+          <Reveal delay={120}>
+            <span aria-hidden className="block h-[3px] w-14 rounded-full" style={{ backgroundColor: PAINT.gialloOrion.hex }} />
+            <p className="mt-7 text-3xl sm:text-4xl font-light leading-tight tracking-tight text-balance text-lightText dark:text-darkText">
               {copy.cards[1].title}
             </p>
-            <p className="mt-2 text-base font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
+            <p className="mt-4 max-w-md text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
               {copy.cards[1].body}
             </p>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>

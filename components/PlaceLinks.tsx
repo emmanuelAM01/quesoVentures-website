@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CITIES, cityOf, type PrimaryCity } from "components/places";
+import { houseAt } from "components/livery";
 
 /**
  * The cluster block: a metro and the towns under it.
@@ -33,38 +34,41 @@ export default function PlaceLinks({
   const isMetro = city.slug === current;
   const towns = city.neighborhoods.filter((n) => n.slug !== current);
 
+  const links = [
+    ...(!isMetro ? [{ href: city.slug, name: `All of ${city.name}`, hub: true }] : []),
+    ...towns.map((t) => ({ href: t.slug, name: t.name, hub: false })),
+  ];
+
   return (
     <section className="border-t border-lightBorder dark:border-darkBorder">
-      <div className="container mx-auto px-4 py-14">
-        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-[minmax(0,14rem),1fr] md:gap-12">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-lightTextMuted dark:text-darkTextMuted md:pt-1">
+      <div className="container mx-auto px-4 py-16 sm:py-20">
+        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-[minmax(0,16rem),1fr] md:gap-12">
+          <h2 className="text-2xl font-light tracking-tight text-lightText dark:text-darkText md:pt-1">
             {isMetro ? `Across ${city.name}` : `Elsewhere in ${city.name}`}
           </h2>
 
-          <div>
-            <ul className="-my-1.5 flex flex-wrap gap-x-7 gap-y-1">
-              {!isMetro && (
-                <li>
-                  <Link
-                    href={city.slug}
-                    className="inline-block py-1.5 text-lg font-semibold text-lightText underline decoration-gialloOrion decoration-2 underline-offset-[6px] transition-opacity hover:opacity-70 dark:text-darkText"
-                  >
-                    All of {city.name}
-                  </Link>
-                </li>
-              )}
-              {towns.map((n) => (
-                <li key={n.slug}>
-                  <Link
-                    href={n.slug}
-                    className="inline-block py-1.5 text-lg font-light text-lightText underline decoration-transparent decoration-2 underline-offset-[6px] transition-colors hover:decoration-gialloOrion dark:text-darkText"
-                  >
-                    {n.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ul className="-my-1.5 flex flex-wrap gap-x-9 gap-y-2">
+            {links.map((l, i) => (
+              <li key={l.href}>
+                <Link
+                  href={l.href}
+                  className={`group relative inline-block py-1.5 text-2xl tracking-tight text-lightText transition-colors dark:text-darkText ${
+                    l.hub ? "font-normal" : "font-light text-lightTextMuted hover:text-lightText dark:text-darkTextMuted dark:hover:text-darkText"
+                  }`}
+                >
+                  {l.name}
+                  {/* The house line draws in under the name on hover; the hub keeps its line. */}
+                  <span
+                    aria-hidden
+                    className={`absolute bottom-0 left-0 h-[2px] rounded-full transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      l.hub ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                    style={{ backgroundColor: houseAt(i, links.length) }}
+                  />
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

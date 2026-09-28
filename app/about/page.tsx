@@ -1,29 +1,27 @@
 import type { Metadata } from "next";
-import { Fragment } from "react";
-import Link from "next/link";
-import Image from "next/image";
 import Footer from "components/Footer";
 import Reveal from "components/Reveal";
-import AboutPortrait from "components/AboutPortrait";
-import { liveryAt, PAINT } from "components/livery";
-import Glow from "components/Glow";
+import AboutHero from "components/AboutHero";
+import AboutDeck, { type DeckCard } from "components/AboutDeck";
+import AboutChapters, { type Chapter } from "components/AboutChapters";
+import { PAINT } from "components/livery";
 import NicheCtaButton from "components/NicheCtaButton";
-import {
-  BUSINESS,
-  LOCAL_BUSINESS_SCHEMA,
-  POSTAL_ADDRESS,
-  breadcrumbSchema,
-} from "components/businessInfo";
+import { BUSINESS, breadcrumbSchema } from "components/businessInfo";
+
+const GITHUB = "https://github.com/emmanuelAM01";
+const LINKEDIN = "https://www.linkedin.com/in/emmanuelmendieta/";
+
+const TITLE = "About Queso Ventures | Founded by Emmanuel Mendieta";
+const DESCRIPTION =
+  "Why Queso Ventures exists and who built it. Emmanuel Mendieta has been building software since 2020 and now helps local businesses get found on Google, Maps, and AI search, bring customers back, and run smoothly.";
 
 export const metadata: Metadata = {
-  title: "About Emmanuel | Queso Ventures",
-  description:
-    "Seven years building software for startups, fintech, and venture backed AI products. Now I help local businesses get found online.",
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: "https://www.quesoventures.com/about" },
   openGraph: {
-    title: "About Emmanuel | Queso Ventures",
-    description:
-      "Seven years building software for startups, fintech, and venture backed AI products. Now I help local businesses get found online.",
+    title: TITLE,
+    description: DESCRIPTION,
     url: "https://www.quesoventures.com/about",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
@@ -32,360 +30,337 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "About Emmanuel | Queso Ventures",
-    description:
-      "Seven years building software for startups, fintech, and venture backed AI products. Now I help local businesses get found online.",
+    title: TITLE,
+    description: DESCRIPTION,
     images: ["/logo.png"],
   },
 };
 
+/*
+  The business itself is not repeated here. LOCAL_BUSINESS_SCHEMA is emitted in
+  full on the home, services, contact and every city and industry page, all
+  under the same @id, so this page points at it rather than restating it.
+*/
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
-    LOCAL_BUSINESS_SCHEMA,
+    {
+      "@type": "AboutPage",
+      "@id": `${BUSINESS.url}/about#webpage`,
+      url: `${BUSINESS.url}/about`,
+      name: TITLE,
+      description: DESCRIPTION,
+      about: { "@id": `${BUSINESS.url}/#localbusiness` },
+      mainEntity: { "@id": `${BUSINESS.url}/about#person` },
+      breadcrumb: { "@id": `${BUSINESS.url}/about#breadcrumb` },
+    },
     {
       "@type": "Person",
       "@id": `${BUSINESS.url}/about#person`,
       name: "Emmanuel Mendieta",
+      givenName: "Emmanuel",
+      familyName: "Mendieta",
       jobTitle: "Founder",
+      description:
+        "Founder of Queso Ventures and a software engineer since 2020. Former CTO of a venture backed startup and tech lead at MARA Digital Holdings. Builds the tools local businesses use to get found on Google, Maps, and AI search, bring customers back, and run smoothly.",
       url: `${BUSINESS.url}/about`,
       image: `${BUSINESS.url}/about.JPEG`,
-      telephone: BUSINESS.phoneE164,
-      email: BUSINESS.email,
       worksFor: { "@id": `${BUSINESS.url}/#localbusiness` },
-      address: POSTAL_ADDRESS,
+      homeLocation: { "@type": "City", name: "Houston, Texas" },
+      alumniOf: {
+        "@type": "CollegeOrUniversity",
+        name: "University of Houston",
+        sameAs: "https://www.uh.edu",
+      },
+      hasCredential: {
+        "@type": "EducationalOccupationalCredential",
+        credentialCategory: "degree",
+        name: "Computer Science",
+        recognizedBy: { "@type": "CollegeOrUniversity", name: "University of Houston" },
+      },
+      /*
+        The facts people and answer engines check a founder against: who they
+        built for before, and what they know. Each one is also on the page in
+        plain text, which is what makes it citable rather than a claim.
+      */
       knowsAbout: [
-        "Web Design",
         "Local SEO",
+        "AI Search Optimization",
+        "Generative Engine Optimization",
         "Google Business Profile Optimization",
+        "Web Design",
+        "Web Development",
         "Software Engineering",
+        "Full Stack Development",
+        "AI Agents",
+        "Blockchain",
       ],
+      sameAs: [LINKEDIN, GITHUB, BUSINESS.instagram, BUSINESS.youtube],
     },
     breadcrumbSchema([{ name: "About", path: "/about" }]),
   ],
 };
 
-const chapters = [
+/*
+  Cards are statements, not paragraphs. The bold line should land on its own;
+  the body is one or two short sentences for whoever slows down.
+
+  The order of the first row is the pitch: websites are how an owner meets
+  Queso Ventures, the engineering is why it works, and the tools are where it
+  is going. No client counts and no price here; the price varies and lives on
+  the pricing pages, and a number of clients invites the wrong comparison.
+*/
+
+const what: DeckCard[] = [
   {
-    year: "2019",
-    label: "Started at 18",
-    body: "COVID closed every job in town, so I taught myself web development and started freelancing. First client at $15 an hour. I've been building for people ever since.",
+    mark: "Websites",
+    icon: "browser",
+    title: "How I got this ball rolling",
+    body: "A site that brings in new business and keeps them coming back.",
   },
   {
-    year: "2022",
-    label: "Rose to tech lead",
-    body: "I joined a tech company as the newest engineer on the team. Within a year, I was leading it. When something needed to get built, I was the one who did it, and real people were using what I made.",
+    mark: "Overqualified",
+    icon: "cpu",
+    title: "I put the FUN in fundamentals",
+    body: "Websites are just the beginning. Ventures is plural for a reason.",
   },
   {
-    year: "2024",
-    label: "Became a CTO",
-    body: "My brother and I started our own company, and investors put real money behind us. As CTO, I built the entire product myself, and that meant building the AI inside it: teaching it to think correctly, pull the right information, and answer questions plainly, the same way AI search does today. I know how it works because I built it from under the hood.",
+    mark: "Helpful",
+    icon: "puzzle",
+    title: "Not just assuming",
+    body: "Tools that are tailored for you to get more customers or to run your shop smarter.",
   },
   {
-    year: "Now",
-    label: "Bringing it all together",
-    body: "Queso Ventures is where all of it lands. Enterprise grade technology for the businesses in my own backyard, serving owners across the Houston area. The big companies already have engineers like me. The businesses that actually matter, the ones down the street, deserve one too.",
+    mark: "Growing pretty fast",
+    icon: "tools",
+    title: "The real product",
+    body: "Software that gets people calling, gets them walking back in, and ends the napkin math. Turn it on and it runs.",
+    href: "/studios",
+    cta: "See Queso Studios",
+  },
+];
+
+/*
+  The story, oldest first, one screen per year.
+
+  Copy marked DRAFT was written from Emmanuel's notes as a placeholder; he
+  rewrites it in his own words. 2022, 2024 and 2025 are his already.
+  Still to fold in, in his words: 2024 was four promotions in six months, and
+  leaving that job for a startup that actually got funded.
+
+  Photos are his, chosen per year; several make a carousel. A chapter with no
+  photo draws a field of its colour instead, so a gap never leaves a hole.
+  The camera shot closes 2026 as the easter egg.
+
+  Layout keeps the rhythm: splits that swap sides, broken by a full screen.
+*/
+const why: Chapter[] = [
+  {
+    /*
+      DRAFT. 2008 and the 2010s are one chapter: the point of those years is
+      that he built sites for fun and messed with technology, and 2020 is when
+      he started doing it for people. No year on it, on purpose: it is a
+      stretch of growing up, not a date.
+    */
+    title: "The younger years",
+    body: "Started out by taking computers apart and putting them back together. 75% success rate overall.",
+    story:
+      "Edited my grades and webpages online to prank my friends. Built sites for fake businesses I thought were cool, then real ones for friends and family. As most kids don't, I did not realzie how important this hobby would be.",
+    photos: [
+      {
+        src: "/about/2008.jpg",
+        alt: "Emmanuel Mendieta as a kid, king of Fogo de Chão",
+        position: "50% 30%",
+      },
+      {
+        src: "/about/2010s-box.jpg",
+        alt: "Emmanuel Mendieta as a kid, sitting in a cardboard box at home",
+        position: "50% 45%",
+      },
+      {
+        src: "/about/2010s-skyline.jpg",
+        alt: "A selfie of Emmanuel Mendieta and his brother in front of a city skyline at night",
+      },
+      {
+        src: "/about/2010s-boat.jpg",
+        alt: "Emmanuel Mendieta sitting in a boat at a hilltop overlook at night",
+        position: "70% 50%",
+      },
+    ],
+    layout: "right",
+  },
+  {
+    // DRAFT
+    mark: "2020",
+    title: "Staring down unemployment",
+    body: "I had to make money somehow. So I started making money off my hobby.",
+    story: "In college and Covid just closed every store that was hiring. The bills were still coming so I had to think fast. I don't know why it did not occur to me earlier to make websites for money, but I started freelancing. $15/hour, then it doubled and grew from there.",
+    photos: [
+      {
+        src: "/about/2020-laptop.jpg",
+        alt: "Emmanuel Mendieta resting his head beside a laptop full of code",
+        position: "35% 50%",
+      },
+    ],
+    layout: "left",
+  },
+  {
+    mark: "2022",
+    title: "First startups",
+    body: "Built apps in college alongside my brother. Y Combinator were not feeling it, and investor conversations did not work out.",
+    story:
+      "I helped build a stablecoin savings app. Then crypto crashed and took the idea with it. Next came a crime reporting app for Latin America. Had investor calls in between school and cupcake shop shifts (progress isn't linear). Things fell through in the end, I though it was because I did not build it correctly, I had not learned my lesson yet though.",
+    photos: [
+      {
+        src: "/about/2022-mountain.jpg",
+        alt: "Emmanuel Mendieta standing on a snowy mountain pass near Tbilisi, Georgia",
+        position: "50% 62%",
+      },
+    ],
+    layout: "full",
+  },
+  {
+    // DRAFT
+    mark: "2023",
+    title: "Graduated, got a regular job",
+    body: "Computer Science at the University of Houston (what a surprise).",
+    story: "After the ups and downs of freelance work and trying to create a company in college, I was relieved that I had an engineering job lined up for me immediately out of college. For 6 months I was reminded why working a regular job and carrying out the plan of life (college -> job -> vacations to break up the mundane) was not for me.",
+    photos: [
+      {
+        src: "/hero/aboutHills.jpg",
+        alt: "Emmanuel Mendieta squinting into the sun on a green hillside",
+        position: "50% 45%",
+      },
+    ],
+    layout: "right",
+  },
+  {
+    mark: "2024",
+    title: "Better engineering job ",
+    body: "This job operated like a startup. I was hired for a specific role and within 2 months I was leading the team.",
+    story:
+      "Took a gamble and a paycut to join this company. Went from cushy W2 to unstable 1099 with the hopes of creating something real. The story of this job was that I was always avaiable and I grew pretty rapidly. Issue is i grew a bit too fast, there is only so much you can do when the company is not yours.",
+    photos: [
+      {
+        src: "/hero/aboutTokyo.jpg",
+        alt: "Emmanuel Mendieta on an observation deck above Tokyo",
+        position: "50% 30%",
+      },
+    ],
+    layout: "full",
+  },
+  {
+    mark: "2025",
+    title: "Back to startups",
+    body: "My brother and I did it, we got funding.",
+    story:
+      "We raised for Bitcoin backed lending: think a high yield savings account that puts your deposits to work in an industry that needs the money. Real estate, movies, and AI datacenters all came up before we settled on logistics, because it is real and always moving. We dropped the crypto, built logistics finance software, and gave that industry everything we had. It gave back hardly anything. The final form was a WhatsApp language tutor that graded your voice notes on grammar, authenticity, relevance, and accuracy, then kept the conversation going. My biggest technical feat, yet we burnt out building it instead of talking to the people it was for.",
+    photos: [
+      {
+        src: "/about/2025-mugello.jpg",
+        alt: "Emmanuel Mendieta in the grandstand at Mugello",
+        position: "50% 45%",
+      },
+      {
+        src: "/hero/aboutColosseum.jpg",
+        alt: "Emmanuel Mendieta inside the Colosseum in Rome",
+        position: "50% 55%",
+      },
+    ],
+    layout: "left",
+  },
+  {
+    // DRAFT
+    mark: "2026",
+    title: "Queso Ventures",
+    body: "Everything I have learned, and everything I am still learning.",
+    story:
+      "The common theme in every year before this: I like to build stuff, but nobody really uses it. So I did the inverse, talk then build stuff. It worked, and it is still how Queso Ventures operates today. I only build what people actually need, and the only way to know that is to talk to them, not guess.",
+    photos: [
+      {
+        src: "/hero/aboutClouds.JPEG",
+        alt: "Pine trees and clouds over the Alps",
+      },
+      {
+        src: "/about.JPEG",
+        alt: "Portrait of Emmanuel Mendieta, founder of Queso Ventures",
+        position: "45% 30%",
+      },
+      {
+        src: "/hero/aboutCamera.jpg",
+        alt: "Emmanuel Mendieta holding the camera behind the photos on this site",
+        position: "50% 28%",
+        caught: true,
+      },
+    ],
+    layout: "right",
   },
 ];
 
 export default function AboutPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-lightBG dark:bg-darkBG">
+    <div className="flex flex-col min-h-screen overflow-x-clip bg-lightBG dark:bg-darkBG">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main>
-        {/* Intro */}
-        <section className="container mx-auto px-4 pt-24 pb-16">
-          <div className="max-w-6xl mx-auto grid lg:grid-cols-[1.2fr,1fr] gap-12 items-center">
-            <div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight text-lightText dark:text-darkText mb-6 text-balance">
-                Hey, I&apos;m Emmanuel.
-              </h1>
-              <p className="max-w-2xl text-xl sm:text-2xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-                In my career I&apos;ve worn lots of hats: AI engineer, software
-                engineer (there is a bit of a difference), blockchain engineer,
-                all the way to CTO of a venture-backed startup.
-              </p>
-              <p className="mt-5 max-w-2xl text-xl sm:text-2xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-                Now I&apos;m bringing it all together and applying it to the
-                businesses back home.
-              </p>
-            </div>
-            <AboutPortrait />
-          </div>
-        </section>
+        <AboutHero
+          title="More customers, less busywork and guessing."
+          sub="Queso Ventures builds the tools local businesses need to grab more customers and keep them coming back."
+          next="what"
+        />
 
-        {/* Chapters — read as a build sheet, not a brochure. Each chapter
-            carries its own factory paint, a spec index, and a year. */}
-        <section className="container mx-auto px-4 py-16">
-          <div className="max-w-6xl mx-auto grid sm:grid-cols-2 gap-5">
-            {chapters.map((chapter, i) => {
-              const paint = liveryAt(i);
-              return (
-                <Fragment key={i}>
-                <Reveal delay={i * 120}>
-                  <Glow color={paint.hex} radius="rounded-3xl" lift={false}>
-                  <div className="relative h-full overflow-hidden rounded-3xl border border-lightBorder dark:border-darkBorder bg-panelLight dark:bg-panelDark">
-                    {/* Livery stripe across the top, full bleed. */}
-                    <span
-                      className="absolute inset-x-0 top-0 h-1.5"
-                      style={{ backgroundColor: paint.hex }}
-                    />
-                    <div className="p-8 pt-10">
-                      <p
-                        className="text-3xl sm:text-4xl font-semibold tracking-tight mb-3"
-                        style={{ color: paint.ink }}
-                      >
-                        {chapter.year}
-                      </p>
-
-                      <p className="text-2xl font-semibold text-lightText dark:text-darkText mb-4 tracking-tight">
-                        {chapter.label}
-                      </p>
-                      <p className="text-lg font-light text-lightTextMuted dark:text-darkTextMuted leading-relaxed">
-                        {chapter.body}
-                      </p>
-
-                      <div className="mt-8 pt-5 border-t border-lightBorder dark:border-darkBorder">
-                        <span
-                          className="block h-1 w-10 rounded-full transition-all duration-300 group-hover:w-24"
-                          style={{ backgroundColor: paint.hex }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  </Glow>
-                </Reveal>
-
-                {/*
-                  The degree, between the rows rather than in a card of its own.
-
-                  It belongs on the timeline and it is the one beat that is not
-                  a chapter: nothing changed about the work in 2023, the paper
-                  just caught up with it. A card would give it the same weight
-                  as becoming a CTO. A line across the gap gives it the weight
-                  it has, and the joke lands better in an aside than in a
-                  headline.
-                */}
-                {i === 1 && (
-                  <Reveal className="sm:col-span-2">
-                    {/*
-                      Arancio Xanto, and not by coincidence.
-
-                      Red and yellow are already spoken for by the two cards it
-                      sits between, so the divider needed a paint that reads as
-                      house livery without echoing either neighbour. The rules
-                      run out of it and fade to nothing at both ends, which is
-                      the only ornament here: everything else is the sentence.
-
-                      Two values from the same paint. The ink is the darkened
-                      variant, the only one legible setting type on cream; the
-                      factory hex is far too bright there and exactly right on
-                      the dark panel. Passed as custom properties so the palette
-                      module stays the single source for both.
-                    */}
-                    <div
-                      className="flex items-center gap-5 py-2"
-                      style={
-                        {
-                          "--paint": PAINT.arancioXanto.hex,
-                          "--paint-ink": PAINT.arancioXanto.ink,
-                        } as React.CSSProperties
-                      }
-                    >
-                      <span
-                        aria-hidden
-                        className="hidden h-px flex-1 sm:block"
-                        style={{
-                          backgroundImage:
-                            "linear-gradient(to right, transparent, var(--paint))",
-                        }}
-                      />
-                      <p className="text-center text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-                        <span className="font-semibold text-[color:var(--paint-ink)] dark:text-[color:var(--paint)]">
-                          2023
-                        </span>{" "}
-                        &middot; Graduated from the University of Houston,
-                        majoring in Computer Science (what a surprise).
-                      </p>
-                      <span
-                        aria-hidden
-                        className="hidden h-px flex-1 sm:block"
-                        style={{
-                          backgroundImage:
-                            "linear-gradient(to left, transparent, var(--paint))",
-                        }}
-                      />
-                    </div>
-                  </Reveal>
-                )}
-                </Fragment>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Why */}
-        <section className="container mx-auto px-4 py-16">
+        {/* What Queso Ventures is */}
+        <section id="what" className="container mx-auto px-4 py-24 sm:py-32 lg:py-0">
           <div className="max-w-6xl mx-auto">
-            <Reveal>
-              <Glow color={PAINT.gialloOrion.hex} radius="rounded-3xl" lift={false} spread={460}>
-              <div
-                data-dark-section
-                className="group relative overflow-hidden rounded-3xl bg-[#101216] p-8 sm:p-14"
-              >
-                {/*
-                  Mugello, and it is not decoration. The paragraph's argument is
-                  that every big brand has a team of engineers making sure you
-                  find them first: this is a picture of exactly that, a pit wall
-                  with a factory operation behind it and privateers on track.
-                  It also happens to be the visual language the whole site is
-                  already speaking, since the palette is factory paint.
+            <AboutDeck cards={what}>
+              <Reveal>
+                <h2 className="text-4xl sm:text-5xl xl:text-6xl font-light tracking-tight text-balance text-lightText dark:text-darkText">
+                  What Queso Ventures is
+                </h2>
+              </Reveal>
+            </AboutDeck>
+          </div>
+        </section>
 
-                  Visibility here is a product, not a setting: the photo shows
-                  through at roughly `opacity x (1 - scrim)`. An early attempt
-                  ran 0.22 under a 0.85 gradient, which is 3% and invisible.
+        {/*
+          The story needs its heading for readers and crawlers, but on screen
+          the chapters open straight after the deck: a title page between them
+          only broke the flow.
+        */}
+        <h2 className="sr-only">Why I&apos;m doing this</h2>
+        <AboutChapters chapters={why} />
 
-                  At rest only the heading shows and the scrim stays light, so
-                  the photograph is the section. Pointing at it fades the
-                  argument in and deepens the scrim to carry it. The copy never
-                  leaves the DOM — it is opacity, not display — so it is still
-                  read by crawlers and still occupies its space, which is what
-                  stops the card from resizing under the pointer.
-
-                  Anything without a pointer gets the full card immediately:
-                  `(hover: none)` covers touch, and `focus-within` covers the
-                  keyboard.
-                */}
-                <Image
-                  src="/hero/aboutMotoGP.JPEG"
-                  alt="The pit straight at Mugello during a MotoGP session"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 1100px"
-                  className="object-cover"
+        {/*
+          The last page. After Ferrari's centred blocks: one statement, one
+          rule, one line, one way forward, and a lot of room around them.
+        */}
+        <section className="bg-panelLight dark:bg-panelDark">
+          <div className="container mx-auto px-4 py-28 sm:py-40">
+            <Reveal className="mx-auto max-w-3xl text-center">
+              <h2 className="text-5xl sm:text-6xl xl:text-7xl font-light tracking-tight text-balance text-lightText dark:text-darkText">
+                Outcomes, not words
+              </h2>
+              <span
+                aria-hidden
+                className="mx-auto mt-9 block h-1 w-24 rounded-full"
+                style={{
+                  backgroundImage: `linear-gradient(to right, ${PAINT.rossoCorsa.hex}, ${PAINT.gialloOrion.hex}, ${PAINT.gialloModena.hex})`,
+                }}
+              />
+              <p className="mx-auto mt-9 max-w-2xl text-xl sm:text-2xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
+                Anyone can say &ldquo;I build websites&rdquo; now. I sell the
+                result: more calls, more walk ins, more orders.
+              </p>
+              <div className="mt-12 flex justify-center">
+                <NicheCtaButton
+                  from="about"
+                  variant="arrow"
+                  message="I want to see what my business could look like online."
+                  label="Get My Free Report"
                 />
-                {/* Base scrim: enough for the heading, light enough to see. */}
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "linear-gradient(115deg, rgba(16,18,22,0.55) 0%, rgba(16,18,22,0.42) 55%, rgba(16,18,22,0.28) 100%)",
-                  }}
-                />
-                {/* Second scrim, only while the copy is showing. */}
-                <div
-                  className="absolute inset-0 opacity-0 transition-opacity duration-500 group-focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100"
-                  style={{
-                    background:
-                      "linear-gradient(115deg, rgba(16,18,22,0.6) 0%, rgba(16,18,22,0.52) 55%, rgba(16,18,22,0.38) 100%)",
-                  }}
-                />
-
-                {/*
-                  The resting title, centred in the card rather than sitting on
-                  top of it.
-
-                  The copy underneath keeps its space while hidden, so an
-                  in-flow heading is pinned to the top of a very tall card with
-                  a photograph running past it — which is why it read as a
-                  caption. This layer is centred in the box and fades out as the
-                  argument fades in, so the two never occupy the middle at once.
-                  It duplicates the words in the h2 below it and is therefore
-                  aria-hidden: the real heading is the one that stays in the
-                  document.
-
-                  White, not the house ramp. Red-to-yellow letters over this
-                  photograph lose their second half against the sand and the
-                  Brembo boards, which is the one place on the site where the
-                  gradient actively costs legibility. The warm tint at the tail
-                  of the type is as far as it goes, and the full ramp appears
-                  underneath as a rule, where nothing has to be read through it.
-                */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-6 text-center opacity-100 transition-opacity duration-500 group-focus-within:opacity-0 group-hover:opacity-0 [@media(hover:none)]:opacity-0"
-                >
-                  <span
-                    className="absolute h-[48%] w-[92%] max-w-4xl rounded-full blur-3xl"
-                    style={{ background: "rgba(16,18,22,0.66)" }}
-                  />
-                  <p className="relative bg-gradient-to-b from-white from-[55%] to-[#FFE0A0] bg-clip-text text-4xl font-light leading-tight tracking-tight text-transparent sm:text-5xl md:text-6xl">
-                    Why Queso Ventures exists
-                  </p>
-                  <span
-                    className="relative mt-7 block h-1 w-24 rounded-full"
-                    style={{
-                      backgroundImage: `linear-gradient(to right, ${PAINT.rossoCorsa.hex}, ${PAINT.gialloOrion.hex}, ${PAINT.gialloModena.hex})`,
-                    }}
-                  />
-                </div>
-
-                <div
-                  className="relative mx-auto max-w-3xl text-center"
-                  style={{ textShadow: "0 2px 20px rgba(0,0,0,0.75)" }}
-                >
-
-                  <div className="opacity-0 transition-opacity duration-500 group-focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
-                    <span
-                      className="mx-auto mt-7 block h-1 w-14 rounded-full"
-                      style={{ backgroundColor: PAINT.gialloOrion.hex }}
-                    />
-
-                    <p className="mt-8 text-3xl sm:text-4xl md:text-5xl font-light leading-tight tracking-tight text-balance text-[#F5F7FA]">
-                      Big brands have dedicated engineers 
-                    </p>
-
-                    {/*
-                      One paragraph, one column. StatementCopy split this into
-                      newspaper columns, which is right for a wall of text at the
-                      top of a page and wrong here: two ragged columns under a
-                      centred lead read as a layout accident.
-                    */}
-                    {/*
-                      Three sentences, down from five.
-
-                      The cut ones were the agency swipe and the sentence
-                      explaining that AI is changing search — both true, both
-                      already made by the headline above and the whole page
-                      below. What is left is the only part nobody else on this
-                      market can say: I built the thing, and you get me.
-
-                      The price went with them. It is on the pricing card, the
-                      services page and this page's own schema; a fourth
-                      appearance inside the emotional beat was the one place it
-                      was doing no work.
-                    */}
-                    {/*
-                      Houston is written out, not interpolated.
-
-                      ${city} inside JSX text prints the dollar sign and the
-                      braces exactly as typed — JSX needs {city}, and there is
-                      no `city` here to reach for anyway. This page is the
-                      flagship About page rather than one of the city-templated
-                      geo pages, so the name is simply the name. If Queso
-                      Ventures ever gets a second About page per metro, this is
-                      the line that becomes a prop.
-                    */}
-                    <p className="mx-auto mt-7 max-w-2xl text-xl font-light leading-relaxed text-[#B7C0C8]">
-                      The local places that Houston is built on do not. I built
-                      Queso Ventures to help level the playing field with
-                      technology.
-                    </p>
-
-                    <div className="mt-10 flex justify-center">
-                      <NicheCtaButton
-                        from="about"
-                        variant="onDark"
-                        message="I want to see what my business could look like online."
-                        label="Get My Free Report"
-                      />
-                    </div>
-                  </div>
-                </div>
               </div>
-              </Glow>
             </Reveal>
           </div>
         </section>

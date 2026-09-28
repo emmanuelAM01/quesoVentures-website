@@ -116,6 +116,9 @@ const Footer = () => {
                 <Link href="/studios" className={columnLink}>
                   Studios
                 </Link>
+                <Link href="/guide" className={columnLink}>
+                  The Queso Guide
+                </Link>
                 <Link href="/contact" className={columnLink}>
                   Contact
                 </Link>

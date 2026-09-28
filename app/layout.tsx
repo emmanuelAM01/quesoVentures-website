@@ -6,6 +6,16 @@ import Header from "components/Header";
 import AboutModal from "components/AboutModal";
 import ContactModal from "components/ContactModal";
 import ConsoleEasterEgg from "components/ConsoleEasterEgg";
+import { getPublished } from "lib/guide/queries";
+
+/**
+ * The Guide joins the nav once it has enough in it to be worth a click. An
+ * empty guide one tap from every page reads as unfinished to a prospect; the
+ * footer link keeps it discoverable to crawlers until then. The count is a
+ * cached read tagged `guide`, so publishing the third entry turns the link on
+ * through the same webhook that publishes it.
+ */
+const GUIDE_NAV_MIN = 3;
 
 
 import "styles/globals.css";
@@ -31,7 +41,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const guideInNav = (await getPublished()).length >= GUIDE_NAV_MIN;
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
@@ -69,7 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             under it. Heroes that do tuck under still cover this.
           */}
           <div className="bg-lightBG dark:bg-darkBG">
-            <Header />
+            <Header guideInNav={guideInNav} />
             {children}
           </div>
           <AboutModal />
@@ -88,8 +99,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           measures this site on, and it is the only way to see that one city page
           is slow because of its hero photograph while the rest are fine.
 
-          Speed Insights was switched on for the project months ago and was
-          collecting nothing, because nothing on the site was sending it.
+          Speed Insights is a PAID add-on, not part of the Pro plan. It was
+          enabled on this project on 2026-09-12; check the billing page before
+          assuming it is free. Removing this component stops the data being
+          sent, but does not disable the feature on the project.
         */}
         <SpeedInsights />
       </body>

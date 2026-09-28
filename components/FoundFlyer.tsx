@@ -1,42 +1,43 @@
 "use client";
-import { trackCtaClick } from "./analytics";
 
+import NicheCtaButton from "./NicheCtaButton";
+import LavaLamp from "./LavaLamp";
+import { houseGradient } from "./livery";
+
+/**
+ * Where the stamp's QR code lands: one screen over the blob field, set like
+ * every hero on the site. The line about the stamp sits small above the title,
+ * then the title, the house rule, the promise, and the one way forward.
+ */
 export default function FoundFlyer() {
-  const openContact = () => {
-    trackCtaClick("found_flyer");
-    window.dispatchEvent(
-      new CustomEvent("modal:open", { detail: { id: "contact-popup" } })
-    );
-    window.dispatchEvent(
-      new CustomEvent("contact:prefill", {
-        detail: {
-          title: "Let's Talk",
-          message: "Hey! I found your QR code stamp and wanted to reach out.",
-        },
-      })
-    );
-  };
-
   return (
-    <section className="flex flex-col items-center justify-center text-center px-4 sm:px-8 min-h-screen">
-      <p className="text-2xl font-semibold tracking-widest uppercase text-lightTextMuted dark:text-darkTextMuted mb-6">
-        You found the stamp
-      </p>
-
-      <h1 className="font-sans text-xl sm:text-2xl md:text-4xl tracking-tight text-lightText dark:text-darkText mb-4 md:whitespace-nowrap">
-        I only stamp businesses I think I can help.
-      </h1>
-
-      <p className="text-base text-lightTextMuted dark:text-darkTextMuted mb-8 font-light ">
-        More leads from Google and AI search. No ad spend, no pressure.
-      </p>
-
-      <button
-        onClick={openContact}
-        className="bg-lightButton hover:bg-lightButtonHover dark:bg-darkButton dark:hover:bg-darkButtonHover text-lightBG dark:text-darkBG px-6 py-3 rounded-xl text-base font-semibold transition-colors"
-      >
-        Get Your Free Audit
-      </button>
+    <section data-dark-section className="relative flex min-h-[100svh] items-end overflow-hidden">
+      <LavaLamp scrim={0.45} />
+      <div className="relative w-full">
+        <div className="container mx-auto px-4 pb-16 pt-40 sm:pb-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="max-w-4xl">
+              <p className="mb-6 text-sm text-white/70">You found the stamp</p>
+              <h1 className="text-5xl font-light leading-[1.02] tracking-tight text-balance text-white sm:text-6xl lg:text-7xl">
+                I only stamp businesses I think I can help.
+              </h1>
+              <span aria-hidden className="mt-8 block h-1 w-24 rounded-full" style={{ backgroundImage: houseGradient() }} />
+              <p className="mt-8 max-w-2xl text-xl font-light leading-relaxed text-white/85 sm:text-2xl">
+                More leads from Google and AI search. No ad spend, no pressure.
+              </p>
+              <div className="mt-10">
+                <NicheCtaButton
+                  from="found_flyer"
+                  variant="arrow"
+                  tone="dark"
+                  message="Hey! I found your QR code stamp and wanted to reach out."
+                  label="Get Your Free Audit"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

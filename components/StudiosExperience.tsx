@@ -4,211 +4,40 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Reveal from "components/Reveal";
-import { STUDIO_DEMOS, type DemoId } from "components/StudiosDemos";
+import { STUDIO_DEMOS } from "components/StudiosDemos";
+import ArrowMark, { arrowTone } from "components/ArrowMark";
+import { houseGradient } from "components/livery";
+import {
+  OUTCOMES,
+  PACKS,
+  PRODUCTS as PRODUCT_LIST,
+  packTitle,
+  packFor,
+  productsFor,
+  type Outcome,
+  type Pack,
+  type Product,
+} from "components/studiosCatalog";
 
-// The Queso Studios reveal. This page deliberately abandons the site's
-// chrome: no header, no footer, dark only. Act one is the wordmark alone in
-// a black void with laser light. Act two is the lineup, a center-snapped
-// glass carousel where side cards fall away in perspective. The only way
-// out is the "Leave" pill, which appears once the reveal has done its job.
+// The Queso Studios shop. This page deliberately abandons the site's chrome:
+// no header, no footer, dark only. Act one is the wordmark alone in a black
+// void with laser light. Act two is the shop, laid out by what an owner wants
+// (more calls, regulars back, new customers, a business that is straightened
+// out, real numbers) rather than by the names of the tools. The only way out
+// is the "Leave" pill, which appears once the reveal has done its job.
 //
-// Every card in the lineup carries a working demo of the tool it is selling,
-// running only while that card is centred. A tagline can tell a shop owner
-// there is a booking tool; watching a slot get picked and confirmed is the
-// only version of that sentence they can actually picture.
-
-type Tool = {
-  /** Keys the live demo in StudiosDemos. */
-  demo: DemoId;
-  name: string;
-  price: string;
-  tagline: string;
-  /**
-   * A quieter line under the tagline. Used where the strongest thing about a
-   * tool would swallow the sentence that explains it, so it gets set small and
-   * separated instead, and reads like fine print that happens to be a flex.
-   */
-  note?: string;
-  href?: string;
-  linkLabel?: string;
-  /**
-   * Runs the width of the grid, for the one entry that is not a product.
-   *
-   * The open slot is an invitation, and sat in a column beside eight finished
-   * tools it read as a ninth thing you could buy that happened to have nothing
-   * in it -- with two empty cells beside it, which looked like the page had
-   * run out rather than finished.
-   */
-  wide?: boolean;
-  /**
-   * Kept out of the lineup bundle and its running total.
-   *
-   * The bundle is priced for software that costs next to nothing to run per
-   * client. The AI Frontdesk pays per minute of phone call, and a busy line
-   * costs $400 to $500 a month to run by itself, so it cannot ride inside $450.
-   */
-  unbundled?: boolean;
-  /** What its button says, where "Want this?" would be asking about nothing. */
-  cta?: string;
-  /**
-   * The card's laser edge, glow, and price pill.
-   *
-   * Factory paint, with one house rule bent: a few of the palette's inks are
-   * mixed for legibility on cream and go nearly black against this page, so
-   * where that happens the brighter sibling is used instead. One colour per
-   * tool, so flipping the lineup feels like flipping a lineup rather than
-   * scrolling a spec sheet.
-   */
-  accent: string;
-};
+// Every product on the shelf carries a working demo of itself, and opens into
+// a popup with the rest: what you get, what it costs, and the way to ask for
+// it. A tagline can tell a shop owner there is a booking tool; watching a slot
+// get picked and confirmed is the only version they can actually picture.
+//
+// Names and prices come from components/studiosCatalog.ts, which mirrors the
+// portal's catalogue so the shop and the portal never quote two numbers.
 
 /**
- * Everything, for less than the sum of it.
- *
- * Nine cards is nine decisions, and a shop owner who would happily take one
- * says no to the fourth simply because it is the fourth thing they have been
- * asked. One price is one decision. It is deliberately well under the running
- * total -- the saving is the offer, and without it there is no reason to take
- * this over the two tools you came for.
- *
- * The total is added up from the lineup rather than typed out, so changing a
- * price on a card can never leave this line quietly wrong. The bundle itself
- * is not, which is the half that needs watching: adding Queso Organization at
- * $250 took the lineup to $960 and left this at $350, quietly turning a
- * half-price offer into a two-thirds-off one nobody had decided to make.
- *
- * $450 is roughly the share that was already being given away -- a little over
- * half off, which is what $350 against $710 was -- and it stays under the
- * monthly rate, so the whole toolbox still reads as something added to Queso
- * Ventures rather than a second thing the same size as it.
- */
-const BUNDLE_PRICE = 450;
-
-function oneAtATime(): number {
-  return TOOLS.filter((t) => !t.unbundled).reduce((sum, t) => {
-    const n = Number(t.price.replace(/[^0-9]/g, ""));
-    return sum + (Number.isFinite(n) ? n : 0);
-  }, 0);
-}
-
-const PRICE_NOTE = "Queso Ventures clients receive discounts";
-
-/**
- * The lineup.
- *
- * Ordered the way it should be met: the one with a website of its own first,
- * because it is proof rather than a promise, then the tools in rough order of
- * how easily an owner can picture them, and the open slot last. That slot only
- * means anything once someone has seen nine finished things.
- */
-const TOOLS: Tool[] = [
-  {
-    demo: "rewards",
-    name: "Queso Rewards",
-    price: "$100 / month",
-    tagline:
-      "A punch card that lives on your customer's phone. It fills as they come back, and it texts them when they are one are getting closer to their reward.",
-    href: "https://www.quesorewards.com",
-    linkLabel: "Visit quesorewards.com",
-    accent: "#FEA700",
-  },
-  {
-    demo: "memberships",
-    name: "Memberships",
-    price: "$80 / month",
-    tagline:
-      "A QR code by the register that opens your own page of deals and store news. Post whatever you want that week, and every scan tells you who came back for it.",
-    note: "Not a punch card. You write the offer, change it whenever, and see which customers keep showing up.",
-    accent: "#7DC23B",
-  },
-  {
-    demo: "chat",
-    name: "AI Chat",
-    price: "$80 / month",
-    tagline:
-      "A chat box on your website that knows your policies, rules, business both inside and out. Only answers how you would answer.",
-    accent: "#A855F7",
-  },
-  {
-    demo: "frontdesk",
-    name: "AI Frontdesk",
-    price: "$500 / month",
-    unbundled: true,
-    tagline:
-      "A phone agent that answers when you cannot. It takes the call, books the appointment, and keeps you the updated.",
-    // Every minute on the phone is paid for underneath, at roughly 18 cents.
-    // 1,500 minutes costs about $270 against the $500, and past it each minute
-    // bills at about double its cost, so a busy line pays for itself.
-    note: "Includes 1,500 call minutes a month, about six calls a day. Extra minutes are 35 cents each.",
-    accent: "#C4161C",
-  },
-  {
-    demo: "booking",
-    name: "Booking",
-    price: "$70 / month",
-    tagline:
-      "They pick a time and get a confirmation, then a reminder. No confusion, no double bookings, just simple cohesion.",
-    accent: "#0690FF",
-  },
-  {
-    demo: "delivery",
-    name: "Deliveries",
-    price: "$80 / month",
-    tagline:
-      "Type an address and get a real price, with traffic, weather and the time of day already in it. Then it hands your driver the route to drive.",
-    accent: "#E64A37",
-  },
-  {
-    demo: "organization",
-    name: "Queso Organization",
-    price: "$250 / month",
-    tagline:
-      "Every customer in one place, and where each one stands right now. What you agreed, what they owe, when they are due back, and every note anybody has written down.",
-    note: "For the businesses running on spreadsheets, napkin math and memory. Bail bonds, garages, clinics, law offices.",
-    accent: "#2243AA",
-  },
-  {
-    demo: "invoicing",
-    name: "Invoicing",
-    price: "$100 / month",
-    tagline:
-      "Ask for it the way you would ask a person. It builds the invoice, sends it by email and text, and chases it if it goes unpaid. (Because this part is never fun)",
-    accent: "#FFD100",
-  },
-  {
-    demo: "qrs",
-    name: "Queso Revenue System",
-    price: "Priced per case",
-    tagline:
-      "Think IRS, but on your side. Upload your numbers and it shows you what is working, what needs attention, and what to do about it.",
-    note: "Prepared by licensed CPAs, Harvard economists, Wharton MBAs, and CFOs out of nationwide logistics firms. (a bunch of number nerds)",
-    accent: "#7692A5",
-  },
-  /*
-    The empty slot, and the only card here that is not software. Eight finished
-    tools make the case that things get built; this one says the list is not
-    closed, which is the part no platform can copy.
-  */
-  {
-    demo: "next",
-    name: "Whatever you need next",
-    price: "Let's talk",
-    wide: true,
-    cta: "I have an idea",
-    tagline:
-      "Every tool on this page started as somebody telling me what was slowing them down. Tell me yours and it is the next thing I build.",
-    accent: "#FEA700",
-  },
-];
-
-/**
- * Whether a card is on screen, so its demo plays when you reach it.
- *
- * The carousel could rely on "is this the centred one", because there was only
- * ever one. A catalogue has nine on the page at once, and nine loops all
- * running is both a waste and a fairground. This plays the ones you are
- * actually looking at and leaves the rest holding their finished state, which
- * is what the demos already do when `on` is false.
+ * Whether an element is on screen, so its demo plays when you reach it and
+ * holds its finished state otherwise. Only as much motion as you are looking
+ * at.
  */
 function useInView<T extends Element>(ref: React.RefObject<T | null>): boolean {
   const [seen, setSeen] = useState(false);
@@ -225,112 +54,447 @@ function useInView<T extends Element>(ref: React.RefObject<T | null>): boolean {
   return seen;
 }
 
-function ToolCard({
-  tool,
-  onWant,
-}: {
-  tool: Tool;
-  onWant: () => void;
-}) {
-  const wide = tool.wide === true;
-  const ref = useRef<HTMLDivElement>(null);
+const outcomeId = (o: Outcome) => `outcome-${o.key}`;
+
+/** "$99 / month", or the note that stands in for a number. */
+function listPrice(p: { list: number | null; priceNote?: string }) {
+  return p.list != null ? `$${p.list} / month` : p.priceNote ?? "";
+}
+
+/** "$49 for Queso clients", or its stand in. Null when there is nothing to say. */
+function clientPrice(p: { client: number | null; clientNote?: string; list: number | null }) {
+  if (p.client != null) return `$${p.client} for Queso clients`;
+  if (p.clientNote) return p.clientNote;
+  return null;
+}
+
+/**
+ * One product as a magazine story: its demo shot on a backdrop of its own
+ * colour, like product photography, then the headline, the standfirst, the
+ * price, and the way in. The whole story is a button that opens the popup.
+ *
+ * `feature` is the lead story of a spread: the backdrop runs taller and the
+ * type a size up, so a spread of three reads as one big story and two
+ * smaller ones rather than three equal boxes.
+ */
+function Story({ product, feature = false, onOpen }: { product: Product; feature?: boolean; onOpen: () => void }) {
+  const ref = useRef<HTMLButtonElement>(null);
   const live = useInView(ref);
-  const Demo = STUDIO_DEMOS[tool.demo];
+  const Demo = STUDIO_DEMOS[product.demo];
+  const forClients = clientPrice(product);
+
+  return (
+    <button
+      ref={ref}
+      type="button"
+      onClick={onOpen}
+      aria-haspopup="dialog"
+      className="group flex h-full w-full flex-col text-left focus:outline-none"
+    >
+      <div
+        className={`relative flex w-full items-center justify-center overflow-hidden rounded-3xl border border-white/10 px-6 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:border-white/25 group-focus-visible:border-white/40 ${
+          feature ? "py-16 lg:min-h-[26rem]" : "py-10"
+        }`}
+        style={{ background: `radial-gradient(ellipse 75% 70% at 50% 60%, ${product.accent}2e, transparent 72%), rgba(255,255,255,0.025)` }}
+      >
+        <div className="w-full max-w-sm transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]">
+          <div
+            className="rounded-2xl border border-white/10 bg-black/40 p-3.5"
+            style={{ boxShadow: `0 30px 90px -40px ${product.accent}88` }}
+          >
+            <Demo on={live} />
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-7 flex flex-1 flex-col">
+        <span aria-hidden className="block h-[3px] w-10 rounded-full transition-[width] duration-500 group-hover:w-16" style={{ backgroundColor: product.accent }} />
+        <p className={`mt-5 font-extralight tracking-tight text-white ${feature ? "text-4xl sm:text-5xl" : "text-3xl"}`}>
+          {product.name}
+        </p>
+        <p className={`mt-3 font-light leading-relaxed text-white/65 ${feature ? "max-w-xl text-lg" : "text-base"}`}>
+          {product.line}
+        </p>
+        <div className="mt-5 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <span className="text-lg font-light tabular-nums text-white">{listPrice(product)}</span>
+          {forClients && <span className="text-sm text-white/45">{forClients}</span>}
+        </div>
+        <span className={`${arrowTone("dark")} mt-6`}>
+          <ArrowMark tone="dark" size="sm" label="See what you get" />
+        </span>
+      </div>
+    </button>
+  );
+}
+
+/**
+ * The complete experience, across the foot of the spread.
+ *
+ * It sat under the outcome's line in small type, and even the person who
+ * wrote it read past it. Now it closes the shelf as its own card, edged in the
+ * paints of the tools inside it: the complete experience in the display
+ * weight, what is in it, the price, and what it saves, said as a number.
+ */
+function PackCard({ pack, onWant }: { pack: Pack; onWant: () => void }) {
+  const inside = pack.products
+    .map((k) => PRODUCT_LIST.find((p) => p.key === k))
+    .filter((p): p is Product => Boolean(p));
+  const separately = inside.reduce((sum, p) => sum + (p.list ?? 0), 0);
+  const saves = separately - pack.list;
+  const edge = `linear-gradient(120deg, ${inside.map((p) => p.accent).join(", ")})`;
 
   return (
     <div
-      ref={ref}
-      className="h-full"
-      onMouseMove={(e) => {
-        const r = e.currentTarget.getBoundingClientRect();
-        e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
-        e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
-      }}
+      id={`pack-${pack.key}`}
+      className="group relative scroll-mt-24 rounded-3xl p-[1.5px] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5"
+      style={{ backgroundImage: edge }}
     >
-      <article className="group relative h-full overflow-hidden rounded-3xl border border-white/10 bg-white/[0.045] p-7 sm:p-8 flex flex-col gap-6 transition-[border-color,box-shadow] duration-500 hover:border-white/25"
-        style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)" }}
-      >
+      {/* The glow the edge throws, stronger under the pointer. */}
+      <div
+        aria-hidden
+        className="absolute -inset-3 -z-10 rounded-[2rem] opacity-40 blur-2xl transition-opacity duration-500 group-hover:opacity-70"
+        style={{ backgroundImage: edge }}
+      />
+      <div className="relative overflow-hidden rounded-[calc(1.5rem-1.5px)] bg-[#0A0C15] px-6 py-8 sm:px-9 sm:py-10">
         <div
           aria-hidden
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          style={{ background: `radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), ${tool.accent}14, transparent 60%)` }}
+          className="pointer-events-none absolute inset-0 opacity-[0.12]"
+          style={{ backgroundImage: edge }}
         />
-        <div
-          aria-hidden
-          className="absolute top-0 left-10 right-10 h-px transition-opacity duration-500 opacity-40 group-hover:opacity-100"
-          style={{ background: `linear-gradient(to right, transparent, ${tool.accent}, transparent)` }}
-        />
-
-        <div className="relative flex items-center justify-between gap-4">
-          <div className="flex gap-1.5">
-            <span className="w-7 h-1 rounded-full bg-[#C4161C]" />
-            <span className="w-7 h-1 rounded-full bg-[#FFD100]" />
+        <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1.35fr),minmax(0,1fr)] lg:gap-14">
+          <div>
+            <p className="text-4xl font-extralight leading-[1.02] tracking-tighter text-balance text-white sm:text-5xl">
+              {packTitle(pack)}
+            </p>
+            <p className="mt-5 max-w-lg text-lg font-light leading-relaxed text-white/70">{pack.line}</p>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {inside.map((p) => (
+                <li
+                  key={p.key}
+                  className="flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-sm text-white/85"
+                >
+                  <span aria-hidden className="h-2 w-2 rounded-full" style={{ backgroundColor: p.accent }} />
+                  {p.name}
+                </li>
+              ))}
+            </ul>
           </div>
-          <span tabIndex={0} className="group/price relative outline-none">
-            <span
-              className="text-sm font-bold rounded-full border px-4 py-1.5 whitespace-nowrap"
-              style={{ color: tool.accent, borderColor: `${tool.accent}55`, textShadow: `0 0 14px ${tool.accent}66` }}
-            >
-              {tool.price}
-              {tool.price.includes("$") && <span aria-hidden>*</span>}
-            </span>
-            {tool.price.includes("$") && (
-              <span
-                role="tooltip"
-                className="absolute right-0 top-full mt-2.5 w-max max-w-[230px] rounded-xl border border-white/15 bg-[#0A0C15]/95 backdrop-blur-md px-3.5 py-2 text-xs text-white/75 leading-snug opacity-0 translate-y-1 pointer-events-none transition-all duration-300 group-hover/price:opacity-100 group-hover/price:translate-y-0 group-focus/price:opacity-100 group-focus/price:translate-y-0 z-10"
-              >
-                {PRICE_NOTE}
-              </span>
-            )}
-          </span>
-        </div>
 
-        <div className={`relative flex-1 ${wide ? "lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center" : "flex flex-col gap-4"}`}>
-          <div className={wide ? "order-2 flex flex-col gap-4" : "contents"}>
-          <h3 className="text-2xl font-bold tracking-tight">{tool.name}</h3>
-
-          {!wide && (
-            <div className="rounded-2xl border border-white/[0.07] bg-black/25 p-3.5">
-              <Demo on={live} />
+          <div className="flex flex-col justify-between gap-6 border-t border-white/10 pt-7 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
+            <div>
+              <p className="flex flex-wrap items-baseline gap-x-3">
+                <span className="text-6xl font-extralight tracking-tighter tabular-nums text-white">${pack.list}</span>
+                <span className="text-base text-white/50">/ month</span>
+                {saves > 0 && <span className="text-base text-white/40 line-through tabular-nums">${separately}</span>}
+              </p>
+              <p className="mt-2 text-base text-white/60">${pack.client} for Queso clients</p>
+              {saves > 0 && (
+                <span
+                  className="mt-4 inline-block rounded-full px-3.5 py-1 text-sm font-semibold text-black"
+                  style={{ backgroundImage: houseGradient() }}
+                >
+                  Save ${saves} a month
+                </span>
+              )}
             </div>
-          )}
-
-          <p className="text-sm sm:text-base text-white/55 leading-relaxed">{tool.tagline}</p>
-          {tool.note && (
-            <p className="border-t border-white/10 pt-3 text-xs leading-relaxed text-white/35">{tool.note}</p>
-          )}
-          {tool.href == null && tool.linkLabel && (
-            <p className="text-sm font-semibold text-white/40">{tool.linkLabel}</p>
-          )}
-
-          {/* mt-auto so every card's buttons sit on the same line, however
-              long the tagline above them runs. */}
-          <div className="mt-auto flex flex-wrap items-center gap-3 pt-1">
-            {tool.href && (
-              <a
-                href={tool.href}
-                className="inline-block rounded-xl bg-white text-black text-sm font-bold px-6 py-3.5 hover:bg-white/85 active:scale-[0.98] transition-all"
-              >
-                {tool.linkLabel}
-              </a>
-            )}
-            <button
-              type="button"
-              onClick={onWant}
-              className="inline-block rounded-xl border border-white/25 text-sm font-bold px-6 py-3.5 text-white/85 hover:text-white hover:border-white/50 active:scale-[0.98] transition-all"
-            >
-              {tool.cta ?? "Want this?"}
+            <button type="button" onClick={onWant} className={`${arrowTone("dark")} text-left`}>
+              <ArrowMark tone="dark" label="Get the complete experience" />
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * One outcome, one magazine spread: the question as the headline, the tools
+ * as stories in columns under it, and the complete experience across the foot
+ * of the spread.
+ */
+function OutcomeChapter({
+  outcome,
+  index,
+  onOpen,
+  onWant,
+}: {
+  outcome: Outcome;
+  index: number;
+  onOpen: (p: Product) => void;
+  onWant: (name: string) => void;
+}) {
+  const shelf = productsFor(outcome.key);
+  const pack = packFor(outcome.key);
+
+  return (
+    <section
+      id={outcomeId(outcome)}
+      data-outcome={index}
+      className="relative border-t border-white/[0.06] px-6 py-24 sm:px-10 sm:py-32"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: `radial-gradient(ellipse 50% 40% at 15% 20%, ${outcome.accent}1c, transparent 70%)` }}
+      />
+      <div className="relative mx-auto max-w-6xl lg:pl-10 xl:pl-0">
+        {/* The spread's headline: the question, and its colour under it. The
+            stories below say the rest, so there is no standfirst. */}
+        <Reveal>
+          <div className="border-b border-white/10 pb-10">
+            <h2 className="text-5xl font-extralight leading-[0.98] tracking-tighter text-balance text-white sm:text-6xl xl:text-7xl">
+              {outcome.label}
+            </h2>
+            <span aria-hidden className="mt-8 block h-1 w-16 rounded-full" style={{ backgroundColor: outcome.accent }} />
+          </div>
+        </Reveal>
+
+        {/* The stories. Three make a lead story and two beside it; two sit as a pair. */}
+        {shelf.length >= 3 ? (
+          <div className="mt-14 grid gap-x-10 gap-y-16 lg:grid-cols-12">
+            <Reveal className="lg:col-span-7">
+              <Story product={shelf[0]} feature onOpen={() => onOpen(shelf[0])} />
+            </Reveal>
+            <div className="grid gap-16 sm:grid-cols-2 lg:col-span-5 lg:grid-cols-1">
+              {shelf.slice(1).map((p, i) => (
+                <Reveal key={p.key} delay={(i + 1) * 100}>
+                  <Story product={p} onOpen={() => onOpen(p)} />
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="mt-14 grid gap-x-10 gap-y-16 md:grid-cols-2">
+            {shelf.map((p, i) => (
+              <Reveal key={p.key} delay={i * 100}>
+                <Story product={p} onOpen={() => onOpen(p)} />
+              </Reveal>
+            ))}
+          </div>
+        )}
+
+        {pack && (
+          <Reveal className="mt-20">
+            <PackCard pack={pack} onWant={() => onWant(packTitle(pack))} />
+          </Reveal>
+        )}
+      </div>
+    </section>
+  );
+}
+
+/**
+ * The shop's contents, pinned to the left edge while the outcomes are on
+ * screen: a dot per outcome in its colour, the one you are in lit and named.
+ */
+function OutcomeRail() {
+  const [active, setActive] = useState(0);
+  const [onScreen, setOnScreen] = useState(false);
+
+  useEffect(() => {
+    const chapters = document.querySelectorAll("[data-outcome]");
+    if (!chapters.length) return;
+    const current = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.outcome));
+        }
+      },
+      { rootMargin: "-50% 0px -50% 0px" }
+    );
+    chapters.forEach((el) => current.observe(el));
+    const onScroll = () => {
+      const a = chapters[0].getBoundingClientRect();
+      const z = chapters[chapters.length - 1].getBoundingClientRect();
+      const mid = window.innerHeight / 2;
+      setOnScreen(a.top < mid && z.bottom > mid);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      current.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  return (
+    <nav
+      aria-label="The shop"
+      className={`fixed left-5 top-1/2 z-40 hidden -translate-y-1/2 transition-opacity duration-500 lg:block xl:left-8 ${
+        onScreen ? "opacity-100" : "pointer-events-none opacity-0"
+      }`}
+    >
+      <ol className="relative flex flex-col gap-5">
+        <span aria-hidden className="absolute bottom-1.5 left-[5px] top-1.5 w-px bg-white/20" />
+        {OUTCOMES.map((o, i) => {
+          const on = i === active;
+          return (
+            <li key={o.key}>
+              <a href={`#${outcomeId(o)}`} aria-current={on} className="group relative flex items-center gap-4 focus:outline-none">
+                <span
+                  className={`block h-[11px] w-[11px] rounded-full border-2 transition-all duration-500 ${
+                    on ? "scale-125" : "group-hover:scale-125"
+                  }`}
+                  style={{
+                    borderColor: o.accent,
+                    backgroundColor: i <= active ? o.accent : "#04050A",
+                    boxShadow: on ? `0 0 14px ${o.accent}` : "none",
+                  }}
+                />
+                {/* Named on hover only: the outcome you are in is already the
+                    biggest words on screen, and the pill would sit on them. */}
+                <span className="-translate-x-1 whitespace-nowrap rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium tracking-[0.08em] text-white opacity-0 backdrop-blur-sm transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-90 group-focus-visible:opacity-90">
+                  {o.label}
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}
+
+/** The open slot's demo, playing while it is on screen. */
+function IdeaDemo() {
+  const ref = useRef<HTMLDivElement>(null);
+  const live = useInView(ref);
+  const Demo = STUDIO_DEMOS.next;
+  return (
+    <div ref={ref}>
+      <Demo on={live} />
+    </div>
+  );
+}
+
+/**
+ * In the product popup: one line saying it is cheaper bundled, and a way to
+ * the bundle. No arithmetic here; the card it leads to has the numbers.
+ */
+function PackNote({ product, pack, onSee }: { product: Product; pack: Pack; onSee: () => void }) {
+  const others = pack.products
+    .filter((k) => k !== product.key)
+    .map((k) => PRODUCT_LIST.find((p) => p.key === k)?.name)
+    .filter(Boolean) as string[];
+  const withWhat = others.length > 1 ? `${others.slice(0, -1).join(", ")} and ${others[others.length - 1]}` : others[0];
+  return (
+    <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4">
+      <p className="text-base font-light text-white/80">Save when you bundle it with {withWhat}.</p>
+      <button type="button" onClick={onSee} className={arrowTone("dark")}>
+        <ArrowMark tone="dark" size="sm" label="See the bundle" />
+      </button>
+    </div>
+  );
+}
+
+/**
+ * The product popup: everything on the shelf plus what the shelf has no room
+ * for. The demo big on one side; on the other the price for anybody and for a
+ * Queso client, what it covers when it is billed by use, what you get, and the
+ * way to ask. Built to order is said plainly, and framed the way it works:
+ * the first businesses to ask shape it.
+ */
+function ProductModal({
+  product,
+  onClose,
+  onWant,
+}: {
+  product: Product;
+  onClose: () => void;
+  onWant: () => void;
+}) {
+  const Demo = STUDIO_DEMOS[product.demo];
+  const forClients = clientPrice(product);
+  const pack = PACKS.find((p) => p.products.includes(product.key));
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const r = requestAnimationFrame(() => setShown(true));
+    return () => cancelAnimationFrame(r);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-[70] flex items-end justify-center sm:items-center sm:px-4" role="dialog" aria-modal="true" aria-label={product.name}>
+      <div
+        className={`absolute inset-0 bg-black/75 backdrop-blur-sm transition-opacity duration-500 ${shown ? "opacity-100" : "opacity-0"}`}
+        onClick={onClose}
+      />
+      <div
+        className={`relative max-h-[92svh] w-full max-w-5xl overflow-y-auto rounded-t-3xl border border-white/15 bg-[#0A0C15]/95 backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:rounded-3xl ${
+          shown ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+        }`}
+      >
+        <span
+          aria-hidden
+          className="absolute inset-x-10 top-0 h-px"
+          style={{ background: `linear-gradient(to right, transparent, ${product.accent}, transparent)` }}
+        />
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full border border-white/15 text-white/60 transition-all hover:border-white/40 hover:text-white"
+        >
+          ✕
+        </button>
+
+        <div className="grid lg:grid-cols-2">
+          <div
+            className="flex items-center justify-center px-6 py-12 sm:px-10"
+            style={{ background: `radial-gradient(ellipse 70% 60% at 50% 55%, ${product.accent}24, transparent 70%)` }}
+          >
+            <div
+              className="w-full max-w-sm rounded-3xl border border-white/10 bg-black/35 p-4"
+              style={{ boxShadow: `0 40px 120px -40px ${product.accent}66` }}
+            >
+              <Demo on />
+            </div>
           </div>
 
-          {wide && (
-            <div className="order-1 mt-4 lg:mt-0 rounded-2xl border border-white/[0.07] bg-black/25 p-3.5">
-              <Demo on={live} />
+          <div className="px-6 pb-10 pt-4 sm:px-10 lg:py-12 lg:pr-14">
+            <h2 className="pr-10 text-4xl font-extralight leading-[1] tracking-tighter text-white sm:text-5xl">{product.name}</h2>
+            <span aria-hidden className="mt-6 block h-[3px] w-12 rounded-full" style={{ backgroundColor: product.accent }} />
+            <p className="mt-6 text-lg font-light leading-relaxed text-white/75">{product.line}</p>
+
+            <div className="mt-8 border-y border-white/10 py-5">
+              <p className="text-3xl font-extralight tabular-nums text-white">{listPrice(product)}</p>
+              {forClients && <p className="mt-1 text-base text-white/55">{forClients}</p>}
+              {product.usage && <p className="mt-3 text-sm text-white/45">{product.usage}</p>}
             </div>
-          )}
+
+            <ul className="mt-6 space-y-3">
+              {product.points.map((pt) => (
+                <li key={pt} className="flex gap-4 text-base font-light leading-relaxed text-white/80">
+                  <span aria-hidden className="mt-[0.8rem] h-[2px] w-4 flex-shrink-0 rounded-full" style={{ backgroundColor: product.accent }} />
+                  {pt}
+                </li>
+              ))}
+            </ul>
+
+            {pack && (
+              <PackNote
+                product={product}
+                pack={pack}
+                onSee={() => {
+                  onClose();
+                  // After the popup lets go of the page's scroll.
+                  setTimeout(() => document.getElementById(`pack-${pack.key}`)?.scrollIntoView({ behavior: "smooth", block: "center" }), 60);
+                }}
+              />
+            )}
+
+            <div className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-5">
+              <button type="button" onClick={onWant} className={arrowTone("dark")}>
+                <ArrowMark tone="dark" label="Want this?" />
+              </button>
+              {product.href && (
+                <a href={product.href} className={arrowTone("dark")}>
+                  <ArrowMark tone="dark" label={product.linkLabel ?? "Visit"} />
+                </a>
+              )}
+            </div>
+          </div>
         </div>
-      </article>
+      </div>
     </div>
   );
 }
@@ -338,10 +502,22 @@ function ToolCard({
 export default function StudiosExperience() {
   const [showLeave, setShowLeave] = useState(false);
   const [wantTool, setWantTool] = useState<{ name: string; idea: boolean } | null>(null);
+  const [openProduct, setOpenProduct] = useState<Product | null>(null);
   const glowRef = useRef<HTMLDivElement>(null);
 
+  // Past the reveal, and only while heading back up: a pill pinned to the
+  // corner sat on top of every headline scrolling under it, most of all on a
+  // phone. Scrolling up is the gesture of someone looking for the way out.
   useEffect(() => {
-    const onScroll = () => setShowLeave(window.scrollY > window.innerHeight * 0.35);
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      // The page has no header or footer, so this is the only way out: it
+      // also stays up at the end, for whoever read to the bottom.
+      const atEnd = y + window.innerHeight > document.documentElement.scrollHeight - window.innerHeight * 0.6;
+      setShowLeave(y > window.innerHeight * 0.35 && (y < last || atEnd));
+      last = y;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -355,19 +531,22 @@ export default function StudiosExperience() {
     el.style.background = `radial-gradient(700px circle at ${e.clientX}px ${e.clientY}px, rgba(145,170,255,0.055), transparent 65%)`;
   }, []);
 
-  // Modal: lock scroll and close on Escape while open.
+  // Popups: lock scroll and close on Escape while one is open. The ask sits
+  // over the product, so Escape closes the ask first.
   useEffect(() => {
-    if (!wantTool) return;
+    if (!wantTool && !openProduct) return;
     document.body.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setWantTool(null);
+      if (e.key !== "Escape") return;
+      if (wantTool) setWantTool(null);
+      else setOpenProduct(null);
     };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
     };
-  }, [wantTool]);
+  }, [wantTool, openProduct]);
 
   return (
     <div
@@ -392,7 +571,7 @@ export default function StudiosExperience() {
       </Link>
 
       {/* Act one: the void and the name */}
-      <section className="relative h-[100dvh] flex items-center justify-center overflow-hidden">
+      <section className="relative flex h-[100dvh] min-h-[640px] overflow-hidden">
         {/* Laser field */}
         <div aria-hidden className="absolute inset-0 pointer-events-none">
           <div
@@ -419,38 +598,66 @@ export default function StudiosExperience() {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_45%,rgba(255,255,255,0.05),transparent_70%)]" />
         </div>
 
-        <div className="relative text-center px-6">
-          <div className="relative overflow-hidden">
-            <h1
-              className="studios-motion text-[clamp(2.5rem,7.5vw,5.5rem)] leading-[1.04] font-bold tracking-tight text-balance bg-gradient-to-b from-white via-white to-white/30 bg-clip-text text-transparent"
-              style={{ animation: "studios-rise 1.3s 0.3s cubic-bezier(0.16,1,0.3,1) both" }}
+        {/*
+          The site's hero, in the dark, and the one hero that stays centred:
+          this page is a reveal, and the name alone in the middle of the void
+          is the reveal. It still speaks the house language: the name in the
+          thin display weight, the house rule drawn in under it, the line under
+          that, the circled arrow at the foot.
+        */}
+        <div className="relative m-auto px-6 text-center">
+          <h1
+            className="studios-motion relative pb-2 text-[clamp(3.25rem,10vw,8rem)] font-extralight leading-[0.95] tracking-tighter text-balance bg-gradient-to-b from-white via-white to-white/50 bg-clip-text text-transparent"
+            style={{ animation: "studios-rise 1.3s 0.3s cubic-bezier(0.16,1,0.3,1) both" }}
+          >
+            Queso Studios
+            {/*
+              The glint: the same word again, over the first, painted with a
+              narrow streak of house light and clipped to the letters, so the
+              light runs through the type itself once and is gone.
+            */}
+            <span
+              aria-hidden
+              className="studios-glint pointer-events-none absolute inset-0 pb-2 bg-clip-text text-transparent"
+              style={{
+                backgroundImage:
+                  "linear-gradient(100deg, transparent 38%, rgba(255,209,0,0.9) 45%, #ffffff 50%, rgba(196,22,28,0.9) 55%, transparent 62%)",
+                backgroundSize: "300% 100%",
+                backgroundPosition: "100% 0",
+                animation: "studios-glint 1.8s 1.35s cubic-bezier(0.45,0,0.2,1) both",
+              }}
             >
               Queso Studios
-            </h1>
-            {/* One-time light sweep across the wordmark */}
-            <div
-              aria-hidden
-              className="studios-motion absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent"
-              style={{ animation: "studios-sweep 1.6s 1.3s ease-in-out both" }}
-            />
-          </div>
+            </span>
+          </h1>
 
           <div
-            className="studios-motion mx-auto mt-10 h-px w-64 max-w-[70vw] origin-center bg-gradient-to-r from-transparent via-[#C4161C] to-transparent"
-            style={{ animation: "studios-laser-draw 1.2s 1.1s cubic-bezier(0.16,1,0.3,1) both" }}
+            aria-hidden
+            className="studios-motion mx-auto mt-9 h-1 w-24 origin-center rounded-full"
+            style={{
+              backgroundImage: houseGradient(),
+              animation: "studios-laser-draw 1.2s 1.1s cubic-bezier(0.16,1,0.3,1) both",
+            }}
           />
 
-          {/* One line at desktop. The old sentence broke across two under a
-              wordmark five times its size, which is the exact hierarchy this
-              page should not have: cut to a single clause and set larger, so
-              the gap between the title and the line under it is a step rather
-              than a cliff. */}
           <p
-            className="studios-motion mt-9 text-[clamp(1.2rem,2.4vw,1.75rem)] font-normal text-white/80 max-w-3xl mx-auto leading-relaxed text-balance"
+            className="studios-motion mx-auto mt-9 max-w-2xl text-[clamp(1.2rem,2.2vw,1.6rem)] font-light leading-relaxed text-white/80 text-balance"
             style={{ animation: "studios-rise 1.1s 1.5s cubic-bezier(0.16,1,0.3,1) both" }}
           >
             Building software for the companies that need it most.
           </p>
+        </div>
+
+        {/* Centred by its row, since the rise animation owns its transform. */}
+        <div className="absolute inset-x-0 bottom-10 flex justify-center">
+          <a
+            href={`#${outcomeId(OUTCOMES[0])}`}
+            aria-label="Go to the shop"
+            className={`studios-motion ${arrowTone("dark")}`}
+            style={{ animation: "studios-rise 1.1s 1.9s cubic-bezier(0.16,1,0.3,1) both" }}
+          >
+            <ArrowMark tone="dark" direction="down" />
+          </a>
         </div>
       </section>
 
@@ -468,132 +675,73 @@ export default function StudiosExperience() {
         caps the headline at 3rem. Lengthen either one and the scale has to come
         down with it.
       */}
-      <section className="relative px-6 pt-16 sm:pt-24 pb-2">
-        <div className="mx-auto max-w-5xl text-center">
-          <Reveal>
-            <h2 className="text-[clamp(1.75rem,3.7vw,3rem)] font-bold leading-[1.12] tracking-tight text-balance bg-gradient-to-b from-white via-white to-white/70 bg-clip-text text-transparent">
+      <section className="relative px-6 py-28 sm:px-10 sm:py-40">
+        <div className="mx-auto max-w-6xl">
+          <Reveal className="max-w-4xl">
+            <span aria-hidden className="mb-10 block h-1 w-24 rounded-full" style={{ backgroundImage: houseGradient() }} />
+            <h2 className="text-4xl font-light leading-[1.08] tracking-tight text-balance text-white sm:text-5xl xl:text-6xl">
               Queso Ventures is a software company at heart
             </h2>
-          </Reveal>
-
-          <Reveal delay={160}>
-            <p className="mx-auto mt-7 max-w-4xl text-[clamp(1.05rem,1.55vw,1.5rem)] font-light leading-relaxed text-white/55 text-balance">
+            <p className="mt-8 max-w-3xl text-xl font-light leading-relaxed text-white/60 sm:text-2xl">
               Every tool on this page started with a conversation from a real business owner who needed help.
             </p>
           </Reveal>
 
-          <Reveal delay={300}>
-            <div
-              aria-hidden
-              className="mx-auto mt-10 h-px w-48 max-w-[55vw] bg-gradient-to-r from-transparent via-[#C4161C] to-transparent"
-            />
-          </Reveal>
-
-          <Reveal delay={420}>
-            <p className="mt-10 text-[clamp(1.75rem,3.7vw,3rem)] font-bold leading-[1.12] tracking-tight bg-gradient-to-r from-[#C4161C] via-[#FF7A1A] to-[#FFD100] bg-clip-text text-transparent">
+          {/* Centred: the one line that turns the page from the pitch to the shop. */}
+          <Reveal delay={200} className="text-center">
+            <p className="mt-24 inline-block pb-3 text-5xl font-extralight leading-tight tracking-tighter bg-clip-text text-transparent sm:text-6xl xl:text-7xl" style={{ backgroundImage: houseGradient() }}>
               Go shopping
             </p>
           </Reveal>
-
-        </div>
-      </section>
-
-      {/* Act two: the lineup, as a catalogue.
-
-          It was a coverflow carousel: one card centred, the rest turned away
-          and dimmed, arrows and nine pips underneath. That works for three or
-          four and stops working at nine -- the page became a thing you operate
-          rather than a thing you read, the tool you wanted was always four
-          presses away, and the two half-cards either side of centre were
-          sliced by the viewport, which reads as text cut off rather than as a
-          deliberate peek.
-
-          A grid shows all nine at once. Nothing is turned away, nothing is
-          clipped, and comparing two tools is looking at two tools instead of
-          remembering the one that scrolled past. Each card plays its demo
-          when it comes into view and holds its finished state otherwise, so
-          there is still exactly as much motion as you can look at. */}
-      <section className="relative px-5 sm:px-8 pb-16 sm:pb-24">
-        <div className="mx-auto grid max-w-[1500px] grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {TOOLS.map((tool) => (
-            <Reveal
-              key={tool.name}
-              className={`h-full ${tool.wide ? "md:col-span-2 xl:col-span-3" : ""}`}
-            >
-              <ToolCard
-                tool={tool}
-                onWant={() => setWantTool({ name: tool.name, idea: tool.wide === true })}
-              />
-            </Reveal>
-          ))}
         </div>
       </section>
 
       {/*
-        Everything, on one row, under the things it replaces.
+        Act two: the shop, by outcome.
 
-        Full width and below the lineup on purpose. Above it, it would be the
-        first offer read and every card after it a smaller version of one
-        already made. Inside the carousel it would be a ninth thing to choose
-        between, which is the problem it exists to solve. Here it is the answer
-        to the question eight cards have just raised.
+        It has been a coverflow carousel, then a grid, then a chapter per
+        tool, and every version was organised by the names of the tools. An
+        owner does not come looking for "booking"; they come wanting more
+        calls. So each outcome is a chapter, its question held on the left,
+        its tools on the shelf beside it, and every product opens into a
+        popup with the rest. The rail at the edge names the outcomes.
       */}
-      <section className="relative px-6 pb-20 sm:pb-28">
-        <Reveal>
-          <div
-            className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-white/15 bg-white/[0.045] p-8 sm:p-11"
-            style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)" }}
-          >
-            {/* Every paint at once, which is the offer said in one stroke. */}
-            <div
-              aria-hidden
-              className="absolute top-0 left-10 right-10 h-px"
-              style={{
-                background: `linear-gradient(to right, transparent, ${TOOLS.filter((t) => !t.unbundled).map((t) => t.accent).join(", ")}, transparent)`,
-              }}
-            />
+      <OutcomeRail />
+      <div className="relative">
+        {OUTCOMES.map((o, i) => (
+          <OutcomeChapter
+            key={o.key}
+            outcome={o}
+            index={i}
+            onOpen={setOpenProduct}
+            onWant={(name) => setWantTool({ name, idea: false })}
+          />
+        ))}
+      </div>
 
-            <div className="relative flex flex-wrap items-end justify-between gap-x-10 gap-y-7">
-              <div className="min-w-0">
-                <h3 className="text-[clamp(1.75rem,3.2vw,2.75rem)] font-bold leading-[1.1] tracking-tight">
-                  Take the whole lineup
-                </h3>
-                <p className="mt-3.5 max-w-xl text-sm sm:text-base leading-relaxed text-white/55">
-                  Every tool on this page but the AI Frontdesk, running for you, on one bill.
-                </p>
-              </div>
-
-              <div className="flex-shrink-0">
-                <p className="text-[clamp(2.25rem,4.6vw,3.5rem)] font-bold leading-none tracking-tight tabular-nums bg-gradient-to-r from-[#C4161C] via-[#FF7A1A] to-[#FFD100] bg-clip-text text-transparent">
-                  ${BUNDLE_PRICE}
-                  <span className="ml-2 align-middle text-base font-medium text-white/45">
-                    / month
-                  </span>
-                </p>
-                <p className="mt-2.5 text-sm text-white/40 tabular-nums">
-                  ${oneAtATime()} one at a time
-                </p>
-                {/* Said out loud rather than hidden behind the asterisk the
-                    cards use. A hover note is fine on a price you are reading
-                    one of; on the row asking for the whole lineup, the thing
-                    that changes the number is worth a line of its own, and a
-                    tooltip is nothing at all on a phone. */}
-                <p className="mt-1 text-sm text-white/40">{PRICE_NOTE}</p>
-              </div>
+      {/* The open slot, last: it only means anything once someone has seen the shelf. */}
+      <section className="relative border-t border-white/[0.06] px-6 py-24 sm:px-10 sm:py-32">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <Reveal>
+            <h2 className="text-5xl font-extralight leading-[0.98] tracking-tighter text-balance text-white sm:text-6xl">
+              Whatever you need next
+            </h2>
+            <span aria-hidden className="mt-8 block h-1 w-16 rounded-full" style={{ backgroundImage: houseGradient() }} />
+            <p className="mt-8 max-w-md text-xl font-light leading-relaxed text-white/65">
+              Every tool on this page started as somebody telling me what was slowing their week down. Tell me yours and it is the next thing I build.
+            </p>
+            <button type="button" onClick={() => setWantTool({ name: "Whatever you need next", idea: true })} className={`${arrowTone("dark")} mt-10`}>
+              <ArrowMark tone="dark" label="I have an idea" />
+            </button>
+          </Reveal>
+          <Reveal delay={120} className="mx-auto w-full max-w-md">
+            <div className="rounded-3xl border border-white/10 bg-black/35 p-4">
+              <IdeaDemo />
             </div>
-
-            <div className="relative pt-9">
-              <button
-                type="button"
-                onClick={() => setWantTool({ name: "The whole lineup", idea: false })}
-                className="inline-block rounded-xl bg-white px-7 py-4 text-sm font-bold text-black transition-all hover:bg-white/85 active:scale-[0.98]"
-              >
-                Want this?
-              </button>
-            </div>
-          </div>
-        </Reveal>
+          </Reveal>
+        </div>
       </section>
+
 
       {/* Outro: just the mark */}
       <section className="relative px-6 pb-16 sm:pb-20 text-center">
@@ -610,7 +758,15 @@ export default function StudiosExperience() {
         />
       </section>
 
-      {/* Want-this modal, in the house style */}
+      {openProduct && (
+        <ProductModal
+          product={openProduct}
+          onClose={() => setOpenProduct(null)}
+          onWant={() => setWantTool({ name: openProduct.name, idea: false })}
+        />
+      )}
+
+      {/* Want-this modal, in the house style, over the product when there is one */}
       {wantTool && (
         <WantModal tool={wantTool.name} idea={wantTool.idea} onClose={() => setWantTool(null)} />
       )}
@@ -672,22 +828,18 @@ function WantModal({ tool, idea, onClose }: { tool: string; idea?: boolean; onCl
 
         {status === "success" ? (
           <div className="py-8 text-center space-y-3">
-            <p className="text-2xl font-bold tracking-tight">Got it.</p>
+            <p className="text-3xl font-light tracking-tight">Got it.</p>
             <p className="text-sm text-white/60">
               {idea ? "I will read it and get back to you." : `We will reach out about ${tool}.`}
             </p>
-            <button
-              type="button"
-              onClick={onClose}
-              className="mt-2 rounded-xl bg-white text-black text-sm font-bold px-6 py-3 hover:bg-white/85 transition-all"
-            >
-              Close
+            <button type="button" onClick={onClose} className={`${arrowTone("dark")} mt-4`}>
+              <ArrowMark tone="dark" label="Close" />
             </button>
           </div>
         ) : (
           <form onSubmit={onSubmit} className="space-y-4">
             <div className="space-y-1.5 pr-8">
-              <h2 className="text-2xl font-bold tracking-tight">
+              <h2 className="text-3xl font-light tracking-tight">
                 {idea ? "What would you build?" : `Want ${tool}?`}
               </h2>
               <p className="text-sm text-white/55">
@@ -726,9 +878,9 @@ function WantModal({ tool, idea, onClose }: { tool: string; idea?: boolean; onCl
             <button
               type="submit"
               disabled={status === "sending"}
-              className="w-full rounded-xl bg-white text-black text-sm font-bold py-3.5 hover:bg-white/85 disabled:opacity-50 active:scale-[0.99] transition-all"
+              className="w-full rounded-full bg-white py-4 text-[13px] font-semibold uppercase tracking-[0.22em] text-black transition-all hover:bg-white/85 active:scale-[0.99] disabled:opacity-50"
             >
-              {status === "sending" ? "Sending…" : "Send"}
+              {status === "sending" ? "Sending" : "Send"}
             </button>
           </form>
         )}

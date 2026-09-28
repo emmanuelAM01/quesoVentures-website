@@ -1,4 +1,4 @@
-import PageHero from "./PageHero";
+import HomeHero from "./HomeHero";
 import SearchDemo from "./SearchDemo";
 import { SITE_COPY, type SiteCopy } from "./siteCopy";
 
@@ -18,7 +18,7 @@ export default function Hero({
   image?: { src: string; alt: string };
 }) {
   return (
-    <PageHero
+    <HomeHero
       headline={copy.headline}
       sub={copy.sub}
       prefill={copy.ctaPrefill}
