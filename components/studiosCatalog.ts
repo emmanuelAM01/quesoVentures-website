@@ -92,7 +92,7 @@ export const PRODUCTS: Product[] = [
   // Get people calling
   {
     key: "frontdesk",
-    name: "Front Desk",
+    name: "Inbound Calls",
     outcome: "calling",
     built: false,
     list: 200,
@@ -137,7 +137,7 @@ export const PRODUCTS: Product[] = [
     points: [
       "Customers book without calling you.",
       "Reminders go out on their own, so fewer no shows.",
-      "Front Desk and Website Chat book straight into it.",
+      "Inbound Calls and Website Chat book straight into it.",
     ],
   },
 
@@ -199,7 +199,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     key: "outreach",
-    name: "Outreach",
+    name: "Outbound Calls",
     outcome: "leads",
     built: false,
     list: 200,
@@ -207,7 +207,7 @@ export const PRODUCTS: Product[] = [
     usage: "300 call minutes a month, then 50 cents a minute.",
     accent: "#0690FF",
     demo: "outreach",
-    line: "Follows up with every lead by email and phone, until they answer.",
+    line: "Calls and emails every lead for you, until they answer.",
     points: [
       "An intro email, a follow up, and a call, without you remembering to.",
       "Written for each lead, not a blast.",
