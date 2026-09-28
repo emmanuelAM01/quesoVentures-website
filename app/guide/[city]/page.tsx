@@ -27,8 +27,8 @@ async function load(slug: string) {
 function copy(name: string, region: string) {
   return {
     title: `${GUIDE_NAME}: ${name}, ${region}`,
-    description: `Local businesses in and around ${name}, ${region}, visited in person for The Queso Guide.`,
-    intro: `Local businesses in and around ${name} that we have visited in person.`,
+    description: `Local businesses in and around ${name}, ${region} that I have been to for The Queso Guide.`,
+    intro: `Local spots in and around ${name} that I have actually been to.`,
   };
 }
 
