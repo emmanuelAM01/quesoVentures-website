@@ -4,20 +4,19 @@ import { GUIDE_DAYS, type GuideDay, type GuideHours } from "lib/guide/types";
 // must not read as the 1st of the next month to a server in UTC.
 const TZ = "America/Chicago";
 
-/** "September 2026". `visited_on` is a date column, so it is read as a calendar date. */
-export function monthYear(date: string | null | undefined): string | null {
+/**
+ * "September 26", or "September 26, 2025" when it is not this year. The
+ * byline's Updated date: long enough to read as a date rather than a code,
+ * without a year that says nothing while it is the current one.
+ */
+export function dayMonth(date: string | null | undefined, now = new Date()): string | null {
   if (!date) return null;
-  const d = new Date(date.length === 10 ? `${date}T12:00:00Z` : date);
-  return d.toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
-}
-
-/** "Sep 25, 2026". */
-export function shortDate(date: string | null | undefined): string | null {
-  if (!date) return null;
-  return new Date(date).toLocaleDateString("en-US", {
-    month: "short",
+  const d = new Date(date);
+  const year = (x: Date) => x.toLocaleDateString("en-US", { year: "numeric", timeZone: TZ });
+  return d.toLocaleDateString("en-US", {
+    month: "long",
     day: "numeric",
-    year: "numeric",
+    ...(year(d) === year(now) ? {} : { year: "numeric" }),
     timeZone: TZ,
   });
 }

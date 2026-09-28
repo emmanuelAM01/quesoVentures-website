@@ -15,25 +15,24 @@ import { collectionGraph, guideTrail, GUIDE_NAME, ldJson } from "lib/guide/jsonl
 
 const TITLE = `${GUIDE_NAME} | Local businesses worth knowing`;
 const DESCRIPTION =
-  "The Queso Guide is a collection of local businesses we have visited in person. Who runs them, what to get, and what to know before you go.";
-const INTRO =
-  "Local businesses worth knowing, written up after a visit. Who runs each one, what to get, and what to know before you go.";
+  "A spotlight on local businesses that stand out, around the places I spend my time. Who runs them, what they are known for, and what to know before you go.";
+const INTRO = "A spotlight on the local businesses that stand out, around the places I spend my time.";
 
 const STATEMENT =
-  "Every entry starts with a visit. Who runs the place, what to order, and what a first time customer should know, written down by someone who went. The facts sit in one box at the top, and every entry says plainly whether the business is a Queso Ventures client.";
+  "Some local businesses just do it better. This is where they get the spotlight: who runs them, what they are known for, and what is good to know before you go. The bottom of every entry tells you if the business is a Queso Ventures client.";
 
 const PRINCIPLES = [
   {
-    title: "Visited in person",
-    body: "Each entry is written after a visit, and the month of that visit is printed at the top.",
+    title: "Places that stand out",
+    body: "If a local business is doing something worth noticing, it belongs here.",
   },
   {
-    title: "A collection, not a ranking",
-    body: "Entries are listed in the order they were published. Nothing is numbered or sorted by how good we think it is.",
+    title: "No rankings",
+    body: "No top 10 lists and no stars. Entries show up in the order I publish them.",
   },
   {
-    title: "Disclosed on every entry",
-    body: "Some businesses are Queso Ventures clients. The end of every entry says which, in plain words.",
+    title: "Clients are labeled",
+    body: "Some of these businesses are Queso Ventures clients. The bottom of every entry tells you which.",
   },
 ];
 
@@ -134,8 +133,6 @@ export default async function GuideHome({ searchParams }: { searchParams: Search
                 <span className="font-semibold text-white">{cities.length}</span>{" "}
                 {cities.length === 1 ? "city" : "cities"}
               </span>
-              <span aria-hidden className="h-1 w-1 rounded-full bg-white/40" />
-              <span>Every one visited in person</span>
             </p>
           </>
         ) : null}
@@ -156,8 +153,8 @@ export default async function GuideHome({ searchParams }: { searchParams: Search
             categoryOrder={categoryOrder}
             empty={
               published.length
-                ? "Nothing in the guide matches that yet. Try another city or industry."
-                : "The first entries are on their way."
+                ? "Nothing here for that one yet. Try another city or industry."
+                : "The first entries are on the way."
             }
           />
         </div>

@@ -37,16 +37,17 @@ export default function Editor() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(jsonLd) }} />
       <GuideHeader
         title="Emmanuel"
-        intro="Editor of The Queso Guide."
+        intro="I write The Queso Guide."
         trail={[...guideTrail(), { name: "Editor", path: "/guide/editor" }]}
       />
       <section className="container mx-auto px-4 py-24 sm:py-32">
         <div className="mx-auto max-w-3xl space-y-6 text-xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
           <p>
-            I run Queso Ventures, which builds websites and handles search for local businesses from{" "}
-            {BUSINESS.addressLine}. I write every entry in the guide myself, after visiting in person.
+            I run Queso Ventures out of {BUSINESS.addressLine}. We build websites and help local
+            businesses get found. I write every entry in the guide, and every place in it is one I think
+            more people should know about.
           </p>
-          <p>Want to know more about the work?</p>
+          <p>Curious about the rest of what I do?</p>
           <Link href="/about" className={`${arrowTone("light")} pt-2`}>
             <ArrowMark label="Read about Queso Ventures" />
           </Link>

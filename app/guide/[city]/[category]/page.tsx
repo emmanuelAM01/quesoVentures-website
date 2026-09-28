@@ -36,7 +36,7 @@ function copy(plural: string, city: string, region: string) {
   return {
     title,
     metaTitle: `${title}, ${region} | ${GUIDE_NAME}`,
-    description: `${plural} in and around ${city}, ${region}, visited in person for The Queso Guide. Who runs them, what to get, and what to know.`,
+    description: `${plural} around ${city}, ${region} worth knowing about. Who runs them, what they are known for, and what to know before you go.`,
   };
 }
 

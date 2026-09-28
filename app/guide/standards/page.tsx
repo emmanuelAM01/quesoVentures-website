@@ -8,7 +8,7 @@ import { guideTrail, GUIDE_NAME } from "lib/guide/jsonld";
 
 const TITLE = `How businesses are chosen | ${GUIDE_NAME}`;
 const DESCRIPTION =
-  "How businesses end up in The Queso Guide, and what it means when an entry says a business is a Queso Member.";
+  "How a business gets into The Queso Guide, and what it means when an entry says Queso Member.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -17,30 +17,30 @@ export const metadata: Metadata = {
   openGraph: { title: TITLE, description: DESCRIPTION, url: `${SITE_URL}/guide/standards`, type: "website" },
 };
 
-// TODO(Emmanuel): placeholder copy. Everything below restates only what the
-// guide already does in code: entries follow a visit, are listed by date, and
-// end with the membership line. Edit freely, and do not add a policy here that
-// the guide does not actually follow.
+// Everything below restates only what the guide already does in code:
+// entries are listed by date, kept dated, and end with the membership line.
+// Do not add a policy here that the guide does not actually follow. The
+// guide is a spotlight, not a review: nothing here claims to grade anyone.
 
 const STATEMENT =
-  "The guide is a record of local places worth knowing. Every entry follows a visit, every entry is dated, and every entry ends by saying whether the business is a Queso Ventures client.";
+  "The guide is a spotlight on local places worth knowing. Nothing is ranked, every entry is dated, and I tell you when a business is a Queso Ventures client.";
 
 const PRINCIPLES = [
   {
-    title: "Every entry is a visit",
-    body: "Each entry is written after a visit, and the month of that visit is printed at the top. It covers who runs the business, what to get, and what is practical to know before you go.",
+    title: "Places that stand out",
+    body: "If a local business is doing something worth noticing, it belongs here. Every entry covers who runs it, what they are known for, and what is good to know before you go.",
   },
   {
-    title: "A collection, not a ranking",
-    body: "Entries are listed in the order they were published. Nothing in the guide is numbered or sorted by how good we think it is.",
+    title: "No rankings",
+    body: "Entries are listed in the order I publish them. Nothing is numbered, and nothing is sorted by how much I liked it.",
   },
   {
-    title: "Membership is disclosed",
-    body: "Queso Ventures builds websites and handles search for local businesses. A Queso Member is a business that is a client. The end of every entry says which it is.",
+    title: "Clients are labeled",
+    body: "Queso Ventures builds websites and gets local businesses found. A business that is a client is a Queso Member, and the bottom of its entry says so.",
   },
   {
     title: "Kept current",
-    body: "Hours and details change, so every entry shows the date it was last updated.",
+    body: "Hours change. Every entry shows the date I last updated it.",
   },
 ];
 
@@ -49,7 +49,7 @@ export default function Standards() {
     <>
       <GuideHeader
         title="How businesses are chosen"
-        intro="What gets a business into The Queso Guide, and what we tell you about each one."
+        intro="What it takes to get into The Queso Guide, and what I tell you about each place."
         trail={[...guideTrail(), { name: "Standards", path: "/guide/standards" }]}
         tall
       />
@@ -63,8 +63,8 @@ export default function Standards() {
       <FreeAudit
         copy={{
           heading: "Know a place that belongs here?",
-          sub: "Tell us about a local business worth a visit, yours included.",
-          cta: "Suggest a Business",
+          sub: "Tell me about a local spot worth the trip. Yours counts too.",
+          cta: "Suggest a business",
           ctaPrefill: "I'd like to suggest a business for The Queso Guide: ",
           reassurance: "It comes straight to me.",
         }}
