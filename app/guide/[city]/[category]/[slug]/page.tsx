@@ -24,7 +24,7 @@ import {
 import { articleGraph, guideTrail, GUIDE_NAME, ldJson } from "lib/guide/jsonld";
 import { guideImageUrl } from "lib/guide/supabase";
 import { guideItemsHeading } from "lib/guide/types";
-import { monthYear, shortDate } from "lib/guide/format";
+import { dayMonth } from "lib/guide/format";
 
 export const revalidate = 86400;
 
@@ -94,8 +94,9 @@ export default async function GuideArticle({ params }: { params: Params }) {
   )
     .map((h) => ({ src: guideImageUrl(h.path), alt: h.alt || entry.business_name }))
     .filter((h): h is { src: string; alt: string } => Boolean(h.src));
-  const visited = monthYear(entry.visited_on);
-  const updated = shortDate(entry.updated_at);
+  // Updated, always, even on the day it was written. No Visited line: the
+  // guide is a spotlight, not a review, and does not lead with a visit.
+  const updated = dayMonth(entry.updated_at);
   const trail = guideTrail({
     city: entry.city,
     category: entry.category,
@@ -145,7 +146,6 @@ export default async function GuideArticle({ params }: { params: Params }) {
               {entry.author_name}
             </Link>
           </span>
-          {visited ? <span>Visited {visited}</span> : null}
           {updated ? <span>Updated {updated}</span> : null}
         </p>
       </PageHero>
