@@ -60,11 +60,11 @@ const useIsoLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 /**
- * `guideInNav` comes from the root layout, which counts published guide
- * entries on the server. The link has to be in the server HTML to count as a
- * sitewide internal link, so it cannot be decided here in the browser.
+ * The Queso Guide is in the main nav on every page, on desktop and in the
+ * phone menu. It used to wait for three published entries; it is a standing
+ * part of the site now, so it is always there.
  */
-export default function Header({ guideInNav = false }: { guideInNav?: boolean }) {
+export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [overDark, setOverDark] = useState(false);
   const [workOpen, setWorkOpen] = useState(false);
@@ -418,13 +418,11 @@ export default function Header({ guideInNav = false }: { guideInNav?: boolean })
 
                 {/* Prospect first (Services, Who I Help), then the story
                     (About), then the things worth showing off. */}
-                {guideInNav ? (
-                  <li>
-                    <Link href="/guide" className={navLinkClass}>
-                      Guide
-                    </Link>
-                  </li>
-                ) : null}
+                <li>
+                  <Link href="/guide" className={navLinkClass}>
+                    Guide
+                  </Link>
+                </li>
 
                 <li>
                   <Link href="/studios" className={`${navLinkClass} font-semibold`}>
@@ -552,11 +550,9 @@ export default function Header({ guideInNav = false }: { guideInNav?: boolean })
                 About
               </Link>
 
-              {guideInNav ? (
-                <Link href="/guide" onClick={closeMobile} className={mobileLinkClass}>
-                  The Queso Guide
-                </Link>
-              ) : null}
+              <Link href="/guide" onClick={closeMobile} className={mobileLinkClass}>
+                The Queso Guide
+              </Link>
 
               <Link href="/studios" onClick={closeMobile} className={`${mobileLinkClass} font-semibold`}>
                 <span className="inline-flex items-center gap-2">

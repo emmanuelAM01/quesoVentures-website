@@ -6,17 +6,6 @@ import Header from "components/Header";
 import AboutModal from "components/AboutModal";
 import ContactModal from "components/ContactModal";
 import ConsoleEasterEgg from "components/ConsoleEasterEgg";
-import { getPublished } from "lib/guide/queries";
-
-/**
- * The Guide joins the nav once it has enough in it to be worth a click. An
- * empty guide one tap from every page reads as unfinished to a prospect; the
- * footer link keeps it discoverable to crawlers until then. The count is a
- * cached read tagged `guide`, so publishing the third entry turns the link on
- * through the same webhook that publishes it.
- */
-const GUIDE_NAV_MIN = 3;
-
 
 import "styles/globals.css";
 
@@ -41,8 +30,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const guideInNav = (await getPublished()).length >= GUIDE_NAV_MIN;
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
@@ -80,7 +68,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             under it. Heroes that do tuck under still cover this.
           */}
           <div className="bg-lightBG dark:bg-darkBG">
-            <Header guideInNav={guideInNav} />
+            <Header />
             {children}
           </div>
           <AboutModal />
