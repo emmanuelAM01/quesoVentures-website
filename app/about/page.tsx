@@ -340,7 +340,7 @@ export default function AboutPage() {
           <div className="container mx-auto px-4 py-28 sm:py-40">
             <Reveal className="mx-auto max-w-3xl text-center">
               <h2 className="text-5xl sm:text-6xl xl:text-7xl font-light tracking-tight text-balance text-lightText dark:text-darkText">
-                Outcomes, not words
+                Your turn
               </h2>
               <span
                 aria-hidden
@@ -350,8 +350,9 @@ export default function AboutPage() {
                 }}
               />
               <p className="mx-auto mt-9 max-w-2xl text-xl sm:text-2xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-                Anyone can say &ldquo;I build websites&rdquo; now. I sell the
-                result: more calls, more walk ins, more orders.
+                I have built software for funded startups and a public company.
+                Now I build it for local businesses, and it shows up as more
+                calls, more walk ins, and more orders.
               </p>
               <div className="mt-12 flex justify-center">
                 <NicheCtaButton

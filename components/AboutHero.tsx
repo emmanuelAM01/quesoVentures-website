@@ -24,8 +24,11 @@ export default function AboutHero({
       image={{
         src: "/hero/aboutMotoGP.JPEG",
         alt: "The pit straight at Mugello during a MotoGP session",
-        position: "50% 60%",
+        // The rider on the straight sits a little right of centre; on a phone's
+        // narrow frame this keeps him in it.
+        position: "57% 62%",
       }}
+      stackOnPhone
     />
   );
 }

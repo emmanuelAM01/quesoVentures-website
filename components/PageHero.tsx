@@ -41,6 +41,7 @@ export default function PageHero({
   above,
   aside,
   children,
+  stackOnPhone = false,
 }: {
   headline: string;
   sub?: string;
@@ -63,6 +64,13 @@ export default function PageHero({
   aside?: React.ReactNode;
   /** Under the subtitle, for controls that belong to the hero (filters, search). */
   children?: React.ReactNode;
+  /**
+   * On a phone, the photograph on top and the words under it rather than
+   * over it. For a photograph whose subject sits where the words would land
+   * on a tall screen (the About page's bikes on the Mugello straight).
+   * From lg up the hero is the usual full bleed.
+   */
+  stackOnPhone?: boolean;
 }) {
   const [ready, setReady] = useState(false);
   const photos = slides?.length ? slides : image ? [image] : [];
@@ -128,10 +136,17 @@ export default function PageHero({
     <section
       ref={section}
       data-dark-section
-      className="relative -mt-[76px] flex min-h-[100svh] items-end overflow-hidden bg-[#0B0D12]"
+      className={`relative -mt-[76px] flex min-h-[100svh] overflow-hidden bg-[#0B0D12] ${
+        stackOnPhone ? "flex-col lg:flex-row lg:items-end" : "items-end"
+      }`}
     >
       {photos.length ? (
-        <div ref={photo} className="absolute inset-0 will-change-transform">
+        <div
+          ref={photo}
+          className={`will-change-transform ${
+            stackOnPhone ? "relative h-[58svh] min-h-[360px] w-full overflow-hidden lg:absolute lg:inset-0 lg:h-auto" : "absolute inset-0"
+          }`}
+        >
           <div
             className={`absolute inset-0 transition-transform duration-[2600ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
               ready ? "scale-100" : "scale-110"
@@ -157,6 +172,14 @@ export default function PageHero({
               </div>
             ))}
           </div>
+          {stackOnPhone && (
+            // Stacked, the photograph only needs to fade into the ground under it.
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-28 lg:hidden"
+              style={{ background: "linear-gradient(to bottom, transparent, #0B0D12)" }}
+            />
+          )}
         </div>
       ) : (
         <LavaLamp scrim={0.45} />
@@ -170,16 +193,17 @@ export default function PageHero({
       />
       <div
         aria-hidden
-        className="absolute inset-0"
+        className={`pointer-events-none absolute inset-0 ${stackOnPhone ? "hidden lg:block" : ""}`}
         style={{
           background:
             "linear-gradient(to top, rgba(8,10,14,0.94) 0%, rgba(8,10,14,0.62) 30%, rgba(8,10,14,0.12) 62%, transparent 80%)",
         }}
       />
 
+
       {/* At least a screen; taller only when the words and controls need it. */}
       <div ref={copy} className="relative w-full will-change-transform">
-        <div className="container mx-auto px-4 pb-14 pt-40 sm:pb-20">
+        <div className={`container mx-auto px-4 pb-14 sm:pb-20 ${stackOnPhone ? "pt-6 lg:pt-40" : "pt-40"}`}>
           <div className="mx-auto flex max-w-6xl items-end justify-between gap-10">
             <div className="max-w-4xl" style={{ textShadow: "0 2px 30px rgba(0,0,0,0.45)" }}>
               {above && (
