@@ -155,7 +155,7 @@ export const PRODUCTS: Product[] = [
     points: [
       "Customers join by scanning a QR code at the counter. No app to download.",
       "Every visit fills the card, and a text lands when they are one away.",
-      "Collects their email too, for the newsletter.",
+      "They show the reward on their phone, and you hand it over.",
       "You see who comes back, and how often.",
     ],
     href: "https://www.quesorewards.com",
