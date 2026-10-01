@@ -45,7 +45,7 @@ export const OUTCOMES: Outcome[] = [
   {
     key: "leads",
     label: "Find new customers",
-    line: "The people who should be buying from you, found for you, and followed up with until they answer.",
+    line: "The people who should be buying from you, found for you every week.",
     accent: "#FF2800",
   },
   {
@@ -197,23 +197,6 @@ export const PRODUCTS: Product[] = [
       "Every lead lands in your lead list, ready to work.",
     ],
   },
-  {
-    key: "outreach",
-    name: "Outbound Calls",
-    outcome: "leads",
-    built: false,
-    list: 200,
-    client: 150,
-    usage: "300 call minutes a month, then 50 cents a minute.",
-    accent: "#0690FF",
-    demo: "outreach",
-    line: "Calls and emails every lead for you, until they answer.",
-    points: [
-      "An intro email, a follow up, and a call, without you remembering to.",
-      "Written for each lead, not a blast.",
-      "Stops the moment they reply, and tells you.",
-    ],
-  },
 
   // Get everything straightened out
   {
@@ -266,6 +249,26 @@ export const PRODUCTS: Product[] = [
       "Chases it until it is paid. (Because this part is never fun.)",
     ],
   },
+  {
+    // Calls to people who already know the business. Cold calls to new leads
+    // by a robot do not land and cost the owner their name, so this is not
+    // a Find new customers tool.
+    key: "outreach",
+    name: "Outbound Calls",
+    outcome: "organized",
+    built: false,
+    list: 200,
+    client: 150,
+    usage: "300 call minutes a month, then 50 cents a minute.",
+    accent: "#0690FF",
+    demo: "outreach",
+    line: "Makes the calls you keep putting off. Confirmations, vendors, missing details.",
+    points: [
+      "Confirms appointments, orders and deliveries ahead of time.",
+      "Calls vendors about prices, stock and when things ship.",
+      "Every call written up and sent to you.",
+    ],
+  },
 
   // Ditch the napkin math
   {
@@ -315,7 +318,8 @@ export type Pack = {
 /**
  * The complete experience for an outcome: every tool on its shelf, for less
  * than buying them one at a time. One per outcome that can have one; Ditch the
- * napkin math has none, since the Revenue System is quoted per case. Nothing
+ * napkin math has none, since the Revenue System is quoted per case, and
+ * Find new customers has none since Lead Finder is alone on that shelf. Nothing
  * is given away inside a pack: each is priced as a discount on exactly the
  * tools in it. Mirrors PACKS in the portal.
  */
@@ -337,15 +341,6 @@ export const PACKS: Pack[] = [
     // $160 one at a time, $80 for a client.
     list: 120,
     client: 60,
-  },
-  {
-    key: "pipeline",
-    outcome: "leads",
-    line: "New leads found every week, and every one of them followed up with until they answer.",
-    products: ["leads", "outreach"],
-    // $400 one at a time, $300 for a client.
-    list: 350,
-    client: 250,
   },
   {
     key: "organized",
