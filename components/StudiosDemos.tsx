@@ -775,13 +775,13 @@ function Leads({ on }: { on: boolean }) {
 /* ------------------------------------------------------------------ */
 
 /**
- * Outreach: one lead, followed up with until they answer. Email, a second
- * email, a call, and the reply that stops it all.
+ * Outbound Calls: a morning of calls the owner kept putting off. A customer
+ * confirmed, a vendor checked on, a message left, and the reply.
  */
 const REACH = [
-  { day: "Mon", what: "Intro email sent", tone: BLUE },
-  { day: "Thu", what: "Follow up sent", tone: BLUE },
-  { day: "Fri", what: "Called, left a message", tone: YELLOW },
+  { day: "9:00", what: "Dana Ruiz, confirmed for Tuesday", tone: GREEN },
+  { day: "9:06", what: "Tile supplier, ships Thursday", tone: BLUE },
+  { day: "9:11", what: "Mark Lee, left a message", tone: YELLOW },
 ] as const;
 const REACH_MARKS = [450, 900, 1350, 2200] as const;
 
@@ -789,7 +789,7 @@ function Outreach({ on }: { on: boolean }) {
   const step = useScript(on, REACH_MARKS);
   return (
     <div className={BOX}>
-      <p className="px-0.5 text-[11px] font-semibold text-white/80">Northside Dental Group</p>
+      <p className="px-0.5 text-[11px] font-semibold text-white/80">This morning's calls</p>
       <div className="space-y-1.5">
         {REACH.map((r, i) => (
           <div
@@ -797,14 +797,14 @@ function Outreach({ on }: { on: boolean }) {
             className="flex items-center gap-2.5 px-1 transition-all duration-500"
             style={rise(step >= i + 1)}
           >
-            <span className={`w-7 shrink-0 text-[10px] ${MUTED}`}>{r.day}</span>
+            <span className={`w-8 shrink-0 text-[10px] ${MUTED}`}>{r.day}</span>
             <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: r.tone }} />
             <span className="text-[11px] text-white/80">{r.what}</span>
           </div>
         ))}
       </div>
       <Bubble side="them" shown={step >= 4}>
-        Can you come by Tuesday for a quote?
+        Tuesday at 2 works, see you then.
       </Bubble>
     </div>
   );
