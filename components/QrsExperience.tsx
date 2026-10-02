@@ -205,8 +205,8 @@ export default function QrsExperience() {
             ))}
           </div>
           <Reveal delay={360}>
-            <Link href="/privacy" className={`${arrowTone("dark")} mt-16`}>
-              <ArrowMark tone="dark" label="Privacy policy" />
+            <Link href="/privacy#qrs" className={`${arrowTone("dark")} mt-16`}>
+              <ArrowMark tone="dark" label="QRS privacy policy" />
             </Link>
           </Reveal>
         </div>
