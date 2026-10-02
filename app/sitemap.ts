@@ -88,6 +88,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     },
     {
+      url: `${BASE}/studios/qrs`,
+      lastModified: sourceDate("/studios/qrs"),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    },
+    {
       url: `${BASE}/privacy`,
       lastModified: sourceDate("/privacy"),
       changeFrequency: "yearly" as const,

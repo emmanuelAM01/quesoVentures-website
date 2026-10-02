@@ -75,7 +75,7 @@ export const TOOLS: Tool[] = [
     id: "qrs",
     name: "QRS",
     full: "Queso Revenue System",
-    line: "Upload your numbers. It finds what is working, what is leaking, and what to do about it.",
+    line: "Connect your bank accounts once. See what came in, what went out, and what you forgot you were paying for.",
   },
   /*
     Last on purpose. Everything above is a thing that exists; this one is the

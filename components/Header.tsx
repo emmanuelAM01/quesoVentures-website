@@ -127,7 +127,8 @@ export default function Header() {
 
   const closeMobile = () => setMobileOpen(false);
 
-  if (pathname && NO_HEADER.includes(pathname)) return null;
+  // Pages under them too: /studios/qrs is Studios chrome like /studios.
+  if (pathname && NO_HEADER.some((p) => pathname === p || pathname.startsWith(`${p}/`))) return null;
 
   return (
     <header
