@@ -20,7 +20,7 @@ export default function PrivacyPolicyPage() {
           business. This Privacy Policy covers quesoventures.com, the
           websites we build and host for our clients, the software we build
           and run under Queso Studios (including the Queso client portal and
-          the Queso Revenue System), and any SMS loyalty or notification
+          the Queso Revenue System (QRS) app), and any SMS loyalty or notification
           program we operate on a client&apos;s behalf (including pages on
           subdomains like{" "}
           <span className="whitespace-nowrap">loyalty.quesoventures.com</span>).
@@ -45,9 +45,8 @@ export default function PrivacyPolicyPage() {
             visit/reward progress, and a log of messages sent to you.
           </li>
           <li>
-            <strong>Bank account and transaction information</strong> — only
-            if you use the Queso Revenue System and choose to link a bank.
-            Section 4 explains exactly what that is and how it is handled.
+            <strong>Bank data for QRS users</strong> — see{" "}
+            <a href="#qrs">section 4</a>.
           </li>
         </ul>
         <p>
@@ -100,26 +99,21 @@ export default function PrivacyPolicyPage() {
         </ul>
       </section>
 
-      <section className="space-y-4">
-        <h2>4. Bank data and the Queso Revenue System</h2>
+      {/* Linked from /studios/qrs, and what Plaid reviews. Keep it true to the code. */}
+      <section id="qrs" className="scroll-mt-28 space-y-4">
+        <h2>4. Queso Revenue System (QRS)</h2>
         <p>
-          The Queso Revenue System (&quot;QRS&quot;) shows a business owner
-          their bank accounts and cards in one place: what came in, what
-          went out, and where it went. This section covers the bank data it
-          uses. It applies on top of everything else in this policy, and
-          where the two differ, this section wins.
+          QRS is a tool that connects to your business bank accounts and cards
+          so you can see what came in, what went out, and where it went.
+          Because it handles bank data, it gets its own section.
         </p>
 
         <p>
-          <strong>How banks are connected.</strong> We use Plaid Inc.
-          (&quot;Plaid&quot;) to connect to your bank. You sign in on
-          Plaid&apos;s own secure screen, not ours, and we never see or
-          store your bank username or password. By linking an account, you
-          grant Queso Ventures and Plaid the right, power, and authority to
-          act on your behalf to access and transmit your personal and
-          financial information from your bank. You agree to your personal
-          and financial information being transferred, stored, and processed
-          by Plaid in accordance with the{" "}
+          <strong>How the connection works.</strong> You connect your bank
+          through Plaid, a service used by thousands of finance apps. You sign
+          in on Plaid&apos;s screen, not ours. We never see or store your bank
+          username or password. Plaid&apos;s handling of your data is covered
+          by the{" "}
           <a href="https://plaid.com/legal/#end-user-privacy-policy" target="_blank" rel="noopener noreferrer">
             Plaid End User Privacy Policy
           </a>
@@ -127,95 +121,95 @@ export default function PrivacyPolicyPage() {
         </p>
 
         <p>
-          <strong>What we receive.</strong> QRS asks Plaid for transaction
-          data only. From each bank you link, we receive:
+          <strong>What QRS collects.</strong>
         </p>
         <ul>
-          <li>the name of the bank</li>
           <li>
-            each account&apos;s name, type (such as checking, savings, or
-            credit card), last four digits, and balance
+            From your bank, through Plaid: your bank&apos;s name, your account
+            names and types, the last four digits of each account number,
+            account balances, and your transactions (date, amount, merchant or
+            description, and category).
           </li>
           <li>
-            each transaction&apos;s date, amount, description, merchant
-            name, and the category Plaid suggests for it
-          </li>
-        </ul>
-        <p>
-          We do not request your full account or routing numbers, your
-          identity details (such as your address or Social Security number),
-          or any access that can move money. Nothing in QRS can make a
-          payment, a transfer, or any other transaction.
-        </p>
-        <p>
-          QRS also keeps what you add yourself: whether a charge is business
-          or personal, its category, notes, the tagging rules you set, and
-          your goals.
-        </p>
-
-        <p>
-          <strong>How we use it.</strong> Only to show you your own numbers
-          in QRS: your transactions, your in and out by month, where your
-          money went, your tags, your goals, and the exports you ask for.
-        </p>
-        <ul>
-          <li>We never sell your bank data.</li>
-          <li>
-            We never share it with anyone for their own marketing, and we
-            never use it for advertising.
-          </li>
-          <li>
-            We never use it to make credit, lending, or eligibility
-            decisions about you.
-          </li>
-          <li>
-            We never use it to train artificial intelligence models, and we
-            never combine it with another customer&apos;s data.
+            From you: your email address to sign in, the business or personal
+            tags you set, the goals you create, and any CSV exports you
+            request.
           </li>
         </ul>
 
         <p>
-          <strong>Who can see it.</strong> You. Queso Ventures looks at it
-          only when we need to: to help you when you ask, to keep the service
-          working and secure, or when the law requires it. The only service
-          providers that handle it are the ones that make QRS run: Plaid, to
-          connect to your bank, and our database and application hosting
-          providers (Supabase and Vercel), which store and serve it for us
-          and do not use it for anything else.
+          <strong>What QRS never collects.</strong> Your full account or
+          routing numbers, or your bank login. QRS is read-only. Nothing in it
+          can move, send, or spend your money.
         </p>
 
         <p>
-          <strong>How we protect it.</strong> Bank data is encrypted in
-          transit. The access Plaid grants us to your accounts is stored
-          encrypted (AES-256), with the key kept apart from the database it
-          is stored in. Bank data is closed to direct database access: only
-          our own servers can read it, and only to run QRS.
+          <strong>How we use it.</strong> Only to run QRS for you: showing your
+          spending and income, applying your tags, tracking your goals, and
+          building the exports you ask for. That&apos;s it.
         </p>
 
         <p>
-          <strong>How long we keep it, and how to delete it.</strong> We keep
-          your bank data for as long as the bank is linked and you use QRS.
+          <strong>What we never do with it.</strong>
         </p>
         <ul>
+          <li>We don&apos;t sell it or share it for anyone&apos;s marketing, full stop.</li>
+          <li>We don&apos;t use it to make credit or lending decisions.</li>
+          <li>We don&apos;t use it to train AI models.</li>
+        </ul>
+
+        <p>
+          <strong>Personal charges.</strong> If a connected account or card
+          also carries personal spending, those transactions come in too. You
+          can tag them as personal, and they&apos;re treated with the same care
+          as everything else.
+        </p>
+
+        <p>
+          <strong>Who else sees it.</strong> Plaid, to make the connection. Our
+          database and hosting providers, to store and run QRS. Nobody else.
+        </p>
+
+        <p>
+          <strong>How it&apos;s protected.</strong>
+        </p>
+        <ul>
+          <li>Data is encrypted in transit and at rest.</li>
           <li>
-            When you unlink a bank, we delete its stored access, its
-            accounts, and its transactions from our systems, and we can no
-            longer read anything from that bank.
+            The access your bank grants QRS is stored encrypted, and the key
+            lives only in the app that reads your accounts.
+          </li>
+          <li>Every customer&apos;s data is walled off from every other customer&apos;s.</li>
+          <li>
+            Access to our systems is limited to one person, protected by
+            multi-factor authentication.
+          </li>
+        </ul>
+
+        <p>
+          <strong>How long we keep it, and how to get rid of it.</strong>
+        </p>
+        <ul>
+          <li>We keep your QRS data for as long as your bank is connected.</li>
+          <li>Unlinking a bank immediately disconnects it and deletes its accounts and transactions.</li>
+          <li>
+            Closing your QRS account deletes all of your QRS data within 30
+            days, including from backups as they cycle out.
           </li>
           <li>
-            When you cancel QRS, or email{" "}
-            <a href="mailto:hello@quesoventures.com">hello@quesoventures.com</a>{" "}
-            asking us to, we delete all of your bank data within 30 days.
-          </li>
-          <li>
-            You can also stop the connection from your bank&apos;s side, or
-            through Plaid at{" "}
+            You can also cut off access from Plaid&apos;s side at any time at{" "}
             <a href="https://my.plaid.com" target="_blank" rel="noopener noreferrer">
               my.plaid.com
             </a>
             .
           </li>
+          <li>CSV files you&apos;ve already downloaded are yours, so deleting them is up to you.</li>
         </ul>
+
+        <p>
+          Questions or deletion requests: email{" "}
+          <a href="mailto:hello@quesoventures.com">hello@quesoventures.com</a>.
+        </p>
       </section>
 
       <section>
@@ -234,9 +228,9 @@ export default function PrivacyPolicyPage() {
         <p>
           We don&apos;t sell your information, full stop. We use a small set
           of service providers to actually run things — database/hosting,
-          email delivery, Telnyx for SMS delivery, and Plaid to connect bank
-          accounts — and they only ever see what they need to do that one
-          job.
+          email delivery, Telnyx for SMS delivery, and Plaid, to connect bank
+          accounts for QRS — and they only ever see what they need to do that
+          one job.
         </p>
       </section>
 
@@ -250,7 +244,8 @@ export default function PrivacyPolicyPage() {
           asked, by replying STOP (for texts) or emailing{" "}
           <a href="mailto:hello@quesoventures.com">hello@quesoventures.com</a>.
           There&apos;s no cancellation fee, no fine print, and no obligation
-          to keep using anything. Bank data has its own rules, in section 4.
+          to keep using anything. QRS bank data has its own rules, in{" "}
+          <a href="#qrs">section 4</a>.
         </p>
       </section>
 
@@ -258,8 +253,8 @@ export default function PrivacyPolicyPage() {
         <h2>8. Security</h2>
         <p>
           We use reasonable, industry-standard measures (encrypted
-          connections, access controls, and encryption of the most sensitive
-          credentials we hold) to protect your information. No
+          connections, access controls) to protect your information. Bank
+          data in QRS gets extra protection; see <a href="#qrs">section 4</a>. No
           system is 100% unbreakable, but we take this seriously and only
           collect what we actually need in the first place.
         </p>
@@ -284,7 +279,7 @@ export default function PrivacyPolicyPage() {
       <section>
         <h2>11. Contact us</h2>
         <p>
-          Questions about this policy, your data, your bank data, or an SMS program? Email{" "}
+          Questions about this policy, your data, QRS, or an SMS program? Email{" "}
           <a href="mailto:hello@quesoventures.com">hello@quesoventures.com</a>{" "}
           — a real person (just one, actually) will get back to you.
         </p>
