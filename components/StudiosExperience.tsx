@@ -78,19 +78,22 @@ function clientPrice(p: { client: number | null; clientNote?: string; list: numb
  * smaller ones rather than three equal boxes.
  */
 function Story({ product, feature = false, onOpen }: { product: Product; feature?: boolean; onOpen: () => void }) {
-  const ref = useRef<HTMLButtonElement>(null);
+  const ref = useRef<HTMLAnchorElement & HTMLButtonElement>(null);
   const live = useInView(ref);
   const Demo = STUDIO_DEMOS[product.demo];
   const forClients = clientPrice(product);
+  const className = "group flex h-full w-full flex-col text-left focus:outline-none";
 
-  return (
-    <button
-      ref={ref}
-      type="button"
-      onClick={onOpen}
-      aria-haspopup="dialog"
-      className="group flex h-full w-full flex-col text-left focus:outline-none"
-    >
+  /*
+    A tool with a page of its own on this site is a real link underneath, and
+    a click still opens the popup. Search Console, 2026-10-06: /studios/qrs had
+    never been crawled, because the only link to it lived inside the popup,
+    which is not in the HTML until someone clicks.
+  */
+  const page = product.href?.startsWith("/") ? product.href : undefined;
+
+  const body = (
+    <>
       <div
         className={`relative flex w-full items-center justify-center overflow-hidden rounded-3xl border border-white/10 px-6 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:border-white/25 group-focus-visible:border-white/40 ${
           feature ? "py-16 lg:min-h-[26rem]" : "py-10"
@@ -123,6 +126,25 @@ function Story({ product, feature = false, onOpen }: { product: Product; feature
           <ArrowMark tone="dark" size="sm" label="See what you get" />
         </span>
       </div>
+    </>
+  );
+
+  return page ? (
+    <a
+      ref={ref}
+      href={page}
+      onClick={(e) => {
+        e.preventDefault();
+        onOpen();
+      }}
+      aria-haspopup="dialog"
+      className={className}
+    >
+      {body}
+    </a>
+  ) : (
+    <button ref={ref} type="button" onClick={onOpen} aria-haspopup="dialog" className={className}>
+      {body}
     </button>
   );
 }
