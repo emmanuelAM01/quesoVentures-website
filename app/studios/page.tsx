@@ -4,12 +4,12 @@ import StudiosExperience from "components/StudiosExperience";
 export const metadata: Metadata = {
   title: "Queso Studios | Software for Local Businesses",
   description:
-    "Ventures is plural for a reason. Queso Studios is the software arm of Queso Ventures: tools we build and run for local businesses, like Queso Rewards.",
+    "Ventures is plural for a reason. Tools that bring your customers back and keep your business running, like Queso Rewards.",
   alternates: { canonical: "https://www.quesoventures.com/studios" },
   openGraph: {
     title: "Queso Studios | Software for Local Businesses",
     description:
-      "Ventures is plural for a reason. Queso Studios is the software arm of Queso Ventures: tools we build and run for local businesses, like Queso Rewards.",
+      "Ventures is plural for a reason. Tools that bring your customers back and keep your business running, like Queso Rewards.",
     url: "https://www.quesoventures.com/studios",
     siteName: "Queso Ventures",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Queso Studios | Software for Local Businesses",
     description:
-      "Ventures is plural for a reason. Queso Studios is the software arm of Queso Ventures: tools we build and run for local businesses, like Queso Rewards.",
+      "Ventures is plural for a reason. Tools that bring your customers back and keep your business running, like Queso Rewards.",
     images: ["/logo.png"],
   },
 };

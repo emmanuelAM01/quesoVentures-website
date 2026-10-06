@@ -216,6 +216,10 @@ export type SiteCopy = ReturnType<typeof siteCopy>;
  * and "web design for home services". Zero clicks from any of them. The
  * snippets above were accurate and read like every other result on the page.
  *
+ * Plain words only. The person clicking is a shop owner, not an engineer:
+ * "productized", "AI-SEO", "software arm" mean nothing to them and read as a
+ * pitch. Say what they get: a website, on Google and Maps, kept working.
+ *
  * So the snippet is now an ad, in the house voice the About page already set:
  * say the obvious thing plainly and let the confidence do the selling. The
  * search term still leads every title so Google bolds it; the line after it is
@@ -229,7 +233,7 @@ export type SiteCopy = ReturnType<typeof siteCopy>;
 const TAGLINE = "Sells Like Coffee at 7am.";
 const META_HOOK = "Need more business? Build website.";
 const META_WHAT =
-  "Web design turned into a product: fast, found on Google, Maps, and ChatGPT. Free report.";
+  "I build it, put you on Google and Maps, and keep it working. Free report.";
 
 /**
  * Google truncates titles around 60 characters and descriptions around 155.
@@ -266,13 +270,13 @@ export function metaFor(
 /** For the industry pages, where the trade is the search term, not the town. */
 export function metaForIndustry(trade: string, titleTrade: string) {
   const withTagline = `${titleTrade} Web Design & SEO. ${TAGLINE}`;
-  const full = `Your work sells itself. Your website should too. Websites, SEO, and AI-SEO for Houston area ${trade}. Free report.`;
+  const full = `Your work sells itself. Your website should too. Websites for Houston area ${trade}, built to show up on Google. Free report.`;
   return {
     title:
       withTagline.length <= TITLE_MAX ? withTagline : `${titleTrade} Web Design & SEO | Houston TX`,
     description:
       full.length <= DESC_MAX
         ? full
-        : `Your work sells itself. Your website should too. Websites, SEO, and AI-SEO for Houston ${trade}.`,
+        : `Your work sells itself. Your website should too. Websites for Houston ${trade}.`,
   };
 }

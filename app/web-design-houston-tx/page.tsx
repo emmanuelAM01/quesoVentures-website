@@ -6,7 +6,7 @@ import { HOUSTON } from "content/houston";
 const { title: TITLE, description: DESCRIPTION } = metaFor("Houston", {
   title: "Houston Area Web Design & SEO, Town by Town",
   description:
-    "Need more business? Build website. Web design and SEO for the Houston area, built by a software engineer who turned it into a product. Free report.",
+    "Need more business? Build website. Websites for Houston area businesses, built to show up on Google and Maps. Free report.",
 });
 
 export const metadata: Metadata = {

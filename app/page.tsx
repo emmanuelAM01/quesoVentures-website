@@ -26,7 +26,7 @@ import {
 const { title: TITLE, description: DESCRIPTION } = metaFor("Houston", {
   title: "Houston Web Design That Sells Like Coffee at 7am",
   description:
-    "Need more business? Build website. I turned web design into a product, so yours ships fast and shows up on Google, Maps, and ChatGPT. Free report.",
+    "Need more business? Build website. I build it, put you on Google, Maps, and ChatGPT, and keep it working. Houston based. Free report.",
 });
 
 export const metadata: Metadata = {

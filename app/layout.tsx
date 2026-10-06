@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   // pages are all duplicates of the homepage. Each page declares its own.
 
   title: "Houston Web Design That Sells Like Coffee at 7am",
-  description: "Need more business? Build website. I turned web design into a product, so yours ships fast and shows up on Google, Maps, and ChatGPT. Free report.",
+  description: "Need more business? Build website. I build it, put you on Google, Maps, and ChatGPT, and keep it working. Houston based. Free report.",
   icons: {
     icon: "/favicon.ico",
     apple: "/logo-square.png",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Houston Web Design That Sells Like Coffee at 7am",
-    description: "Need more business? Build website. I turned web design into a product, so yours ships fast and shows up on Google, Maps, and ChatGPT. Free report.",
+    description: "Need more business? Build website. I build it, put you on Google, Maps, and ChatGPT, and keep it working. Houston based. Free report.",
     images: ["/logo.png"],
   },
 };
