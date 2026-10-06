@@ -16,7 +16,7 @@ import {
   breadcrumbSchema,
 } from "components/businessInfo";
 
-const SERVICES_TITLE = "Websites, SEO, AI-SEO & Google Business Profile";
+const SERVICES_TITLE = "Get Your Business Online | Houston Websites & SEO";
 const SERVICES_DESCRIPTION =
   "What I actually do: build the website, run your Google and Maps presence, and get you named by AI assistants. More customers, and more of them coming back.";
 

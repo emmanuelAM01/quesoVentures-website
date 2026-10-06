@@ -3,7 +3,7 @@ import QrsExperience from "components/QrsExperience";
 
 const TITLE = "Queso Revenue System (QRS) | Queso Studios";
 const DESCRIPTION =
-  "Connect your bank accounts and cards once and see what came in, what went out, and where it went. Read only: nothing in it can move your money.";
+  "Like the IRS, except it works for you. Connect your bank accounts and cards once and see what came in and what went out. Read only, it never moves money.";
 const URL = "https://www.quesoventures.com/studios/qrs";
 
 export const metadata: Metadata = {

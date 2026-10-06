@@ -210,12 +210,36 @@ export type SiteCopy = ReturnType<typeof siteCopy>;
  * characters that now sell the free preview instead. The number still appears
  * on the page and in the LocalBusiness schema, where it belongs.
  */
-const META_PROMISE = "More first-time customers, more repeat customers.";
+/**
+ * Round two, 2026-10-06. Search Console, 2026-07-03 to 2026-10-03: 900
+ * impressions, 12 clicks, 1.3%. Position 1.0 for "seo humble", "seo services",
+ * and "web design for home services". Zero clicks from any of them. The
+ * snippets above were accurate and read like every other result on the page.
+ *
+ * Plain words only. The person clicking is a shop owner, not an engineer:
+ * "productized", "AI-SEO", "software arm" mean nothing to them and read as a
+ * pitch. Say what they get: a website, on Google and Maps, kept working.
+ *
+ * So the descriptions are now an ad, in the house voice the About page
+ * already set: say the obvious thing plainly and let the confidence do the
+ * selling. The hook is the first line of the Google Business Profile, word for
+ * word, so Maps and search sound like the same person.
+ *
+ * Titles stay plain: the search term and the name. The one hook in a title is
+ * the homepage's. A slogan stamped on every page reads like a template, which
+ * is how "Sells Like Coffee at 7am" went out and came straight back.
+ *
+ * None of this is visible on the site. The page copy is the brand and changes
+ * slowly; the snippet can be swapped whenever the numbers say so.
+ */
+const META_HOOK = "Need more business? Start with a website.";
+const META_WHAT =
+  "I build it, put you on Google and Maps, and keep it working. Free report.";
 
 /**
  * Google truncates titles around 60 characters and descriptions around 155.
  * A cut-off snippet reads as carelessness, so both helpers fall back to a
- * shorter form rather than overrun — which also means a long city name added
+ * shorter form rather than overrun, which also means a long city name added
  * later cannot silently break its own snippet.
  */
 const TITLE_MAX = 60;
@@ -232,29 +256,28 @@ export function metaFor(
    */
   override: { title?: string; description?: string } = {}
 ) {
-  const withHook = `${place} Websites, SEO, & AI-SEO Built by an Engineer`;
-  const withPhone = `Websites, SEO, and AI-SEO for ${place}. ${META_PROMISE} A free report on where you show up today.`;
+  const withName = `${place} Web Design & SEO | Queso Ventures`;
+  const full = `Need more business in ${place}? Start with a website. ${META_WHAT}`;
   return {
     title:
       override.title ??
-      (withHook.length <= TITLE_MAX ? withHook : `${place} Websites, SEO, & AI-SEO`),
+      (withName.length <= TITLE_MAX ? withName : `${place} Web Design & SEO`),
     description:
       override.description ??
-      (withPhone.length <= DESC_MAX
-        ? withPhone
-        : `Websites, SEO, & AI-SEO for ${place}. ${META_PROMISE}`),
+      (full.length <= DESC_MAX ? full : `${META_HOOK} ${META_WHAT}`),
   };
 }
 
 /** For the industry pages, where the trade is the search term, not the town. */
 export function metaForIndustry(trade: string, titleTrade: string) {
-  const title = `${titleTrade} Websites, SEO, & AI-SEO | Houston TX`;
-  const withPhone = `Websites, SEO, and AI-SEO for Houston area ${trade}. ${META_PROMISE}`;
+  const withName = `${titleTrade} Websites & SEO in Houston | Queso Ventures`;
+  const full = `Your work sells itself. Your website should too. Websites for Houston area ${trade}, built to show up on Google. Free report.`;
   return {
-    title,
+    title:
+      withName.length <= TITLE_MAX ? withName : `${titleTrade} Websites & SEO | Houston TX`,
     description:
-      withPhone.length <= DESC_MAX
-        ? withPhone
-        : `Websites, SEO, & AI-SEO for Houston area ${trade}. ${META_PROMISE}`,
+      full.length <= DESC_MAX
+        ? full
+        : `Your work sells itself. Your website should too. Websites for Houston ${trade}.`,
   };
 }
