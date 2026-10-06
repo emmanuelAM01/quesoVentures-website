@@ -40,7 +40,7 @@ export async function generateStaticParams(): Promise<Params[]> {
 
 function derivedMeta(entry: GuideEntry) {
   return {
-    title: entry.seo_title || `${entry.business_name} in ${entry.area || entry.city.name} | ${GUIDE_NAME}`,
+    title: entry.seo_title || `${entry.business_name} in ${entry.city.name} | ${GUIDE_NAME}`,
     description: entry.seo_description || entry.dek || `${entry.business_name}, in ${GUIDE_NAME}.`,
   };
 }
@@ -130,7 +130,7 @@ export default async function GuideArticle({ params }: { params: Params }) {
           <>
             <Breadcrumbs trail={trail} tone="dark" />
             <p className="mt-5 text-base font-medium text-white/90">
-              {entry.category.name} in {entry.area || entry.city.name}
+              {entry.category.name} in {entry.city.name}
             </p>
           </>
         }

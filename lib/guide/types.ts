@@ -98,6 +98,12 @@ export type GuideArticle = {
   locality: string | null;
   region: string | null;
   postal_code: string | null;
+  /**
+   * The towns its customers come from (migration 110). The city is the one
+   * town it is in, and says it everywhere; area, locality and region above are
+   * no longer read.
+   */
+  serves_city_ids: string[];
   latitude: number | null;
   longitude: number | null;
   phone: string | null;

@@ -41,7 +41,7 @@ export default function GuideCard({ entry, paintIndex }: { entry: Card; paintInd
           style={{ "--paint": paint.hex, "--paint-ink": paint.ink } as React.CSSProperties}
         >
           {entry.category.name}
-          {entry.area || entry.city.name ? ` in ${entry.area || entry.city.name}` : ""}
+          {entry.city.name ? ` in ${entry.city.name}` : ""}
         </p>
         <h3 className="mt-2 text-2xl font-light tracking-tight text-lightText transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 dark:text-darkText">
           {entry.business_name}

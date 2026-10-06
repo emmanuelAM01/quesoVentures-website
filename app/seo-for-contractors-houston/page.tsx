@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 const data: IndustryPageData = {
   "industry": "Construction, Roofing & Flooring Companies",
   "slug": "/seo-for-contractors-houston",
-  "headline": "Referrals are not a plan.",
+  "headline": "Referrals can only go so far.",
   "intro": "Websites, SEO, and AI-SEO for construction, roofing, and flooring companies across Northeast Houston, residential and commercial. A second pipeline that keeps producing when the referrals go quiet.",
   "prefill": "I run a construction, roofing, or flooring company and want my website to actually get me calls.",
   "serviceName": "Websites, SEO & AI-SEO for Construction, Roofing and Flooring Companies",

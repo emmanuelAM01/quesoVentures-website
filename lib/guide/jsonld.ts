@@ -87,8 +87,8 @@ export function articleGraph(entry: GuideEntry, meta: { title: string; descripti
       ? clean({
           "@type": "PostalAddress",
           streetAddress: entry.street_address,
-          addressLocality: entry.locality || entry.city.name,
-          addressRegion: entry.region || entry.city.region,
+          addressLocality: entry.city.name,
+          addressRegion: entry.city.region,
           postalCode: entry.postal_code || undefined,
           addressCountry: "US",
         })
@@ -98,6 +98,10 @@ export function articleGraph(entry: GuideEntry, meta: { title: string; descripti
         ? { "@type": "GeoCoordinates", latitude: Number(entry.latitude), longitude: Number(entry.longitude) }
         : undefined,
     hasMap: entry.maps_url || undefined,
+    // Its own town and the towns its customers come from. The supported way to
+    // say "in Montgomery, serving Conroe and The Woodlands" to search engines
+    // and AI answers, without a copy of the page per town.
+    areaServed: [entry.city, ...entry.serves].map((c) => ({ "@type": "City", name: `${c.name}, ${c.region}` })),
     openingHoursSpecification: (entry.hours ?? [])
       .filter((h) => h.days?.length && h.opens && h.closes)
       .map((h) => ({

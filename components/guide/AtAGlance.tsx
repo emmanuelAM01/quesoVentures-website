@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { GuideEntry } from "lib/guide/queries";
 import { addressLine, displayUrl, hoursLines, telHref } from "lib/guide/format";
 
@@ -53,6 +54,24 @@ export default function AtAGlance({ entry }: { entry: GuideEntry }) {
         <a href={entry.website_url} target="_blank" rel="noopener" className={`${LINK} break-all`}>
           {displayUrl(entry.website_url)}
         </a>
+      ),
+    });
+  // The towns its customers come from, each a link to that town's page in the
+  // guide, where this entry is listed too.
+  if (entry.serves.length)
+    rows.push({
+      label: "Serves",
+      value: (
+        <span>
+          {entry.serves.map((c, i) => (
+            <span key={c.id}>
+              {i > 0 ? ", " : ""}
+              <Link href={`/guide/${c.slug}`} className={LINK}>
+                {c.name}
+              </Link>
+            </span>
+          ))}
+        </span>
       ),
     });
   if (entry.price_range) rows.push({ label: "Price", value: entry.price_range });

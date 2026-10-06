@@ -76,14 +76,15 @@ export function displayUrl(url: string): string {
   return url.replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/$/, "");
 }
 
+/** The street, then the town and state from the entry's city: one answer to "where". */
 export function addressLine(a: {
   street_address: string | null;
-  locality: string | null;
-  region: string | null;
   postal_code: string | null;
+  city: { name: string; region: string };
 }): string | null {
-  const cityState = [a.locality, [a.region, a.postal_code].filter(Boolean).join(" ")]
+  if (!a.street_address) return null;
+  const cityState = [a.city.name, [a.city.region, a.postal_code].filter(Boolean).join(" ")]
     .filter(Boolean)
     .join(", ");
-  return [a.street_address, cityState].filter(Boolean).join(", ") || null;
+  return [a.street_address, cityState].filter(Boolean).join(", ");
 }

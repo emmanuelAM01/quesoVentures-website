@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getPublished, SITE_URL } from "lib/guide/queries";
+import { getCities, getPublished, SITE_URL } from "lib/guide/queries";
 
 export const revalidate = 86400;
 
@@ -13,7 +13,8 @@ export const revalidate = 86400;
  * each URL from the row itself.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const published = await getPublished();
+  const [published, cities] = await Promise.all([getPublished(), getCities()]);
+  const slugOf = new Map(cities.map((c) => [c.id, c.slug]));
   if (!published.length) {
     return [{ url: `${SITE_URL}/guide`, changeFrequency: "weekly", priority: 0.7 }];
   }
@@ -24,14 +25,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const byCity = new Map<string, typeof published>();
   const byCategory = new Map<string, typeof published>();
   for (const e of published) {
-    byCity.set(e.city.slug, [...(byCity.get(e.city.slug) ?? []), e]);
+    // A town's page lists the businesses in it and the ones serving it.
+    const towns = [e.city.slug, ...(e.serves_city_ids ?? []).map((id) => slugOf.get(id)).filter((s): s is string => !!s)];
+    for (const town of Array.from(new Set(towns))) byCity.set(town, [...(byCity.get(town) ?? []), e]);
     const key = `${e.city.slug}/${e.category.slug}`;
     byCategory.set(key, [...(byCategory.get(key) ?? []), e]);
   }
 
   return [
     { url: `${SITE_URL}/guide`, lastModified: newest(published), changeFrequency: "weekly", priority: 0.7 },
-    ...Array.from(byCity, ([city, list]) => ({
+    // A town page with one entry is not indexed (see app/guide/[city]), so it
+    // is not offered to search engines either.
+    ...Array.from(byCity).filter(([, list]) => list.length >= 2).map(([city, list]) => ({
       url: `${SITE_URL}/guide/${city}`,
       lastModified: newest(list),
       changeFrequency: "weekly" as const,

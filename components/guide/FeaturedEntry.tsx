@@ -35,7 +35,7 @@ export default function FeaturedEntry({ entry, paint }: { entry: GuideCard; pain
         </div>
         <div className="p-6 sm:p-7">
           <p className="text-sm font-semibold" style={{ color: paint.ink }}>
-            {entry.category.name} in {entry.area || entry.city.name}
+            {entry.category.name} in {entry.city.name}
           </p>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight text-lightText dark:text-darkText sm:text-3xl">
             {entry.business_name}

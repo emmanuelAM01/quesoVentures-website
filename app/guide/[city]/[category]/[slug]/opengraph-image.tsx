@@ -76,7 +76,7 @@ export default async function OgImage({
           <div style={{ display: "flex", flexDirection: "column" }}>
             {entry ? (
               <div style={{ fontSize: 28, color: "#FFD100", marginBottom: 12 }}>
-                {`${entry.category.name} in ${entry.area || entry.city.name}`}
+                {`${entry.category.name} in ${entry.city.name}`}
               </div>
             ) : null}
             <div style={{ fontSize: 76, fontWeight: 700, color: "#FFFFFF", letterSpacing: -2, lineHeight: 1.05 }}>

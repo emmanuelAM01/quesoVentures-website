@@ -21,17 +21,18 @@ export type GuideCard = Pick<
   | "slug"
   | "business_name"
   | "dek"
-  | "area"
+  | "serves_city_ids"
   | "hero_image_path"
   | "hero_image_alt"
   | "published_at"
   | "updated_at"
 > & { city: CityRef; category: CategoryRef; path: string };
 
-export type GuideEntry = GuideArticle & { city: CityRef; category: CategoryRef; path: string };
+/** An entry with the towns it serves resolved, in the Guide's city order. */
+export type GuideEntry = GuideArticle & { city: CityRef; category: CategoryRef; path: string; serves: CityRef[] };
 
 const CARD_COLUMNS =
-  "id, slug, business_name, dek, area, hero_image_path, hero_image_alt, published_at, updated_at, " +
+  "id, slug, business_name, dek, serves_city_ids, hero_image_path, hero_image_alt, published_at, updated_at, " +
   "city:cities!inner(id, slug, name, region), category:categories!inner(id, slug, name, plural_name, schema_type, items_label)";
 
 const ENTRY_COLUMNS =
@@ -85,7 +86,8 @@ export async function getActiveFacets() {
     getCities(),
     getCategories(),
   ]);
-  const cityIds = new Set(published.map((a) => a.city.id));
+  // A town is on the guide when a business is in it or serves it.
+  const cityIds = new Set(published.flatMap((a) => [a.city.id, ...(a.serves_city_ids ?? [])]));
   const categoryIds = new Set(published.map((a) => a.category.id));
   return {
     published,
@@ -112,9 +114,15 @@ export const getEntry = cache(
       .eq("city.slug", city)
       .eq("category.slug", category);
     if (!draft) query = query.eq("status", "published");
-    const { data } = await query.maybeSingle();
+    const [{ data }, cities] = await Promise.all([query.maybeSingle(), getCities()]);
     if (!data) return null;
-    return withPath(data as unknown as Omit<GuideEntry, "path">);
+    const row = data as unknown as Omit<GuideEntry, "path" | "serves">;
+    // Ids of a city since deleted are skipped rather than failing the page.
+    const ids = new Set(row.serves_city_ids ?? []);
+    const serves = cities
+      .filter((c) => ids.has(c.id) && c.id !== row.city.id)
+      .map(({ id, slug, name, region }) => ({ id, slug, name, region }));
+    return { ...withPath(row), serves };
   }
 );
 
