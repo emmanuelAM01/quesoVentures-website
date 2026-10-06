@@ -774,7 +774,7 @@ export default function StudiosExperience() {
   );
 }
 
-function WantModal({ tool, idea, onClose }: { tool: string; idea?: boolean; onClose: () => void }) {
+export function WantModal({ tool, idea, onClose }: { tool: string; idea?: boolean; onClose: () => void }) {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [error, setError] = useState("");
 

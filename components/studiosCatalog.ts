@@ -288,21 +288,28 @@ export const PRODUCTS: Product[] = [
     ],
   },
   {
+    // The old Revenue System (numbers read by hand, quoted per case) is gone.
+    // This one is the Economics screen from the admin, the one Emmanuel runs
+    // his own books on, made for a client. Its own page is /studios/qrs.
     key: "revenue",
     name: "Queso Revenue System",
     outcome: "numbers",
-    built: true,
-    list: null,
-    client: null,
-    priceNote: "Priced per case",
+    built: false,
+    list: 100,
+    client: 50,
+    usage: "Up to 5 bank connections. Past that, $10 a month for every 2 more ($5 for Queso clients).",
     accent: "#7692A5",
     demo: "qrs",
-    line: "Your numbers, read by people who do this for a living.",
+    line: "Every account in one place, and what your month really looks like.",
     points: [
-      "Upload what you have. It does not have to be neat.",
-      "Get back what is working, what needs attention, and what to do about it.",
-      "Prepared by licensed CPAs, Harvard economists, Wharton MBAs, and CFOs out of nationwide logistics firms. (A bunch of number nerds.)",
+      "Connect your bank accounts and cards once. Every charge comes in on its own.",
+      "Tag a charge business or personal once, and it remembers.",
+      "What came in, what went out, and where it went, month by month.",
+      "What is left over in a typical month, and what it takes to hit a goal.",
+      "It only reads. Nothing in it can move your money.",
     ],
+    href: "/studios/qrs",
+    linkLabel: "How it works",
   },
 ];
 
@@ -318,7 +325,7 @@ export type Pack = {
 /**
  * The complete experience for an outcome: every tool on its shelf, for less
  * than buying them one at a time. One per outcome that can have one; Ditch the
- * napkin math has none, since the Revenue System is quoted per case, and
+ * napkin math has none yet, and
  * Find new customers has none since Lead Finder is alone on that shelf. Nothing
  * is given away inside a pack: each is priced as a discount on exactly the
  * tools in it. Mirrors PACKS in the portal.

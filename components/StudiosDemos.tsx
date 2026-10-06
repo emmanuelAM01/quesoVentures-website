@@ -5,14 +5,11 @@ import {
   FaCheck,
   FaPhone,
   FaQrcode,
-  FaRegFileExcel,
-  FaArrowUp,
-  FaArrowDown,
-  FaTriangleExclamation,
   FaTruckFast,
 } from "react-icons/fa6";
 import { HiSparkles } from "react-icons/hi2";
 import { ASKS } from "./tools";
+import { QrsCard } from "./QrsScenes";
 
 /**
  * The Queso Studios demos.
@@ -474,75 +471,6 @@ function Delivery({ on }: { on: boolean }) {
 }
 
 /**
- * What an audit hands back, in the order it hands it back.
- *
- * The order is the point: what is working, what is quietly leaking, then what
- * is costing real money. An all-red list reads as an accusation, and nobody
- * books a call to be told they are bad at running their own shop. Keep one of
- * each tone and keep the numbers plausible for a shop, not for a chain.
- */
-type Tone = "good" | "watch" | "bad";
-
-const FINDINGS: { tone: Tone; label: string; value: string }[] = [
-  { tone: "good", label: "Revenue steady, no big swings", value: "12 months" },
-  { tone: "watch", label: "Two subscriptions doing the same job", value: "$240 / mo" },
-  { tone: "bad", label: "Invoices going out four days late", value: "3 accounts" },
-];
-
-const TONE: Record<Tone, { hex: string; Icon: typeof FaArrowUp }> = {
-  good: { hex: GREEN, Icon: FaArrowUp },
-  watch: { hex: YELLOW, Icon: FaTriangleExclamation },
-  bad: { hex: RED, Icon: FaArrowDown },
-};
-
-function Qrs({ on }: { on: boolean }) {
-  const reduced = useReduced();
-  const [shown, setShown] = useState(FINDINGS.length);
-  useEffect(() => {
-    if (!on || reduced) return setShown(FINDINGS.length);
-    setShown(0);
-    let n = 0;
-    const t = setInterval(() => {
-      n += 1;
-      setShown(n);
-      if (n >= FINDINGS.length) clearInterval(t);
-    }, 520);
-    return () => clearInterval(t);
-  }, [on, reduced]);
-
-  return (
-    <div className={BOX}>
-      <div className="flex items-center gap-2.5 rounded-xl border border-dashed border-white/20 px-3.5 py-1.5">
-        <FaRegFileExcel size={13} className="shrink-0" style={{ color: GREEN }} />
-        <span className="min-w-0 truncate text-[13px] text-white/85">last-quarter.xlsx</span>
-        <span className={`ml-auto shrink-0 text-[10px] ${MUTED}`}>Read</span>
-      </div>
-      <div className="space-y-1.5">
-        {FINDINGS.map((f, i) => {
-          const { hex, Icon } = TONE[f.tone];
-          return (
-            <div
-              key={f.label}
-              className={`${PANE} flex items-center gap-2.5 px-3 py-1.5 transition-all duration-500`}
-              style={rise(shown > i)}
-            >
-              <span
-                className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-black"
-                style={{ backgroundColor: hex }}
-              >
-                <Icon size={9} />
-              </span>
-              <p className="min-w-0 flex-1 truncate text-[12px] text-white/80">{f.label}</p>
-              <p className="shrink-0 text-[12px] font-semibold text-white">{f.value}</p>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-/**
  * Where the next viewing starts. Module scope on purpose: the demo unmounts
  * whenever its card leaves the centre, so component state would reset to the
  * same ask forever. This survives, which is the whole point — come back to
@@ -886,6 +814,6 @@ export const STUDIO_DEMOS: Record<DemoId, (p: { on: boolean }) => JSX.Element> =
   invoicing: Invoicing,
   delivery: Delivery,
   organization: Organization,
-  qrs: Qrs,
+  qrs: QrsCard,
   next: WhatsNext,
 };

@@ -13,7 +13,7 @@ const LINKEDIN = "https://www.linkedin.com/in/emmanuelmendieta/";
 
 const TITLE = "About Queso Ventures | Founded by Emmanuel Mendieta";
 const DESCRIPTION =
-  "Why Queso Ventures exists and who built it. Emmanuel Mendieta has been building software since 2020 and now helps local businesses get found on Google, Maps, and AI search, bring customers back, and run smoothly.";
+  "Why Queso Ventures exists and who built it. Emmanuel Mendieta has been building software since 2019 and now helps local businesses get found on Google, Maps, and AI search, bring customers back, and run smoothly.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -62,7 +62,7 @@ const jsonLd = {
       familyName: "Mendieta",
       jobTitle: "Founder",
       description:
-        "Founder of Queso Ventures and a software engineer since 2020. Former CTO of a venture backed startup and tech lead at MARA Digital Holdings. Builds the tools local businesses use to get found on Google, Maps, and AI search, bring customers back, and run smoothly.",
+        "Founder of Queso Ventures and a software engineer since 2019. Former CTO of a venture backed startup and tech lead at MARA Digital Holdings. Builds the tools local businesses use to get found on Google, Maps, and AI search, bring customers back, and run smoothly.",
       url: `${BUSINESS.url}/about`,
       image: `${BUSINESS.url}/about.JPEG`,
       worksFor: { "@id": `${BUSINESS.url}/#localbusiness` },
@@ -165,7 +165,7 @@ const why: Chapter[] = [
     title: "The younger years",
     body: "Started out by taking computers apart and putting them back together. 75% success rate overall.",
     story:
-      "Edited my grades and webpages online to prank my friends. Built sites for fake businesses I thought were cool, then real ones for friends and family. As most kids don't, I did not realzie how important this hobby would be.",
+      "Edited my grades and webpages online to prank my friends. Built sites for fake businesses I thought were cool, then real ones for friends and family. As most kids don't, I did not realize how important this hobby would be.",
     photos: [
       {
         src: "/about/2008.jpg",
@@ -194,7 +194,7 @@ const why: Chapter[] = [
     mark: "2020",
     title: "Staring down unemployment",
     body: "I had to make money somehow. So I started making money off my hobby.",
-    story: "In college and Covid just closed every store that was hiring. The bills were still coming so I had to think fast. I don't know why it did not occur to me earlier to make websites for money, but I started freelancing. $15/hour, then it doubled and grew from there.",
+    story: "In college and Covid just closed every store that was hiring. The bills were still coming so I had to think fast. I don't know why it did not occur to me earlier to make websites for money, but I went all in on freelancing. $15/hour, then it doubled and grew from there.",
     photos: [
       {
         src: "/about/2020-laptop.jpg",
@@ -209,7 +209,7 @@ const why: Chapter[] = [
     title: "First startups",
     body: "Built apps in college alongside my brother. Y Combinator were not feeling it, and investor conversations did not work out.",
     story:
-      "I helped build a stablecoin savings app. Then crypto crashed and took the idea with it. Next came a crime reporting app for Latin America. Had investor calls in between school and cupcake shop shifts (progress isn't linear). Things fell through in the end, I though it was because I did not build it correctly, I had not learned my lesson yet though.",
+      "I helped build a stablecoin savings app. Then crypto crashed and took the idea with it. Next came a crime reporting app for Latin America. Had investor calls in between school and cupcake shop shifts (progress isn't linear). Things fell through in the end, I thought it was because I did not build it correctly, I had not learned my lesson yet though.",
     photos: [
       {
         src: "/about/2022-mountain.jpg",
