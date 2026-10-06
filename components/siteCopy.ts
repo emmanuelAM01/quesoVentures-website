@@ -220,18 +220,19 @@ export type SiteCopy = ReturnType<typeof siteCopy>;
  * "productized", "AI-SEO", "software arm" mean nothing to them and read as a
  * pitch. Say what they get: a website, on Google and Maps, kept working.
  *
- * So the snippet is now an ad, in the house voice the About page already set:
- * say the obvious thing plainly and let the confidence do the selling. The
- * search term still leads every title so Google bolds it; the line after it is
- * what makes someone stop scrolling.
+ * So the descriptions are now an ad, in the house voice the About page
+ * already set: say the obvious thing plainly and let the confidence do the
+ * selling. The hook is the first line of the Google Business Profile, word for
+ * word, so Maps and search sound like the same person.
+ *
+ * Titles stay plain: the search term and the name. The one hook in a title is
+ * the homepage's. A slogan stamped on every page reads like a template, which
+ * is how "Sells Like Coffee at 7am" went out and came straight back.
  *
  * None of this is visible on the site. The page copy is the brand and changes
- * slowly; the snippet is a billboard and can be swapped whenever the numbers
- * say so. Same tagline on every page on purpose: one line, repeated, is how a
- * slogan works.
+ * slowly; the snippet can be swapped whenever the numbers say so.
  */
-const TAGLINE = "Sells Like Coffee at 7am.";
-const META_HOOK = "Need more business? Build website.";
+const META_HOOK = "Need more business? Start with a website.";
 const META_WHAT =
   "I build it, put you on Google and Maps, and keep it working. Free report.";
 
@@ -255,12 +256,12 @@ export function metaFor(
    */
   override: { title?: string; description?: string } = {}
 ) {
-  const withTagline = `${place} Web Design & SEO. ${TAGLINE}`;
-  const full = `Need more business in ${place}? Build website. ${META_WHAT}`;
+  const withName = `${place} Web Design & SEO | Queso Ventures`;
+  const full = `Need more business in ${place}? Start with a website. ${META_WHAT}`;
   return {
     title:
       override.title ??
-      (withTagline.length <= TITLE_MAX ? withTagline : `${place} Web Design & SEO`),
+      (withName.length <= TITLE_MAX ? withName : `${place} Web Design & SEO`),
     description:
       override.description ??
       (full.length <= DESC_MAX ? full : `${META_HOOK} ${META_WHAT}`),
@@ -269,11 +270,11 @@ export function metaFor(
 
 /** For the industry pages, where the trade is the search term, not the town. */
 export function metaForIndustry(trade: string, titleTrade: string) {
-  const withTagline = `${titleTrade} Web Design & SEO. ${TAGLINE}`;
+  const withName = `${titleTrade} Websites & SEO in Houston | Queso Ventures`;
   const full = `Your work sells itself. Your website should too. Websites for Houston area ${trade}, built to show up on Google. Free report.`;
   return {
     title:
-      withTagline.length <= TITLE_MAX ? withTagline : `${titleTrade} Web Design & SEO | Houston TX`,
+      withName.length <= TITLE_MAX ? withName : `${titleTrade} Websites & SEO | Houston TX`,
     description:
       full.length <= DESC_MAX
         ? full
