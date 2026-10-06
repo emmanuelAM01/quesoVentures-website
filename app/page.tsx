@@ -24,9 +24,9 @@ import {
 } from "components/businessInfo";
 
 const { title: TITLE, description: DESCRIPTION } = metaFor("Houston", {
-  title: "Houston Websites, SEO & AI-SEO, Built by an Engineer",
+  title: "Houston Web Design That Sells Like Coffee at 7am",
   description:
-    "Websites, SEO, and AI-SEO for Houston area businesses. More first-time customers, more repeat customers. A free report on where you show up today.",
+    "Need more business? Build website. I turned web design into a product, so yours ships fast and shows up on Google, Maps, and ChatGPT. Free report.",
 });
 
 export const metadata: Metadata = {

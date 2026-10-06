@@ -13,7 +13,7 @@ const LINKEDIN = "https://www.linkedin.com/in/emmanuelmendieta/";
 
 const TITLE = "About Queso Ventures | Founded by Emmanuel Mendieta";
 const DESCRIPTION =
-  "Why Queso Ventures exists and who built it. Emmanuel Mendieta has been building software since 2019 and now helps local businesses get found on Google, Maps, and AI search, bring customers back, and run smoothly.";
+  "Staring down unemployment, I started making money off my hobby. Software engineer since 2019, now building the websites and tools local businesses run on.";
 
 export const metadata: Metadata = {
   title: TITLE,

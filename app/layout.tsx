@@ -16,16 +16,16 @@ export const metadata: Metadata = {
   // by every page that doesn't set its own, which quietly tells Google those
   // pages are all duplicates of the homepage. Each page declares its own.
 
-  title: "Websites, SEO & AI-SEO in Atascocita, Humble & Kingwood TX",
-  description: "Websites, SEO, and AI-SEO for businesses in Atascocita, Humble, Kingwood, and Northeast Houston. Simple plans at $500 a month, not agency prices.",
+  title: "Houston Web Design That Sells Like Coffee at 7am",
+  description: "Need more business? Build website. I turned web design into a product, so yours ships fast and shows up on Google, Maps, and ChatGPT. Free report.",
   icons: {
     icon: "/favicon.ico",
     apple: "/logo-square.png",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Websites, SEO & AI-SEO in Atascocita, Humble & Kingwood TX",
-    description: "Websites, SEO, and AI-SEO for businesses in Atascocita, Humble, Kingwood, and Northeast Houston. Simple plans at $500 a month, not agency prices.",
+    title: "Houston Web Design That Sells Like Coffee at 7am",
+    description: "Need more business? Build website. I turned web design into a product, so yours ships fast and shows up on Google, Maps, and ChatGPT. Free report.",
     images: ["/logo.png"],
   },
 };

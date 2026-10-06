@@ -4,9 +4,9 @@ import GeoPageTemplate, { GeoPageData } from "components/GeoPageTemplate";
 import { HOUSTON } from "content/houston";
 
 const { title: TITLE, description: DESCRIPTION } = metaFor("Houston", {
-  title: "Websites, SEO & AI-SEO Across the Houston Area",
+  title: "Houston Area Web Design & SEO, Town by Town",
   description:
-    "Websites, SEO, and AI-SEO for Houston businesses, neighborhood by neighborhood. More first-time customers, more repeat customers. Free report.",
+    "Need more business? Build website. Web design and SEO for the Houston area, built by a software engineer who turned it into a product. Free report.",
 });
 
 export const metadata: Metadata = {

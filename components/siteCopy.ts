@@ -210,12 +210,31 @@ export type SiteCopy = ReturnType<typeof siteCopy>;
  * characters that now sell the free preview instead. The number still appears
  * on the page and in the LocalBusiness schema, where it belongs.
  */
-const META_PROMISE = "More first-time customers, more repeat customers.";
+/**
+ * Round two, 2026-10-06. Search Console, 2026-07-03 to 2026-10-03: 900
+ * impressions, 12 clicks, 1.3%. Position 1.0 for "seo humble", "seo services",
+ * and "web design for home services". Zero clicks from any of them. The
+ * snippets above were accurate and read like every other result on the page.
+ *
+ * So the snippet is now an ad, in the house voice the About page already set:
+ * say the obvious thing plainly and let the confidence do the selling. The
+ * search term still leads every title so Google bolds it; the line after it is
+ * what makes someone stop scrolling.
+ *
+ * None of this is visible on the site. The page copy is the brand and changes
+ * slowly; the snippet is a billboard and can be swapped whenever the numbers
+ * say so. Same tagline on every page on purpose: one line, repeated, is how a
+ * slogan works.
+ */
+const TAGLINE = "Sells Like Coffee at 7am.";
+const META_HOOK = "Need more business? Build website.";
+const META_WHAT =
+  "Web design turned into a product: fast, found on Google, Maps, and ChatGPT. Free report.";
 
 /**
  * Google truncates titles around 60 characters and descriptions around 155.
  * A cut-off snippet reads as carelessness, so both helpers fall back to a
- * shorter form rather than overrun — which also means a long city name added
+ * shorter form rather than overrun, which also means a long city name added
  * later cannot silently break its own snippet.
  */
 const TITLE_MAX = 60;
@@ -232,29 +251,28 @@ export function metaFor(
    */
   override: { title?: string; description?: string } = {}
 ) {
-  const withHook = `${place} Websites, SEO, & AI-SEO Built by an Engineer`;
-  const withPhone = `Websites, SEO, and AI-SEO for ${place}. ${META_PROMISE} A free report on where you show up today.`;
+  const withTagline = `${place} Web Design & SEO. ${TAGLINE}`;
+  const full = `Need more business in ${place}? Build website. ${META_WHAT}`;
   return {
     title:
       override.title ??
-      (withHook.length <= TITLE_MAX ? withHook : `${place} Websites, SEO, & AI-SEO`),
+      (withTagline.length <= TITLE_MAX ? withTagline : `${place} Web Design & SEO`),
     description:
       override.description ??
-      (withPhone.length <= DESC_MAX
-        ? withPhone
-        : `Websites, SEO, & AI-SEO for ${place}. ${META_PROMISE}`),
+      (full.length <= DESC_MAX ? full : `${META_HOOK} ${META_WHAT}`),
   };
 }
 
 /** For the industry pages, where the trade is the search term, not the town. */
 export function metaForIndustry(trade: string, titleTrade: string) {
-  const title = `${titleTrade} Websites, SEO, & AI-SEO | Houston TX`;
-  const withPhone = `Websites, SEO, and AI-SEO for Houston area ${trade}. ${META_PROMISE}`;
+  const withTagline = `${titleTrade} Web Design & SEO. ${TAGLINE}`;
+  const full = `Your work sells itself. Your website should too. Websites, SEO, and AI-SEO for Houston area ${trade}. Free report.`;
   return {
-    title,
+    title:
+      withTagline.length <= TITLE_MAX ? withTagline : `${titleTrade} Web Design & SEO | Houston TX`,
     description:
-      withPhone.length <= DESC_MAX
-        ? withPhone
-        : `Websites, SEO, & AI-SEO for Houston area ${trade}. ${META_PROMISE}`,
+      full.length <= DESC_MAX
+        ? full
+        : `Your work sells itself. Your website should too. Websites, SEO, and AI-SEO for Houston ${trade}.`,
   };
 }
