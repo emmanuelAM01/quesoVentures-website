@@ -1,5 +1,7 @@
 // @ts-check
 
+const RESUME_ROLES = "FDE|Founding|GTM|Product";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -18,8 +20,35 @@ const nextConfig = {
     // IndexNow verifies ownership by fetching /{key}.txt. The key lives in an
     // env var rather than a committed file; see app/api/guide/indexnow-key.
     const key = process.env.INDEXNOW_KEY;
-    if (!key || !/^[a-zA-Z0-9-]{8,128}$/.test(key)) return [];
-    return [{ source: `/${key}.txt`, destination: "/api/guide/indexnow-key" }];
+    const resume = {
+      // Emmanuel's resumes, at a readable URL for the forms that want a link
+      // rather than a file. The PDFs live in public/resumes; keep this list in
+      // step with components/AboutResumes.tsx.
+      source: `/emmanuelMendietaResume/:role(${RESUME_ROLES})`,
+      destination: "/resumes/Emmanuel_Mendieta_Resume_:role.pdf",
+    };
+    if (!key || !/^[a-zA-Z0-9-]{8,128}$/.test(key)) return [resume];
+    return [resume, { source: `/${key}.txt`, destination: "/api/guide/indexnow-key" }];
+  },
+  async headers() {
+    return [
+      {
+        // Opens in the browser, saves under the full name instead of "FDE",
+        // and stays out of search results.
+        source: `/emmanuelMendietaResume/:role(${RESUME_ROLES})`,
+        headers: [
+          {
+            key: "Content-Disposition",
+            value: 'inline; filename="Emmanuel_Mendieta_Resume_:role.pdf"',
+          },
+          { key: "X-Robots-Tag", value: "noindex" },
+        ],
+      },
+      {
+        source: "/resumes/:file*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+      },
+    ];
   },
   async redirects() {
     return [

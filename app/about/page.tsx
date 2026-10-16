@@ -6,6 +6,7 @@ import AboutDeck, { type DeckCard } from "components/AboutDeck";
 import AboutChapters, { type Chapter } from "components/AboutChapters";
 import { PAINT } from "components/livery";
 import NicheCtaButton from "components/NicheCtaButton";
+import AboutResumes from "components/AboutResumes";
 import { BUSINESS, breadcrumbSchema } from "components/businessInfo";
 
 const GITHUB = "https://github.com/emmanuelAM01";
@@ -366,6 +367,7 @@ export default function AboutPage() {
           </div>
         </section>
       </main>
+      <AboutResumes />
       <Footer />
     </div>
   );
