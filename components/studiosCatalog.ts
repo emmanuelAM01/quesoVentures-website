@@ -297,7 +297,7 @@ export const PRODUCTS: Product[] = [
     built: false,
     list: 100,
     client: 50,
-    usage: "Up to 5 bank connections. Past that, $10 a month for every 2 more ($5 for Queso clients).",
+    usage: "Up to 15 bank connections. Past that, $10 a month for every 2 more ($5 for Queso clients).",
     accent: "#7692A5",
     demo: "qrs",
     line: "Every account in one place, and what your month really looks like.",

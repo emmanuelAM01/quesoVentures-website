@@ -1,16 +1,37 @@
-import { track } from "@vercel/analytics";
-
 /**
  * Conversion tracking.
  *
- * Pageviews answer "did anyone come". These answer the question that actually
- * matters here: did they try to reach me, and from where on the page.
+ * Pageviews answer "did anyone come" (Vercel Web Analytics, still on in the
+ * layout). These answer the question that actually matters here: did they try
+ * to reach me, and from where on the page.
  *
- * Pro allows two properties per custom event, so these deliberately carry one.
- * The page itself does not need to be passed — Vercel records `route` and
- * `requestPath` as dimensions automatically, so you can already break any of
- * these down by page in the dashboard.
+ * They go to our own /api/track, which relays them to the portal's
+ * website_events, so they sit in God Mode → Queso beside every client site's
+ * taps instead of in Vercel's dashboard. Each carries where on the page it
+ * happened and which page.
  */
+
+/** Fire and forget. sendBeacon survives the page unloading, which a tap on a phone link usually does. */
+function send(event_type: string, location: string) {
+  if (typeof window === "undefined") return;
+  try {
+    const body = JSON.stringify({
+      event_type,
+      location,
+      page: window.location.pathname,
+      referrer: document.referrer || null,
+    });
+    if (navigator.sendBeacon?.("/api/track", new Blob([body], { type: "application/json" }))) return;
+    void fetch("/api/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body,
+      keepalive: true,
+    }).catch(() => {});
+  } catch {
+    // Tracking never breaks the page.
+  }
+}
 
 /**
  * Where on the page the action happened. Keep this list short and stable.
@@ -49,15 +70,15 @@ export type Placement =
  * read `cta_click` and `contact_submit` as the real conversion path.
  */
 export function trackCall(from: Placement) {
-  track("call_click", { from });
+  send("call_tap", from);
 }
 
 /** Someone opened the contact form from a call-to-action button. */
 export function trackCtaClick(from: Placement) {
-  track("cta_click", { from });
+  send("cta_click", from);
 }
 
 /** Someone actually submitted the form. */
 export function trackContactSubmit(status: "success" | "error") {
-  track("contact_submit", { status });
+  send("contact_submit", status);
 }

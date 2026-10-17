@@ -94,6 +94,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     },
     {
+      // The data under it changes daily, so the page's own file date says
+      // nothing about freshness. Weekly is what Google should expect.
+      url: `${BASE}/report-card`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    },
+    {
       url: `${BASE}/privacy`,
       lastModified: sourceDate("/privacy"),
       changeFrequency: "yearly" as const,
