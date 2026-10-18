@@ -23,7 +23,8 @@ import { productByKey } from "components/catalog";
  * that happens before paint, so a line never shows a frame early.
  */
 
-type Order = { shop: string; problem: string; tool: string; runs: string };
+/** `result` is the ticket's total: what changed for that shop, in their terms. */
+type Order = { shop: string; problem: string; tool: string; runs: string; result: string };
 
 const ORDERS: Order[] = [
   {
@@ -31,24 +32,28 @@ const ORDERS: Order[] = [
     problem: "Missed calls while on a roof",
     tool: "frontdesk",
     runs: "Answers every call",
+    result: "No more missed jobs",
   },
   {
     shop: "Glazed Donut Co",
     problem: "Regulars stopped coming back",
     tool: "rewards",
     runs: "A punch card on their phone",
+    result: "Regulars back in the door",
   },
   {
     shop: "Westside Auto",
     problem: "Can't keep track of business vs personal expenses",
     tool: "revenue",
     runs: "Real numbers and true organization",
+    result: "Clean books at tax time",
   },
   {
     shop: "Big Tex Wraps",
     problem: "Quoting by text all night",
     tool: "quotes",
     runs: "Prices right on the site",
+    result: "Evenings back",
   },
 ];
 
@@ -66,10 +71,11 @@ function Ticket({ index, printed, paperRef }: { index: number; printed: number; 
   const o = ORDERS[index];
   const tool = productByKey(o.tool)!;
   const lines = [
-    { k: "We talk", v: `“${o.problem}”` },
-    { k: "I build it", v: tool.name, accent: tool.accent },
-    { k: "It runs", v: o.runs },
-    { k: "We check in", v: "Every month, in plain words" },
+    // Each row reads on its own: a plain label, then the answer.
+    { k: "The problem", v: `“${o.problem}”` },
+    { k: "What I built", v: tool.name, accent: tool.accent },
+    { k: "What it does", v: o.runs },
+    { k: "Every month", v: "I check in with their numbers" },
   ];
   const show = (i: number) => ({ opacity: printed > i ? 1 : 0, transition: "opacity 250ms ease" });
 
@@ -91,7 +97,11 @@ function Ticket({ index, printed, paperRef }: { index: number; printed: number; 
       <ul className="space-y-3.5">
         {lines.map((l, i) => (
           <li key={l.k} data-line={i + 1} style={show(i + 1)} className="flex items-baseline gap-2">
-            <span className="shrink-0 text-[15px] font-medium">{l.k}</span>
+            <span className="shrink-0 text-[15px] font-medium">
+              {l.k}
+              {/* The dotted leader is only drawn; copied text and screen readers get a colon. */}
+              <span className="sr-only">: </span>
+            </span>
             <span aria-hidden className="mb-1 min-w-4 flex-1 border-b border-dotted border-[#1B1F27]/35" />
             <span className="text-right text-[15px] font-light" style={l.accent ? { color: l.accent, fontWeight: 500 } : undefined}>
               {l.v}
@@ -103,8 +113,10 @@ function Ticket({ index, printed, paperRef }: { index: number; printed: number; 
       <div className="my-5 border-t border-dashed border-[#1B1F27]/30" />
 
       <div data-line={5} style={show(5)} className="flex items-baseline justify-between">
-        <span className="text-base font-semibold uppercase tracking-[0.2em]">Total</span>
-        <span className="text-lg font-light">One less headache</span>
+        <span className="text-base font-semibold uppercase tracking-[0.2em]">
+          Result<span className="sr-only">: </span>
+        </span>
+        <span className="text-right text-lg font-light">{o.result}</span>
       </div>
       <p data-line={6} style={show(6)} className="mt-6 text-center text-sm text-[#1B1F27]/60">
         Thank you, come again.
