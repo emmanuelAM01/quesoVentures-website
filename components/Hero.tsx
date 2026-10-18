@@ -3,8 +3,8 @@ import SearchDemo from "./SearchDemo";
 import { SITE_COPY, type SiteCopy } from "./siteCopy";
 
 /**
- * The homepage hero: copy on the left, the search demo on the right, over the
- * blob field.
+ * The Website's hero (it was the homepage's): copy on the left, the search
+ * demo on the right, over the blob field. The one tool you can try on the spot.
  *
  * The demo had a spell below the fold in its own band and it was the wrong
  * call. It is the only thing on the page that shows rather than tells, and a

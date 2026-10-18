@@ -6,6 +6,7 @@ import Header from "components/Header";
 import AboutModal from "components/AboutModal";
 import ContactModal from "components/ContactModal";
 import ConsoleEasterEgg from "components/ConsoleEasterEgg";
+import GetStartedPanel from "components/GetStarted";
 
 import "styles/globals.css";
 
@@ -16,16 +17,16 @@ export const metadata: Metadata = {
   // by every page that doesn't set its own, which quietly tells Google those
   // pages are all duplicates of the homepage. Each page declares its own.
 
-  title: "Houston Web Design | Need More Business? Start Here",
-  description: "Need more business? Start with a website. I build it, put you on Google, Maps, and ChatGPT, and keep it working. Houston based. Free report.",
+  title: "Queso Ventures | Software for Small Businesses, Built in Houston",
+  description: "Websites and tools that bring customers in, bring them back, and straighten out the busywork. Built by talking to owners, one shop at a time.",
   icons: {
     icon: "/favicon.ico",
     apple: "/logo-square.png",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Houston Web Design | Need More Business? Start Here",
-    description: "Need more business? Start with a website. I build it, put you on Google, Maps, and ChatGPT, and keep it working. Houston based. Free report.",
+    title: "Queso Ventures | Software for Small Businesses, Built in Houston",
+    description: "Websites and tools that bring customers in, bring them back, and straighten out the busywork. Built by talking to owners, one shop at a time.",
     images: ["/logo.png"],
   },
 };
@@ -55,8 +56,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             already moved. One instance above the router makes the bar a fixed
             piece of furniture the pages move underneath.
 
-            Two routes opt out inside the component: /studios brings its own
-            chrome and /foundCode uses SimpleHeader.
+            One route opts out inside the component: /foundCode uses
+            SimpleHeader.
           */}
           {/*
             The site ground, behind the bar as well as the page.
@@ -73,6 +74,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
           <AboutModal />
           <ContactModal />
+          {/* The one Get Started panel; every Get it button opens it. */}
+          <GetStartedPanel />
           <ConsoleEasterEgg />
         </ThemeProvider>
         {/*

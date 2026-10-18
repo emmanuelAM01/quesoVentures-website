@@ -68,14 +68,14 @@ export default function HomeHero({
         <div
           className={
             split
-              ? "mx-auto grid w-full max-w-6xl items-center gap-14 lg:grid-cols-2 lg:gap-10"
+              ? "mx-auto grid w-full max-w-6xl grid-cols-[minmax(0,1fr)] items-center gap-14 lg:grid-cols-2 lg:gap-10"
               : "mx-auto max-w-3xl text-center"
           }
         >
           <div>
             <h1
               style={image ? OVER_PHOTO : undefined}
-              className={`font-sans tracking-tight text-balance text-white ${
+              className={`font-sans font-light leading-[1.02] tracking-tight text-balance text-white ${
                 split
                   ? "text-4xl sm:text-5xl lg:text-6xl"
                   : "text-4xl sm:text-6xl lg:text-7xl"

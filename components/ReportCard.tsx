@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import LavaLamp from "components/LavaLamp";
+import { formatGrowth } from "components/formatGrowth";
 import { PAINT, houseGradient } from "components/livery";
 import type { ReportCard, ReportFigure, ReportGroup, ReportMetric, ReportPoint } from "lib/reportCard";
 
@@ -17,7 +18,8 @@ import type { ReportCard, ReportFigure, ReportGroup, ReportMetric, ReportPoint }
  * the calendar year, January to December, this month lit. It explains nothing.
  * Every figure is Google's own record for real clients (the portal decides
  * which figures exist: packages/metrics/src/report-card-math.ts in the portal
- * repo). The one fine print kept is "Projected" on the dashed months, because
+ * repo). The one fine print kept is "Projected" on the dashed months (every
+ * month after this one; this month and earlier are always solid), because
  * a projection passed off as a result is the one thing that would make the
  * whole page a lie, and "All clients" on a card a trade borrows.
  */
@@ -31,16 +33,6 @@ const LAYERS: { key: ReportMetric; label: string; color: string }[] = [
 
 const UNDERBELLIES_NOTE =
   "If you have heard me say “underbellies,” you know why this is here. If not: these are the businesses tech forgot about. Nobody builds for them. I do.";
-
-/**
- * Always the percent increase, never a multiple: 2.2x is +120%. People read
- * "2x" and "+100%" as two different numbers. The portal's admin writes it the
- * same way.
- */
-export function formatGrowth(g: number): string {
-  const pct = Math.round((g - 1) * 100);
-  return pct >= 0 ? `+${pct.toLocaleString("en-US")}%` : `${pct.toLocaleString("en-US")}%`;
-}
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const monthShort = (p: number) => (MONTHS[p - 1] ?? "").slice(0, 3);
@@ -416,7 +408,8 @@ function MetricCard({
         {formatGrowth(value)}
       </span>
       <span className="mt-2 sm:mt-3 block text-xs sm:text-sm leading-snug text-white/50">
-        {figure.estimated ? "Projected" : figure.fallback ? "All clients" : "Since starting with Queso"}
+        {/* The card is this month, and this month is never called projected. */}
+        {figure.fallback ? "All clients" : "Since starting with Queso"}
       </span>
     </button>
   );
@@ -515,12 +508,15 @@ function Chart({
             </span>
           ))}
         </div>
+        {/* Only while there are months still ahead: in December there are none. */}
+        {lines.some((l) => l.pts.some((p) => p.projected)) && (
         <span className="inline-flex items-center gap-2 text-sm text-white/55">
           <svg width="20" height="4" aria-hidden>
             <line x1="1" x2="19" y1="2" y2="2" stroke="white" strokeOpacity="0.6" strokeWidth="2" strokeDasharray="2 4" strokeLinecap="round" />
           </svg>
           Projected
         </span>
+        )}
       </div>
 
       <div

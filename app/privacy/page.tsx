@@ -99,7 +99,7 @@ export default function PrivacyPolicyPage() {
         </ul>
       </section>
 
-      {/* Linked from /studios/qrs, and what Plaid reviews. Keep it true to the code. */}
+      {/* Linked from /tools/queso-revenue-system, and what Plaid reviews. Keep it true to the code. */}
       <section id="qrs" className="scroll-mt-28 space-y-4">
         <h2>4. Queso Revenue System (QRS)</h2>
         <p>

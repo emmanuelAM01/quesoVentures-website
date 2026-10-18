@@ -83,7 +83,8 @@ export function useBusinessSearch({
 
   // Live lookup, through the proxy so the API key stays on the server.
   useEffect(() => {
-    if (!live || chosen || query.trim().length < 3) {
+    // A committed name is an answer; a lookup still in flight must not reopen the list.
+    if (!live || chosen || entered || query.trim().length < 3) {
       setSuggestions([]);
       return;
     }
@@ -103,7 +104,7 @@ export function useBusinessSearch({
       clearTimeout(t);
       ctrl.abort();
     };
-  }, [query, live, chosen]);
+  }, [query, live, chosen, entered]);
 
   /**
    * Focus after the input exists, not at the click.

@@ -39,8 +39,7 @@ export const metadata: Metadata = {
 
 /*
   The business itself is not repeated here. LOCAL_BUSINESS_SCHEMA is emitted in
-  full on the home, services, contact and every city and industry page, all
-  under the same @id, so this page points at it rather than restating it.
+  full on the home, the contact page and the Report Card, all under the same @id, so this page points at it rather than restating it.
 */
 const jsonLd = {
   "@context": "https://schema.org",
@@ -118,6 +117,8 @@ const what: DeckCard[] = [
     icon: "browser",
     title: "How I got this ball rolling",
     body: "A site that brings in new business and keeps them coming back.",
+    href: "/tools/website",
+    cta: "See the website",
   },
   {
     mark: "Overqualified",
@@ -136,8 +137,8 @@ const what: DeckCard[] = [
     icon: "tools",
     title: "The real product",
     body: "Software that gets people calling, gets them walking back in, and ends the napkin math. Turn it on and it runs.",
-    href: "/studios",
-    cta: "See Queso Studios",
+    href: "/tools",
+    cta: "See every tool",
   },
 ];
 

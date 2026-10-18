@@ -6,21 +6,22 @@ import { HiSparkles } from "react-icons/hi2";
 import { PAINT, houseGradient } from "./livery";
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
-import ToolCarousel from "./ToolCarousel";
+import TuneLoop from "./TuneLoop";
 import { useBusinessSearch } from "./useBusinessSearch";
 import { SITE_COPY, type SiteCopy } from "./siteCopy";
 
 /**
- * Two halves: where you rank, and what runs the shop afterwards.
+ * Two halves: where you rank, and the work that keeps you there.
  *
  * This replaced three icon cards. The icons were decoration — a globe next to
  * the words "they find you" tells a reader nothing the words did not — and the
  * argument the page is making is visual. So the left card shows their own
  * business at number one, using their real name off Google, and the right card
- * shows the six tools nobody could picture from the phrase "custom tools".
+ * shows the work after launch (check, change, watch) that nobody could
+ * picture from the phrase "SEO".
  *
  * Both halves are live. The left one is the same lookup as the hero and lands
- * in the same form; the right one stops on whichever tool someone clicks.
+ * in the same form; the right one jumps to whichever step someone clicks.
  */
 
 /** Fires once when the section scrolls into view. Both cards animate off it. */
@@ -280,8 +281,8 @@ export default function Showcase({
           {/* Full width, unlike the search. A search box has a natural size;
               this is a screen, and a screen boxed small reads as a thumbnail
               of something rather than the thing. */}
-          <div className="flex flex-1 items-center">
-            <ToolCarousel running={on} />
+          <div className="flex flex-1 items-center justify-center">
+            <TuneLoop running={on} />
           </div>
           <Reveal delay={120}>
             <span aria-hidden className="block h-[3px] w-14 rounded-full" style={{ backgroundColor: PAINT.gialloOrion.hex }} />

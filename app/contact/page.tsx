@@ -12,7 +12,7 @@ import {
 
 const TITLE = "Contact Queso Ventures | Houston TX";
 const DESCRIPTION =
-  "Send your business name and I reply within 24 hours. Websites, SEO, and AI-SEO for Houston area businesses, built by a software engineer.";
+  "Send your business name and I reply within 24 hours. Websites and tools for small businesses, built by a software engineer in Houston.";
 
 export const metadata: Metadata = {
   title: TITLE,
