@@ -74,8 +74,47 @@ export async function getReportCard(): Promise<ReportCard | null> {
     });
     if (!res.ok) return null;
     const card = (await res.json()) as ReportCard;
-    return Array.isArray(card.groups) ? card : null;
+    return Array.isArray(card.groups) ? onTheCalendar(card) : null;
   } catch {
     return null;
   }
+}
+
+/**
+ * Solid and dashed by the calendar, and nothing else.
+ *
+ * Every month up to and including this one is solid and never called
+ * projected; every month after it is dashed. A year already over (early
+ * January, before the new one has data) is solid to December. The card's
+ * number is the end of the solid line.
+ *
+ * The portal applies the same rule (applyCalendar in its report-card-math);
+ * it runs here too so the page holds to it whatever the portal sends.
+ */
+function onTheCalendar(card: ReportCard, today = new Date()): ReportCard {
+  const current = card.year < today.getUTCFullYear() ? 12 : today.getUTCMonth() + 1;
+  return {
+    ...card,
+    groups: card.groups.map((g) => ({
+      ...g,
+      metrics: Object.fromEntries(
+        Object.entries(g.metrics).map(([key, f]) => {
+          if (!f) return [key, f];
+          const line = f.line.map((p) => ({ ...p, projected: p.period > current }));
+          const solidEnd = line.filter((p) => !p.projected).at(-1);
+          const end = line.find((p) => p.period === 12);
+          return [
+            key,
+            {
+              ...f,
+              line,
+              estimated: false,
+              growth: solidEnd ? solidEnd.index / 100 : f.growth,
+              projected: end?.projected ? end.index / 100 : null,
+            },
+          ];
+        })
+      ) as ReportGroup["metrics"],
+    })),
+  };
 }

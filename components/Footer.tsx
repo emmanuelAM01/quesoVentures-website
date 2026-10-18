@@ -4,23 +4,21 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { AiOutlineInstagram, AiOutlineYoutube } from "react-icons/ai";
-import { LISTED_FEATURED } from "components/serviceAreas";
-import { CITIES, ALL_NEIGHBORHOODS } from "components/places";
 import { BUSINESS } from "components/businessInfo";
 import { PAINT } from "components/livery";
 
 const CLICKS_TO_TRIGGER = 3;
 
 // The footer is dark in both themes now, so these stop being theme-aware.
-const columnHeading = "text-sm font-semibold text-[#F5F7FA] mb-4";
 const columnLink =
-  "block py-2.5 text-[15px] text-[#8A949E] transition-colors hover:text-[#F5F7FA]";
-/**
- * Neither of these lists is the whole story, and the footer is now the only
- * place they appear. Nobody should scan six towns, miss theirs, and conclude
- * they aren't a fit.
- */
-const columnTail = "block pt-2 text-[15px] italic text-[#6B747D]";
+  "block py-1.5 text-[14px] text-[#8A949E] transition-colors hover:text-[#F5F7FA]";
+const FOOTER_LINKS = [
+  { href: "/tools", label: "Tools" },
+  { href: "/report-card", label: "Report Card" },
+  { href: "/about", label: "About" },
+  { href: "/guide", label: "The Queso Guide" },
+  { href: "/contact", label: "Contact" },
+];
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -65,114 +63,36 @@ const Footer = () => {
         ))}
       </div>
 
-      <div className="container mx-auto px-4 py-16 sm:py-20">
+      <div className="container mx-auto px-4 py-10">
         <div className="max-w-6xl mx-auto">
-          {/* No oversized phone number here. Every page already ends with a
-              call CTA directly above the footer, and repeating it at 48px read
-              as shouting the same thing twice. */}
           {/*
-            Identity on the left, navigation on the right, and nothing else in
-            either.
-
-            The old shape had a column called "Get in touch" carrying a phone
-            number, an email, a locality, two legal links and the social icons —
-            five unrelated kinds of thing stacked to fill a column. That is why
-            a line reading "Northeast Houston, TX" landed between an email
-            address and a privacy policy and meant nothing. There are four
-            columns again, but each one now answers a single question: what else
-            is here, who is this for, where do you work, how do I reach you.
-            Legal and social stay out of all four, on their own bar below.
+            Two lines: who this is, and where else to go. The fourteen tools
+            used to be listed here too, under a second "Tools" beside the first;
+            every tool is one click away on /tools and on the home page, so the
+            footer only needs the door. The email moved down to the bottom
+            bar, beside the other ways to reach the business.
           */}
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,20rem),1fr] lg:gap-16">
-            <div>
-              <Link href="/" className="-my-1.5 inline-flex items-center gap-2.5 py-1.5">
-                <Image
-                  src="/logo.png"
-                  alt=""
-                  width={28}
-                  height={28}
-                  className="object-contain"
-                />
-                <span className="text-lg font-medium text-[#F5F7FA]">
-                  Queso Ventures
-                </span>
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-5">
+              <Link href="/" className="-my-1.5 inline-flex shrink-0 items-center gap-2.5 py-1.5">
+                <Image src="/logo.png" alt="" width={26} height={26} className="object-contain" />
+                <span className="text-lg font-medium text-[#F5F7FA]">Queso Ventures</span>
               </Link>
-
-              <p className="mt-5 max-w-xs text-[15px] font-light leading-relaxed text-[#8A949E]">
-                Websites, SEO, and AI-SEO for Houston area businesses, built by
-                a software engineer. Based in {BUSINESS.addressLine}.
+              <p className="max-w-md text-[14px] font-light leading-relaxed text-[#8A949E]">
+                Software for small businesses, built in Houston.
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-[repeat(3,minmax(0,1fr))_auto]">
-              <div>
-                <p className={columnHeading}>Company</p>
-                <Link href="/services" className={columnLink}>
-                  Services
+            <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-1">
+              {FOOTER_LINKS.map((l) => (
+                <Link key={l.href} href={l.href} className={columnLink}>
+                  {l.label}
                 </Link>
-                <Link href="/about" className={columnLink}>
-                  About
-                </Link>
-                <Link href="/studios" className={columnLink}>
-                  Studios
-                </Link>
-                <Link href="/guide" className={columnLink}>
-                  The Queso Guide
-                </Link>
-                <Link href="/contact" className={columnLink}>
-                  Contact
-                </Link>
-              </div>
-
-              <div>
-                <p className={columnHeading}>Who I help</p>
-                {LISTED_FEATURED.map((industry) => (
-                  <Link key={industry.slug} href={industry.slug} className={columnLink}>
-                    {industry.label}
-                  </Link>
-                ))}
-                <span className={columnTail}>and plenty more</span>
-              </div>
-
-              <div>
-                <p className={columnHeading}>Areas</p>
-                {CITIES.map((city) => (
-                  <Link key={city.slug} href={city.slug} className={columnLink}>
-                    All of {city.name}
-                  </Link>
-                ))}
-                {ALL_NEIGHBORHOODS.map((area) => (
-                  <Link key={area.slug} href={area.slug} className={columnLink}>
-                    {area.name}
-                  </Link>
-                ))}
-                <span className={columnTail}>and wherever you are</span>
-              </div>
-
-              {/*
-                The number gets a label now.
-
-                Loose in the identity block it read as one more fact about the
-                business, sitting between an address and an email. Headed
-                "Support" it answers a question instead: someone already working
-                with me, or already sold, knows this is the line to use. That is
-                also the only place a phone number belongs on this site — the
-                hero and the navbar are for people who have not decided yet, and
-                every unqualified call so far has been spam.
-              */}
-              <div>
-                <p className={columnHeading}>Support</p>
-                <a
-                  href={BUSINESS.emailHref}
-                  className="block whitespace-nowrap py-2.5 text-[13px] text-[#8A949E] transition-colors hover:text-[#F5F7FA] sm:text-[15px]"
-                >
-                  {BUSINESS.email}
-                </a>
-              </div>
-            </div>
+              ))}
+            </nav>
           </div>
 
-          <div className="relative mt-16 flex flex-col items-center gap-6 border-t border-white/10 pt-8 sm:flex-row sm:justify-between">
+          <div className="relative mt-8 flex flex-col items-center gap-3 border-t border-white/10 pt-5 sm:flex-row sm:justify-between">
             <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[14px] text-[#6B747D]">
               <p
                 onClick={onCopyrightClick}
@@ -188,7 +108,10 @@ const Footer = () => {
               </Link>
             </div>
 
-            <div className="flex items-center gap-5">
+            <div className="flex flex-wrap items-center justify-center gap-5">
+              <a href={BUSINESS.emailHref} className="py-2 text-[14px] text-[#8A949E] transition-colors hover:text-[#F5F7FA]">
+                {BUSINESS.email}
+              </a>
               <a
                 href={BUSINESS.instagram}
                 target="_blank"

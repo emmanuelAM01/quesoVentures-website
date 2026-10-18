@@ -40,10 +40,10 @@ export default function Pricing({
                 style={{ backgroundImage: houseGradient() }}
               />
               <p className="mt-10 flex items-baseline gap-4 text-white">
-                <span className="text-[6.5rem] font-extralight leading-[0.85] tracking-tighter tabular-nums sm:text-[8rem] xl:text-[10rem]">
+                <span className="text-[5.25rem] font-extralight leading-[0.85] tracking-tighter tabular-nums min-[400px]:text-[6.5rem] sm:text-[8rem] xl:text-[10rem]">
                   {copy.amount}
                 </span>
-                <span className="text-xl font-light text-white/55">{copy.period}</span>
+                <span className="whitespace-nowrap text-xl font-light text-white/55">{copy.period}</span>
               </p>
               <div className="mt-12">
                 <NicheCtaButton

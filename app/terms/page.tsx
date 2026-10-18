@@ -4,14 +4,14 @@ import { LegalPage } from "components/legal/LegalPage";
 export const metadata: Metadata = {
   title: "Terms & Conditions | Queso Ventures",
   description:
-    "Terms of use for Queso Ventures LLC's website and SMS loyalty/notification programs.",
+    "Terms of use for Queso Ventures LLC's website, the tools sold at checkout, and SMS loyalty/notification programs.",
   alternates: { canonical: "https://www.quesoventures.com/terms" },
   robots: { index: true, follow: true },
 };
 
 export default function TermsPage() {
   return (
-    <LegalPage title="Terms & Conditions" effectiveDate="July 4, 2026">
+    <LegalPage title="Terms & Conditions" effectiveDate="October 17, 2026">
       <section>
         <h2>1. Acceptance of terms</h2>
         <p>
@@ -84,7 +84,18 @@ export default function TermsPage() {
       </section>
 
       <section>
-        <h2>4. Your responsibilities</h2>
+        <h2>4. Tools bought online</h2>
+        <p>
+          Tools you buy at checkout, on quesoventures.com or in your portal,
+          are billed month to month. If a payment does not go through, we
+          retry for about two weeks, then the tool turns off. There are no
+          late fees. To cancel, just send us a message, and the tool stays
+          on until the end of the month you paid for.
+        </p>
+      </section>
+
+      <section>
+        <h2>5. Your responsibilities</h2>
         <p>
           Use the sites and Programs honestly — don&apos;t try to break
           things, spoof someone else&apos;s phone number, or abuse a rewards
@@ -93,7 +104,7 @@ export default function TermsPage() {
       </section>
 
       <section>
-        <h2>5. No guarantees</h2>
+        <h2>6. No guarantees</h2>
         <p>
           Everything here is provided as-is. We do our best to keep sites and
           Programs running smoothly, but we can&apos;t promise zero downtime
@@ -104,12 +115,12 @@ export default function TermsPage() {
       </section>
 
       <section>
-        <h2>6. Governing law</h2>
+        <h2>7. Governing law</h2>
         <p>These Terms are governed by the laws of the State of Texas.</p>
       </section>
 
       <section>
-        <h2>7. Changes to these terms</h2>
+        <h2>8. Changes to these terms</h2>
         <p>
           If we make a meaningful change to these Terms — especially
           anything affecting an SMS Program — we&apos;ll update the date at
@@ -119,7 +130,7 @@ export default function TermsPage() {
       </section>
 
       <section>
-        <h2>8. Contact us</h2>
+        <h2>9. Contact us</h2>
         <p>
           Questions about these Terms or a specific Program? Email{" "}
           <a href="mailto:hello@quesoventures.com">hello@quesoventures.com</a>.

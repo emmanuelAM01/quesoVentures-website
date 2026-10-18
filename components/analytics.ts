@@ -59,7 +59,11 @@ export type Placement =
   | "faq"
   | "price_estimator"
   | "found_flyer"
-  | "guide_membership";
+  | "guide_membership"
+  | "get_started"
+  | "tools"
+  | "tool_page"
+  | "home";
 
 /**
  * Someone tapped a phone number.

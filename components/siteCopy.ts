@@ -83,8 +83,8 @@ export function siteCopy({ city }: PlaceContext = {}) {
           body: `Google, Maps, and the AI chatbots people now ask instead. When someone ${nearYou} looks for what you do, they find you.`,
         },
         {
-          title: "Then mix in some tools to taste.",
-          body: "Loyalty rewards, AI that answers your phone and your website, appointment booking, invoicing, a deep dive on your finances, and more as your business needs them.",
+          title: "Then mix in some tweaks and optimizations to taste.",
+          body: "I check the data, make the changes, and keep watching. Every week, not once.",
         },
       ],
     },
@@ -186,98 +186,3 @@ export function siteCopy({ city }: PlaceContext = {}) {
 export const SITE_COPY = siteCopy();
 
 export type SiteCopy = ReturnType<typeof siteCopy>;
-
-/**
- * Titles and descriptions, by the numbers.
- *
- * Search Console, 2026-05-28 to 2026-08-28: 554 impressions, 9 clicks, 1.6%
- * CTR. The site sat at position 4.3 for "web development" (81 impressions),
- * 1.0 for "seo services", 1.0 for "web design", 2.1 for "local seo" — and took
- * zero clicks from any of them. Ranking was never the problem. The snippet was.
- *
- * Three things changed:
- *
- * 1. The price came out. "$500 a month" in a snippet at position 4 disqualifies
- *    the reader before the page gets to argue for itself. Price filters better
- *    on the page, after they have seen the work.
- * 2. The promise replaced the street names. Nobody searched "Sheldon Road".
- * 3. "Built by an engineer" went in the title. Every competing result on that
- *    page says web design; none of them say who is doing it.
- *
- * The phone number came out afterwards, for the same reason the price did.
- * Every call the number has produced so far has been spam, a number sitting in
- * a search snippet is trivially harvested, and it was spending twenty-two
- * characters that now sell the free preview instead. The number still appears
- * on the page and in the LocalBusiness schema, where it belongs.
- */
-/**
- * Round two, 2026-10-06. Search Console, 2026-07-03 to 2026-10-03: 900
- * impressions, 12 clicks, 1.3%. Position 1.0 for "seo humble", "seo services",
- * and "web design for home services". Zero clicks from any of them. The
- * snippets above were accurate and read like every other result on the page.
- *
- * Plain words only. The person clicking is a shop owner, not an engineer:
- * "productized", "AI-SEO", "software arm" mean nothing to them and read as a
- * pitch. Say what they get: a website, on Google and Maps, kept working.
- *
- * So the descriptions are now an ad, in the house voice the About page
- * already set: say the obvious thing plainly and let the confidence do the
- * selling. The hook is the first line of the Google Business Profile, word for
- * word, so Maps and search sound like the same person.
- *
- * Titles stay plain: the search term and the name. The one hook in a title is
- * the homepage's. A slogan stamped on every page reads like a template, which
- * is how "Sells Like Coffee at 7am" went out and came straight back.
- *
- * None of this is visible on the site. The page copy is the brand and changes
- * slowly; the snippet can be swapped whenever the numbers say so.
- */
-const META_HOOK = "Need more business? Start with a website.";
-const META_WHAT =
-  "I build it, put you on Google and Maps, and keep it working. Free report.";
-
-/**
- * Google truncates titles around 60 characters and descriptions around 155.
- * A cut-off snippet reads as carelessness, so both helpers fall back to a
- * shorter form rather than overrun, which also means a long city name added
- * later cannot silently break its own snippet.
- */
-const TITLE_MAX = 60;
-const DESC_MAX = 155;
-
-export function metaFor(
-  place: string,
-  /**
-   * Override when a page would otherwise collide with another.
-   *
-   * The homepage and the Houston hub both called `metaFor("Houston")` and
-   * came out byte-identical, which is two pages bidding for one query with the
-   * same snippet — Google picks one, and often not the one you wanted.
-   */
-  override: { title?: string; description?: string } = {}
-) {
-  const withName = `${place} Web Design & SEO | Queso Ventures`;
-  const full = `Need more business in ${place}? Start with a website. ${META_WHAT}`;
-  return {
-    title:
-      override.title ??
-      (withName.length <= TITLE_MAX ? withName : `${place} Web Design & SEO`),
-    description:
-      override.description ??
-      (full.length <= DESC_MAX ? full : `${META_HOOK} ${META_WHAT}`),
-  };
-}
-
-/** For the industry pages, where the trade is the search term, not the town. */
-export function metaForIndustry(trade: string, titleTrade: string) {
-  const withName = `${titleTrade} Websites & SEO in Houston | Queso Ventures`;
-  const full = `Your work sells itself. Your website should too. Websites for Houston area ${trade}, built to show up on Google. Free report.`;
-  return {
-    title:
-      withName.length <= TITLE_MAX ? withName : `${titleTrade} Websites & SEO | Houston TX`,
-    description:
-      full.length <= DESC_MAX
-        ? full
-        : `Your work sells itself. Your website should too. Websites for Houston ${trade}.`,
-  };
-}

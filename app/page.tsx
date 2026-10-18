@@ -1,20 +1,11 @@
 import type { Metadata } from "next";
-import Hero from "components/Hero";
-import Showcase from "components/Showcase";
 import Footer from "components/Footer";
 import FreeAudit from "components/FreeAudit";
-import IndustriesMarquee from "components/IndustriesMarquee";
-import Pricing from "components/Pricing";
-import FaqDeck from "components/FaqDeck";
-import Reveal from "components/Reveal";
-import ScrollDivider from "components/ScrollDivider";
-import LightBar from "components/LightBar";
 import KonamiEasterEgg from "components/KonamiEasterEgg";
-import Link from "next/link";
-import ArrowMark, { arrowTone } from "components/ArrowMark";
-import { houseGradient } from "components/livery";
-import { PRICING, MONTHLY_PLAN_OFFER } from "components/pricingCopy";
-import { metaFor } from "components/siteCopy";
+import { CompanyHero, FounderLine, ProofBand } from "components/home/HomeSections";
+import Receipt from "components/home/Receipt";
+import Shelf from "components/home/Shelf";
+import { getReportCard } from "lib/reportCard";
 import {
   BUSINESS,
   LOCAL_BUSINESS_SCHEMA,
@@ -23,11 +14,9 @@ import {
   SAME_AS,
 } from "components/businessInfo";
 
-const { title: TITLE, description: DESCRIPTION } = metaFor("Houston", {
-  title: "Houston Web Design | Need More Business? Start Here",
-  description:
-    "Need more business? Start with a website. I build it, put you on Google, Maps, and ChatGPT, and keep it working. Houston based. Free report.",
-});
+const TITLE = "Queso Ventures | Software for Small Businesses, Built in Houston";
+const DESCRIPTION =
+  "Websites and tools that bring customers in, bring them back, and straighten out the busywork. Built by talking to owners, one shop at a time.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -38,14 +27,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: BUSINESS.url,
     siteName: BUSINESS.name,
-    images: [
-      {
-        url: "/logo.png",
-        width: 512,
-        height: 512,
-        alt: "Queso Ventures logo - websites, SEO, and AI-SEO for local businesses",
-      },
-    ],
+    images: [{ url: "/logo.png", width: 512, height: 512, alt: "Queso Ventures" }],
     locale: "en_US",
     type: "website",
   },
@@ -57,66 +39,14 @@ export const metadata: Metadata = {
   },
 };
 
-/**
- * The FAQ is the highest-value block on the page for AI assistants: discrete
- * question and answer pairs extract cleanly where prose does not. It costs
- * almost no height, because the deck shows one card at a time.
- */
-/**
- * Eight questions, two sentences each, and both limits are load-bearing.
- *
- * These are the highest-value block on the page for AI assistants, because a
- * question and its answer extract cleanly where prose does not. They are also
- * read by a shop owner on a phone between jobs, and the deck shows one card at
- * a time — an answer long enough to scroll inside its own card is an answer
- * nobody finishes.
- *
- * No trade vocabulary. "I improve the content, structure, page speed, and lead
- * capture instead of rebuilding" was four things a customer cannot picture and
- * has no way to want. Say what changes for them, not what I touch.
- */
-const faqItems = [
-  {
-    title: "People visit my site but nobody calls. Why?",
-    content:
-      "Usually the site is slow on a phone, or what to do next isn't obvious. I find which one it is and fix that first.",
-  },
-  {
-    title: "My competitor shows up on Google and I don't. Why?",
-    content:
-      "Google trusts them more: a stronger profile, more reviews, better pages. I build you the same foundation, starting with whatever moves fastest.",
-  },
-  {
-    title: "How do I show up when someone asks ChatGPT or Siri who to call?",
-    content:
-      "Those tools read your website before they recommend anyone. Yours has to say plainly who you are, what you do, and where you do it. That is what I set up.",
-  },
-  {
-    title: "How fast will I see more calls?",
-    content:
-      "Some changes show up within a few weeks. Search results take eight to twelve. I run both at the same time so you are not waiting on one.",
-  },
-  {
-    title: "Do I need a whole new website?",
-    content:
-      "Usually not. If what you have works, I fix what is losing you calls instead of starting over.",
-  },
-  {
-    title: "Who do you work with?",
-    content:
-      "Local businesses whose customers find them by searching. Auto shops, contractors, roofers, cleaners, med spas, bakeries, and plenty more.",
-  },
-  {
-    title: "What does it cost?",
-    content: `${PRICING.monthlyLabel} a month for the website, getting you found on Google and in AI answers, and the tools I build for your business. No setup fee.`,
-  },
-  {
-    title: "How does this start?",
-    content:
-      "Send me your business name. I look at where you show up today and get in touch with what I found. Free either way.",
-  },
-];
+// The proof band reads the Report Card, which is cached for an hour.
+export const revalidate = 3600;
 
+/*
+  The company, and the business behind it. The website's own Service, offers
+  and questions moved to /tools/website with the rest of what used to be this
+  page; each tool carries its own on its page.
+*/
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -126,108 +56,42 @@ const jsonLd = {
       name: BUSINESS.name,
       legalName: BUSINESS.legalName,
       url: BUSINESS.url,
-      logo: {
-        "@type": "ImageObject",
-        url: `${BUSINESS.url}/logo.png`,
-      },
+      logo: { "@type": "ImageObject", url: `${BUSINESS.url}/logo.png` },
       telephone: BUSINESS.phoneE164,
       email: BUSINESS.email,
       address: POSTAL_ADDRESS,
       sameAs: SAME_AS,
       description:
-        "Queso Ventures helps local businesses get more calls from Google, Google Maps, and AI assistants. Headquartered in Northeast Houston, working with clients nationwide.",
+        "Queso Ventures builds software for small businesses: websites that get found on Google, Maps, and AI answers, and tools that answer calls, bring regulars back, and keep the books straight. Based in Houston.",
       areaServed: AREA_SERVED_SCHEMA,
       knowsAbout: [
+        "Small Business Software",
         "Web Design",
         "Search Engine Optimization",
         "Local SEO",
         "Google Business Profile Optimization",
-        "Lead Generation",
+        "Customer Loyalty Programs",
+        "AI Phone Answering",
       ],
     },
     // The canonical description of the business. Same node id everywhere.
     LOCAL_BUSINESS_SCHEMA,
-    {
-      "@type": "Service",
-      "@id": `${BUSINESS.url}/#service-seo`,
-      name: "Websites, SEO & AI-SEO for Northeast Houston Businesses",
-      provider: { "@id": `${BUSINESS.url}/#localbusiness` },
-      serviceType: "Local Search Engine Optimization",
-      description:
-        "Website design, local search, and Google Business Profile work that gets local service businesses found by the customers nearest them, and recommended when someone asks an AI assistant who to call.",
-      areaServed: AREA_SERVED_SCHEMA,
-      // Two offers. The page states the price once in the hero and once in the
-      // pricing block; the machine-readable version below is what lets an AI
-      // assistant answer "how much do they charge" without the page having to
-      // repeat itself a third and fourth time.
-      offers: [
-        MONTHLY_PLAN_OFFER,
-        {
-          "@type": "Offer",
-          name: "Free Website Growth Audit",
-          price: "0",
-          priceCurrency: "USD",
-          description:
-            "A free report on where your business shows up today on Google, on Maps, and in AI answers, plus what is most likely costing you calls.",
-        },
-      ],
-    },
-    {
-      "@type": "FAQPage",
-      "@id": `${BUSINESS.url}/#faq`,
-      mainEntity: faqItems.map((item) => ({
-        "@type": "Question",
-        name: item.title,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: item.content,
-        },
-      })),
-    },
   ],
 };
 
-export default function Page() {
+export default async function Page() {
+  const card = await getReportCard();
   return (
-    <div className="flex flex-col min-h-screen bg-lightBG dark:bg-darkBG">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+    <div className="flex min-h-screen flex-col bg-lightBG dark:bg-darkBG">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <KonamiEasterEgg />
       <main>
-        <Hero />
-        <LightBar />
-        <IndustriesMarquee />
-
-        {/* Credibility. One line: the whole argument is that a software
-            engineer is doing this, not a marketing agency. */}
-        <section className="container mx-auto px-4 py-28 sm:py-36">
-          <Reveal className="mx-auto max-w-4xl text-center">
-            <p className="text-3xl sm:text-4xl md:text-5xl font-light leading-tight tracking-tight text-balance text-lightText dark:text-darkText">
-              Industry-trained software engineer, working for the businesses that rarely get one.
-            </p>
-            <span
-              aria-hidden
-              className="mx-auto mt-9 block h-1 w-24 rounded-full"
-              style={{ backgroundImage: houseGradient() }}
-            />
-            <Link href="/about" className={`${arrowTone("light")} mt-10`}>
-              <ArrowMark label="Meet the founder" />
-            </Link>
-          </Reveal>
-        </section>
-
-        <Showcase />
-        <ScrollDivider />
-        <Pricing />
-        <FaqDeck items={faqItems} />
-        <FreeAudit
-          image={{
-            src: "/hero/ctaHero.JPEG",
-            alt: "A trench path running into the treeline at Verdun",
-          }}
-        />
+        <CompanyHero />
+        <Receipt />
+        <Shelf />
+        <ProofBand card={card} />
+        <FounderLine />
+        <FreeAudit image={{ src: "/hero/ctaHero.JPEG", alt: "A trench path running into the treeline at Verdun" }} />
       </main>
       <Footer />
     </div>

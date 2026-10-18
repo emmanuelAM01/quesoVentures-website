@@ -787,7 +787,96 @@ function Forms({ on }: { on: boolean }) {
   );
 }
 
+/**
+ * The website: someone searches for the trade, and the business comes up
+ * first, with its stars and a call button. The whole point of the product in
+ * one frame.
+ */
+const SITE_MARKS = [1500, 2300] as const;
+
+function Website({ on }: { on: boolean }) {
+  const typed = useTyped("roofer near me", on, 60);
+  const step = useScript(on, SITE_MARKS);
+  return (
+    <div className={BOX}>
+      <div className={`${PANE} flex items-center gap-2.5 rounded-full px-3.5 py-2.5`}>
+        <span aria-hidden className="h-2.5 w-2.5 rounded-full border-2 border-white/40" />
+        <span className="text-[12px] text-white/85">
+          {typed}
+          <span className="ml-px inline-block h-3 w-px translate-y-0.5 bg-white/60" />
+        </span>
+      </div>
+      <div className={`${PANE} flex items-center justify-between px-3.5 py-3 transition-all duration-500`} style={rise(step >= 1)}>
+        <div>
+          <p className="text-[12px] font-semibold text-white">Your Business</p>
+          <p className="mt-0.5 text-[10px] tracking-[0.18em]" style={{ color: YELLOW }}>
+            ★★★★★
+          </p>
+          <p className={`mt-0.5 text-[10px] ${MUTED}`}>Open now · 2.1 mi</p>
+        </div>
+        <span className="rounded-md px-2 py-1 text-[10px] font-bold text-white" style={{ backgroundColor: RED }}>
+          #1
+        </span>
+      </div>
+      <div
+        className={`${PANE} flex items-center gap-2 px-3.5 py-2 transition-all duration-500`}
+        style={rise(step >= 2)}
+      >
+        <FaPhone size={10} style={{ color: GREEN }} />
+        <span className="text-[11px] text-white/80">New call from Google</span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Instant Quotes: they pick what they need, the range shows up, and the
+ * request lands with a name and number.
+ */
+const QUOTE_MARKS = [900, 1800] as const;
+const QUOTE_OPTIONS = ["Sedan", "Truck", "Box truck"] as const;
+
+function Quotes({ on }: { on: boolean }) {
+  const step = useScript(on, QUOTE_MARKS);
+  return (
+    <div className={BOX}>
+      <div className={`${PANE} p-3`}>
+        <p className={`text-[10px] ${MUTED}`}>Full wrap</p>
+        <div className="mt-2 grid grid-cols-3 gap-1.5">
+          {QUOTE_OPTIONS.map((o, i) => (
+            <span
+              key={o}
+              className="rounded-lg border py-1.5 text-center text-[10px] font-medium transition-all duration-300"
+              style={
+                i === 1 && step >= 1
+                  ? { borderColor: YELLOW, color: YELLOW, backgroundColor: `${YELLOW}1F` }
+                  : { borderColor: "rgba(255,255,255,0.16)", color: "rgba(255,255,255,0.55)" }
+              }
+            >
+              {o}
+            </span>
+          ))}
+        </div>
+        <p className="mt-2.5 text-[15px] font-light tabular-nums text-white transition-opacity duration-500" style={{ opacity: step >= 1 ? 1 : 0.25 }}>
+          $2,800 to $3,400
+        </p>
+      </div>
+      <div
+        className={`${PANE} flex items-center gap-2.5 px-3.5 py-2.5 transition-all duration-500`}
+        style={rise(step >= 2)}
+      >
+        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-black" style={{ backgroundColor: GREEN }}>
+          <FaCheck size={10} />
+        </span>
+        <span className="text-[11px] text-white/85">Quote request from Dana, (832) 555 0142</span>
+      </div>
+    </div>
+  );
+}
+
 export type DemoId =
+  | "website"
+  | "quotes"
   | "rewards"
   | "newsletter"
   | "leads"
@@ -803,6 +892,8 @@ export type DemoId =
   | "next";
 
 export const STUDIO_DEMOS: Record<DemoId, (p: { on: boolean }) => JSX.Element> = {
+  website: Website,
+  quotes: Quotes,
   rewards: Rewards,
   newsletter: Newsletter,
   leads: Leads,

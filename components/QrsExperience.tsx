@@ -5,8 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Reveal from "components/Reveal";
 import ArrowMark, { arrowTone } from "components/ArrowMark";
 import { houseGradient } from "components/livery";
-import { PRODUCTS } from "components/studiosCatalog";
-import { WantModal } from "components/StudiosExperience";
+import { productByKey } from "components/catalog";
 import { QrsConnect, QrsMonth, QrsTag } from "components/QrsScenes";
 
 /**
@@ -23,7 +22,7 @@ import { QrsConnect, QrsMonth, QrsTag } from "components/QrsScenes";
  * dark, whatever the visitor's theme, because the drawings are made for it.
  */
 
-const QRS = PRODUCTS.find((p) => p.key === "revenue")!;
+const QRS = productByKey("revenue")!;
 const EASE = "ease-[cubic-bezier(0.22,1,0.36,1)]";
 
 function useInView<T extends Element>(ref: React.RefObject<T | null>): boolean {
@@ -108,61 +107,14 @@ const PROMISES: { title: string; body: string }[] = [
   },
 ];
 
-export default function QrsExperience() {
-  const [want, setWant] = useState(false);
-  const [shown, setShown] = useState(false);
-  useEffect(() => {
-    const r = requestAnimationFrame(() => setShown(true));
-    return () => cancelAnimationFrame(r);
-  }, []);
-
-  useEffect(() => {
-    if (!want) return;
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setWant(false);
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [want]);
-
+/**
+ * The middle of the QRS page, between the tool page's hero and its questions:
+ * how it works in three spreads, then the bank data said plainly. Dark, like
+ * the hero above it, because this is the part a bank login is decided on.
+ */
+export default function QrsStory() {
   return (
-    <div className="min-h-screen overflow-x-clip bg-[#04050A] text-white">
-      <Link
-        href="/studios"
-        className="fixed left-5 top-5 z-50 flex items-center gap-2 rounded-full border border-white/15 bg-[#04050A]/85 px-5 py-2.5 text-sm font-semibold text-white/80 backdrop-blur-md transition-all duration-500 hover:border-white/35 hover:text-white"
-      >
-        <span aria-hidden>←</span> Queso Studios
-      </Link>
-
-      {/* The name */}
-      <section className="relative grid min-h-[100svh] grid-cols-1 lg:grid-cols-2 [&>*]:min-w-0">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{ background: `radial-gradient(ellipse 55% 50% at 75% 50%, ${QRS.accent}22, transparent 70%)` }}
-        />
-        <div
-          className={`relative flex flex-col justify-end px-6 pb-14 pt-32 transition-all duration-[1400ms] sm:px-10 lg:px-16 lg:pb-24 ${EASE} ${
-            shown ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-          }`}
-        >
-          <p className="text-[13px] font-semibold uppercase tracking-[0.28em] text-white/45">Queso Studios</p>
-          <h1 className="mt-5 text-6xl font-extralight leading-[0.95] tracking-tighter text-balance sm:text-7xl lg:text-8xl">
-            Queso Revenue System
-          </h1>
-          <span aria-hidden className="mt-8 block h-1 w-16 rounded-full" style={{ backgroundImage: houseGradient() }} />
-          <p className="mt-8 max-w-md text-xl font-light leading-relaxed text-white/70">{QRS.line}</p>
-          <button type="button" onClick={() => setWant(true)} className={`${arrowTone("dark")} mt-10 self-start`}>
-            <ArrowMark tone="dark" label="Want this?" />
-          </button>
-        </div>
-        <div className="relative hidden lg:block">
-          <Stage Scene={QrsMonth} />
-        </div>
-      </section>
-
+    <div data-dark-section className="overflow-x-clip bg-[#04050A] text-white">
       <Spread title="Connect once" Scene={QrsConnect}>
         <p>
           Sign in to your bank through Plaid, the secure screen a great many finance apps use. From then on every charge on
@@ -211,25 +163,6 @@ export default function QrsExperience() {
           </Reveal>
         </div>
       </section>
-
-      {/* The price, and the way in */}
-      <section className="border-t border-white/[0.06] px-6 py-24 sm:px-10 sm:py-32">
-        <Reveal className="mx-auto max-w-6xl">
-          <p className="text-5xl font-extralight tabular-nums tracking-tighter sm:text-6xl">${QRS.list} / month</p>
-          <p className="mt-3 text-xl font-light text-white/60">${QRS.client} for Queso clients</p>
-          {QRS.usage && <p className="mt-5 max-w-xl text-base font-light leading-relaxed text-white/45">{QRS.usage}</p>}
-          <div className="mt-12 flex flex-wrap items-center gap-x-12 gap-y-6">
-            <button type="button" onClick={() => setWant(true)} className={arrowTone("dark")}>
-              <ArrowMark tone="dark" label="Want this?" />
-            </button>
-            <Link href="/studios" className={arrowTone("dark")}>
-              <ArrowMark tone="dark" label="Everything else in Studios" />
-            </Link>
-          </div>
-        </Reveal>
-      </section>
-
-      {want && <WantModal tool={QRS.name} onClose={() => setWant(false)} />}
     </div>
   );
 }

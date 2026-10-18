@@ -1,9 +1,7 @@
 import fs from "fs";
 import path from "path";
 import type { MetadataRoute } from "next";
-import { FEATURED_INDUSTRIES } from "components/serviceAreas";
-import { CITIES, ALL_NEIGHBORHOODS } from "components/places";
-import { CITY_PAGES, isIndexable } from "components/cityPageData";
+import { PRODUCTS } from "components/catalog";
 
 const BASE = "https://www.quesoventures.com";
 
@@ -25,6 +23,25 @@ function sourceDate(routePath: string): Date {
   }
 }
 
+/**
+ * The tool pages share one template and one data file, so the catalogue's
+ * own date is the honest one for all of them. The Website and the Revenue
+ * System have pages of their own on top of it; whichever moved last wins.
+ */
+function toolDate(slug: string): Date {
+  const data = path.join(process.cwd(), "components", "catalog.ts");
+  const own = path.join(process.cwd(), "app", "tools", slug, "page.tsx");
+  const dates = [data, own].map((f) => {
+    try {
+      return fs.statSync(f).mtime.getTime();
+    } catch {
+      return 0;
+    }
+  });
+  const latest = Math.max(...dates);
+  return latest ? new Date(latest) : new Date();
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
@@ -40,38 +57,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: `${BASE}/services`,
-      lastModified: sourceDate("/services"),
-      changeFrequency: "monthly" as const,
+      url: `${BASE}/tools`,
+      lastModified: toolDate("."),
+      changeFrequency: "weekly" as const,
       priority: 0.9,
     },
-    // Geo pages carry the local intent — highest priority after the homepage.
-    // The metro page is the hub of its cluster, so it outranks the towns under
-    // it rather than sitting in the same undifferentiated list.
-    ...CITIES.map((city) => ({
-      url: `${BASE}${city.slug}`,
-      lastModified: sourceDate(city.slug),
-      changeFrequency: "monthly" as const,
-      priority: 0.9,
-    })),
-    ...ALL_NEIGHBORHOODS.map((area) => ({
-      url: `${BASE}${area.slug}`,
-      lastModified: sourceDate(area.slug),
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    })),
-    ...FEATURED_INDUSTRIES.map((industry) => ({
-      url: `${BASE}${industry.slug}`,
-      lastModified: sourceDate(industry.slug),
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    })),
-    // City pages that carry real copy. A business card landing has no seo
-    // block, so it stays out of the sitemap the same way it stays out of the
-    // index. Empty until cities are registered.
-    ...CITY_PAGES.filter(isIndexable).map((page) => ({
-      url: `${BASE}${page.slug}`,
-      lastModified: sourceDate(page.slug),
+    ...PRODUCTS.map((p) => ({
+      url: `${BASE}/tools/${p.slug}`,
+      lastModified: toolDate(p.slug),
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
@@ -80,18 +73,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: sourceDate("/about"),
       changeFrequency: "monthly" as const,
       priority: 0.7,
-    },
-    {
-      url: `${BASE}/studios`,
-      lastModified: sourceDate("/studios"),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    },
-    {
-      url: `${BASE}/studios/qrs`,
-      lastModified: sourceDate("/studios/qrs"),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
     },
     {
       // The data under it changes daily, so the page's own file date says

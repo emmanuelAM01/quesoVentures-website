@@ -51,16 +51,35 @@ const nextConfig = {
     ];
   },
   async redirects() {
+    /*
+      The rebrand, 2026-10. The site stopped being a local web design shop
+      with a page per suburb and became a software company with a catalogue.
+      Every old URL is permanent to its closest new page, so whatever little
+      equity it had moves and anyone holding the old link lands somewhere real.
+
+      The suburb pages all go to the website, which is the thing they sold.
+      The trade pages go to that trade's own tab on the Report Card, which is
+      the honest answer to "do you work with businesses like mine". Tab slugs
+      are the portal's (GET /api/report-card); check them there before adding.
+    */
+    const suburbs = ["houston", "humble", "kingwood", "atascocita", "channelview", "porter", "summerwood"];
+    const trades = {
+      "seo-for-auto-shops-houston": "mechanics",
+      "seo-for-wrap-shops-houston": "wrap-shops-marketing-and-advertising",
+      "seo-for-med-spas-houston": "medical",
+      "seo-for-contractors-houston": "trades",
+      "website-for-food-trucks-houston": "food-trucks",
+    };
     return [
-      {
-        // Retired 2026-08-31: zero impressions in three months, and to anyone
-        // searching it is Humble. Permanent so the little equity it had moves
-        // rather than evaporating, and so anyone holding the old link lands
-        // somewhere real.
-        source: "/web-design-summerwood-tx",
-        destination: "/web-design-humble-tx",
+      { source: "/studios", destination: "/tools", permanent: true },
+      { source: "/studios/qrs", destination: "/tools/queso-revenue-system", permanent: true },
+      { source: "/services", destination: "/tools/website", permanent: true },
+      ...suburbs.map((s) => ({ source: `/web-design-${s}-tx`, destination: "/tools/website", permanent: true })),
+      ...Object.entries(trades).map(([page, tab]) => ({
+        source: `/${page}`,
+        destination: `/report-card?tab=${tab}`,
         permanent: true,
-      },
+      })),
     ];
   },
 };

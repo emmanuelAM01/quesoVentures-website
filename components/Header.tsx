@@ -3,35 +3,35 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { PiCaretDownBold, PiCaretRightBold } from "react-icons/pi";
+import { useEffect, useRef, useState } from "react";
+import { PiCaretRightBold } from "react-icons/pi";
 import ThemeSwitch from "./ThemeSwitch";
-import { INDUSTRIES, LISTED_FEATURED } from "./serviceAreas";
-import { CITIES, ALL_NEIGHBORHOODS } from "components/places";
-import NicheCtaButton from "./NicheCtaButton";
-import { SITE_COPY } from "./siteCopy";
+import { GetStartedButton } from "./GetStarted";
 import { houseGradient } from "./livery";
 
 /**
- * The bar, on every page but Studios and the stamp landing.
+ * The bar, on every page but the stamp landing.
  *
- * Laid out in the order a prospect needs it: what I do (Services), who for
- * (Who I Help), what I have built (Studios), then the brand (the Guide, and
- * About). The Free Report closes the row, because it is where every one of
- * those is meant to lead.
+ * Three things to look at and one thing to do: the Tools (the catalog, which
+ * is the company), the Report Card (the proof), About (the person), and Get
+ * Started, which opens the catalog as an order list (components/GetStarted).
  *
  * Three columns, so the nav sits at the true centre without measuring
  * anything: the logo holds the left, the actions the right, and the middle
- * column is the nav. It used to slide sideways on trade pages to make room
- * for the page's name; the Who I Help item names the page instead, which says
- * the same thing without the bar moving under the pointer.
+ * column is the nav.
  *
- * On a phone the bar is the logo, the Free Report in the middle, and the menu.
+ * On a phone the bar is the logo, Get Started in the middle, and the menu.
  * The menu is a full screen page of its own: it scrolls by itself, the page
  * underneath is locked while it is open, and it closes on a tap, a link, or
  * Escape.
  */
-const NO_HEADER = ["/studios", "/foundCode"];
+const NO_HEADER = ["/foundCode"];
+
+const NAV = [
+  { href: "/tools", label: "Tools", dot: true },
+  { href: "/report-card", label: "Report Card" },
+  { href: "/about", label: "About" },
+] as const;
 
 const navLinkClass =
   "relative whitespace-nowrap text-[15px] font-medium text-lightText dark:text-darkText px-3.5 py-2 transition-colors " +
@@ -39,32 +39,13 @@ const navLinkClass =
   "after:origin-left after:scale-x-0 after:transition-transform after:duration-300 " +
   "after:bg-lightAccent dark:after:bg-darkAccent hover:after:scale-x-100 focus-visible:after:scale-x-100 focus:outline-none";
 
-const dropdownLinkClass =
-  "block py-[7px] text-[15px] leading-snug text-lightTextMuted transition-colors " +
-  "hover:text-lightText dark:text-darkTextMuted dark:hover:text-darkText";
-
-/** The trade or town a page is about, for the Who I Help label. */
-function selectedPlaceOrTrade(pathname: string | null): string | null {
-  if (!pathname) return null;
-  const trade = INDUSTRIES.find((i) => i.slug && i.slug === pathname);
-  if (trade) return trade.short ?? trade.label;
-  const hood = ALL_NEIGHBORHOODS.find((n) => n.slug === pathname);
-  if (hood) return hood.name;
-  const city = CITIES.find((c) => c.slug === pathname);
-  if (city) return city.name;
-  return null;
-}
-
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [overDark, setOverDark] = useState(false);
-  const [workOpen, setWorkOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [mobileWorkOpen, setMobileWorkOpen] = useState(false);
-  const workRef = useRef<HTMLLIElement>(null);
   const menuRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
-  const selected = useMemo(() => selectedPlaceOrTrade(pathname), [pathname]);
+  const isCurrent = (href: string) => pathname === href || (pathname?.startsWith(`${href}/`) ?? false);
 
   // Light or dark by what is under the bar, and a firmer edge once scrolled.
   useEffect(() => {
@@ -82,18 +63,9 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (workRef.current && !workRef.current.contains(e.target as Node)) setWorkOpen(false);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
   // Every navigation closes whatever was open.
   useEffect(() => {
     setMobileOpen(false);
-    setWorkOpen(false);
   }, [pathname]);
 
   /*
@@ -127,7 +99,6 @@ export default function Header() {
 
   const closeMobile = () => setMobileOpen(false);
 
-  // Pages under them too: /studios/qrs is Studios chrome like /studios.
   if (pathname && NO_HEADER.some((p) => pathname === p || pathname.startsWith(`${p}/`))) return null;
 
   return (
@@ -162,137 +133,35 @@ export default function Header() {
               <span className="hidden whitespace-nowrap sm:inline">Queso Ventures</span>
             </Link>
 
-            {/* Middle: the nav on desktop, the Free Report on a phone. */}
+            {/* Middle: the nav on desktop, Get Started on a phone. */}
             <nav aria-label="Main" className="hidden lg:block">
               <ul className="flex items-center">
-                <li>
-                  <Link href="/services" className={navLinkClass}>
-                    Services
-                  </Link>
-                </li>
-
-                <li ref={workRef} className="relative">
-                  {/* On a trade or town page this item names the page, with its
-                      line drawn, which is how you know which of the pages you
-                      are on without a breadcrumb. */}
-                  <button
-                    type="button"
-                    onClick={() => setWorkOpen((o) => !o)}
-                    className={`${navLinkClass} inline-flex items-center gap-1.5 ${selected ? "after:scale-x-100" : ""}`}
-                    aria-expanded={workOpen}
-                  >
-                    {/* No entrance animation on the label: it left the text on a
-                        compositing layer that painted it grey beside its neighbours. */}
-                    <span>{selected ?? "Who I Help"}</span>
-                    <PiCaretDownBold
-                      aria-hidden
-                      className={`h-3 w-3 transition-transform duration-300 ${workOpen ? "rotate-180" : ""}`}
-                    />
-                  </button>
-
-                  {/* Always in the DOM, toggled with CSS, so every link is in
-                      the server HTML for crawlers. */}
-                  <div
-                    className={`${
-                      workOpen ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0"
-                    } absolute left-1/2 top-full z-50 mt-4 w-[36rem] -translate-x-1/2 rounded-3xl border border-lightBorder bg-panelLight p-7 shadow-2xl shadow-black/10 transition-all duration-300 dark:border-darkBorder dark:bg-panelDark dark:shadow-black/40`}
-                  >
-                    <span
-                      aria-hidden
-                      className="absolute inset-x-7 top-0 h-[2px] rounded-full"
-                      style={{ backgroundImage: houseGradient() }}
-                    />
-                    <div className="grid grid-cols-2 gap-x-10">
-                      <div>
-                        <p className="mb-3 text-sm text-lightTextMuted dark:text-darkTextMuted">By trade</p>
-                        {LISTED_FEATURED.map((item) => (
-                          <Link
-                            key={item.slug}
-                            href={item.slug}
-                            aria-current={item.slug === pathname ? "page" : undefined}
-                            className={`${dropdownLinkClass} ${
-                              item.slug === pathname ? "font-medium text-lightText dark:text-darkText" : ""
-                            }`}
-                          >
-                            {item.label}
-                          </Link>
-                        ))}
-                        <Link href="/services" className={`${dropdownLinkClass} italic`}>
-                          and many more
-                        </Link>
-                      </div>
-                      <div>
-                        <p className="mb-3 text-sm text-lightTextMuted dark:text-darkTextMuted">By area</p>
-                        {CITIES.map((city) => (
-                          <div key={city.slug} className="mb-1 last:mb-0">
-                            <Link
-                              href={city.slug}
-                              aria-current={city.slug === pathname ? "page" : undefined}
-                              className={`${dropdownLinkClass} font-medium text-lightText dark:text-darkText`}
-                            >
-                              All of {city.name}
-                            </Link>
-                            <div className="ml-1 border-l border-lightBorder pl-3 dark:border-darkBorder">
-                              {city.neighborhoods.map((item) => (
-                                <Link
-                                  key={item.slug}
-                                  href={item.slug}
-                                  aria-current={item.slug === pathname ? "page" : undefined}
-                                  className={`${dropdownLinkClass} ${
-                                    item.slug === pathname ? "font-medium text-lightText dark:text-darkText" : ""
-                                  }`}
-                                >
-                                  {item.name}
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <Link href="/studios" className={`${navLinkClass} inline-flex items-center gap-1.5`}>
-                    <span aria-hidden className="h-1.5 w-1.5 rounded-full" style={{ backgroundImage: houseGradient() }} />
-                    Studios
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/guide" className={navLinkClass}>
-                    Guide
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/about" className={navLinkClass}>
-                    About
-                  </Link>
-                </li>
+                {NAV.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      aria-current={isCurrent(item.href) ? "page" : undefined}
+                      className={`${navLinkClass} inline-flex items-center gap-1.5 ${isCurrent(item.href) ? "after:scale-x-100" : ""}`}
+                    >
+                      {"dot" in item && (
+                        <span aria-hidden className="h-1.5 w-1.5 rounded-full" style={{ backgroundImage: houseGradient() }} />
+                      )}
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </nav>
 
-            {/* The Free Report, dead centre on a phone: the one thing the bar
-                is for, one tap away, without the drawer. */}
             <div className="lg:hidden">
-              <NicheCtaButton
-                from="header_mobile"
-                variant="pill"
-                message={SITE_COPY.audit.ctaPrefill}
-                label="Free Report"
-              />
+              <GetStartedButton from="header_mobile" />
             </div>
 
-            {/* Right: theme and the Free Report on desktop, the menu on a phone. */}
+            {/* Right: theme and Get Started on desktop, the menu on a phone. */}
             <div className="flex items-center justify-self-end gap-2">
               <div className="hidden items-center gap-2 lg:flex">
                 <ThemeSwitch />
-                <NicheCtaButton
-                  from="header"
-                  variant="pill"
-                  message={SITE_COPY.audit.ctaPrefill}
-                  label="Free Report"
-                />
+                <GetStartedButton from="header" />
               </div>
               <button
                 type="button"
@@ -341,91 +210,19 @@ export default function Header() {
           className="h-full overflow-y-auto overscroll-contain px-6 pb-12 pt-28"
         >
           <ul className="border-b border-lightText/10 dark:border-darkText/10">
-            <MenuLink href="/services" onClick={closeMobile} shown={mobileOpen} i={0}>
-              Services
-            </MenuLink>
-
-            <li className="border-t border-lightText/10 dark:border-darkText/10" style={stagger(mobileOpen, 1)}>
-              <button
-                type="button"
-                onClick={() => setMobileWorkOpen((o) => !o)}
-                className="flex w-full items-center justify-between py-5 text-left text-3xl font-light tracking-tight text-lightText dark:text-darkText"
-                aria-expanded={mobileWorkOpen}
-              >
-                {selected ?? "Who I Help"}
-                <PiCaretDownBold
-                  aria-hidden
-                  className={`h-5 w-5 transition-transform duration-300 ${mobileWorkOpen ? "rotate-180" : ""}`}
-                />
-              </button>
-              {mobileWorkOpen && (
-                <div className="grid gap-8 pb-6 sm:grid-cols-2">
-                  <div>
-                    <p className="mb-2 text-sm text-lightTextMuted dark:text-darkTextMuted">By trade</p>
-                    {LISTED_FEATURED.map((item) => (
-                      <Link
-                        key={item.slug}
-                        href={item.slug}
-                        onClick={closeMobile}
-                        className="block py-2.5 text-lg font-light text-lightText dark:text-darkText"
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                    <Link href="/services" onClick={closeMobile} className="block py-2.5 text-lg font-light italic text-lightTextMuted dark:text-darkTextMuted">
-                      and many more
-                    </Link>
-                  </div>
-                  <div>
-                    <p className="mb-2 text-sm text-lightTextMuted dark:text-darkTextMuted">By area</p>
-                    {CITIES.map((city) => (
-                      <div key={city.slug}>
-                        <Link href={city.slug} onClick={closeMobile} className="block py-2.5 text-lg text-lightText dark:text-darkText">
-                          All of {city.name}
-                        </Link>
-                        <div className="ml-1 border-l border-lightText/15 pl-4 dark:border-darkText/15">
-                          {city.neighborhoods.map((item) => (
-                            <Link
-                              key={item.slug}
-                              href={item.slug}
-                              onClick={closeMobile}
-                              className="block py-2.5 text-lg font-light text-lightTextMuted dark:text-darkTextMuted"
-                            >
-                              {item.name}
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </li>
-
-            <MenuLink href="/studios" onClick={closeMobile} shown={mobileOpen} i={2}>
-              <span className="inline-flex items-center gap-3">
-                <span aria-hidden className="h-2 w-2 rounded-full" style={{ backgroundImage: houseGradient() }} />
-                Studios
-              </span>
-            </MenuLink>
-            <MenuLink href="/guide" onClick={closeMobile} shown={mobileOpen} i={3}>
-              The Queso Guide
-            </MenuLink>
-            <MenuLink href="/about" onClick={closeMobile} shown={mobileOpen} i={4}>
-              About
-            </MenuLink>
-            <MenuLink href="/contact" onClick={closeMobile} shown={mobileOpen} i={5}>
-              Contact
-            </MenuLink>
+            {[...NAV, { href: "/contact", label: "Contact" }].map((item, i) => (
+              <MenuLink key={item.href} href={item.href} onClick={closeMobile} shown={mobileOpen} i={i}>
+                <span className="inline-flex items-center gap-3">
+                  {"dot" in item && item.dot && (
+                    <span aria-hidden className="h-2 w-2 rounded-full" style={{ backgroundImage: houseGradient() }} />
+                  )}
+                  {item.label}
+                </span>
+              </MenuLink>
+            ))}
           </ul>
 
-          <div className="mt-10 flex items-center justify-between gap-6" style={stagger(mobileOpen, 6)}>
-            <NicheCtaButton
-              from="header_mobile"
-              variant="arrow"
-              message={SITE_COPY.audit.ctaPrefill}
-              label="Get My Free Report"
-            />
+          <div className="mt-10 flex items-center justify-end gap-6" style={stagger(mobileOpen, 5)}>
             <ThemeSwitch />
           </div>
         </nav>
