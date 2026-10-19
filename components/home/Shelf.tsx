@@ -40,7 +40,7 @@ export default function Shelf() {
     <section className="bg-bandLight dark:bg-bandDark">
       <div className="container mx-auto px-4 pt-24 sm:pt-32">
         <div className="mx-auto max-w-6xl">
-          <h2 className="text-5xl font-extralight tracking-tight text-lightText sm:text-6xl dark:text-darkText">Pick what you need.</h2>
+          <h2 className="text-5xl font-extralight tracking-tight text-lightText sm:text-6xl dark:text-darkText">Go Shopping</h2>
           <span aria-hidden className="mt-8 block h-1 w-24 rounded-full" style={{ backgroundImage: houseGradient() }} />
 
           <div className="grid lg:grid-cols-2 lg:gap-16">

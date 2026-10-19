@@ -186,7 +186,7 @@ export default function Receipt() {
             <h2 className="text-5xl font-extralight tracking-tight text-lightText sm:text-6xl dark:text-darkText">Built at the counter.</h2>
             <span aria-hidden className="mt-8 block h-1 w-24 rounded-full" style={{ backgroundImage: houseGradient() }} />
             <p className="mt-8 max-w-md text-xl font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
-              Every tool here started as one owner&apos;s problem, said out loud at their counter.
+              Every tool here started as one owner&apos;s problem.
             </p>
           </div>
 
