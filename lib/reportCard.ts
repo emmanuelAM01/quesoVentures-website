@@ -30,8 +30,6 @@ export interface ReportPoint {
 }
 
 export interface ReportFigure {
-  /** This trade has no figure of its own here; the card shows every client's. */
-  fallback?: boolean;
   /** The card's number: the line at its latest month. 2.4 means 2.4x. */
   growth: number;
   /** That month was set by hand in God Mode: the card says Projected. */
@@ -50,8 +48,6 @@ export interface ReportGroup {
   name: string;
   businesses: number;
   metrics: Partial<Record<ReportMetric, ReportFigure>>;
-  /** No figures of its own yet: shows every client's, and says so. */
-  fallback?: boolean;
 }
 
 export interface ReportCard {
