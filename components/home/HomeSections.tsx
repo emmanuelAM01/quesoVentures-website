@@ -70,8 +70,13 @@ export function ProofBand({ card }: { card: ReportCard | null }) {
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] items-center gap-14 lg:grid-cols-[1fr_1.2fr]">
           <div>
             <h2 className="text-5xl font-extralight leading-[1.02] tracking-tight text-white sm:text-6xl">
-              The Website, in real numbers.
+              Let's talk websites
             </h2>
+            {figures.length > 0 && (
+              <p className="mt-6 text-lg font-light text-white/55">
+                The average Queso Ventures website client growth.
+              </p>
+            )}
             <span aria-hidden className="mt-8 block h-1 w-24 rounded-full" style={{ backgroundImage: houseGradient() }} />
             {figures.length > 0 && (
               <dl className="mt-10 space-y-5">
@@ -85,11 +90,6 @@ export function ProofBand({ card }: { card: ReportCard | null }) {
                   </div>
                 ))}
               </dl>
-            )}
-            {figures.length > 0 && (
-              <p className="mt-6 text-base font-light text-white/55">
-                The average Queso Ventures website client, against where they started{projected ? ", with projections" : ""}.
-              </p>
             )}
             <div className="mt-10 flex flex-wrap gap-x-8 gap-y-4">
               <Link href="/tools/website" className={arrowTone("dark")}>

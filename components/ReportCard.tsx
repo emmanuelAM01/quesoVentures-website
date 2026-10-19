@@ -291,7 +291,7 @@ function Body({ card, initialSlug }: { card: ReportCard | null; initialSlug: str
  */
 function OnAir({ asOf }: { asOf: string }) {
   return (
-    <div className="flex items-center gap-4" title={`Queso Ventures' Report Card updated ${prettyDate(asOf)}`}>
+    <div className="flex items-center gap-4" title={`Queso Ventures' Report Card updated less than 24 hours ago`}>
       <span
         className="on-air relative inline-flex items-center rounded-md border-2 border-[#FF2800] bg-[#2a0503]/70 px-3.5 py-1.5 shadow-[0_0_24px_rgba(255,40,0,0.45),inset_0_0_14px_rgba(255,40,0,0.35)]"
       >

@@ -173,8 +173,8 @@ export function siteCopy({ city }: PlaceContext = {}) {
         where you come up, and the button tells you. It also names all three
         surfaces the report actually covers, which the old pair never did.
       */
-      heading: "Where do you show up?",
-      sub: "A free report on Google, Maps, and what AI tells people about you.",
+      heading: "What's on your mind?",
+      sub: "Want a free look into your business?",
       cta: "Get My Free Report",
       ctaPrefill:
         "I'd like the free report on where my business shows up.",

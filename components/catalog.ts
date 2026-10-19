@@ -48,8 +48,8 @@ export type Outcome = {
 export const OUTCOMES: Outcome[] = [
   {
     key: "found",
-    label: "Get found",
-    line: "A website that brings in new business, on Google, on Maps, and in the AI people ask now.",
+    label: "Get found online",
+    line: "The fundamentals, a website that brings in new business. Optimized for all those new AI searches, so your customers find you in 2026.",
     accent: "#0690FF",
   },
   {
@@ -61,25 +61,25 @@ export const OUTCOMES: Outcome[] = [
   {
     key: "returning",
     label: "Get people walking back in",
-    line: "Give regulars a reason to come back, and tell them what is on the week it is on.",
+    line: "Give regulars a reason to come back, and tell them why to come back",
     accent: "#FEA700",
   },
   {
     key: "leads",
     label: "Find new customers",
-    line: "The people who should be buying from you, found for you every week.",
+    line: "The people who should be buying from you, found for you with the click of a button.",
     accent: "#FF2800",
   },
   {
     key: "organized",
     label: "Get everything straightened out",
-    line: "Every customer, lead, vendor, form and invoice in one place, and chased when it needs chasing.",
+    line: "Every customer, lead, vendor, form and invoice in one place and all the action items, like collections that come with it handled.",
     accent: "#7DC23B",
   },
   {
     key: "numbers",
     label: "Ditch the napkin math",
-    line: "Real prices and real numbers instead of a guess on the back of a receipt.",
+    line: "Real prices and real numbers instead of a guess so you can have a good night's sleep on April 14th.",
     accent: "#E64A37",
   },
 ];
