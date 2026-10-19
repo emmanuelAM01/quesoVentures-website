@@ -21,7 +21,7 @@ import type { ReportCard, ReportFigure, ReportGroup, ReportMetric, ReportPoint }
  * repo). The one fine print kept is "Projected" on the dashed months (every
  * month after this one; this month and earlier are always solid), because
  * a projection passed off as a result is the one thing that would make the
- * whole page a lie, and "All clients" on a card a trade borrows.
+ * whole page a lie.
  */
 
 /** The three metrics, in the one order every tab uses. */
@@ -30,6 +30,9 @@ const LAYERS: { key: ReportMetric; label: string; color: string }[] = [
   { key: "website", label: "Went to the website", color: "#3EA6FF" },
   { key: "reached", label: "Calls and/or directions", color: "#FF4D2E" },
 ];
+
+/** The tools that have a Report Card, in picker order. The first is shown. */
+const REPORT_TOOLS = ["Websites"] as const;
 
 const UNDERBELLIES_NOTE =
   "If you have heard me say “underbellies,” you know why this is here. If not: these are the businesses tech forgot about. Nobody builds for them. I do.";
@@ -41,11 +44,10 @@ const isUnderbellies = (g: ReportGroup) => /underbell/i.test(g.name);
 const tabLabel = (g: ReportGroup) => (g.slug === "all" && g.name === "Average Queso Ventures client" ? "All clients" : g.name);
 /**
  * Whose year the tab shows, as the headline over the numbers. Every client
- * on the all tab, or on a trade that borrows the all-clients figures; the
- * trade's own name otherwise.
+ * on the all tab, the trade's own name on every other.
  */
 const whoseYear = (g: ReportGroup): { lead: string; name: string } =>
-  g.slug === "all" || g.fallback
+  g.slug === "all"
     ? { lead: "The average year with", name: "Queso Ventures" }
     : { lead: "The average year for", name: g.name.replace(/^the\s+/i, "") };
 
@@ -204,8 +206,15 @@ function Body({ card, initialSlug }: { card: ReportCard | null; initialSlug: str
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
             <div>
-              <h1 className="text-5xl sm:text-6xl xl:text-7xl font-light leading-[1.02] tracking-tight text-white">
-                Report Card
+              {/* Which tool's numbers these are. One today; when a second tool
+                  has a Report Card, this is where the picker goes (REPORT_TOOLS). */}
+              <h1 className="text-[2.75rem] min-[400px]:text-5xl sm:text-6xl xl:text-7xl font-light leading-[1.02] tracking-tight text-balance text-white">
+                Report Card{" "}
+                <span aria-hidden className="font-extralight text-white/30">/</span>{" "}
+                <span className="sr-only">for </span>
+                <span className="text-transparent bg-clip-text" style={{ backgroundImage: houseGradient() }}>
+                  {REPORT_TOOLS[0]}
+                </span>
               </h1>
               <span aria-hidden className="mt-6 block h-1 w-24 rounded-full" style={{ backgroundImage: houseGradient() }} />
             </div>
@@ -282,7 +291,7 @@ function Body({ card, initialSlug }: { card: ReportCard | null; initialSlug: str
  */
 function OnAir({ asOf }: { asOf: string }) {
   return (
-    <div className="flex items-center gap-4" title={`Live Google data, updated ${prettyDate(asOf)}`}>
+    <div className="flex items-center gap-4" title={`Queso Ventures' Report Card updated ${prettyDate(asOf)}`}>
       <span
         className="on-air relative inline-flex items-center rounded-md border-2 border-[#FF2800] bg-[#2a0503]/70 px-3.5 py-1.5 shadow-[0_0_24px_rgba(255,40,0,0.45),inset_0_0_14px_rgba(255,40,0,0.35)]"
       >
@@ -290,7 +299,7 @@ function OnAir({ asOf }: { asOf: string }) {
           ON AIR
         </span>
       </span>
-      <span className="text-sm text-white/55 tabular-nums">Updated {prettyDate(asOf)}</span>
+      <span className="text-sm text-white/55 tabular-nums">Updated less than 24 hours ago</span>
       <style>{`
         .on-air { animation: on-air-hum 4.5s ease-in-out infinite; }
         @keyframes on-air-hum {
@@ -409,7 +418,7 @@ function MetricCard({
       </span>
       <span className="mt-2 sm:mt-3 block text-xs sm:text-sm leading-snug text-white/50">
         {/* The card is this month, and this month is never called projected. */}
-        {figure.fallback ? "All clients" : "Since starting with Queso"}
+        Since starting with Queso
       </span>
     </button>
   );
