@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <LegalPage title="Privacy Policy" effectiveDate="October 1, 2026">
+    <LegalPage title="Privacy Policy" effectiveDate="October 31, 2026">
       <section>
         <h2>1. Who we are</h2>
         <p>
@@ -145,8 +145,9 @@ export default function PrivacyPolicyPage() {
 
         <p>
           <strong>How we use it.</strong> Only to run QRS for you: showing your
-          spending and income, applying your tags, tracking your goals, and
-          building the exports you ask for. That&apos;s it.
+          spending and income, applying your tags, suggesting tags for charges
+          it can&apos;t place on its own, tracking your goals, and building the
+          exports you ask for. That&apos;s it.
         </p>
 
         <p>
@@ -167,7 +168,13 @@ export default function PrivacyPolicyPage() {
 
         <p>
           <strong>Who else sees it.</strong> Plaid, to make the connection. Our
-          database and hosting providers, to store and run QRS. Nobody else.
+          database and hosting providers, to store and run QRS. Anthropic, an AI
+          provider QRS uses for Auto-tagging, only while Auto-tagging is on (it
+          is unless you switch it off in QRS Settings): it sees the merchant names, amounts and bank labels of
+          charges QRS can&apos;t tag on its own, plus your business type and
+          the tags you chose before. Never account numbers, balances or the
+          names of people you pay. Anthropic doesn&apos;t train on it. Nobody
+          else.
         </p>
 
         <p>
@@ -228,8 +235,8 @@ export default function PrivacyPolicyPage() {
         <p>
           We don&apos;t sell your information, full stop. We use a small set
           of service providers to actually run things — database/hosting,
-          email delivery, Telnyx for SMS delivery, and Plaid, to connect bank
-          accounts for QRS — and they only ever see what they need to do that
+          email delivery, Telnyx for SMS delivery, Plaid, to connect bank
+          accounts for QRS, and Anthropic, for QRS&apos;s Auto-tagging — and they only ever see what they need to do that
           one job.
         </p>
       </section>

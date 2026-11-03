@@ -140,7 +140,7 @@ export const PRODUCTS: Product[] = [
     line: "A website that brings in new business, kept working every month.",
     points: [
       "A website built for your business, hosted, and sharpened every month.",
-      "Found on Google, on Maps, and in ChatGPT and Siri answers.",
+      "Found on Google, on Maps, and in ChatGPT, Google AI Overviews, Copilot and Siri answers.",
       "A report every month in plain words, with what to do next.",
       "Every form on it goes to your inbox and your phone.",
     ],
@@ -157,7 +157,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         q: "How do I show up when someone asks ChatGPT or Siri who to call?",
-        a: "Those tools read your website before they recommend anyone. Yours has to say plainly who you are, what you do, and where you do it. That is what I set up.",
+        a: "ChatGPT, Google AI Overviews, Copilot and Siri all read your website before they recommend anyone. Yours has to say plainly who you are, what you do, and where you do it. That is what I set up.",
       },
       {
         q: "How fast will I see more calls?",
@@ -219,7 +219,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         q: "Will customers know they are talking to AI?",
-        a: "It sounds like your front desk and answers like you would. If someone wants a person, it takes a message and texts it to you.",
+        a: "If they ask, yes. It never pretends to be a person. It sounds like your front desk and answers like you would, and if someone wants a person, it takes a message and texts it to you.",
       },
     ],
     seoTitle: "AI Phone Answering for Small Businesses | Inbound Calls",
@@ -571,7 +571,7 @@ export const PRODUCTS: Product[] = [
     line: "Every account in one place, and what your month really looks like.",
     points: [
       "Connect your bank accounts and cards once. Every charge comes in on its own.",
-      "Tag a charge business or personal once, and it remembers.",
+      "Tags your charges business or personal on its own. Fix one once, and it remembers.",
       "What came in, what went out, and where it went, month by month.",
       "What is left over in a typical month, and what it takes to hit a goal.",
       "It only reads. Nothing in it can move your money.",
@@ -583,7 +583,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         q: "How do I see where my business money is going?",
-        a: "Connect every account and card in one place. Every charge comes in on its own, and you tag it business or personal once.",
+        a: "Connect every account and card in one place. Every charge comes in on its own, QRS tags most of them for you, and any it can't place, you tag once.",
       },
       {
         q: "Is it safe to connect my bank account?",

@@ -46,7 +46,7 @@ const PLAN = {
   heading: "Your website",
   included: [
     "A website built, hosted, and sharpened every single day.",
-    "Found on Google, Maps, ChatGPT, and Siri.",
+    "Found on Google, Maps, ChatGPT, Google AI Overviews, Copilot, and Siri.",
     "Every form on it goes to your inbox and your phone.",
     "Analysis with clear next steps, not weightless statements.",
   ],
