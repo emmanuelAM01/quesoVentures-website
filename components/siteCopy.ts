@@ -128,7 +128,7 @@ export function siteCopy({ city }: PlaceContext = {}) {
       */
       included: [
         "A website built, hosted, and sharpened every single day.",
-        "SEO and AI-SEO: found on Google, Maps, ChatGPT, and Siri.",
+        "SEO and AI-SEO: found on Google, Maps, ChatGPT, Google AI Overviews, Copilot, and Siri.",
         `Custom tools built for ${where} owners to keep earning dough.`,
         "Analysis with clear next steps, not weightless statements.",
       ],

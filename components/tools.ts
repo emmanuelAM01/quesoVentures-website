@@ -53,12 +53,12 @@ export const TOOLS: Tool[] = [
   */
   {
     id: "chat",
-    name: "AI chat",
+    name: "Website Chat",
     line: "It reads your own policies and answers the same five questions all day, right on your site.",
   },
   {
     id: "frontdesk",
-    name: "AI front desk",
+    name: "Inbound Calls",
     line: "Answers the questions or books slots while your hands are busy running your business.",
   },
   {
