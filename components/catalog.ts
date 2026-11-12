@@ -684,6 +684,19 @@ export const PACKS: Pack[] = [
   },
 ];
 
+/**
+ * The tools that keep a page of their own. Everything else opens in the Get
+ * Started panel, where the tool, its price and the way to get it are one
+ * screen.
+ *
+ * The Website is the one you can try on the spot. The Queso Revenue System
+ * page is what Plaid reviews, and the Customer Loyalty page is what Telnyx
+ * reviews for the text program: neither moves or changes without checking
+ * with them first.
+ */
+export const FULL_PAGE = new Set(["website", "queso-revenue-system", "customer-loyalty"]);
+export const hasFullPage = (p: { slug: string }) => FULL_PAGE.has(p.slug);
+
 export const outcomeBy = (key: OutcomeKey) => OUTCOMES.find((o) => o.key === key)!;
 export const productsFor = (outcome: OutcomeKey) => PRODUCTS.filter((p) => p.outcome === outcome);
 export const packFor = (outcome: OutcomeKey) => PACKS.find((p) => p.outcome === outcome);
@@ -757,6 +770,8 @@ export type Orderable = {
   isWebsite: boolean;
   /** A bundle: what is in it, said as a sentence. */
   contents?: string;
+  /** A tool: the whole product, for the panel to show what you get. */
+  product?: Product;
 };
 
 export function orderable(key: string): Orderable | undefined {
@@ -776,5 +791,5 @@ export function orderable(key: string): Orderable | undefined {
   }
   const p = productByKey(key);
   if (!p) return undefined;
-  return { key: p.key, name: p.name, line: p.line, list: p.list, usage: p.usage, accent: p.accent, buyUrl: p.buyUrl, isWebsite: p.key === "website" };
+  return { key: p.key, name: p.name, line: p.line, list: p.list, usage: p.usage, accent: p.accent, buyUrl: p.buyUrl, isWebsite: p.key === "website", product: p };
 }

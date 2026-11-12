@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import type { MetadataRoute } from "next";
-import { PRODUCTS } from "components/catalog";
+import { PRODUCTS, hasFullPage } from "components/catalog";
 
 const BASE = "https://www.quesoventures.com";
 
@@ -56,13 +56,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.9,
     },
-    {
-      url: `${BASE}/tools`,
-      lastModified: toolDate("."),
-      changeFrequency: "weekly" as const,
-      priority: 0.9,
-    },
-    ...PRODUCTS.map((p) => ({
+    // Only the tools with a page of their own. The rest open in the Get
+    // Started panel on the home page and have no address to list.
+    ...PRODUCTS.filter(hasFullPage).map((p) => ({
       url: `${BASE}/tools/${p.slug}`,
       lastModified: toolDate(p.slug),
       changeFrequency: "monthly" as const,

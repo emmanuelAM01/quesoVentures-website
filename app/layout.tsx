@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   // by every page that doesn't set its own, which quietly tells Google those
   // pages are all duplicates of the homepage. Each page declares its own.
 
-  title: "Queso Ventures | Software for Small Businesses, Built in Houston",
+  title: "Queso Ventures | Software for Small Businesses, Originated from Houston, TX",
   description: "Websites and tools that bring customers in, bring them back, and straighten out the busywork. Built by talking to owners, one shop at a time.",
   icons: {
     icon: "/favicon.ico",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Queso Ventures | Software for Small Businesses, Built in Houston",
+    title: "Queso Ventures | Software for Small Businesses, Originated from Houston, TX",
     description: "Websites and tools that bring customers in, bring them back, and straighten out the busywork. Built by talking to owners, one shop at a time.",
     images: ["/logo.png"],
   },

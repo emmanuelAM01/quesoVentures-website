@@ -45,7 +45,12 @@ export default function ContactModal() {
   return (
     <Modal id="contact-popup" title={modalTitle}>
       <ContactForm
-        prefillMessage={prefillMessage}
+        // Only an opening they are meant to finish ("Here is what slows my
+        // week down: ") goes in the box. A whole sentence written for them
+        // still arrives with the lead, but it is not put in a box marked
+        // optional as if they had typed it.
+        prefillMessage={/:\s*$/.test(prefillMessage) ? prefillMessage : ""}
+        note={/:\s*$/.test(prefillMessage) ? undefined : prefillMessage}
         prefillBusiness={business}
         prefillBusinessName={businessName}
         prefillBusinessAddress={businessAddress}

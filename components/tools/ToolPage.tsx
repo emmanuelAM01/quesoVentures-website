@@ -44,7 +44,7 @@ export function ToolHero({ product }: { product: Product }) {
       <div className="container relative mx-auto px-4 pb-24 pt-14 sm:pb-28 sm:pt-16">
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] items-center gap-16 lg:grid-cols-2">
           <div>
-            <Link href={`/tools#${dept.key}`} className="inline-flex items-center gap-3 text-sm text-white/55 transition-colors hover:text-white">
+            <Link href="/#tools" className="inline-flex items-center gap-3 text-sm text-white/55 transition-colors hover:text-white">
               <span className="tabular-nums">No. {itemNumber(product)}</span>
               <span aria-hidden className="h-[3px] w-5 rounded-full" style={{ backgroundColor: dept.accent }} />
               <span>{dept.label}</span>
@@ -65,7 +65,7 @@ export function ToolHero({ product }: { product: Product }) {
 
             <div className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-4">
               <GetIt orderKey={product.key} from="tool_page" tone="dark" size="lg" label={actionLabel(product, "Get my free report")} />
-              <Link href="/tools" className={arrowTone("dark")}>
+              <Link href="/#tools" className={arrowTone("dark")}>
                 <ArrowMark tone="dark" size="sm" label="Every tool" />
               </Link>
             </div>
@@ -164,7 +164,7 @@ export function GoesWellWith({ product }: { product: Product }) {
               )}
             </div>
           )}
-          <Link href={`/tools#${dept.key}`} className={`${arrowTone("light")} mt-14`}>
+          <Link href="/#tools" className={`${arrowTone("light")} mt-14`}>
             <ArrowMark size="sm" label={`${departmentNumber(dept)} ${dept.label}`} />
           </Link>
         </div>

@@ -13,7 +13,7 @@ const CLICKS_TO_TRIGGER = 3;
 const columnLink =
   "block py-1.5 text-[14px] text-[#8A949E] transition-colors hover:text-[#F5F7FA]";
 const FOOTER_LINKS = [
-  { href: "/tools", label: "Tools" },
+  { href: "/#tools", label: "Tools" },
   { href: "/report-card", label: "Report Card" },
   { href: "/about", label: "About" },
   { href: "/guide", label: "The Queso Guide" },
@@ -79,7 +79,7 @@ const Footer = () => {
                 <span className="text-lg font-medium text-[#F5F7FA]">Queso Ventures</span>
               </Link>
               <p className="max-w-md text-[14px] font-light leading-relaxed text-[#8A949E]">
-                Software for small businesses, built in Houston.
+                Software for small businesses. Originated from Houston, TX.
               </p>
             </div>
 

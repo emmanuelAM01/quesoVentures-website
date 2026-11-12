@@ -143,9 +143,7 @@ export default function BusinessPicker({
   return (
     <div className="flex flex-col gap-1.5">
       <label className={labelClass} htmlFor="business-name">
-        {manual || configured === false
-          ? "Your business name"
-          : "Find your business"}
+        Your business
       </label>
 
       <div ref={boxRef} className="relative">
@@ -161,7 +159,7 @@ export default function BusinessPicker({
           placeholder={
             manual || configured === false
               ? "Snowflake Donuts, or snowflakedonuts.com"
-              : "Start typing your business name"
+              : "Start typing its name"
           }
           value={query}
           onChange={(e) => {
@@ -216,17 +214,19 @@ export default function BusinessPicker({
         )}
       </div>
 
-      {showEscapeHatch && (
-        <button
-          type="button"
-          onClick={() => {
-            setManual(true);
-            setOpen(false);
-          }}
-          className="self-start text-sm text-lightTextMuted underline underline-offset-4 transition-opacity hover:opacity-70 dark:text-darkTextMuted"
-        >
-          Can&apos;t find it? Type it in instead.
-        </button>
+      {/*
+        Says what the list is for, and that it is not a gate. It used to be a
+        link ("Can't find it? Type it in instead.") that read as a second step
+        somebody had to take; typing a name and moving on always worked.
+      */}
+      {placeId ? (
+        <p className="text-sm text-lightTextMuted dark:text-darkTextMuted">Found it on Google.</p>
+      ) : (
+        showEscapeHatch && (
+          <p className="text-sm text-lightTextMuted dark:text-darkTextMuted">
+            Pick it from the list if it shows up. If not, the name is enough.
+          </p>
+        )
       )}
     </div>
   );

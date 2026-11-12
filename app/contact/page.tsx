@@ -10,7 +10,7 @@ import {
   breadcrumbSchema,
 } from "components/businessInfo";
 
-const TITLE = "Contact Queso Ventures | Houston TX";
+const TITLE = "Contact Queso Ventures";
 const DESCRIPTION =
   "Send your business name and I reply within 24 hours. Websites and tools for small businesses, built by a software engineer in Houston.";
 

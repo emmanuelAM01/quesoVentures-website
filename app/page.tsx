@@ -3,18 +3,18 @@ import Footer from "components/Footer";
 import FreeAudit from "components/FreeAudit";
 import KonamiEasterEgg from "components/KonamiEasterEgg";
 import { CompanyHero, FounderLine, ProofBand } from "components/home/HomeSections";
+import ToolDeck from "components/home/ToolDeck";
+import OpenToolFromAddress from "components/home/OpenToolFromAddress";
 import Receipt from "components/home/Receipt";
-import Shelf from "components/home/Shelf";
 import { getReportCard } from "lib/reportCard";
 import {
   BUSINESS,
   LOCAL_BUSINESS_SCHEMA,
-  AREA_SERVED_SCHEMA,
   POSTAL_ADDRESS,
   SAME_AS,
 } from "components/businessInfo";
 
-const TITLE = "Queso Ventures | Software for Small Businesses, Built in Houston";
+const TITLE = "Queso Ventures | Software for Small Businesses, Originated from Houston, TX";
 const DESCRIPTION =
   "Websites and tools that bring customers in, bring them back, and straighten out the busywork. Built by talking to owners, one shop at a time.";
 
@@ -62,8 +62,8 @@ const jsonLd = {
       address: POSTAL_ADDRESS,
       sameAs: SAME_AS,
       description:
-        "Queso Ventures builds software for small businesses: websites that get found on Google, Maps, and AI answers, and tools that answer calls, bring regulars back, and keep the books straight. Based in Houston.",
-      areaServed: AREA_SERVED_SCHEMA,
+        "Queso Ventures builds software for small businesses: websites that get found on Google, Maps, and AI answers, and tools that answer calls, bring regulars back, and keep the books straight. Based in Houston, Texas.",
+      areaServed: { "@type": "Country", name: "United States" },
       knowsAbout: [
         "Small Business Software",
         "Web Design",
@@ -85,10 +85,11 @@ export default async function Page() {
     <div className="flex min-h-screen flex-col bg-lightBG dark:bg-darkBG">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <KonamiEasterEgg />
+      <OpenToolFromAddress />
       <main>
         <CompanyHero />
+        <ToolDeck />
         <Receipt />
-        <Shelf />
         <ProofBand card={card} />
         <FounderLine />
         <FreeAudit image={{ src: "/hero/ctaHero.JPEG", alt: "A trench path running into the treeline at Verdun" }} />

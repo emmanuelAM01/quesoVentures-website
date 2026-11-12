@@ -435,7 +435,7 @@ function Invoicing({ on }: { on: boolean }) {
   );
 }
 
-const ADDRESS = "1420 Kingwood Dr, Kingwood";
+const ADDRESS = "1420 Main St, Suite B";
 
 function Delivery({ on }: { on: boolean }) {
   const typed = useTyped(ADDRESS, on, 38);
@@ -666,8 +666,8 @@ function Newsletter({ on }: { on: boolean }) {
  * matches arriving with a way to reach each one.
  */
 const LEADS = [
-  { name: "Northside Dental Group", why: "New location, Humble", reach: "Email + phone" },
-  { name: "Kingwood HOA", why: "Asked for bids this month", reach: "Email" },
+  { name: "Northside Dental Group", why: "New location nearby", reach: "Email + phone" },
+  { name: "Lakeside HOA", why: "Asked for bids this month", reach: "Email" },
   { name: "Summit Roofing", why: "Hiring 3 techs", reach: "Phone" },
 ] as const;
 const LEAD_MARKS = [500, 950, 1400, 2100] as const;
@@ -676,7 +676,7 @@ function Leads({ on }: { on: boolean }) {
   const step = useScript(on, LEAD_MARKS);
   return (
     <div className={BOX}>
-      <p className={`px-0.5 text-[10px] ${MUTED}`}>Looking for: offices near Kingwood that need cleaning</p>
+      <p className={`px-0.5 text-[10px] ${MUTED}`}>Looking for: offices near you that need cleaning</p>
       <div className="space-y-1.5">
         {LEADS.map((l, i) => (
           <div

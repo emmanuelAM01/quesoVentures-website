@@ -16,11 +16,12 @@ import { houseGradient } from "./livery";
  * is the company), the Report Card (the proof), About (the person), and Get
  * Started, which opens the catalog as an order list (components/GetStarted).
  *
- * Three columns, so the nav sits at the true centre without measuring
- * anything: the logo holds the left, the actions the right, and the middle
- * column is the nav.
+ * Two ends, nothing floating in the middle: the name holds the left, and
+ * everything you can do sits together on the right, the nav leading into Get
+ * Started. It reads left to right the way the page does.
  *
- * On a phone the bar is the logo, Get Started in the middle, and the menu.
+ * On a phone the bar is the name on the left, then Get Started and the menu
+ * together on the right.
  * The menu is a full screen page of its own: it scrolls by itself, the page
  * underneath is locked while it is open, and it closes on a tap, a link, or
  * Escape.
@@ -28,7 +29,7 @@ import { houseGradient } from "./livery";
 const NO_HEADER = ["/foundCode"];
 
 const NAV = [
-  { href: "/tools", label: "Tools", dot: true },
+  { href: "/#tools", label: "Tools", dot: true },
   { href: "/report-card", label: "Report Card" },
   { href: "/about", label: "About" },
 ] as const;
@@ -45,7 +46,12 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const menuRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
-  const isCurrent = (href: string) => pathname === href || (pathname?.startsWith(`${href}/`) ?? false);
+  // Tools is a place on the home page now ("/#tools"); it is still the
+  // current item on the tool pages that remain.
+  const isCurrent = (href: string) => {
+    const base = href === "/#tools" ? "/tools" : href;
+    return pathname === base || (pathname?.startsWith(`${base}/`) ?? false);
+  };
 
   // Light or dark by what is under the bar, and a firmer edge once scrolled.
   useEffect(() => {
@@ -123,45 +129,42 @@ export default function Header() {
             }`}
           />
 
-          <div className="relative grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 sm:px-6">
+          <div className="relative flex h-16 items-center justify-between gap-3 pl-5 pr-3 sm:pl-6 sm:pr-4">
             {/* Left: the logo. */}
             <Link
               href="/"
-              className="flex items-center gap-2 justify-self-start py-3 text-lg font-medium text-lightText dark:text-darkText"
+              className="flex shrink-0 items-center gap-2 py-3 text-lg font-medium text-lightText dark:text-darkText"
             >
               <Image src="/logo.png" alt="Queso Ventures logo" width={26} height={26} className="object-contain" />
-              <span className="hidden whitespace-nowrap sm:inline">Queso Ventures</span>
+              <span className="hidden whitespace-nowrap min-[370px]:inline">Queso Ventures</span>
             </Link>
 
-            {/* Middle: the nav on desktop, Get Started on a phone. */}
-            <nav aria-label="Main" className="hidden lg:block">
-              <ul className="flex items-center">
-                {NAV.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      aria-current={isCurrent(item.href) ? "page" : undefined}
-                      className={`${navLinkClass} inline-flex items-center gap-1.5 ${isCurrent(item.href) ? "after:scale-x-100" : ""}`}
-                    >
-                      {"dot" in item && (
-                        <span aria-hidden className="h-1.5 w-1.5 rounded-full" style={{ backgroundImage: houseGradient() }} />
-                      )}
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            <div className="lg:hidden">
-              <GetStartedButton from="header_mobile" />
-            </div>
-
-            {/* Right: theme and Get Started on desktop, the menu on a phone. */}
-            <div className="flex items-center justify-self-end gap-2">
+            {/* Right: the nav, theme and Get Started on desktop; Get Started and the menu on a phone. */}
+            <div className="flex items-center gap-1.5 lg:gap-2">
+              <nav aria-label="Main" className="hidden lg:mr-2 lg:block">
+                <ul className="flex items-center">
+                  {NAV.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        aria-current={isCurrent(item.href) ? "page" : undefined}
+                        className={`${navLinkClass} inline-flex items-center gap-1.5 ${isCurrent(item.href) ? "after:scale-x-100" : ""}`}
+                      >
+                        {"dot" in item && (
+                          <span aria-hidden className="h-1.5 w-1.5 rounded-full" style={{ backgroundImage: houseGradient() }} />
+                        )}
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
               <div className="hidden items-center gap-2 lg:flex">
                 <ThemeSwitch />
                 <GetStartedButton from="header" />
+              </div>
+              <div className="lg:hidden">
+                <GetStartedButton from="header_mobile" />
               </div>
               <button
                 type="button"

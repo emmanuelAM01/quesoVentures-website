@@ -11,8 +11,8 @@ import { formatGrowth } from "components/formatGrowth";
 import type { ReportCard } from "lib/reportCard";
 
 /**
- * The home, as the company's front page: what this is, how it gets made
- * (Receipt), what is on the shelf (Shelf), proof it works, who is behind it. Each section answers
+ * The home, as the company's front page: what this is, every tool it makes
+ * (ToolDeck), how they get made (Receipt), proof it works, who is behind it. Each section answers
  * one question and hands off to the page that answers it in full, so nothing
  * here is said twice on the site.
  */
@@ -39,7 +39,7 @@ export function CompanyHero() {
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-4">
               <GetIt label="Get Started" from="home" tone="dark" size="lg" />
-              <Link href="/tools" className={arrowTone("dark")}>
+              <Link href="/#tools" className={arrowTone("dark")}>
                 <ArrowMark tone="dark" size="sm" label="Every tool" />
               </Link>
             </div>

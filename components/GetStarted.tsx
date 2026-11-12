@@ -1,12 +1,24 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { PiArrowLeftBold, PiArrowUpRightBold, PiXBold } from "react-icons/pi";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { PiArrowLeftBold, PiArrowRightBold, PiArrowUpRightBold, PiCaretDownBold, PiCaretRightBold, PiXBold } from "react-icons/pi";
+import ProductShot from "components/tools/ProductShot";
 import ContactForm from "components/ContactForm";
-import OutcomeRows from "components/tools/OutcomeRows";
 import { trackCtaClick, type Placement } from "components/analytics";
 import { houseGradient } from "components/livery";
-import { OUTCOMES, orderable, priceLabel, type Orderable } from "components/catalog";
+import {
+  OUTCOMES,
+  hasFullPage,
+  orderable,
+  packCount,
+  packFor,
+  priceLabel,
+  productByKey,
+  productsFor,
+  type Orderable,
+} from "components/catalog";
 
 /**
  * Get Started: the one button in the bar, and the one way anything on the
@@ -25,7 +37,12 @@ import { OUTCOMES, orderable, priceLabel, type Orderable } from "components/cata
  * Under the bar on a desktop, a full screen sheet on a phone.
  */
 
-type View = { kind: "menu" } | { kind: "tool"; key: string };
+/**
+ * Three screens, each with one job. The list: pick a tool. The tool: see it,
+ * and one button. The form: say who you are. `asking` is the form for a
+ * tool; "ask" is the form with no tool, for somebody who is not sure yet.
+ */
+type View = { kind: "menu" } | { kind: "tool"; key: string; asking?: boolean } | { kind: "ask" };
 
 /**
  * A business already named somewhere on the page (the home hero's search).
@@ -99,7 +116,34 @@ export default function GetStartedPanel() {
   }, [open]);
 
   const close = () => setOpen(false);
+
+  // Going to another page closes it, so a link inside the panel lands on the
+  // page rather than under the panel.
+  const pathname = usePathname();
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    setOpen(false);
+  }, [pathname]);
+
+  // Scrolled back to the top whenever what it shows changes.
+  useEffect(() => {
+    panelRef.current?.scrollTo(0, 0);
+  }, [view, open]);
+
   const tool = view.kind === "tool" ? orderable(view.key) : undefined;
+  const asking = view.kind === "tool" && view.asking;
+
+  // One step back, and the button says where that is.
+  const back =
+    view.kind === "menu"
+      ? null
+      : asking && tool
+        ? { label: tool.name, to: { kind: "tool", key: view.key } as View }
+        : { label: "Every tool", to: { kind: "menu" } as View };
 
   return (
     <>
@@ -127,14 +171,14 @@ export default function GetStartedPanel() {
         <span aria-hidden className="absolute inset-x-8 top-0 h-[2px] rounded-full" style={{ backgroundImage: houseGradient() }} />
 
         <div className="flex items-center justify-between px-6 pt-6 sm:px-7">
-          {view.kind === "tool" ? (
+          {back ? (
             <button
               type="button"
-              onClick={() => setView({ kind: "menu" })}
+              onClick={() => setView(back.to)}
               className="inline-flex items-center gap-2 text-sm font-medium text-lightTextMuted transition-colors hover:text-lightText dark:text-darkTextMuted dark:hover:text-darkText"
             >
               <PiArrowLeftBold aria-hidden className="h-3.5 w-3.5" />
-              Every tool
+              {back.label}
             </button>
           ) : (
             <p className="text-2xl font-light tracking-tight">{business ? `What does ${business.name} need?` : "What do you need?"}</p>
@@ -149,8 +193,19 @@ export default function GetStartedPanel() {
           </button>
         </div>
 
-        <div key={view.kind === "tool" ? view.key : "menu"} className="animate-fadeIn px-6 pb-8 pt-4 sm:px-7">
-          {tool ? <ToolStep tool={tool} business={business} /> : <Menu onPick={(key) => setView({ kind: "tool", key })} />}
+        <div
+          key={view.kind === "tool" ? `${view.key}:${asking ? "ask" : "see"}` : view.kind}
+          className="animate-fadeIn px-6 pb-8 pt-4 sm:px-7"
+        >
+          {view.kind === "ask" ? (
+            <AskStep business={business} onClose={close} />
+          ) : tool && asking ? (
+            <AskStep tool={tool} business={business} onClose={close} />
+          ) : tool ? (
+            <ToolStep tool={tool} onAsk={() => setView({ kind: "tool", key: tool.key, asking: true })} onLeave={close} />
+          ) : (
+            <Menu onPick={(key) => setView({ kind: "tool", key })} onAsk={() => setView({ kind: "ask" })} />
+          )}
         </div>
       </div>
     </>
@@ -158,70 +213,212 @@ export default function GetStartedPanel() {
 }
 
 /**
- * The catalog as an order list, one outcome to a row. Each bundle is a
- * single row named for its outcome; it opens to the tools inside, each of
- * which can be picked on its own (see OutcomeRows).
+ * Every tool, as one flat list under what it is for: a name, a price, a tap.
+ * A need with more than one tool ends on its bundle, the same row with the
+ * one at a time total struck beside it.
+ *
+ * It used to be six folded rows named for the needs, each priced as a bundle,
+ * with the tools hidden inside until you opened one. Nobody tapping Get
+ * Started was looking for a row to unfold. This is also the whole catalogue
+ * now; there is no Tools page beside it.
  */
-function Menu({ onPick }: { onPick: (key: string) => void }) {
+function Menu({ onPick, onAsk }: { onPick: (key: string) => void; onAsk: () => void }) {
+  const row = "group flex min-h-[3rem] w-full items-center gap-3 py-2.5 text-left";
+  const name = "min-w-0 flex-1 text-[17px] transition-colors group-hover:text-lightAccent dark:group-hover:text-darkAccent";
+  const caret = (
+    <PiCaretRightBold aria-hidden className="h-3.5 w-3.5 shrink-0 text-lightTextMuted/60 dark:text-darkTextMuted/60" />
+  );
+  const price = (n: number) => (
+    <span className="shrink-0 tabular-nums text-lightTextMuted dark:text-darkTextMuted">
+      <span className="text-[15px]">${n}</span>
+      <span className="text-xs opacity-70"> /mo</span>
+    </span>
+  );
+
   return (
-    <div className="divide-y divide-lightText/10 border-y border-lightText/10 dark:divide-darkText/10 dark:border-darkText/10">
-      {OUTCOMES.map((o) => (
-        <OutcomeRows key={o.key} outcome={o} variant="menu" onTool={onPick} onPack={onPick} />
-      ))}
+    <div className="space-y-7 pt-2">
+      {OUTCOMES.map((o) => {
+        const pack = packFor(o.key);
+        const separately = pack ? pack.products.reduce((n, k) => n + (productByKey(k)?.list ?? 0), 0) : 0;
+        return (
+          <section key={o.key}>
+            <p className="flex items-center gap-2.5 text-sm text-lightTextMuted dark:text-darkTextMuted">
+              <span aria-hidden className="h-[3px] w-3 rounded-full" style={{ backgroundColor: o.accent }} />
+              {o.label}
+            </p>
+            <ul className="mt-1.5 divide-y divide-lightText/10 border-y border-lightText/10 dark:divide-darkText/10 dark:border-darkText/10">
+              {productsFor(o.key).map((t) => (
+                <li key={t.key}>
+                  <button type="button" onClick={() => onPick(t.key)} className={row}>
+                    <span className={`${name} font-light`}>{t.name}</span>
+                    {t.list != null && price(t.list)}
+                    {caret}
+                  </button>
+                </li>
+              ))}
+              {pack && (
+                <li>
+                  <button type="button" onClick={() => onPick(`pack:${pack.key}`)} className={row}>
+                    <span className={`${name} font-normal`}>{packCount(pack)} together</span>
+                    <span className="shrink-0 text-sm tabular-nums text-lightTextMuted line-through decoration-1 dark:text-darkTextMuted">
+                      ${separately}
+                    </span>
+                    {price(pack.list)}
+                    {caret}
+                  </button>
+                </li>
+              )}
+            </ul>
+          </section>
+        );
+      })}
+
+      {/* The way out for anybody who read the list and is still not sure. */}
+      <button
+        type="button"
+        onClick={onAsk}
+        className="group flex w-full items-center gap-3 rounded-2xl bg-black/[0.04] px-5 py-4 text-left transition-colors hover:bg-black/[0.07] dark:bg-white/[0.06] dark:hover:bg-white/[0.1]"
+      >
+        <span className="min-w-0 flex-1">
+          <span className="block text-[17px] font-normal">Don&apos;t see it? Ask for it.</span>
+          <span className="block text-sm font-light text-lightTextMuted dark:text-darkTextMuted">
+            Tell me what slows your week down.
+          </span>
+        </span>
+        <PiArrowRightBold aria-hidden className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
+      </button>
+    </div>
+  );
+}
+
+const primaryButton =
+  "group mt-6 inline-flex w-full items-center justify-center gap-3 rounded-full bg-lightButton px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-lightButtonHover dark:bg-darkButton dark:text-darkBG dark:hover:bg-darkButtonHover";
+
+/**
+ * One tool, picked: the tool running, what it is, what it costs, and one
+ * button, all before any scrolling. What you get and the questions are under
+ * the button for anybody who wants them.
+ *
+ * The button is the only decision on the screen, and it says what happens:
+ * Subscribe goes to checkout, Get my free report and Ask about it open the
+ * form on its own screen. The form used to sit at the foot of this one, under
+ * everything else, where it was easy to miss and easier to misread.
+ */
+function ToolStep({ tool, onAsk, onLeave }: { tool: Orderable; onAsk: () => void; onLeave: () => void }) {
+  const { isWebsite, product } = tool;
+  const smallPrint = product?.usage ?? product?.terms ?? tool.usage;
+
+  return (
+    <div>
+      {product && (
+        <div className="mb-6 mt-2">
+          <ProductShot product={product} size="md" />
+        </div>
+      )}
+
+      <div className="flex items-baseline justify-between gap-4">
+        <p className="text-3xl font-light tracking-tight">{tool.name}</p>
+        <span aria-hidden className="h-[3px] w-10 shrink-0 rounded-full" style={{ backgroundColor: tool.accent }} />
+      </div>
+      <p className="mt-2 text-lg font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">{tool.line}</p>
+      {tool.contents && <p className="mt-3 text-base font-light text-lightText dark:text-darkText">{tool.contents}.</p>}
+
+      <p className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <span className="text-2xl font-light tabular-nums">{priceLabel(tool)}</span>
+        {product && !product.built && <span className="text-sm text-lightTextMuted dark:text-darkTextMuted">Made to order</span>}
+      </p>
+      {smallPrint && <p className="mt-1 text-sm text-lightTextMuted dark:text-darkTextMuted">{smallPrint}</p>}
+
+      {tool.buyUrl ? (
+        <a href={tool.buyUrl} className={primaryButton}>
+          Subscribe
+          <PiArrowUpRightBold aria-hidden className="h-4 w-4" />
+        </a>
+      ) : (
+        <button type="button" onClick={onAsk} className={primaryButton}>
+          {isWebsite ? "Get my free report" : "Ask about it"}
+          <PiArrowRightBold aria-hidden className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+        </button>
+      )}
+      {/* A question before paying is still one tap away. */}
+      {tool.buyUrl && (
+        <button
+          type="button"
+          onClick={onAsk}
+          className="mt-3 w-full py-2 text-center text-sm font-medium text-lightTextMuted transition-colors hover:text-lightText dark:text-darkTextMuted dark:hover:text-darkText"
+        >
+          Ask a question first
+        </button>
+      )}
+
+      {product && (
+        <ul className="mt-7 space-y-3 border-t border-lightText/10 pt-6 dark:border-darkText/10">
+          {product.points.map((point) => (
+            <li key={point} className="flex gap-3 text-[15px] font-light leading-relaxed">
+              <span aria-hidden className="mt-[0.6em] h-[3px] w-3 shrink-0 rounded-full" style={{ backgroundColor: tool.accent }} />
+              {point}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {product && product.questions.length > 0 && (
+        <div className="mt-8 border-t border-lightText/10 dark:border-darkText/10">
+          {product.questions.map((q) => (
+            <details key={q.q} className="group border-b border-lightText/10 dark:border-darkText/10">
+              <summary className="flex cursor-pointer list-none items-start justify-between gap-4 py-3.5 text-[15px] font-normal [&::-webkit-details-marker]:hidden">
+                {q.q}
+                <PiCaretDownBold aria-hidden className="mt-1 h-3.5 w-3.5 shrink-0 text-lightTextMuted transition-transform duration-300 group-open:rotate-180 dark:text-darkTextMuted" />
+              </summary>
+              <p className="pb-4 text-[15px] font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">{q.a}</p>
+            </details>
+          ))}
+        </div>
+      )}
+
+      {product && hasFullPage(product) && (
+        <Link
+          href={`/tools/${product.slug}`}
+          onClick={onLeave}
+          className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-lightTextMuted transition-colors hover:text-lightText dark:text-darkTextMuted dark:hover:text-darkText"
+        >
+          The full page
+          <PiArrowRightBold aria-hidden className="h-3.5 w-3.5" />
+        </Link>
+      )}
     </div>
   );
 }
 
 /**
- * One tool, picked. The website goes to the free report; a tool with a
- * checkout link goes to Stripe; anything else asks for the business and a way
- * to reach them, with the tool named in the message.
+ * The form, on a screen of its own: what you are asking for as the heading,
+ * one line on what comes back, then three fields. With a tool, the tool rides
+ * along as a line at the top of the form (see ContactForm's `topic`); without
+ * one it is the open ask from the foot of the list.
  */
-function ToolStep({ tool, business }: { tool: Orderable; business?: StartedBusiness }) {
-  const { isWebsite } = tool;
-
+function AskStep({ tool, business, onClose }: { tool?: Orderable; business?: StartedBusiness; onClose: () => void }) {
+  const isWebsite = tool?.isWebsite ?? false;
   return (
     <div>
-      <div className="flex items-baseline justify-between gap-4">
-        <p className="text-3xl font-light tracking-tight">
-          {isWebsite ? "Your free report" : tool.buyUrl || tool.contents ? tool.name : `Want ${tool.name}?`}
-        </p>
-        <span aria-hidden className="h-[3px] w-10 shrink-0 rounded-full" style={{ backgroundColor: tool.accent }} />
-      </div>
-      <p className="mt-2 text-base font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
+      <p className="text-3xl font-light tracking-tight">
+        {isWebsite ? "Your free report" : tool ? `Ask about ${tool.name}` : "Ask for it"}
+      </p>
+      <p className="mb-6 mt-2 text-base font-light leading-relaxed text-lightTextMuted dark:text-darkTextMuted">
         {isWebsite
           ? "Where you show up on Google, on Maps, and in AI answers. Then we talk website."
-          : tool.contents && !tool.buyUrl
-            ? `${tool.contents}, ${priceLabel(tool).replace(" / ", " a ")}. Leave your business and how to reach you.`
-            : tool.buyUrl
-            ? tool.line
-            : "Leave your business and how to reach you. Your free report comes with it."}
+          : tool
+            ? "Tell me where to reach you. I reply with how it would work for your business, and a free report on where you show up today."
+            : "Tell me what slows your week down. Every tool here started that way."}
       </p>
-
-      {tool.buyUrl ? (
-        <div className="mt-6">
-          <p className="text-2xl font-light tabular-nums">{priceLabel(tool)}</p>
-          {tool.usage && <p className="mt-1 text-sm text-lightTextMuted dark:text-darkTextMuted">{tool.usage}</p>}
-          <a
-            href={tool.buyUrl}
-            className="group mt-6 inline-flex w-full items-center justify-center gap-3 rounded-full bg-lightButton px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-lightButtonHover dark:bg-darkButton dark:text-darkBG dark:hover:bg-darkButtonHover"
-          >
-            Subscribe
-            <PiArrowUpRightBold aria-hidden className="h-4 w-4" />
-          </a>
-        </div>
-      ) : (
-        <div className="mt-6">
-          <ContactForm
-            prefillMessage={isWebsite ? "" : tool.contents ? `I want ${tool.name}, all of it: ${tool.contents}.` : `I want ${tool.name}.`}
-            prefillBusiness={business?.label}
-            prefillBusinessName={business?.name}
-            prefillBusinessAddress={business?.address}
-            prefillPlaceId={business?.placeId}
-            submitLabel={isWebsite ? "Send My Report" : "Inquire"}
-          />
-        </div>
-      )}
+      <ContactForm
+        topic={tool && !isWebsite ? (tool.contents ? `${tool.name} (${tool.contents})` : tool.name) : undefined}
+        prefillBusiness={business?.label}
+        prefillBusinessName={business?.name}
+        prefillBusinessAddress={business?.address}
+        prefillPlaceId={business?.placeId}
+        submitLabel={isWebsite ? "Send My Report" : "Send"}
+        onClose={onClose}
+      />
     </div>
   );
 }

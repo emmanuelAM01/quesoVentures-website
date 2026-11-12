@@ -137,7 +137,7 @@ const what: DeckCard[] = [
     icon: "tools",
     title: "The real product",
     body: "Software that gets people calling, gets them walking back in, and ends the napkin math. Turn it on and it runs.",
-    href: "/tools",
+    href: "/#tools",
     cta: "See every tool",
   },
 ];

@@ -37,6 +37,21 @@ interface Props {
    */
   onClose?: () => void;
   submitLabel?: string;
+  /**
+   * What they are asking about, when a button already knows: "Booking", "Get
+   * people calling". Shown as a line at the top of the form so they can see
+   * the ask is already attached, and sent as the first line of the message.
+   *
+   * It used to be typed into the optional message box for them ("I want
+   * Booking."), which left a box marked optional already holding words they
+   * never wrote, and nobody sure whether to keep them.
+   */
+  topic?: string;
+  /**
+   * Context the button already has (which button, an estimate they built),
+   * sent with the message and never shown in the box.
+   */
+  note?: string;
 }
 
 export default function ContactForm({
@@ -47,6 +62,8 @@ export default function ContactForm({
   prefillPlaceId = "",
   onClose,
   submitLabel = "Send My Report",
+  topic,
+  note,
 }: Props) {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [error, setError] = useState("");
@@ -74,7 +91,9 @@ export default function ContactForm({
           // Split at the source rather than unpicked later. `name` is now the
           // business name on its own; this is the rest of what was chosen.
           businessAddress: formData.get("businessAddress"),
-          message: formData.get("message"),
+          message: [topic ? `Asking about: ${topic}.` : "", note ?? "", String(formData.get("message") ?? "").trim()]
+            .filter(Boolean)
+            .join("\n\n"),
           // Which page the form was opened from, so a lead arrives saying
           // where it came from rather than just when.
           sourcePage: window.location.pathname,
@@ -120,6 +139,7 @@ export default function ContactForm({
             failed. */}
         {acknowledged ? (
           <div className="space-y-3 text-base font-light text-lightTextMuted dark:text-darkTextMuted">
+            {topic && <p>I will reply about {topic} within 24 hours.</p>}
             <p>
               Check your email, you should have gotten something. High chance your report is already in your inbox too. (Be sure to check spam/junk)
             </p>
@@ -134,6 +154,7 @@ export default function ContactForm({
              where a way to reach me matters most, and it was the one branch
              that had none. */
           <div className="space-y-3 text-base font-light text-lightTextMuted dark:text-darkTextMuted">
+            {topic && <p>I will reply about {topic} within 24 hours.</p>}
             <p>Thank you for reaching out and wanting to be part of the Queso Network.</p>
             <p>
               I will get back to you shortly. If you would rather not wait:{" "}
@@ -164,6 +185,15 @@ export default function ContactForm({
           to work out, typed on a phone between jobs. The offer is a free
           report, and the only thing that actually needs is enough to find the
           business and a way to reply. */}
+      {/* The ask, already attached. One line, so nobody wonders whether the
+          form knows what they tapped. */}
+      {topic && (
+        <p className="flex items-baseline gap-2 rounded-xl bg-black/[0.04] px-4 py-3 text-[15px] dark:bg-white/[0.06]">
+          <span className="text-lightTextMuted dark:text-darkTextMuted">Asking about</span>
+          <span className="font-medium text-lightText dark:text-darkText">{topic}</span>
+        </p>
+      )}
+
       <BusinessPicker
         inputClass={inputClass}
         labelClass={labelClass}
@@ -174,13 +204,17 @@ export default function ContactForm({
       />
 
       <div className="flex flex-col gap-1.5">
-        <label className={labelClass}>Email or phone</label>
+        <label className={labelClass} htmlFor="contact-reply">
+          Where should I reply?
+        </label>
         <input
+          id="contact-reply"
           name="contact"
           type="text"
           required
           inputMode="email"
-          placeholder="you@yourbusiness.com or (281) 555-0100"
+          autoComplete="email"
+          placeholder="Email or phone number"
           className={inputClass}
           // Formatted in place rather than through state: the field is
           // uncontrolled and read with FormData on submit, and adding state
@@ -231,6 +265,11 @@ export default function ContactForm({
           <PiCaretRightBold className="absolute inset-0 h-4 w-4 -translate-x-5 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
         </span>
       </button>
+
+      {/* What pressing it costs and what happens next, said before they press. */}
+      <p className="text-center text-sm font-light text-lightTextMuted dark:text-darkTextMuted">
+        Free. I reply within 24 hours.
+      </p>
     </form>
   );
 }

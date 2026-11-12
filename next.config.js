@@ -70,8 +70,31 @@ const nextConfig = {
       "seo-for-contractors-houston": "trades",
       "website-for-food-trucks-houston": "food-trucks",
     };
+    /*
+      2026-11: the Tools page folded into the home page, which deals every
+      tool as you scroll and opens each one in the Get Started panel. A tool
+      without a page of its own redirects to the home page with that tool
+      open (app/page.tsx reads ?tool=). Website, Queso Revenue System and
+      Customer Loyalty keep their pages and are not in this list; keep it in
+      step with FULL_PAGE in components/catalog.ts.
+    */
+    const panelTools = [
+      "inbound-calls",
+      "website-chat",
+      "booking",
+      "instant-quotes",
+      "email-newsletter",
+      "lead-finder",
+      "queso-organizer",
+      "forms",
+      "invoicing",
+      "outbound-calls",
+      "deliveries",
+    ];
     return [
-      { source: "/studios", destination: "/tools", permanent: true },
+      { source: "/tools", destination: "/#tools", permanent: true },
+      { source: `/tools/:slug(${panelTools.join("|")})`, destination: "/?tool=:slug#tools", permanent: true },
+      { source: "/studios", destination: "/#tools", permanent: true },
       { source: "/studios/qrs", destination: "/tools/queso-revenue-system", permanent: true },
       { source: "/services", destination: "/tools/website", permanent: true },
       ...suburbs.map((s) => ({ source: `/web-design-${s}-tx`, destination: "/tools/website", permanent: true })),

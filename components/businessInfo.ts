@@ -135,7 +135,7 @@ export const LOCAL_BUSINESS_SCHEMA = {
   },
   priceRange: BUSINESS.priceRange,
   description:
-    "Websites, SEO, and AI-SEO for businesses in Atascocita, Humble, Kingwood, and the rest of Northeast Houston. Simple plans at $500 a month.",
+    "Software for small businesses: websites that get found on Google, Maps, and AI answers, and tools that answer calls, bring regulars back, and keep the books straight.",
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
